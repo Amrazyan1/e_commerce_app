@@ -1,7 +1,11 @@
 import 'package:animations/animations.dart';
 import 'package:auto_route/annotations.dart';
+import 'package:e_commerce_app/screens/Cart/views/cart_screen.dart';
+import 'package:e_commerce_app/screens/Discover/views/discover_screen.dart';
+import 'package:e_commerce_app/screens/Favorites/views/favorite_screen.dart';
 import 'package:e_commerce_app/screens/Home/views/home_screen.dart';
 import 'package:e_commerce_app/constants.dart';
+import 'package:e_commerce_app/screens/profile/views/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -16,11 +20,12 @@ class EntryPoint extends StatefulWidget {
 class _EntryPointState extends State<EntryPoint> {
   final List _pages = const [
     HomeScreen(),
-    // DiscoverScreen(),
+    DiscoverScreen(),
     // BookmarkScreen(),
     // // EmptyCartScreen(), // if Cart is empty
-    // CartScreen(),
-    // ProfileScreen(),
+    CartScreen(),
+    FavoriteScreen(),
+    ProfileScreen(),
   ];
   int _currentIndex = 0;
 

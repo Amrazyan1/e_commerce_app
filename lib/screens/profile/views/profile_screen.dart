@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:e_commerce_app/components/list_tile/divider_list_tile.dart';
 import 'package:e_commerce_app/components/network_image_with_loader.dart';
 import 'package:e_commerce_app/constants.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'components/profile_card.dart';
 import 'components/profile_menu_item_list_tile.dart';
 
+@RoutePage()
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 

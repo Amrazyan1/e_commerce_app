@@ -8,5 +8,9 @@ class AppRouter extends RootStackRouter {
         /// routes go here
         AutoRoute(page: EntryPoint.page, path: '/'),
         AutoRoute(page: HomeRoute.page, path: '/home'),
+        AutoRoute(page: DiscoverRoute.page, path: '/discover'),
+        AutoRoute(page: FavoriteRoute.page, path: '/favorites'),
+        AutoRoute(page: CartRoute.page, path: '/cart'),
+        AutoRoute(page: ProfileRoute.page, path: '/profile'),
       ];
 }
