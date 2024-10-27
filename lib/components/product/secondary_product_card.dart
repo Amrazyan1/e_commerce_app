@@ -29,9 +29,17 @@ class SecondaryProductCard extends StatelessWidget {
       onPressed: () {},
       style: style ??
           OutlinedButton.styleFrom(
-              minimumSize: const Size(256, 114),
-              maximumSize: const Size(256, 114),
-              padding: const EdgeInsets.all(8)),
+            minimumSize: const Size(256, 114),
+            maximumSize: const Size(256, 114),
+            padding: const EdgeInsets.all(8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            side: const BorderSide(
+              color: Color.fromARGB(66, 124, 124, 124),
+              width: 1, // Optional: You can adjust the border width here
+            ),
+          ),
       child: Row(
         children: [
           AspectRatio(

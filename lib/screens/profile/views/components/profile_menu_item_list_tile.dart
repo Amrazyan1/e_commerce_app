@@ -21,7 +21,7 @@ class ProfileMenuListTile extends StatelessWidget {
       minLeadingWidth: 24,
       leading: SvgPicture.asset(
         svgSrc,
-        height: 24,
+        height: 15,
         width: 24,
         colorFilter: ColorFilter.mode(
           Theme.of(context).iconTheme.color!,

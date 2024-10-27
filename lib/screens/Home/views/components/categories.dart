@@ -87,7 +87,7 @@ class CategoryBtn extends StatelessWidget {
         height: 36,
         padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
         decoration: BoxDecoration(
-          color: isActive ? primaryColor : Colors.transparent,
+          color: isActive ? kprimaryColor : Colors.transparent,
           border: Border.all(
               color: isActive
                   ? Colors.transparent

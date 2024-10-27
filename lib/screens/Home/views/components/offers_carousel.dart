@@ -1,12 +1,11 @@
 import 'dart:async';
-
+import 'package:flutter/material.dart';
 import 'package:e_commerce_app/components/Banners/M/banner_m_style_1.dart';
 import 'package:e_commerce_app/components/Banners/M/banner_m_style_2.dart';
 import 'package:e_commerce_app/components/Banners/M/banner_m_style_3.dart';
 import 'package:e_commerce_app/components/Banners/M/banner_m_style_4.dart';
 import 'package:e_commerce_app/components/dot_indicators.dart';
 import 'package:e_commerce_app/constants.dart';
-import 'package:flutter/material.dart';
 
 class OffersCarousel extends StatefulWidget {
   const OffersCarousel({
@@ -25,7 +24,7 @@ class _OffersCarouselState extends State<OffersCarousel> {
   // Offers List
   List offers = [
     BannerMStyle1(
-      text: "New items with \nFree shipping",
+      text: "Fresh webetables",
       press: () {},
     ),
     BannerMStyle2(
@@ -40,7 +39,6 @@ class _OffersCarouselState extends State<OffersCarousel> {
       press: () {},
     ),
     BannerMStyle4(
-      // image: , user your image
       title: "SUMMER \nSALE",
       subtitle: "SPECIAL OFFER",
       discountParcent: 80,
@@ -76,46 +74,53 @@ class _OffersCarouselState extends State<OffersCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1.87,
-      child: Stack(
-        alignment: Alignment.bottomRight,
-        children: [
-          PageView.builder(
-            controller: _pageController,
-            itemCount: offers.length,
-            onPageChanged: (int index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-            itemBuilder: (context, index) => offers[index],
-          ),
-          FittedBox(
-            child: Padding(
-              padding: const EdgeInsets.all(defaultPadding),
-              child: SizedBox(
-                height: 16,
-                child: Row(
-                  children: List.generate(
-                    offers.length,
-                    (index) {
-                      return Padding(
-                        padding:
-                            const EdgeInsets.only(left: defaultPadding / 4),
-                        child: DotIndicator(
-                          isActive: index == _selectedIndex,
-                          activeColor: Colors.white70,
-                          inActiveColor: Colors.white54,
-                        ),
-                      );
-                    },
+    return Center(
+      child: ClipRRect(
+        borderRadius:
+            BorderRadius.circular(15), // Rounded corners with radius 30
+        child: SizedBox(
+          width: 368, // Set width of the carousel
+          height: 115, // Set height of the carousel
+          child: Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              PageView.builder(
+                controller: _pageController,
+                itemCount: offers.length,
+                onPageChanged: (int index) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                },
+                itemBuilder: (context, index) => offers[index],
+              ),
+              FittedBox(
+                child: Padding(
+                  padding: const EdgeInsets.all(defaultPadding),
+                  child: SizedBox(
+                    height: 16,
+                    child: Row(
+                      children: List.generate(
+                        offers.length,
+                        (index) {
+                          return Padding(
+                            padding:
+                                const EdgeInsets.only(left: defaultPadding / 4),
+                            child: DotIndicator(
+                              isActive: index == _selectedIndex,
+                              activeColor: Colors.white70,
+                              inActiveColor: Colors.white54,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          )
-        ],
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

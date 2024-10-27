@@ -23,7 +23,7 @@ class CheckboxUnderlineListTile extends StatelessWidget {
     return Column(
       children: [
         CheckboxListTile(
-          activeColor: primaryColor,
+          activeColor: kprimaryColor,
           onChanged: onChanged,
           value: value,
           title: Text.rich(

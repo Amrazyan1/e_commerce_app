@@ -2,6 +2,8 @@ import 'package:e_commerce_app/router/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+final _appRouter = AppRouter(); // Initialize the AppRouter
+
 void main() {
   runApp(const MainApp());
 }
@@ -11,8 +13,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _appRouter = AppRouter(); // Initialize the AppRouter
-
     return ScreenUtilInit(
       designSize: const Size(414, 896),
       fontSizeResolver: (fontSize, instance) =>

@@ -24,9 +24,17 @@ class ProductCard extends StatelessWidget {
     return OutlinedButton(
       onPressed: press,
       style: OutlinedButton.styleFrom(
-          minimumSize: const Size(140, 220),
-          maximumSize: const Size(140, 220),
-          padding: const EdgeInsets.all(8)),
+        minimumSize: const Size(140, 220),
+        maximumSize: const Size(140, 220),
+        padding: const EdgeInsets.all(8),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        side: const BorderSide(
+          color: Color.fromARGB(66, 124, 124, 124),
+          width: 1, // Optional: You can adjust the border width here
+        ), // Set radius to 15
+      ),
       child: Column(
         children: [
           AspectRatio(
@@ -68,20 +76,20 @@ class ProductCard extends StatelessWidget {
                 children: [
                   Text(
                     brandName.toUpperCase(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontSize: 10),
-                  ),
-                  const SizedBox(height: defaultPadding / 2),
-                  Text(
-                    title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context)
                         .textTheme
                         .titleSmall!
-                        .copyWith(fontSize: 12),
+                        .copyWith(fontSize: 12, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: defaultPadding / 2),
+                  Text(
+                    title,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(fontSize: 10),
                   ),
                   const Spacer(),
                   priceAfetDiscount != null
@@ -90,7 +98,7 @@ class ProductCard extends StatelessWidget {
                             Text(
                               "\$$priceAfetDiscount",
                               style: const TextStyle(
-                                color: Color(0xFF31B0D8),
+                                color: ksecondaryColor,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 12,
                               ),
@@ -112,7 +120,7 @@ class ProductCard extends StatelessWidget {
                       : Text(
                           "\$$price",
                           style: const TextStyle(
-                            color: Color(0xFF31B0D8),
+                            color: ksecondaryColor,
                             fontWeight: FontWeight.w500,
                             fontSize: 12,
                           ),
