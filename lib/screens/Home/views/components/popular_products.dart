@@ -1,6 +1,7 @@
-import 'package:e_commerce_app/components/product/product_card.dart';
+import 'package:e_commerce_app/screens/Products/Components/product_card.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/models/product_model.dart';
+import 'package:e_commerce_app/screens/Products/product_details_screen.dart';
 import 'package:flutter/material.dart';
 
 class PopularProducts extends StatelessWidget {
@@ -44,8 +45,17 @@ class PopularProducts extends StatelessWidget {
                 priceAfetDiscount: demoPopularProducts[index].priceAfetDiscount,
                 dicountpercent: demoPopularProducts[index].dicountpercent,
                 press: () {
-                  Navigator.pushNamed(context, 'productDetailsScreenRoute',
-                      arguments: index.isEven);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ProductDetailsScreen(
+                        productImages: [
+                          demoPopularProducts[index].image,
+                          demoPopularProducts[index].image,
+                          demoPopularProducts[index].image
+                        ],
+                      ),
+                    ),
+                  );
                 },
               ),
             ),
