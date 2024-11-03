@@ -3,13 +3,13 @@
 import 'package:e_commerce_app/constants.dart';
 
 class ProductModel {
-  final String image, brandName, title;
+  final String imageUrl, brandName, title;
   final double price;
   final double? priceAfetDiscount;
   final int? dicountpercent;
   bool isFavourite;
   ProductModel({
-    required this.image,
+    required this.imageUrl,
     required this.brandName,
     required this.title,
     required this.price,
@@ -21,7 +21,7 @@ class ProductModel {
 
 List<ProductModel> demoPopularProducts = [
   ProductModel(
-      image: productDemoImg1,
+      imageUrl: productDemoImg1,
       title: "Banana",
       brandName: "Custom Store",
       price: 540,
@@ -29,13 +29,13 @@ List<ProductModel> demoPopularProducts = [
       dicountpercent: 20,
       isFavourite: false),
   ProductModel(
-      image: productDemoImg4,
+      imageUrl: productDemoImg4,
       title: "Banana",
       brandName: "Custom Store",
       price: 800,
       isFavourite: false),
   ProductModel(
-    image: productDemoImg5,
+    imageUrl: productDemoImg5,
     title: "Bannana",
     brandName: "Custom Store",
     price: 650.62,
@@ -43,7 +43,7 @@ List<ProductModel> demoPopularProducts = [
     dicountpercent: 40,
   ),
   ProductModel(
-    image: productDemoImg6,
+    imageUrl: productDemoImg6,
     title: "Bananna",
     brandName: "City",
     price: 1264,
@@ -51,7 +51,7 @@ List<ProductModel> demoPopularProducts = [
     dicountpercent: 5,
   ),
   ProductModel(
-    image: "https://pngimg.com/d/strawberry_PNG89.png",
+    imageUrl: "https://pngimg.com/d/strawberry_PNG89.png",
     title: "Strawwberry",
     brandName: "Straw",
     price: 650.62,
@@ -59,7 +59,7 @@ List<ProductModel> demoPopularProducts = [
     dicountpercent: 40,
   ),
   ProductModel(
-    image:
+    imageUrl:
         "https://thumbs.dreamstime.com/b/green-apple-isolated-white-png-image-transparent-background-green-apple-isolated-white-137311568.jpg",
     title: "Apple",
     brandName: "Apple",
@@ -70,7 +70,7 @@ List<ProductModel> demoPopularProducts = [
 ];
 List<ProductModel> demoFlashSaleProducts = [
   ProductModel(
-    image: productDemoImg5,
+    imageUrl: productDemoImg5,
     title: "Store",
     brandName: "Banana",
     price: 650.62,
@@ -78,7 +78,7 @@ List<ProductModel> demoFlashSaleProducts = [
     dicountpercent: 40,
   ),
   ProductModel(
-    image: productDemoImg6,
+    imageUrl: productDemoImg6,
     title: "Strawberry",
     brandName: "Banana",
     price: 1264,
@@ -86,7 +86,7 @@ List<ProductModel> demoFlashSaleProducts = [
     dicountpercent: 5,
   ),
   ProductModel(
-    image: productDemoImg4,
+    imageUrl: productDemoImg4,
     title: "Yerevan city",
     brandName: "Banana",
     price: 800,
@@ -96,7 +96,7 @@ List<ProductModel> demoFlashSaleProducts = [
 ];
 List<ProductModel> demoBestSellersProducts = [
   ProductModel(
-    image: "https://pngimg.com/d/strawberry_PNG89.png",
+    imageUrl: "https://pngimg.com/d/strawberry_PNG89.png",
     title: "Strawberry",
     brandName: "Banana",
     price: 650.62,
@@ -104,7 +104,7 @@ List<ProductModel> demoBestSellersProducts = [
     dicountpercent: 40,
   ),
   ProductModel(
-    image: "https://pngimg.com/d/strawberry_PNG89.png",
+    imageUrl: "https://pngimg.com/d/strawberry_PNG89.png",
     title: "store",
     brandName: "Banana",
     price: 1264,
@@ -112,7 +112,7 @@ List<ProductModel> demoBestSellersProducts = [
     dicountpercent: 5,
   ),
   ProductModel(
-    image: productDemoImg4,
+    imageUrl: productDemoImg4,
     title: "Yerevan city",
     brandName: "Banana",
     price: 800,
@@ -122,7 +122,7 @@ List<ProductModel> demoBestSellersProducts = [
 ];
 List<ProductModel> kidsProducts = [
   ProductModel(
-    image: "https://pngimg.com/d/strawberry_PNG89.png",
+    imageUrl: "https://pngimg.com/d/strawberry_PNG89.png",
     title: "Strawberry",
     brandName: "Banana",
     price: 650.62,
@@ -130,19 +130,19 @@ List<ProductModel> kidsProducts = [
     dicountpercent: 24,
   ),
   ProductModel(
-    image: "https://pngimg.com/d/strawberry_PNG89.png",
+    imageUrl: "https://pngimg.com/d/strawberry_PNG89.png",
     title: "Printed Sleeveless Tiered Swing Dress",
     brandName: "Banana",
     price: 650.62,
   ),
   ProductModel(
-    image: "https://pngimg.com/d/strawberry_PNG89.png",
+    imageUrl: "https://pngimg.com/d/strawberry_PNG89.png",
     title: "Ruffle-Sleeve Ponte-Knit Sheath ",
     brandName: "Banana",
     price: 400,
   ),
   ProductModel(
-    image: "https://pngimg.com/d/strawberry_PNG89.png",
+    imageUrl: "https://pngimg.com/d/strawberry_PNG89.png",
     title: "Green Yerevan city",
     brandName: "Banana",
     price: 400,
@@ -150,13 +150,13 @@ List<ProductModel> kidsProducts = [
     dicountpercent: 20,
   ),
   ProductModel(
-    image: "https://pngimg.com/d/strawberry_PNG89.png",
+    imageUrl: "https://pngimg.com/d/strawberry_PNG89.png",
     title: "Printed Sleeveless Tiered Swing Dress",
     brandName: "Banana",
     price: 654,
   ),
   ProductModel(
-    image: "https://pngimg.com/d/strawberry_PNG89.png",
+    imageUrl: "https://pngimg.com/d/strawberry_PNG89.png",
     title: "Yerevan city",
     brandName: "Banana",
     price: 250,

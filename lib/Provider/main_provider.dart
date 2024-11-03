@@ -35,12 +35,15 @@ class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void addToFavourites() {
-    currentProductModel.isFavourite = !currentProductModel.isFavourite;
-    if (currentProductModel.isFavourite) {
-      favouriteProducts.add(currentProductModel);
+  void addToFavourites(ProductModel? model) {
+    if (model == null) {}
+    model = currentProductModel;
+
+    model.isFavourite = !model.isFavourite;
+    if (model.isFavourite) {
+      favouriteProducts.add(model);
     } else {
-      favouriteProducts.remove(currentProductModel);
+      favouriteProducts.remove(model);
     }
     notifyListeners();
   }

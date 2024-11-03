@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
+import 'package:e_commerce_app/screens/profile/views/fake_proifle_screen.dart';
 
 @AutoRouterConfig()
 class AppRouter extends RootStackRouter {
@@ -12,6 +13,8 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: FavoriteRoute.page, path: '/favorites'),
         AutoRoute(page: CartRoute.page, path: '/cart'),
         AutoRoute(page: ProfileRoute.page, path: '/profile'),
+        AutoRoute(page: FakeProifleRoute.page, path: '/FakeProifleRoute'),
+
         AutoRoute(page: DiscoverDetailsRoute.page, path: '/discoverdetail'),
       ];
 }

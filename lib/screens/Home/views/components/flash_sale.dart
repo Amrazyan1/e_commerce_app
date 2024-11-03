@@ -48,7 +48,7 @@ class FlashSale extends StatelessWidget {
                     : 0,
               ),
               child: ProductCard(
-                image: demoFlashSaleProducts[index].image,
+                image: demoFlashSaleProducts[index].imageUrl,
                 brandName: demoFlashSaleProducts[index].brandName,
                 title: demoFlashSaleProducts[index].title,
                 price: demoFlashSaleProducts[index].price,
@@ -62,9 +62,9 @@ class FlashSale extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => ProductDetailsScreen(
                         productImages: [
-                          demoPopularProducts[index].image,
-                          demoPopularProducts[index].image,
-                          demoPopularProducts[index].image
+                          demoPopularProducts[index].imageUrl,
+                          demoPopularProducts[index].imageUrl,
+                          demoPopularProducts[index].imageUrl
                         ],
                       ),
                     ),

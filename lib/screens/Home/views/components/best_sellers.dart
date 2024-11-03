@@ -40,7 +40,7 @@ class BestSellers extends StatelessWidget {
                     : 0,
               ),
               child: ProductCard(
-                image: demoBestSellersProducts[index].image,
+                image: demoBestSellersProducts[index].imageUrl,
                 brandName: demoBestSellersProducts[index].brandName,
                 title: demoBestSellersProducts[index].title,
                 price: demoBestSellersProducts[index].price,
@@ -54,9 +54,9 @@ class BestSellers extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => ProductDetailsScreen(
                         productImages: [
-                          demoPopularProducts[index].image,
-                          demoPopularProducts[index].image,
-                          demoPopularProducts[index].image
+                          demoPopularProducts[index].imageUrl,
+                          demoPopularProducts[index].imageUrl,
+                          demoPopularProducts[index].imageUrl
                         ],
                       ),
                     ),

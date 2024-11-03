@@ -38,7 +38,7 @@ class DiscoverDetailsScreen extends StatelessWidget {
                 itemCount: demoPopularProducts.length,
                 itemBuilder: (context, index) {
                   return ProductCard(
-                    image: demoPopularProducts[index].image,
+                    image: demoPopularProducts[index].imageUrl,
                     brandName: demoPopularProducts[index].brandName,
                     title: demoPopularProducts[index].title,
                     price: demoPopularProducts[index].price,
@@ -52,9 +52,9 @@ class DiscoverDetailsScreen extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (context) => ProductDetailsScreen(
                             productImages: [
-                              demoPopularProducts[index].image,
-                              demoPopularProducts[index].image,
-                              demoPopularProducts[index].image
+                              demoPopularProducts[index].imageUrl,
+                              demoPopularProducts[index].imageUrl,
+                              demoPopularProducts[index].imageUrl
                             ],
                           ),
                         ),

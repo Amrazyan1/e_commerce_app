@@ -85,9 +85,9 @@ class _CartScreenState extends State<CartScreen> {
                       MaterialPageRoute(
                         builder: (context) => ProductDetailsScreen(
                           productImages: [
-                            demoPopularProducts[index].image,
-                            demoPopularProducts[index].image,
-                            demoPopularProducts[index].image
+                            demoPopularProducts[index].imageUrl,
+                            demoPopularProducts[index].imageUrl,
+                            demoPopularProducts[index].imageUrl
                           ],
                         ),
                       ),

@@ -1,7 +1,9 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/components/list_tile/divider_list_tile.dart';
 import 'package:e_commerce_app/components/network_image_with_loader.dart';
 import 'package:e_commerce_app/constants.dart';
+import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -40,34 +42,41 @@ class ProfileScreen extends StatelessWidget {
             text: "Orders",
             svgSrc: "assets/icons/Order.svg",
             press: () {
-              Navigator.pushNamed(context, 'ordersScreenRoute');
+              AutoRouter.of(context)
+                  .push(FakeProifleRoute(pageName: 'Orders screen'));
             },
           ),
 
           ProfileMenuListTile(
             text: "My Details",
             svgSrc: "assets/icons/my_details.svg",
-            press: () {},
+            press: () {
+              AutoRouter.of(context)
+                  .push(FakeProifleRoute(pageName: 'My Details screen'));
+            },
           ),
           ProfileMenuListTile(
             text: "Delivery Address",
             svgSrc: "assets/icons/Address.svg",
             press: () {
-              Navigator.pushNamed(context, 'addressesScreenRoute');
+              AutoRouter.of(context)
+                  .push(FakeProifleRoute(pageName: 'Delivery Address screen'));
             },
           ),
           ProfileMenuListTile(
             text: "Payment Methods",
             svgSrc: "assets/icons/payment.svg",
             press: () {
-              Navigator.pushNamed(context, 'emptyPaymentScreenRoute');
+              AutoRouter.of(context)
+                  .push(FakeProifleRoute(pageName: 'Payment Methods screen'));
             },
           ),
           ProfileMenuListTile(
-            text: "Promo Cods",
+            text: "Promo Codes",
             svgSrc: "assets/icons/promo_code.svg",
             press: () {
-              Navigator.pushNamed(context, 'walletScreenRoute');
+              AutoRouter.of(context)
+                  .push(FakeProifleRoute(pageName: 'Promo Codes screen'));
             },
           ),
           const SizedBox(height: defaultPadding),
@@ -84,14 +93,16 @@ class ProfileScreen extends StatelessWidget {
             title: "Notification",
             trilingText: "Off",
             press: () {
-              Navigator.pushNamed(context, 'enableNotificationScreenRoute');
+              // AutoRouter.of(context)
+              //     .push(FakeProifleRoute(pageName: 'Orders screen'));
             },
           ),
           ProfileMenuListTile(
             text: "Help",
             svgSrc: "assets/icons/help.svg",
             press: () {
-              Navigator.pushNamed(context, 'preferencesScreenRoute');
+              AutoRouter.of(context)
+                  .push(FakeProifleRoute(pageName: 'Help screen'));
             },
           ),
           const SizedBox(height: defaultPadding),
@@ -107,7 +118,7 @@ class ProfileScreen extends StatelessWidget {
             text: "Language",
             svgSrc: "assets/icons/Language.svg",
             press: () {
-              Navigator.pushNamed(context, 'selectLanguageScreenRoute');
+              // Navigator.pushNamed(context, 'selectLanguageScreenRoute');
             },
           ),
 

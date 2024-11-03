@@ -46,7 +46,7 @@ class ProductInfo extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     log('IS favorite true');
-                    context.read<MainProvider>().addToFavourites();
+                    context.read<MainProvider>().addToFavourites(null);
                   },
                   child: Icon(
                     context

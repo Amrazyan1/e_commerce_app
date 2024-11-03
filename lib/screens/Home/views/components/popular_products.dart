@@ -40,7 +40,7 @@ class PopularProducts extends StatelessWidget {
                     : 0,
               ),
               child: ProductCard(
-                image: demoPopularProducts[index].image,
+                image: demoPopularProducts[index].imageUrl,
                 brandName: demoPopularProducts[index].brandName,
                 title: demoPopularProducts[index].title,
                 price: demoPopularProducts[index].price,
@@ -53,9 +53,9 @@ class PopularProducts extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => ProductDetailsScreen(
                         productImages: [
-                          demoPopularProducts[index].image,
-                          demoPopularProducts[index].image,
-                          demoPopularProducts[index].image
+                          demoPopularProducts[index].imageUrl,
+                          demoPopularProducts[index].imageUrl,
+                          demoPopularProducts[index].imageUrl
                         ],
                       ),
                     ),

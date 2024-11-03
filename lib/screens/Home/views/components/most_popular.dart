@@ -37,7 +37,7 @@ class MostPopular extends StatelessWidget {
                     : 0,
               ),
               child: SecondaryProductCard(
-                image: demoPopularProducts[index].image,
+                image: demoPopularProducts[index].imageUrl,
                 brandName: demoPopularProducts[index].brandName,
                 title: demoPopularProducts[index].title,
                 price: demoPopularProducts[index].price,
