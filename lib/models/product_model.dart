@@ -7,12 +7,13 @@ class ProductModel {
   final double price;
   final double? priceAfetDiscount;
   final int? dicountpercent;
-
+  bool isFavourite;
   ProductModel({
     required this.image,
     required this.brandName,
     required this.title,
     required this.price,
+    this.isFavourite = false,
     this.priceAfetDiscount,
     this.dicountpercent,
   });
@@ -20,19 +21,19 @@ class ProductModel {
 
 List<ProductModel> demoPopularProducts = [
   ProductModel(
-    image: productDemoImg1,
-    title: "Banana",
-    brandName: "Custom Store",
-    price: 540,
-    priceAfetDiscount: 420,
-    dicountpercent: 20,
-  ),
+      image: productDemoImg1,
+      title: "Banana",
+      brandName: "Custom Store",
+      price: 540,
+      priceAfetDiscount: 420,
+      dicountpercent: 20,
+      isFavourite: false),
   ProductModel(
-    image: productDemoImg4,
-    title: "Banana",
-    brandName: "Custom Store",
-    price: 800,
-  ),
+      image: productDemoImg4,
+      title: "Banana",
+      brandName: "Custom Store",
+      price: 800,
+      isFavourite: false),
   ProductModel(
     image: productDemoImg5,
     title: "Bannana",

@@ -1,5 +1,7 @@
+import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class QuantityWidget extends StatefulWidget {
   final int initialCount;
@@ -8,8 +10,8 @@ class QuantityWidget extends StatefulWidget {
 
   const QuantityWidget({
     Key? key,
-    this.initialCount = 0,
-    this.minCount = 0,
+    this.initialCount = 1,
+    this.minCount = 1,
     this.maxCount = 100,
   }) : super(key: key);
 
@@ -34,6 +36,8 @@ class _QuantityWidgetState extends State<QuantityWidget> {
         _count++;
         _controller.text = _count.toString();
       });
+      context.read<MainProvider>().detailButtonPriceSum =
+          _count * context.read<MainProvider>().currentProductModel.price;
     }
   }
 
@@ -43,6 +47,8 @@ class _QuantityWidgetState extends State<QuantityWidget> {
         _count--;
         _controller.text = _count.toString();
       });
+      context.read<MainProvider>().detailButtonPriceSum =
+          _count * context.read<MainProvider>().currentProductModel.price;
     }
   }
 

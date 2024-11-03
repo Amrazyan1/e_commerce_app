@@ -1,11 +1,14 @@
+import 'package:e_commerce_app/Provider/main_provider.dart';
+import 'package:e_commerce_app/components/added_to_cart_message_screen.dart';
+import 'package:e_commerce_app/components/custom_modal_bottom_sheet.dart';
 import 'package:e_commerce_app/screens/Products/Components/product_card.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/screens/Products/Components/product_images.dart';
 import 'package:e_commerce_app/screens/Products/Components/product_info.dart';
-import 'package:e_commerce_app/screens/Products/Components/product_list_tile.dart';
 import 'package:e_commerce_app/screens/Products/Components/review_card.dart';
 import 'package:e_commerce_app/screens/Products/Components/cart_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
@@ -19,8 +22,14 @@ class ProductDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: CartButton(
-        price: 140,
-        press: () {},
+        price: context.watch<MainProvider>().detailButtonPriceSum,
+        press: () {
+          customModalBottomSheet(
+            context,
+            isDismissible: true,
+            child: const AddedToCartMessageScreen(),
+          );
+        },
       ),
       body: SafeArea(
         child: CustomScrollView(
@@ -39,15 +48,18 @@ class ProductDetailsScreen extends StatelessWidget {
             ProductImages(
               images: productImages,
             ),
-            const ProductInfo(
-              brand: "Best banana",
-              title: "Some short info",
+            ProductInfo(
+              brand:
+                  '${context.watch<MainProvider>().currentProductModel.brandName}',
+              title:
+                  '${context.watch<MainProvider>().currentProductModel.title}',
               isAvailable: true,
               description:
                   "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
               rating: 4.4,
               numOfReviews: 126,
-              price: '1500\$',
+              price:
+                  '${context.watch<MainProvider>().currentProductModel.price}',
             ),
             // ProductListTile(
             //   svgSrc: "assets/icons/Product.svg",
@@ -108,8 +120,8 @@ class ProductDetailsScreen extends StatelessWidget {
                         right: index == 4 ? defaultPadding : 0),
                     child: ProductCard(
                       image: productDemoImg2,
-                      title: "Sleeveless Tiered Dobby Swing Dress",
-                      brandName: "LIPSY LONDON",
+                      title: "Product",
+                      brandName: "product",
                       price: 24.65,
                       priceAfetDiscount: index.isEven ? 20.99 : null,
                       dicountpercent: index.isEven ? 25 : null,

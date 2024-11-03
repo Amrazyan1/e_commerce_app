@@ -44,43 +44,40 @@ class _EntryPointState extends State<EntryPoint> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        // pinned: true,
-        // floating: true,
-        // snap: true,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        leading: const SizedBox(),
-        leadingWidth: 0,
-        centerTitle: false,
-        title: Text('Project N1'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              // Navigator.pushNamed(context, searchScreenRoute);
-            },
-            icon: SvgPicture.asset(
-              "assets/icons/Search.svg",
-              height: 24,
-              colorFilter: ColorFilter.mode(
-                  Theme.of(context).textTheme.bodyLarge!.color!,
-                  BlendMode.srcIn),
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              // Navigator.pushNamed(context, notificationsScreenRoute);
-            },
-            icon: SvgPicture.asset(
-              "assets/icons/Notification.svg",
-              height: 24,
-              colorFilter: ColorFilter.mode(
-                  Theme.of(context).textTheme.bodyLarge!.color!,
-                  BlendMode.srcIn),
-            ),
-          ),
-        ],
-      ),
-      // body: _pages[_currentIndex],
+      // appBar: AppBar(
+
+      //   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      //   leading: const SizedBox(),
+      //   leadingWidth: 0,
+      //   centerTitle: false,
+      //   title: Text('Project N1'),
+      //   actions: [
+      //     IconButton(
+      //       onPressed: () {
+      //         // Navigator.pushNamed(context, searchScreenRoute);
+      //       },
+      //       icon: SvgPicture.asset(
+      //         "assets/icons/Search.svg",
+      //         height: 24,
+      //         colorFilter: ColorFilter.mode(
+      //             Theme.of(context).textTheme.bodyLarge!.color!,
+      //             BlendMode.srcIn),
+      //       ),
+      //     ),
+      //     IconButton(
+      //       onPressed: () {
+      //         // Navigator.pushNamed(context, notificationsScreenRoute);
+      //       },
+      //       icon: SvgPicture.asset(
+      //         "assets/icons/Notification.svg",
+      //         height: 24,
+      //         colorFilter: ColorFilter.mode(
+      //             Theme.of(context).textTheme.bodyLarge!.color!,
+      //             BlendMode.srcIn),
+      //       ),
+      //     ),
+      //   ],
+      // ),
       body: PageTransitionSwitcher(
         duration: defaultDuration,
         transitionBuilder: (child, animation, secondAnimation) {

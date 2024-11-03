@@ -1,6 +1,10 @@
+import 'dart:developer';
+
+import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/screens/Products/Components/product_availability_tag.dart';
 import 'package:e_commerce_app/screens/Products/Components/quantity_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../constants.dart';
@@ -31,11 +35,31 @@ class ProductInfo extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(brand.toUpperCase(),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(fontWeight: FontWeight.bold)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(brand.toUpperCase(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(fontWeight: FontWeight.bold)),
+                GestureDetector(
+                  onTap: () {
+                    log('IS favorite true');
+                    context.read<MainProvider>().addToFavourites();
+                  },
+                  child: Icon(
+                    context
+                            .watch<MainProvider>()
+                            .currentProductModel
+                            .isFavourite
+                        ? Icons.favorite
+                        : Icons.favorite_border_outlined,
+                    color: kprimaryColor,
+                  ),
+                )
+              ],
+            ),
             const SizedBox(height: defaultPadding / 2),
             Text(
               title,

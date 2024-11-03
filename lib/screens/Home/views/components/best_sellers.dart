@@ -1,7 +1,10 @@
+import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/screens/Products/Components/product_card.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/models/product_model.dart';
+import 'package:e_commerce_app/screens/Products/product_details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BestSellers extends StatelessWidget {
   const BestSellers({
@@ -45,8 +48,19 @@ class BestSellers extends StatelessWidget {
                     demoBestSellersProducts[index].priceAfetDiscount,
                 dicountpercent: demoBestSellersProducts[index].dicountpercent,
                 press: () {
-                  Navigator.pushNamed(context, 'productDetailsScreenRoute',
-                      arguments: index.isEven);
+                  context.read<MainProvider>().currentProductModel =
+                      demoPopularProducts[index];
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ProductDetailsScreen(
+                        productImages: [
+                          demoPopularProducts[index].image,
+                          demoPopularProducts[index].image,
+                          demoPopularProducts[index].image
+                        ],
+                      ),
+                    ),
+                  );
                 },
               ),
             ),

@@ -20,7 +20,7 @@ class ProfileScreen extends StatelessWidget {
           ProfileCard(
             name: "Name Surname",
             email: "email@gmail.com",
-            imageSrc: "https://i.imgur.com/IXnwbLk.png",
+            imageSrc: "https://cdn-icons-png.flaticon.com/512/219/219988.png",
             // proLableText: "Sliver",
             // isPro: true, if the user is pro
             press: () {

@@ -1,4 +1,5 @@
 import 'package:auto_route/annotations.dart';
+import 'package:e_commerce_app/components/search_bar_input_field.dart';
 import 'package:e_commerce_app/screens/Home/views/components/best_sellers.dart';
 import 'package:e_commerce_app/screens/Home/views/components/flash_sale.dart';
 import 'package:e_commerce_app/screens/Home/views/components/most_popular.dart';
@@ -8,6 +9,7 @@ import 'package:e_commerce_app/components/Banners/S/banner_s_style_1.dart';
 import 'package:e_commerce_app/components/Banners/S/banner_s_style_5.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -19,6 +21,11 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
+            SliverToBoxAdapter(
+                child: Padding(
+              padding: const EdgeInsets.all(25),
+              child: SearchInputField(),
+            )),
             const SliverToBoxAdapter(child: OffersCarouselAndCategories()),
             const SliverToBoxAdapter(child: PopularProducts()),
             const SliverPadding(

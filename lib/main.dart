@@ -1,11 +1,22 @@
+import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/router/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 final _appRouter = AppRouter(); // Initialize the AppRouter
 
 void main() {
-  runApp(const MainApp());
+  runApp(
+    /// Providers are above [MyApp] instead of inside it, so that tests
+    /// can use [MyApp] while mocking the providers
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => MainProvider()),
+      ],
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
