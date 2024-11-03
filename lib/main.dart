@@ -1,6 +1,7 @@
 import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/router/router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +25,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return ScreenUtilInit(
       designSize: const Size(414, 896),
       fontSizeResolver: (fontSize, instance) =>

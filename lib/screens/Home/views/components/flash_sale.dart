@@ -60,13 +60,7 @@ class FlashSale extends StatelessWidget {
                       demoPopularProducts[index];
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => ProductDetailsScreen(
-                        productImages: [
-                          demoPopularProducts[index].imageUrl,
-                          demoPopularProducts[index].imageUrl,
-                          demoPopularProducts[index].imageUrl
-                        ],
-                      ),
+                      builder: (context) => ProductDetailsScreen(),
                     ),
                   );
                 },

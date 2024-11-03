@@ -8,12 +8,14 @@ class ProductModel {
   final double? priceAfetDiscount;
   final int? dicountpercent;
   bool isFavourite;
+  int quantity;
   ProductModel({
     required this.imageUrl,
     required this.brandName,
     required this.title,
     required this.price,
     this.isFavourite = false,
+    this.quantity = 1,
     this.priceAfetDiscount,
     this.dicountpercent,
   });

@@ -14,9 +14,7 @@ import 'package:flutter_svg/svg.dart';
 class ProductDetailsScreen extends StatelessWidget {
   const ProductDetailsScreen({
     super.key,
-    required this.productImages,
   });
-  final List<String> productImages;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +22,9 @@ class ProductDetailsScreen extends StatelessWidget {
       bottomNavigationBar: CartButton(
         price: context.watch<MainProvider>().detailButtonPriceSum,
         press: () {
+          context
+              .read<MainProvider>()
+              .addToCart(context.read<MainProvider>().currentProductModel);
           customModalBottomSheet(
             context,
             isDismissible: true,
@@ -37,16 +38,13 @@ class ProductDetailsScreen extends StatelessWidget {
             SliverAppBar(
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               floating: true,
-              actions: [
-                IconButton(
-                  onPressed: () {},
-                  icon: SvgPicture.asset("assets/icons/Bookmark.svg",
-                      color: Theme.of(context).textTheme.bodyLarge!.color),
-                ),
-              ],
             ),
             ProductImages(
-              images: productImages,
+              images: [
+                context.read<MainProvider>().currentProductModel.imageUrl,
+                context.read<MainProvider>().currentProductModel.imageUrl,
+                context.read<MainProvider>().currentProductModel.imageUrl
+              ],
             ),
             ProductInfo(
               brand:

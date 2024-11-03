@@ -49,16 +49,10 @@ class BestSellers extends StatelessWidget {
                 dicountpercent: demoBestSellersProducts[index].dicountpercent,
                 press: () {
                   context.read<MainProvider>().currentProductModel =
-                      demoPopularProducts[index];
+                      demoBestSellersProducts[index];
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => ProductDetailsScreen(
-                        productImages: [
-                          demoPopularProducts[index].imageUrl,
-                          demoPopularProducts[index].imageUrl,
-                          demoPopularProducts[index].imageUrl
-                        ],
-                      ),
+                      builder: (context) => ProductDetailsScreen(),
                     ),
                   );
                 },

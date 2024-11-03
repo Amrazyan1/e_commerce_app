@@ -77,7 +77,6 @@ class ProductInfo extends StatelessWidget {
                   initialCount: 1,
                 ),
                 const Spacer(),
-                SvgPicture.asset("assets/icons/Star_filled.svg"),
                 const SizedBox(width: defaultPadding / 4),
                 Text(
                   "$price ",

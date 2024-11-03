@@ -19,44 +19,25 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  List<CartItem> cartItems = [
-    CartItem(
-      imageUrl: productDemoImg1,
-      title: 'Product 1',
-      info: 'Product details ',
-      price: 20.0,
-      quantity: 1,
-    ),
-
-    CartItem(
-      imageUrl: productDemoImg2,
-      title: 'Product 1',
-      info: 'Product details ',
-      price: 20.0,
-      quantity: 1,
-    ),
-    // Add more CartItem instances here
-  ];
-
   void _increaseQuantity(int index) {
     setState(() {
-      cartItems[index].quantity++;
+      context.read<MainProvider>().cartProducts[index].quantity++;
     });
   }
 
   void _decreaseQuantity(int index) {
-    if (cartItems[index].quantity > 1) {
+    if (context.read<MainProvider>().cartProducts[index].quantity > 1) {
       setState(() {
-        cartItems[index].quantity--;
+        context.read<MainProvider>().cartProducts[index].quantity--;
       });
     }
   }
 
   double _calculateTotal() {
-    return cartItems.fold(
-      0,
-      (sum, item) => sum + (item.price * item.quantity),
-    );
+    return context.read<MainProvider>().cartProducts.fold(
+          0,
+          (sum, item) => sum + (item.price * item.quantity),
+        );
   }
 
   @override
@@ -73,55 +54,66 @@ class _CartScreenState extends State<CartScreen> {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: cartItems.length,
+              itemCount: context.read<MainProvider>().cartProducts.length,
               itemBuilder: (context, index) {
-                final item = cartItems[index];
-                return GestureDetector(
-                  onTap: () {
-                    // context.read<MainProvider>().currentProductModel =
-                    //   demoPopularProducts[index];
+                final item = context.read<MainProvider>().cartProducts[index];
+                return Dismissible(
+                  key: Key(item.title
+                      .toString()), // Ensure each item has a unique key
+                  direction: DismissDirection.endToStart,
+                  onDismissed: (direction) {
+                    context.read<MainProvider>().removefromCart(item);
+                  },
+                  background: Container(
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                    color: Colors.red,
+                    child: Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    ),
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      // context.read<MainProvider>().currentProductModel =
+                      //   demoPopularProducts[index];
 
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => ProductDetailsScreen(
-                          productImages: [
-                            demoPopularProducts[index].imageUrl,
-                            demoPopularProducts[index].imageUrl,
-                            demoPopularProducts[index].imageUrl
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ProductDetailsScreen(),
+                        ),
+                      );
+                    },
+                    child: Card(
+                      margin: EdgeInsets.all(8.0),
+                      child: ListTile(
+                        leading: Image.network(item.imageUrl),
+                        title: Text(item.title),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(item.title),
+                            Text(
+                                '\$${(item.price * item.quantity).toStringAsFixed(2)}'),
                           ],
                         ),
-                      ),
-                    );
-                  },
-                  child: Card(
-                    margin: EdgeInsets.all(8.0),
-                    child: ListTile(
-                      leading: Image.network(item.imageUrl),
-                      title: Text(item.title),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(item.info),
-                          Text(
-                              '\$${(item.price * item.quantity).toStringAsFixed(2)}'),
-                        ],
-                      ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.remove),
-                            onPressed: () => _decreaseQuantity(index),
-                          ),
-                          Text('${item.quantity}'),
-                          IconButton(
-                            icon: Icon(
-                              Icons.add,
-                              color: kprimaryColor,
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.remove),
+                              onPressed: () => _decreaseQuantity(index),
                             ),
-                            onPressed: () => _increaseQuantity(index),
-                          ),
-                        ],
+                            Text('${item.quantity}'),
+                            IconButton(
+                              icon: Icon(
+                                Icons.add,
+                                color: kprimaryColor,
+                              ),
+                              onPressed: () => _increaseQuantity(index),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

@@ -65,7 +65,11 @@ class CheckoutModal extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 20.0),
-                child: SizedBox(height: 50, child: ButtonMainWidget()),
+                child: SizedBox(
+                    height: 50,
+                    child: ButtonMainWidget(
+                      text: 'Place order',
+                    )),
               ),
             ],
           ),
@@ -78,8 +82,9 @@ class CheckoutModal extends StatelessWidget {
 class ButtonMainWidget extends StatelessWidget {
   const ButtonMainWidget({
     super.key,
+    required this.text,
   });
-
+  final String text;
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -94,7 +99,7 @@ class ButtonMainWidget extends StatelessWidget {
         onTap: () {},
         child: Center(
           child: Text(
-            "Place Order",
+            text,
             style: Theme.of(context)
                 .textTheme
                 .titleMedium!

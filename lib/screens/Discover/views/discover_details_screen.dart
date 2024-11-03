@@ -3,10 +3,12 @@ import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/components/search_bar_input_field.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/models/product_model.dart';
+import 'package:e_commerce_app/screens/Discover/views/filter_screen.dart';
 import 'package:e_commerce_app/screens/Products/Components/product_card.dart';
 import 'package:e_commerce_app/screens/Products/product_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 
 @RoutePage()
 class DiscoverDetailsScreen extends StatelessWidget {
@@ -21,6 +23,19 @@ class DiscoverDetailsScreen extends StatelessWidget {
           context.watch<MainProvider>().categoryName,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => FilterScreen(),
+                ),
+              );
+            },
+            icon: SvgPicture.asset("assets/icons/filter.svg",
+                color: Theme.of(context).textTheme.bodyLarge!.color),
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -50,13 +65,7 @@ class DiscoverDetailsScreen extends StatelessWidget {
                           demoPopularProducts[index];
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => ProductDetailsScreen(
-                            productImages: [
-                              demoPopularProducts[index].imageUrl,
-                              demoPopularProducts[index].imageUrl,
-                              demoPopularProducts[index].imageUrl
-                            ],
-                          ),
+                          builder: (context) => ProductDetailsScreen(),
                         ),
                       );
                     },

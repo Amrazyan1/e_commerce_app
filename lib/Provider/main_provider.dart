@@ -36,8 +36,7 @@ class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void addToFavourites(ProductModel? model) {
-    if (model == null) {}
-    model = currentProductModel;
+    model ??= currentProductModel;
 
     model.isFavourite = !model.isFavourite;
     if (model.isFavourite) {
@@ -46,6 +45,26 @@ class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
       favouriteProducts.remove(model);
     }
     notifyListeners();
+  }
+
+  void addToCart(ProductModel model) {
+    cartProducts.add(model);
+
+    notifyListeners();
+  }
+
+  void removefromCart(ProductModel model) {
+    cartProducts.remove(model);
+
+    notifyListeners();
+  }
+
+  List<ProductModel> _cartProducts = [];
+
+  List<ProductModel> get cartProducts => _cartProducts;
+
+  set cartProducts(List<ProductModel> value) {
+    _cartProducts = value;
   }
 
   List<ProductModel> _favouriteProducts = [];
