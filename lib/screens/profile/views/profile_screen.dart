@@ -67,16 +67,14 @@ class ProfileScreen extends StatelessWidget {
             text: "Payment Methods",
             svgSrc: "assets/icons/payment.svg",
             press: () {
-              AutoRouter.of(context)
-                  .push(FakeProifleRoute(pageName: 'Payment Methods screen'));
+              AutoRouter.of(context).push(PaymentmethodsRoute());
             },
           ),
           ProfileMenuListTile(
             text: "Promo Codes",
             svgSrc: "assets/icons/promo_code.svg",
             press: () {
-              AutoRouter.of(context)
-                  .push(FakeProifleRoute(pageName: 'Promo Codes screen'));
+              AutoRouter.of(context).push(CouponsRoute());
             },
           ),
           const SizedBox(height: defaultPadding),
@@ -103,6 +101,14 @@ class ProfileScreen extends StatelessWidget {
             press: () {
               AutoRouter.of(context)
                   .push(FakeProifleRoute(pageName: 'Help screen'));
+            },
+          ),
+          const SizedBox(height: defaultPadding),
+          ProfileMenuListTile(
+            text: "About",
+            svgSrc: "assets/icons/help.svg",
+            press: () {
+              AutoRouter.of(context).push(AboutUsRoute());
             },
           ),
           const SizedBox(height: defaultPadding),
