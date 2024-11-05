@@ -80,11 +80,13 @@ class CheckoutModal extends StatelessWidget {
 }
 
 class ButtonMainWidget extends StatelessWidget {
-  const ButtonMainWidget({
+  ButtonMainWidget({
     super.key,
     required this.text,
+    this.callback,
   });
   final String text;
+  VoidCallback? callback;
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -96,7 +98,7 @@ class ButtonMainWidget extends StatelessWidget {
         ),
       ),
       child: InkWell(
-        onTap: () {},
+        onTap: callback ?? () {},
         child: Center(
           child: Text(
             text,

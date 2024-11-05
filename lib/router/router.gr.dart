@@ -8,7 +8,7 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i15;
+import 'package:auto_route/auto_route.dart' as _i16;
 import 'package:e_commerce_app/entry_point.dart' as _i8;
 import 'package:e_commerce_app/router/EmptyRouterPage.dart' as _i7;
 import 'package:e_commerce_app/screens/Cart/views/cart_screen.dart' as _i2;
@@ -32,12 +32,13 @@ import 'package:e_commerce_app/screens/profile/views/paymentmethods_screen.dart'
     as _i13;
 import 'package:e_commerce_app/screens/profile/views/profile_screen.dart'
     as _i14;
-import 'package:flutter/material.dart' as _i16;
+import 'package:e_commerce_app/screens/Splash/splash_view.dart' as _i15;
+import 'package:flutter/material.dart' as _i17;
 
 /// generated route for
 /// [_i1.AboutUsScreen]
-class AboutUsRoute extends _i15.PageRouteInfo<void> {
-  const AboutUsRoute({List<_i15.PageRouteInfo>? children})
+class AboutUsRoute extends _i16.PageRouteInfo<void> {
+  const AboutUsRoute({List<_i16.PageRouteInfo>? children})
       : super(
           AboutUsRoute.name,
           initialChildren: children,
@@ -45,7 +46,7 @@ class AboutUsRoute extends _i15.PageRouteInfo<void> {
 
   static const String name = 'AboutUsRoute';
 
-  static _i15.PageInfo page = _i15.PageInfo(
+  static _i16.PageInfo page = _i16.PageInfo(
     name,
     builder: (data) {
       return const _i1.AboutUsScreen();
@@ -55,8 +56,8 @@ class AboutUsRoute extends _i15.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.CartScreen]
-class CartRoute extends _i15.PageRouteInfo<void> {
-  const CartRoute({List<_i15.PageRouteInfo>? children})
+class CartRoute extends _i16.PageRouteInfo<void> {
+  const CartRoute({List<_i16.PageRouteInfo>? children})
       : super(
           CartRoute.name,
           initialChildren: children,
@@ -64,7 +65,7 @@ class CartRoute extends _i15.PageRouteInfo<void> {
 
   static const String name = 'CartRoute';
 
-  static _i15.PageInfo page = _i15.PageInfo(
+  static _i16.PageInfo page = _i16.PageInfo(
     name,
     builder: (data) {
       return const _i2.CartScreen();
@@ -74,8 +75,8 @@ class CartRoute extends _i15.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.CouponsScreen]
-class CouponsRoute extends _i15.PageRouteInfo<void> {
-  const CouponsRoute({List<_i15.PageRouteInfo>? children})
+class CouponsRoute extends _i16.PageRouteInfo<void> {
+  const CouponsRoute({List<_i16.PageRouteInfo>? children})
       : super(
           CouponsRoute.name,
           initialChildren: children,
@@ -83,7 +84,7 @@ class CouponsRoute extends _i15.PageRouteInfo<void> {
 
   static const String name = 'CouponsRoute';
 
-  static _i15.PageInfo page = _i15.PageInfo(
+  static _i16.PageInfo page = _i16.PageInfo(
     name,
     builder: (data) {
       return const _i3.CouponsScreen();
@@ -93,8 +94,8 @@ class CouponsRoute extends _i15.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.DeliveryAddressScreen]
-class DeliveryAddressRoute extends _i15.PageRouteInfo<void> {
-  const DeliveryAddressRoute({List<_i15.PageRouteInfo>? children})
+class DeliveryAddressRoute extends _i16.PageRouteInfo<void> {
+  const DeliveryAddressRoute({List<_i16.PageRouteInfo>? children})
       : super(
           DeliveryAddressRoute.name,
           initialChildren: children,
@@ -102,7 +103,7 @@ class DeliveryAddressRoute extends _i15.PageRouteInfo<void> {
 
   static const String name = 'DeliveryAddressRoute';
 
-  static _i15.PageInfo page = _i15.PageInfo(
+  static _i16.PageInfo page = _i16.PageInfo(
     name,
     builder: (data) {
       return const _i4.DeliveryAddressScreen();
@@ -112,8 +113,8 @@ class DeliveryAddressRoute extends _i15.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.DiscoverDetailsScreen]
-class DiscoverDetailsRoute extends _i15.PageRouteInfo<void> {
-  const DiscoverDetailsRoute({List<_i15.PageRouteInfo>? children})
+class DiscoverDetailsRoute extends _i16.PageRouteInfo<void> {
+  const DiscoverDetailsRoute({List<_i16.PageRouteInfo>? children})
       : super(
           DiscoverDetailsRoute.name,
           initialChildren: children,
@@ -121,7 +122,7 @@ class DiscoverDetailsRoute extends _i15.PageRouteInfo<void> {
 
   static const String name = 'DiscoverDetailsRoute';
 
-  static _i15.PageInfo page = _i15.PageInfo(
+  static _i16.PageInfo page = _i16.PageInfo(
     name,
     builder: (data) {
       return const _i5.DiscoverDetailsScreen();
@@ -131,8 +132,8 @@ class DiscoverDetailsRoute extends _i15.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i6.DiscoverScreen]
-class DiscoverRoute extends _i15.PageRouteInfo<void> {
-  const DiscoverRoute({List<_i15.PageRouteInfo>? children})
+class DiscoverRoute extends _i16.PageRouteInfo<void> {
+  const DiscoverRoute({List<_i16.PageRouteInfo>? children})
       : super(
           DiscoverRoute.name,
           initialChildren: children,
@@ -140,7 +141,7 @@ class DiscoverRoute extends _i15.PageRouteInfo<void> {
 
   static const String name = 'DiscoverRoute';
 
-  static _i15.PageInfo page = _i15.PageInfo(
+  static _i16.PageInfo page = _i16.PageInfo(
     name,
     builder: (data) {
       return const _i6.DiscoverScreen();
@@ -150,8 +151,8 @@ class DiscoverRoute extends _i15.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i7.EmptyRouterPage]
-class EmptyRouter extends _i15.PageRouteInfo<void> {
-  const EmptyRouter({List<_i15.PageRouteInfo>? children})
+class EmptyRouter extends _i16.PageRouteInfo<void> {
+  const EmptyRouter({List<_i16.PageRouteInfo>? children})
       : super(
           EmptyRouter.name,
           initialChildren: children,
@@ -159,7 +160,7 @@ class EmptyRouter extends _i15.PageRouteInfo<void> {
 
   static const String name = 'EmptyRouter';
 
-  static _i15.PageInfo page = _i15.PageInfo(
+  static _i16.PageInfo page = _i16.PageInfo(
     name,
     builder: (data) {
       return const _i7.EmptyRouterPage();
@@ -169,8 +170,8 @@ class EmptyRouter extends _i15.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i8.EntryPoint]
-class EntryPoint extends _i15.PageRouteInfo<void> {
-  const EntryPoint({List<_i15.PageRouteInfo>? children})
+class EntryPoint extends _i16.PageRouteInfo<void> {
+  const EntryPoint({List<_i16.PageRouteInfo>? children})
       : super(
           EntryPoint.name,
           initialChildren: children,
@@ -178,7 +179,7 @@ class EntryPoint extends _i15.PageRouteInfo<void> {
 
   static const String name = 'EntryPoint';
 
-  static _i15.PageInfo page = _i15.PageInfo(
+  static _i16.PageInfo page = _i16.PageInfo(
     name,
     builder: (data) {
       return const _i8.EntryPoint();
@@ -188,11 +189,11 @@ class EntryPoint extends _i15.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i9.FakeProifleScreen]
-class FakeProifleRoute extends _i15.PageRouteInfo<FakeProifleRouteArgs> {
+class FakeProifleRoute extends _i16.PageRouteInfo<FakeProifleRouteArgs> {
   FakeProifleRoute({
-    _i16.Key? key,
+    _i17.Key? key,
     required String pageName,
-    List<_i15.PageRouteInfo>? children,
+    List<_i16.PageRouteInfo>? children,
   }) : super(
           FakeProifleRoute.name,
           args: FakeProifleRouteArgs(
@@ -204,7 +205,7 @@ class FakeProifleRoute extends _i15.PageRouteInfo<FakeProifleRouteArgs> {
 
   static const String name = 'FakeProifleRoute';
 
-  static _i15.PageInfo page = _i15.PageInfo(
+  static _i16.PageInfo page = _i16.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<FakeProifleRouteArgs>();
@@ -222,7 +223,7 @@ class FakeProifleRouteArgs {
     required this.pageName,
   });
 
-  final _i16.Key? key;
+  final _i17.Key? key;
 
   final String pageName;
 
@@ -234,8 +235,8 @@ class FakeProifleRouteArgs {
 
 /// generated route for
 /// [_i10.FavoriteScreen]
-class FavoriteRoute extends _i15.PageRouteInfo<void> {
-  const FavoriteRoute({List<_i15.PageRouteInfo>? children})
+class FavoriteRoute extends _i16.PageRouteInfo<void> {
+  const FavoriteRoute({List<_i16.PageRouteInfo>? children})
       : super(
           FavoriteRoute.name,
           initialChildren: children,
@@ -243,7 +244,7 @@ class FavoriteRoute extends _i15.PageRouteInfo<void> {
 
   static const String name = 'FavoriteRoute';
 
-  static _i15.PageInfo page = _i15.PageInfo(
+  static _i16.PageInfo page = _i16.PageInfo(
     name,
     builder: (data) {
       return const _i10.FavoriteScreen();
@@ -253,8 +254,8 @@ class FavoriteRoute extends _i15.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i11.HomeScreen]
-class HomeRoute extends _i15.PageRouteInfo<void> {
-  const HomeRoute({List<_i15.PageRouteInfo>? children})
+class HomeRoute extends _i16.PageRouteInfo<void> {
+  const HomeRoute({List<_i16.PageRouteInfo>? children})
       : super(
           HomeRoute.name,
           initialChildren: children,
@@ -262,7 +263,7 @@ class HomeRoute extends _i15.PageRouteInfo<void> {
 
   static const String name = 'HomeRoute';
 
-  static _i15.PageInfo page = _i15.PageInfo(
+  static _i16.PageInfo page = _i16.PageInfo(
     name,
     builder: (data) {
       return const _i11.HomeScreen();
@@ -272,8 +273,8 @@ class HomeRoute extends _i15.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i12.MydetailsScreen]
-class MydetailsRoute extends _i15.PageRouteInfo<void> {
-  const MydetailsRoute({List<_i15.PageRouteInfo>? children})
+class MydetailsRoute extends _i16.PageRouteInfo<void> {
+  const MydetailsRoute({List<_i16.PageRouteInfo>? children})
       : super(
           MydetailsRoute.name,
           initialChildren: children,
@@ -281,7 +282,7 @@ class MydetailsRoute extends _i15.PageRouteInfo<void> {
 
   static const String name = 'MydetailsRoute';
 
-  static _i15.PageInfo page = _i15.PageInfo(
+  static _i16.PageInfo page = _i16.PageInfo(
     name,
     builder: (data) {
       return const _i12.MydetailsScreen();
@@ -291,8 +292,8 @@ class MydetailsRoute extends _i15.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i13.PaymentmethodsScreen]
-class PaymentmethodsRoute extends _i15.PageRouteInfo<void> {
-  const PaymentmethodsRoute({List<_i15.PageRouteInfo>? children})
+class PaymentmethodsRoute extends _i16.PageRouteInfo<void> {
+  const PaymentmethodsRoute({List<_i16.PageRouteInfo>? children})
       : super(
           PaymentmethodsRoute.name,
           initialChildren: children,
@@ -300,7 +301,7 @@ class PaymentmethodsRoute extends _i15.PageRouteInfo<void> {
 
   static const String name = 'PaymentmethodsRoute';
 
-  static _i15.PageInfo page = _i15.PageInfo(
+  static _i16.PageInfo page = _i16.PageInfo(
     name,
     builder: (data) {
       return const _i13.PaymentmethodsScreen();
@@ -310,8 +311,8 @@ class PaymentmethodsRoute extends _i15.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i14.ProfileScreen]
-class ProfileRoute extends _i15.PageRouteInfo<void> {
-  const ProfileRoute({List<_i15.PageRouteInfo>? children})
+class ProfileRoute extends _i16.PageRouteInfo<void> {
+  const ProfileRoute({List<_i16.PageRouteInfo>? children})
       : super(
           ProfileRoute.name,
           initialChildren: children,
@@ -319,10 +320,29 @@ class ProfileRoute extends _i15.PageRouteInfo<void> {
 
   static const String name = 'ProfileRoute';
 
-  static _i15.PageInfo page = _i15.PageInfo(
+  static _i16.PageInfo page = _i16.PageInfo(
     name,
     builder: (data) {
       return const _i14.ProfileScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [_i15.SplashViewScreen]
+class SplashViewRoute extends _i16.PageRouteInfo<void> {
+  const SplashViewRoute({List<_i16.PageRouteInfo>? children})
+      : super(
+          SplashViewRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SplashViewRoute';
+
+  static _i16.PageInfo page = _i16.PageInfo(
+    name,
+    builder: (data) {
+      return const _i15.SplashViewScreen();
     },
   );
 }

@@ -54,7 +54,7 @@ class _CartScreenState extends State<CartScreen> {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: context.read<MainProvider>().cartProducts.length,
+              itemCount: context.watch<MainProvider>().cartProducts.length,
               itemBuilder: (context, index) {
                 final item = context.read<MainProvider>().cartProducts[index];
                 return Dismissible(
