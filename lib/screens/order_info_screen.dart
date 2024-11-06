@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:e_commerce_app/components/checkout_modal.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 @RoutePage()
 class OrderInfoScreen extends StatelessWidget {
@@ -11,22 +13,22 @@ class OrderInfoScreen extends StatelessWidget {
     // Sample product data
     final products = [
       {
-        'name': 'Apple',
-        'info': 'Fresh and crispy',
+        'name': 'Banana',
+        'info': 'Product info',
         'image': productDemoImg1,
         'count': 2,
         'price': '1200 AMD',
       },
       {
         'name': 'Orange',
-        'info': 'Juicy and sweet',
+        'info': 'Product info',
         'image': productDemoImg1,
         'count': 3,
         'price': '1800 AMD',
       },
       {
         'name': 'Peach',
-        'info': 'Soft and ripe',
+        'info': 'Product info',
         'image': productDemoImg1,
         'count': 1,
         'price': '800 AMD',
@@ -106,6 +108,16 @@ class OrderInfoScreen extends StatelessWidget {
                 _buildInfoRow('Promo Code', 'SUMMER2024'),
                 _buildInfoRow('Total Cost', '7300 AMD'),
                 _buildInfoRow('Status', 'Pending'),
+                SizedBox(
+                  height: 60,
+                  child: Row(
+                    children: [
+                      Expanded(child: ButtonMainWidget(text: 'Order Again')),
+                      Gap(10),
+                      Expanded(child: ButtonMainWidget(text: 'Cancel Order')),
+                    ],
+                  ),
+                )
               ],
             );
           }

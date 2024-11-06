@@ -50,16 +50,14 @@ class ProfileScreen extends StatelessWidget {
             text: "My Details",
             svgSrc: "assets/icons/my_details.svg",
             press: () {
-              AutoRouter.of(context)
-                  .push(FakeProifleRoute(pageName: 'My Details screen'));
+              AutoRouter.of(context).push(MyDetailsRoute());
             },
           ),
           ProfileMenuListTile(
             text: "Delivery Address",
             svgSrc: "assets/icons/Address.svg",
             press: () {
-              AutoRouter.of(context)
-                  .push(FakeProifleRoute(pageName: 'Delivery Address screen'));
+              AutoRouter.of(context).push(DeliveryAddresseRoute());
             },
           ),
           ProfileMenuListTile(
