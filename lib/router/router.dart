@@ -24,10 +24,12 @@ class AppRouter extends RootStackRouter {
             AutoRoute(page: AboutUsRoute.page, path: 'about-us'),
             AutoRoute(page: CouponsRoute.page, path: 'couponsRoute'),
             AutoRoute(
-                page: DeliveryAddressRoute.page, path: 'aeliveryAddressRoute'),
+                page: DeliveryAddressRoute.page, path: 'deliveryAddressRoute'),
             AutoRoute(page: MydetailsRoute.page, path: 'mydetailsRoute'),
             AutoRoute(
-                page: PaymentmethodsRoute.page, path: 'aaymentmethodsRoute'),
+                page: PaymentmethodsRoute.page, path: 'paymentmethodsRoute'),
+            AutoRoute(page: OrdersRoute.page, path: 'ordersRoute'),
+            AutoRoute(page: OrderInfoRoute.page, path: 'ordersInfoRoute'),
           ]),
         ]),
         AutoRoute(page: BonusCarRoute.page, path: '/bonuscard'),
