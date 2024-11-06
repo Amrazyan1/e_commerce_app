@@ -32,7 +32,9 @@ class _EntryPointState extends State<EntryPoint> {
 
     return AutoTabsRouter(
       routes: const [
-        HomeRoute(),
+        EmptyHomeRouter(children: [
+          HomeRoute(), // Default child of home tab
+        ]),
         DiscoverRoute(),
         CartRoute(),
         FavoriteRoute(),

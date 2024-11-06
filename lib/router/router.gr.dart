@@ -8,9 +8,10 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i20;
-import 'package:e_commerce_app/entry_point.dart' as _i10;
-import 'package:e_commerce_app/router/EmptyRouterPage.dart' as _i9;
+import 'package:auto_route/auto_route.dart' as _i21;
+import 'package:e_commerce_app/entry_point.dart' as _i11;
+import 'package:e_commerce_app/router/EmptyForHomePage.dart' as _i9;
+import 'package:e_commerce_app/router/EmptyRouterPage.dart' as _i10;
 import 'package:e_commerce_app/screens/bonuscard_screen.dart' as _i2;
 import 'package:e_commerce_app/screens/Cart/views/cart_screen.dart' as _i3;
 import 'package:e_commerce_app/screens/delivery_address_info.dart' as _i5;
@@ -19,30 +20,30 @@ import 'package:e_commerce_app/screens/Discover/views/discover_details_screen.da
 import 'package:e_commerce_app/screens/Discover/views/discover_screen.dart'
     as _i8;
 import 'package:e_commerce_app/screens/Favorites/views/favorite_screen.dart'
-    as _i12;
-import 'package:e_commerce_app/screens/Home/views/home_screen.dart' as _i13;
-import 'package:e_commerce_app/screens/order_info_screen.dart' as _i15;
-import 'package:e_commerce_app/screens/orders_screen.dart' as _i16;
+    as _i13;
+import 'package:e_commerce_app/screens/Home/views/home_screen.dart' as _i14;
+import 'package:e_commerce_app/screens/order_info_screen.dart' as _i16;
+import 'package:e_commerce_app/screens/orders_screen.dart' as _i17;
 import 'package:e_commerce_app/screens/profile/views/about_screen.dart' as _i1;
 import 'package:e_commerce_app/screens/profile/views/coupons_screen.dart'
     as _i4;
 import 'package:e_commerce_app/screens/profile/views/delivery_address_screen.dart'
     as _i6;
 import 'package:e_commerce_app/screens/profile/views/fake_proifle_screen.dart'
-    as _i11;
+    as _i12;
 import 'package:e_commerce_app/screens/profile/views/mydetails_screen.dart'
-    as _i14;
+    as _i15;
 import 'package:e_commerce_app/screens/profile/views/paymentmethods_screen.dart'
-    as _i17;
-import 'package:e_commerce_app/screens/profile/views/profile_screen.dart'
     as _i18;
-import 'package:e_commerce_app/screens/Splash/splash_view.dart' as _i19;
-import 'package:flutter/material.dart' as _i21;
+import 'package:e_commerce_app/screens/profile/views/profile_screen.dart'
+    as _i19;
+import 'package:e_commerce_app/screens/Splash/splash_view.dart' as _i20;
+import 'package:flutter/material.dart' as _i22;
 
 /// generated route for
 /// [_i1.AboutUsScreen]
-class AboutUsRoute extends _i20.PageRouteInfo<void> {
-  const AboutUsRoute({List<_i20.PageRouteInfo>? children})
+class AboutUsRoute extends _i21.PageRouteInfo<void> {
+  const AboutUsRoute({List<_i21.PageRouteInfo>? children})
       : super(
           AboutUsRoute.name,
           initialChildren: children,
@@ -50,7 +51,7 @@ class AboutUsRoute extends _i20.PageRouteInfo<void> {
 
   static const String name = 'AboutUsRoute';
 
-  static _i20.PageInfo page = _i20.PageInfo(
+  static _i21.PageInfo page = _i21.PageInfo(
     name,
     builder: (data) {
       return const _i1.AboutUsScreen();
@@ -60,8 +61,8 @@ class AboutUsRoute extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.BonusCarScreen]
-class BonusCarRoute extends _i20.PageRouteInfo<void> {
-  const BonusCarRoute({List<_i20.PageRouteInfo>? children})
+class BonusCarRoute extends _i21.PageRouteInfo<void> {
+  const BonusCarRoute({List<_i21.PageRouteInfo>? children})
       : super(
           BonusCarRoute.name,
           initialChildren: children,
@@ -69,7 +70,7 @@ class BonusCarRoute extends _i20.PageRouteInfo<void> {
 
   static const String name = 'BonusCarRoute';
 
-  static _i20.PageInfo page = _i20.PageInfo(
+  static _i21.PageInfo page = _i21.PageInfo(
     name,
     builder: (data) {
       return const _i2.BonusCarScreen();
@@ -79,8 +80,8 @@ class BonusCarRoute extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.CartScreen]
-class CartRoute extends _i20.PageRouteInfo<void> {
-  const CartRoute({List<_i20.PageRouteInfo>? children})
+class CartRoute extends _i21.PageRouteInfo<void> {
+  const CartRoute({List<_i21.PageRouteInfo>? children})
       : super(
           CartRoute.name,
           initialChildren: children,
@@ -88,7 +89,7 @@ class CartRoute extends _i20.PageRouteInfo<void> {
 
   static const String name = 'CartRoute';
 
-  static _i20.PageInfo page = _i20.PageInfo(
+  static _i21.PageInfo page = _i21.PageInfo(
     name,
     builder: (data) {
       return const _i3.CartScreen();
@@ -98,8 +99,8 @@ class CartRoute extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.CouponsScreen]
-class CouponsRoute extends _i20.PageRouteInfo<void> {
-  const CouponsRoute({List<_i20.PageRouteInfo>? children})
+class CouponsRoute extends _i21.PageRouteInfo<void> {
+  const CouponsRoute({List<_i21.PageRouteInfo>? children})
       : super(
           CouponsRoute.name,
           initialChildren: children,
@@ -107,7 +108,7 @@ class CouponsRoute extends _i20.PageRouteInfo<void> {
 
   static const String name = 'CouponsRoute';
 
-  static _i20.PageInfo page = _i20.PageInfo(
+  static _i21.PageInfo page = _i21.PageInfo(
     name,
     builder: (data) {
       return const _i4.CouponsScreen();
@@ -117,8 +118,8 @@ class CouponsRoute extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.DeliveryAddressInfoScreen]
-class DeliveryAddressInfoRoute extends _i20.PageRouteInfo<void> {
-  const DeliveryAddressInfoRoute({List<_i20.PageRouteInfo>? children})
+class DeliveryAddressInfoRoute extends _i21.PageRouteInfo<void> {
+  const DeliveryAddressInfoRoute({List<_i21.PageRouteInfo>? children})
       : super(
           DeliveryAddressInfoRoute.name,
           initialChildren: children,
@@ -126,7 +127,7 @@ class DeliveryAddressInfoRoute extends _i20.PageRouteInfo<void> {
 
   static const String name = 'DeliveryAddressInfoRoute';
 
-  static _i20.PageInfo page = _i20.PageInfo(
+  static _i21.PageInfo page = _i21.PageInfo(
     name,
     builder: (data) {
       return const _i5.DeliveryAddressInfoScreen();
@@ -136,8 +137,8 @@ class DeliveryAddressInfoRoute extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i6.DeliveryAddresseScreen]
-class DeliveryAddresseRoute extends _i20.PageRouteInfo<void> {
-  const DeliveryAddresseRoute({List<_i20.PageRouteInfo>? children})
+class DeliveryAddresseRoute extends _i21.PageRouteInfo<void> {
+  const DeliveryAddresseRoute({List<_i21.PageRouteInfo>? children})
       : super(
           DeliveryAddresseRoute.name,
           initialChildren: children,
@@ -145,7 +146,7 @@ class DeliveryAddresseRoute extends _i20.PageRouteInfo<void> {
 
   static const String name = 'DeliveryAddresseRoute';
 
-  static _i20.PageInfo page = _i20.PageInfo(
+  static _i21.PageInfo page = _i21.PageInfo(
     name,
     builder: (data) {
       return const _i6.DeliveryAddresseScreen();
@@ -155,8 +156,8 @@ class DeliveryAddresseRoute extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i7.DiscoverDetailsScreen]
-class DiscoverDetailsRoute extends _i20.PageRouteInfo<void> {
-  const DiscoverDetailsRoute({List<_i20.PageRouteInfo>? children})
+class DiscoverDetailsRoute extends _i21.PageRouteInfo<void> {
+  const DiscoverDetailsRoute({List<_i21.PageRouteInfo>? children})
       : super(
           DiscoverDetailsRoute.name,
           initialChildren: children,
@@ -164,7 +165,7 @@ class DiscoverDetailsRoute extends _i20.PageRouteInfo<void> {
 
   static const String name = 'DiscoverDetailsRoute';
 
-  static _i20.PageInfo page = _i20.PageInfo(
+  static _i21.PageInfo page = _i21.PageInfo(
     name,
     builder: (data) {
       return const _i7.DiscoverDetailsScreen();
@@ -174,8 +175,8 @@ class DiscoverDetailsRoute extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i8.DiscoverScreen]
-class DiscoverRoute extends _i20.PageRouteInfo<void> {
-  const DiscoverRoute({List<_i20.PageRouteInfo>? children})
+class DiscoverRoute extends _i21.PageRouteInfo<void> {
+  const DiscoverRoute({List<_i21.PageRouteInfo>? children})
       : super(
           DiscoverRoute.name,
           initialChildren: children,
@@ -183,7 +184,7 @@ class DiscoverRoute extends _i20.PageRouteInfo<void> {
 
   static const String name = 'DiscoverRoute';
 
-  static _i20.PageInfo page = _i20.PageInfo(
+  static _i21.PageInfo page = _i21.PageInfo(
     name,
     builder: (data) {
       return const _i8.DiscoverScreen();
@@ -192,9 +193,28 @@ class DiscoverRoute extends _i20.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i9.EmptyRouterPage]
-class EmptyRouter extends _i20.PageRouteInfo<void> {
-  const EmptyRouter({List<_i20.PageRouteInfo>? children})
+/// [_i9.EmptyHomeRouterPage]
+class EmptyHomeRouter extends _i21.PageRouteInfo<void> {
+  const EmptyHomeRouter({List<_i21.PageRouteInfo>? children})
+      : super(
+          EmptyHomeRouter.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'EmptyHomeRouter';
+
+  static _i21.PageInfo page = _i21.PageInfo(
+    name,
+    builder: (data) {
+      return const _i9.EmptyHomeRouterPage();
+    },
+  );
+}
+
+/// generated route for
+/// [_i10.EmptyRouterPage]
+class EmptyRouter extends _i21.PageRouteInfo<void> {
+  const EmptyRouter({List<_i21.PageRouteInfo>? children})
       : super(
           EmptyRouter.name,
           initialChildren: children,
@@ -202,18 +222,18 @@ class EmptyRouter extends _i20.PageRouteInfo<void> {
 
   static const String name = 'EmptyRouter';
 
-  static _i20.PageInfo page = _i20.PageInfo(
+  static _i21.PageInfo page = _i21.PageInfo(
     name,
     builder: (data) {
-      return const _i9.EmptyRouterPage();
+      return const _i10.EmptyRouterPage();
     },
   );
 }
 
 /// generated route for
-/// [_i10.EntryPoint]
-class EntryPoint extends _i20.PageRouteInfo<void> {
-  const EntryPoint({List<_i20.PageRouteInfo>? children})
+/// [_i11.EntryPoint]
+class EntryPoint extends _i21.PageRouteInfo<void> {
+  const EntryPoint({List<_i21.PageRouteInfo>? children})
       : super(
           EntryPoint.name,
           initialChildren: children,
@@ -221,21 +241,21 @@ class EntryPoint extends _i20.PageRouteInfo<void> {
 
   static const String name = 'EntryPoint';
 
-  static _i20.PageInfo page = _i20.PageInfo(
+  static _i21.PageInfo page = _i21.PageInfo(
     name,
     builder: (data) {
-      return const _i10.EntryPoint();
+      return const _i11.EntryPoint();
     },
   );
 }
 
 /// generated route for
-/// [_i11.FakeProifleScreen]
-class FakeProifleRoute extends _i20.PageRouteInfo<FakeProifleRouteArgs> {
+/// [_i12.FakeProifleScreen]
+class FakeProifleRoute extends _i21.PageRouteInfo<FakeProifleRouteArgs> {
   FakeProifleRoute({
-    _i21.Key? key,
+    _i22.Key? key,
     required String pageName,
-    List<_i20.PageRouteInfo>? children,
+    List<_i21.PageRouteInfo>? children,
   }) : super(
           FakeProifleRoute.name,
           args: FakeProifleRouteArgs(
@@ -247,11 +267,11 @@ class FakeProifleRoute extends _i20.PageRouteInfo<FakeProifleRouteArgs> {
 
   static const String name = 'FakeProifleRoute';
 
-  static _i20.PageInfo page = _i20.PageInfo(
+  static _i21.PageInfo page = _i21.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<FakeProifleRouteArgs>();
-      return _i11.FakeProifleScreen(
+      return _i12.FakeProifleScreen(
         key: args.key,
         pageName: args.pageName,
       );
@@ -265,7 +285,7 @@ class FakeProifleRouteArgs {
     required this.pageName,
   });
 
-  final _i21.Key? key;
+  final _i22.Key? key;
 
   final String pageName;
 
@@ -276,9 +296,9 @@ class FakeProifleRouteArgs {
 }
 
 /// generated route for
-/// [_i12.FavoriteScreen]
-class FavoriteRoute extends _i20.PageRouteInfo<void> {
-  const FavoriteRoute({List<_i20.PageRouteInfo>? children})
+/// [_i13.FavoriteScreen]
+class FavoriteRoute extends _i21.PageRouteInfo<void> {
+  const FavoriteRoute({List<_i21.PageRouteInfo>? children})
       : super(
           FavoriteRoute.name,
           initialChildren: children,
@@ -286,18 +306,18 @@ class FavoriteRoute extends _i20.PageRouteInfo<void> {
 
   static const String name = 'FavoriteRoute';
 
-  static _i20.PageInfo page = _i20.PageInfo(
+  static _i21.PageInfo page = _i21.PageInfo(
     name,
     builder: (data) {
-      return const _i12.FavoriteScreen();
+      return const _i13.FavoriteScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i13.HomeScreen]
-class HomeRoute extends _i20.PageRouteInfo<void> {
-  const HomeRoute({List<_i20.PageRouteInfo>? children})
+/// [_i14.HomeScreen]
+class HomeRoute extends _i21.PageRouteInfo<void> {
+  const HomeRoute({List<_i21.PageRouteInfo>? children})
       : super(
           HomeRoute.name,
           initialChildren: children,
@@ -305,18 +325,18 @@ class HomeRoute extends _i20.PageRouteInfo<void> {
 
   static const String name = 'HomeRoute';
 
-  static _i20.PageInfo page = _i20.PageInfo(
+  static _i21.PageInfo page = _i21.PageInfo(
     name,
     builder: (data) {
-      return const _i13.HomeScreen();
+      return const _i14.HomeScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i14.MyDetailsScreen]
-class MyDetailsRoute extends _i20.PageRouteInfo<void> {
-  const MyDetailsRoute({List<_i20.PageRouteInfo>? children})
+/// [_i15.MyDetailsScreen]
+class MyDetailsRoute extends _i21.PageRouteInfo<void> {
+  const MyDetailsRoute({List<_i21.PageRouteInfo>? children})
       : super(
           MyDetailsRoute.name,
           initialChildren: children,
@@ -324,18 +344,18 @@ class MyDetailsRoute extends _i20.PageRouteInfo<void> {
 
   static const String name = 'MyDetailsRoute';
 
-  static _i20.PageInfo page = _i20.PageInfo(
+  static _i21.PageInfo page = _i21.PageInfo(
     name,
     builder: (data) {
-      return const _i14.MyDetailsScreen();
+      return const _i15.MyDetailsScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i15.OrderInfoScreen]
-class OrderInfoRoute extends _i20.PageRouteInfo<void> {
-  const OrderInfoRoute({List<_i20.PageRouteInfo>? children})
+/// [_i16.OrderInfoScreen]
+class OrderInfoRoute extends _i21.PageRouteInfo<void> {
+  const OrderInfoRoute({List<_i21.PageRouteInfo>? children})
       : super(
           OrderInfoRoute.name,
           initialChildren: children,
@@ -343,18 +363,18 @@ class OrderInfoRoute extends _i20.PageRouteInfo<void> {
 
   static const String name = 'OrderInfoRoute';
 
-  static _i20.PageInfo page = _i20.PageInfo(
+  static _i21.PageInfo page = _i21.PageInfo(
     name,
     builder: (data) {
-      return const _i15.OrderInfoScreen();
+      return const _i16.OrderInfoScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i16.OrdersScreen]
-class OrdersRoute extends _i20.PageRouteInfo<void> {
-  const OrdersRoute({List<_i20.PageRouteInfo>? children})
+/// [_i17.OrdersScreen]
+class OrdersRoute extends _i21.PageRouteInfo<void> {
+  const OrdersRoute({List<_i21.PageRouteInfo>? children})
       : super(
           OrdersRoute.name,
           initialChildren: children,
@@ -362,18 +382,18 @@ class OrdersRoute extends _i20.PageRouteInfo<void> {
 
   static const String name = 'OrdersRoute';
 
-  static _i20.PageInfo page = _i20.PageInfo(
+  static _i21.PageInfo page = _i21.PageInfo(
     name,
     builder: (data) {
-      return const _i16.OrdersScreen();
+      return const _i17.OrdersScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i17.PaymentmethodsScreen]
-class PaymentmethodsRoute extends _i20.PageRouteInfo<void> {
-  const PaymentmethodsRoute({List<_i20.PageRouteInfo>? children})
+/// [_i18.PaymentmethodsScreen]
+class PaymentmethodsRoute extends _i21.PageRouteInfo<void> {
+  const PaymentmethodsRoute({List<_i21.PageRouteInfo>? children})
       : super(
           PaymentmethodsRoute.name,
           initialChildren: children,
@@ -381,18 +401,18 @@ class PaymentmethodsRoute extends _i20.PageRouteInfo<void> {
 
   static const String name = 'PaymentmethodsRoute';
 
-  static _i20.PageInfo page = _i20.PageInfo(
+  static _i21.PageInfo page = _i21.PageInfo(
     name,
     builder: (data) {
-      return const _i17.PaymentmethodsScreen();
+      return const _i18.PaymentmethodsScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i18.ProfileScreen]
-class ProfileRoute extends _i20.PageRouteInfo<void> {
-  const ProfileRoute({List<_i20.PageRouteInfo>? children})
+/// [_i19.ProfileScreen]
+class ProfileRoute extends _i21.PageRouteInfo<void> {
+  const ProfileRoute({List<_i21.PageRouteInfo>? children})
       : super(
           ProfileRoute.name,
           initialChildren: children,
@@ -400,18 +420,18 @@ class ProfileRoute extends _i20.PageRouteInfo<void> {
 
   static const String name = 'ProfileRoute';
 
-  static _i20.PageInfo page = _i20.PageInfo(
+  static _i21.PageInfo page = _i21.PageInfo(
     name,
     builder: (data) {
-      return const _i18.ProfileScreen();
+      return const _i19.ProfileScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i19.SplashViewScreen]
-class SplashViewRoute extends _i20.PageRouteInfo<void> {
-  const SplashViewRoute({List<_i20.PageRouteInfo>? children})
+/// [_i20.SplashViewScreen]
+class SplashViewRoute extends _i21.PageRouteInfo<void> {
+  const SplashViewRoute({List<_i21.PageRouteInfo>? children})
       : super(
           SplashViewRoute.name,
           initialChildren: children,
@@ -419,10 +439,10 @@ class SplashViewRoute extends _i20.PageRouteInfo<void> {
 
   static const String name = 'SplashViewRoute';
 
-  static _i20.PageInfo page = _i20.PageInfo(
+  static _i21.PageInfo page = _i21.PageInfo(
     name,
     builder: (data) {
-      return const _i19.SplashViewScreen();
+      return const _i20.SplashViewScreen();
     },
   );
 }

@@ -22,6 +22,29 @@ class HomeScreen extends StatelessWidget {
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/icons/icon.png',
+                    width: 30,
+                    height: 25,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.location_on_rounded),
+                      const Text(
+                        'Yerevan, Davitashen',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SliverToBoxAdapter(
                 child: Padding(
               padding: const EdgeInsets.all(25),
               child: SearchInputField(),

@@ -15,7 +15,11 @@ class AppRouter extends RootStackRouter {
         ),
 
         AutoRoute(page: EntryPoint.page, path: '/entry', children: [
-          AutoRoute(page: HomeRoute.page, path: 'home'),
+          AutoRoute(page: EmptyHomeRouter.page, path: 'home', children: [
+            AutoRoute(page: HomeRoute.page, path: ''),
+            AutoRoute(page: BonusCarRoute.page, path: 'bonuscard'),
+            AutoRoute(page: DiscoverDetailsRoute.page, path: 'discoverdetail'),
+          ]),
           AutoRoute(page: DiscoverRoute.page, path: 'discover'),
           AutoRoute(page: FavoriteRoute.page, path: 'favorites'),
           AutoRoute(page: CartRoute.page, path: 'cart'),
@@ -33,10 +37,7 @@ class AppRouter extends RootStackRouter {
             AutoRoute(page: DeliveryAddressInfoRoute.page, path: 'addressinfo'),
           ]),
         ]),
-        AutoRoute(page: BonusCarRoute.page, path: '/bonuscard'),
 
         AutoRoute(page: FakeProifleRoute.page, path: '/FakeProifleRoute'),
-
-        AutoRoute(page: DiscoverDetailsRoute.page, path: '/discoverdetail'),
       ];
 }
