@@ -1,6 +1,9 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:e_commerce_app/components/expansion_category.dart';
 import 'package:e_commerce_app/constants.dart';
+import 'package:e_commerce_app/models/category_model.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
+import 'package:e_commerce_app/screens/order_accepted_screen.dart';
 import 'package:e_commerce_app/screens/profile/views/components/profile_menu_item_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -38,29 +41,13 @@ class CheckoutModal extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: ListView(
-                  children: [
-                    _customListTile(
-                      text: 'Delivery',
-                      text1: 'Select Address',
-                    ),
-                    Divider(height: 1),
-                    _customListTile(
-                      text: 'Payment',
-                      text1: 'Select Payment',
-                    ),
-                    Divider(height: 1),
-                    _customListTile(
-                      text: 'Promo Code',
-                      text1: 'Pick discount',
-                    ),
-                    Divider(height: 1),
-                    _customListTile(
-                      text: 'Total Cost',
-                      text1: '7,780 ֏',
-                    ),
-                    Divider(height: 1),
-                  ],
+                child: ListView.builder(
+                  itemCount: demoCategories.length,
+                  itemBuilder: (context, index) => ExpansionCategory(
+                    title: demoCategories[index].title,
+                    info: demoCategories[index].info,
+                    subCategory: demoCategories[index].subCategories!,
+                  ),
                 ),
               ),
               Padding(
@@ -69,6 +56,14 @@ class CheckoutModal extends StatelessWidget {
                     height: 50,
                     child: ButtonMainWidget(
                       text: 'Place order',
+                      callback: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => OrderAcceptedScreen(),
+                          ),
+                        );
+                      },
                     )),
               ),
             ],

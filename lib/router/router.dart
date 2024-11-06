@@ -30,6 +30,7 @@ class AppRouter extends RootStackRouter {
                 page: PaymentmethodsRoute.page, path: 'aaymentmethodsRoute'),
           ]),
         ]),
+        AutoRoute(page: BonusCarRoute.page, path: '/bonuscard'),
 
         AutoRoute(page: FakeProifleRoute.page, path: '/FakeProifleRoute'),
 
