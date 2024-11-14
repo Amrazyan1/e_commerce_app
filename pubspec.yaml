@@ -27,6 +27,7 @@ dependencies:
   gap: ^3.0.1
   u_credit_card: ^1.4.0
   barcode_widget: ^2.0.4
+  dio: ^5.7.0
 
 dev_dependencies:
   flutter_test:
