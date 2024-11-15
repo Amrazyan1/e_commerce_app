@@ -5,7 +5,7 @@ class Endpoints {
   static const String userAddresses = '/users/addresses/?perPage={perPage}';
   static const String setDefaultAddress = '/users/addresses/{id}/set-default';
   static const String addAddress = '/users/addresses';
-  static const String getAddressById = '/users/addresses/{id}';
+  static const String updateAddressById = '/users/addresses/{id}';
   static const String deleteAddressById = '/users/addresses/{id}';
 
   // Articles
@@ -32,4 +32,64 @@ class Endpoints {
   static const String reduceCart = '/carts/reduce';
   static const String changeCart = '/carts/change';
   static const String cartById = '/carts/{id}';
+
+  // Categories
+  static const String getCategories = '/categories?perPage={perPage}';
+  static const String getSubcategoriesById =
+      '/categories/{id}?perPage={perPage}';
+  static const String getCategoryBreadcrumbs = '/categories/{id}/breadcrumbs';
+
+  // Contents
+  static const String getContentsByKeys = '/contents?keys={keys}';
+
+  // Customer
+  static const String subscribeCustomer = '/customers';
+
+  // Orders
+  static const String getOrderById = '/orders/{id}';
+  static const String deleteOrderById = '/orders/{id}';
+  static const String createOrder = '/orders';
+  static const String processOrder = '/orders/process';
+  static const String payOrder = '/orders/{id}/pay/{method}';
+  static const String notifyOrder = '/orders/{id}/notify';
+
+  // Partners
+  static const String getPartnersUsers = '/partners/users';
+  static const String createPartnerForUser = '/partners/users';
+  static const String createPartner = '/partners';
+  static const String certificatePartner = '/partners/certificate';
+
+  // Products
+  static const String getProductsByCategory =
+      '/categories/{id}/products?perPage={perPage}';
+  static const String getProductById = '/products/{id}?perPage={perPage}';
+  static const String getProductRatings = '/products/{product:id}/ratings';
+  static const String addProductRating = '/products/{product:id}/ratings';
+  static const String getFavoriteProducts = '/products/favorites';
+  static const String addProductToFavorites = '/products/favorites';
+  static const String removeProductFromFavorites = '/products/favorites/{id}';
+  static const String getTrendProducts =
+      '/products/trends/{trend}?perPage={perPage}';
+
+  // Professions
+  static const String getProfessions = '/professions';
+
+  // Regions
+  static const String getRegions = '/regions/?perPage={perPage}';
+
+  // Search
+  static const String searchCatalog = '/search/{keyword}?perPage={perPage}';
+
+  // Sessions
+  static const String clearSession = '/sessions/clear';
+
+  // Spheres
+  static const String getSpheres = '/spheres';
+
+  // User
+  static const String getUserOrders = '/users/orders?perPage={perPage}';
+  static const String getUserSettings = '/users/settings';
+  static const String deleteUser = '/users';
+  static const String updateUserSettings = '/auth/settings';
+  static const String updateUserPassword = '/auth/settings/password';
 }

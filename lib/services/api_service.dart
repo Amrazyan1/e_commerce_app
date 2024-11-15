@@ -22,7 +22,7 @@ class ApiService {
 
   Future<Response> setDefaultAddress(String id) async {
     try {
-      return await _dioClient.dio.post(
+      return await _dioClient.dio.put(
         Endpoints.setDefaultAddress.replaceFirst('{id}', id),
       );
     } catch (e) {
@@ -41,10 +41,10 @@ class ApiService {
     }
   }
 
-  Future<Response> getAddressById(String id) async {
+  Future<Response> updateAddressById(String id) async {
     try {
-      return await _dioClient.dio.get(
-        Endpoints.getAddressById.replaceFirst('{id}', id),
+      return await _dioClient.dio.put(
+        Endpoints.updateAddressById.replaceFirst('{id}', id),
       );
     } catch (e) {
       rethrow;
@@ -116,9 +116,9 @@ class ApiService {
     }
   }
 
-  Future<Response> getSubscriptionById(String id) async {
+  Future<Response> deleteSubscriptionById(String id) async {
     try {
-      return await _dioClient.dio.get(
+      return await _dioClient.dio.delete(
         Endpoints.subscriptionById.replaceFirst('{id}', id),
       );
     } catch (e) {
@@ -215,10 +215,364 @@ class ApiService {
     }
   }
 
-  Future<Response> getCartById(String id) async {
+  Future<Response> deleteCartById(String id) async {
+    try {
+      return await _dioClient.dio.delete(
+        Endpoints.cartById.replaceFirst('{id}', id),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Categories
+  Future<Response> getCategories(int perPage) async {
     try {
       return await _dioClient.dio.get(
-        Endpoints.cartById.replaceFirst('{id}', id),
+        Endpoints.getCategories.replaceFirst('{perPage}', perPage.toString()),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> getSubcategoriesById(String id, int perPage) async {
+    try {
+      return await _dioClient.dio.get(
+        Endpoints.getSubcategoriesById
+            .replaceFirst('{id}', id)
+            .replaceFirst('{perPage}', perPage.toString()),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> getCategoryBreadcrumbs(String id) async {
+    try {
+      return await _dioClient.dio.get(
+        Endpoints.getCategoryBreadcrumbs.replaceFirst('{id}', id),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Contents
+  Future<Response> getContentsByKeys(String keys) async {
+    try {
+      return await _dioClient.dio.get(
+        Endpoints.getContentsByKeys.replaceFirst('{keys}', keys),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Customer
+  Future<Response> subscribeCustomer(Map<String, dynamic> data) async {
+    try {
+      return await _dioClient.dio.post(
+        Endpoints.subscribeCustomer,
+        data: data,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Orders
+  Future<Response> getOrderById(String id) async {
+    try {
+      return await _dioClient.dio.get(
+        Endpoints.getOrderById.replaceFirst('{id}', id),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> deleteOrderById(String id) async {
+    try {
+      return await _dioClient.dio.delete(
+        Endpoints.deleteOrderById.replaceFirst('{id}', id),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> createOrder(Map<String, dynamic> data) async {
+    try {
+      return await _dioClient.dio.post(
+        Endpoints.createOrder,
+        data: data,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> processOrder(Map<String, dynamic> data) async {
+    try {
+      return await _dioClient.dio.put(
+        Endpoints.processOrder,
+        data: data,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> payOrder(
+      String id, String method, Map<String, dynamic> data) async {
+    try {
+      return await _dioClient.dio.post(
+        Endpoints.payOrder
+            .replaceFirst('{id}', id)
+            .replaceFirst('{method}', method),
+        data: data,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> notifyOrder(String id, Map<String, dynamic> data) async {
+    try {
+      return await _dioClient.dio.post(
+        Endpoints.notifyOrder.replaceFirst('{id}', id),
+        data: data,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Partners
+  Future<Response> getPartnersUsers() async {
+    try {
+      return await _dioClient.dio.get(Endpoints.getPartnersUsers);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> createPartnerForUser(Map<String, dynamic> data) async {
+    try {
+      return await _dioClient.dio.post(
+        Endpoints.createPartnerForUser,
+        data: data,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> createPartner(Map<String, dynamic> data) async {
+    try {
+      return await _dioClient.dio.post(
+        Endpoints.createPartner,
+        data: data,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> certificatePartner(Map<String, dynamic> data) async {
+    try {
+      return await _dioClient.dio.post(
+        Endpoints.certificatePartner,
+        data: data,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Products
+  Future<Response> getProductsByCategory(String id, int perPage) async {
+    try {
+      return await _dioClient.dio.get(
+        Endpoints.getProductsByCategory
+            .replaceFirst('{id}', id)
+            .replaceFirst('{perPage}', perPage.toString()),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> getProductById(String id, int perPage) async {
+    try {
+      return await _dioClient.dio.get(
+        Endpoints.getProductById
+            .replaceFirst('{id}', id)
+            .replaceFirst('{perPage}', perPage.toString()),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> getProductRatings(String productId) async {
+    try {
+      return await _dioClient.dio.get(
+        Endpoints.getProductRatings.replaceFirst('{product:id}', productId),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> addProductRating(
+      String productId, Map<String, dynamic> data) async {
+    try {
+      return await _dioClient.dio.post(
+        Endpoints.addProductRating.replaceFirst('{product:id}', productId),
+        data: data,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> getFavoriteProducts() async {
+    try {
+      return await _dioClient.dio.get(Endpoints.getFavoriteProducts);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> addProductToFavorites(Map<String, dynamic> data) async {
+    try {
+      return await _dioClient.dio.post(
+        Endpoints.addProductToFavorites,
+        data: data,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> removeProductFromFavorites(String id) async {
+    try {
+      return await _dioClient.dio.delete(
+        Endpoints.removeProductFromFavorites.replaceFirst('{id}', id),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> getTrendProducts(String trend, int perPage) async {
+    try {
+      return await _dioClient.dio.get(
+        Endpoints.getTrendProducts
+            .replaceFirst('{trend}', trend)
+            .replaceFirst('{perPage}', perPage.toString()),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Professions
+  Future<Response> getProfessions() async {
+    try {
+      return await _dioClient.dio.get(Endpoints.getProfessions);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Regions
+  Future<Response> getRegions(int perPage) async {
+    try {
+      return await _dioClient.dio.get(
+        Endpoints.getRegions.replaceFirst('{perPage}', perPage.toString()),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Search
+  Future<Response> searchCatalog(String keyword, int perPage) async {
+    try {
+      return await _dioClient.dio.get(
+        Endpoints.searchCatalog
+            .replaceFirst('{keyword}', keyword)
+            .replaceFirst('{perPage}', perPage.toString()),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Sessions
+  Future<Response> clearSession() async {
+    try {
+      return await _dioClient.dio.post(Endpoints.clearSession);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Spheres
+  Future<Response> getSpheres() async {
+    try {
+      return await _dioClient.dio.get(Endpoints.getSpheres);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // User
+  Future<Response> getUserOrders(int perPage) async {
+    try {
+      return await _dioClient.dio.get(
+        Endpoints.getUserOrders.replaceFirst('{perPage}', perPage.toString()),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> getUserSettings() async {
+    try {
+      return await _dioClient.dio.get(Endpoints.getUserSettings);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> deleteUser() async {
+    try {
+      return await _dioClient.dio.delete(Endpoints.deleteUser);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> updateUserSettings(Map<String, dynamic> data) async {
+    try {
+      return await _dioClient.dio.put(
+        Endpoints.updateUserSettings,
+        data: data,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> updateUserPassword(Map<String, dynamic> data) async {
+    try {
+      return await _dioClient.dio.put(
+        Endpoints.updateUserPassword,
+        data: data,
       );
     } catch (e) {
       rethrow;

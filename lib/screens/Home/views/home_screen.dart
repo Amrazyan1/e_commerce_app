@@ -9,7 +9,6 @@ import 'package:e_commerce_app/components/Banners/S/banner_s_style_1.dart';
 import 'package:e_commerce_app/components/Banners/S/banner_s_style_5.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -30,11 +29,11 @@ class HomeScreen extends StatelessWidget {
                     width: 30,
                     height: 25,
                   ),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.location_on_rounded),
-                      const Text(
+                      Text(
                         'Yerevan, Davitashen',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16),
