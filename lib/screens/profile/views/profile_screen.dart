@@ -1,11 +1,17 @@
+import 'dart:developer';
+
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:e_commerce_app/blocs/settings/bloc/settings_bloc.dart';
+import 'package:e_commerce_app/blocs/settings/bloc/settings_state.dart';
 import 'package:e_commerce_app/components/list_tile/divider_list_tile.dart';
 import 'package:e_commerce_app/components/network_image_with_loader.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shimmer/shimmer.dart';
 
 import 'components/profile_card.dart';
 import 'components/profile_menu_item_list_tile.dart';
@@ -19,14 +25,31 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       body: ListView(
         children: [
-          ProfileCard(
-            name: "Name Surname",
-            email: "email@gmail.com",
-            imageSrc: "https://cdn-icons-png.flaticon.com/512/219/219988.png",
-            // proLableText: "Sliver",
-            // isPro: true, if the user is pro
-            press: () {
-              Navigator.pushNamed(context, 'userInfoScreenRoute');
+          BlocBuilder<SettingsBloc, SettingsState>(
+            builder: (context, state) {
+              if (state is SettingsLoaded) {
+                return ProfileCard(
+                  name: state.settings.data!.fullName!,
+                  email: state.settings.data!.email!,
+                  imageSrc:
+                      "https://cdn-icons-png.flaticon.com/512/219/219988.png",
+                  isPro: state.settings.data!.isPartner!,
+                );
+              }
+              if (state is SettingsError) {
+                log('Error ${state.error}');
+              }
+              return Shimmer.fromColors(
+                baseColor: Colors.grey.shade300,
+                highlightColor: Colors.grey.shade100,
+                enabled: true,
+                child: const ProfileCard(
+                  name: "",
+                  email: "",
+                  imageSrc:
+                      "https://cdn-icons-png.flaticon.com/512/219/219988.png",
+                ),
+              );
             },
           ),
 
@@ -119,7 +142,7 @@ class ProfileScreen extends StatelessWidget {
           ),
           ProfileMenuListTile(
             text: "Language",
-            svgSrc: "assets/icons/Language.svg",
+            svgSrc: "assets/icons/help.svg",
             press: () {
               // Navigator.pushNamed(context, 'selectLanguageScreenRoute');
             },

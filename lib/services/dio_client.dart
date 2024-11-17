@@ -1,4 +1,6 @@
 // dio_client.dart
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,8 +14,8 @@ class DioClient {
             connectTimeout: Duration(milliseconds: 5000),
             receiveTimeout: Duration(milliseconds: 3000),
             headers: {
-              'accept': 'application/json',
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Accept': 'application/json',
               'X-CSRF-TOKEN': '', // Add token if available or leave empty
             },
           ),
@@ -26,8 +28,21 @@ class DioClient {
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
         }
-
+        options.contentType = Headers.jsonContentType;
         return handler.next(options);
+      },
+      onResponse: (response, handler) {
+        // Manually decode response if it's a String
+        response.data = json.encode(response.data);
+        // if (response.data is String) {
+        //   try {
+        //     response.data = json.decode(response.data);
+        //   } catch (e) {
+        //     // Log or handle the case where decoding fails
+        //     print('Failed to decode response: $e');
+        //   }
+        // }
+        return handler.next(response);
       },
       onError: (DioError e, handler) {
         return handler.next(e);

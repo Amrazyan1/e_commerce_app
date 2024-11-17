@@ -1,8 +1,11 @@
 import 'dart:developer';
 import 'package:auto_route/auto_route.dart';
+import 'package:e_commerce_app/blocs/settings/bloc/settings_bloc.dart';
+import 'package:e_commerce_app/blocs/settings/bloc/settings_event.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 @RoutePage()
@@ -63,9 +66,7 @@ class _EntryPointState extends State<EntryPoint> {
               child: BottomNavigationBar(
                 currentIndex: tabsRouter.activeIndex,
                 onTap: (index) {
-                  if (index != tabsRouter.activeIndex) {
-                    tabsRouter.setActiveIndex(index);
-                  }
+                  _onPageChange(index, tabsRouter);
                 },
                 type: BottomNavigationBarType.fixed,
                 selectedFontSize: 14,
@@ -109,5 +110,18 @@ class _EntryPointState extends State<EntryPoint> {
         );
       },
     );
+  }
+
+  void _onPageChange(int index, TabsRouter tabsRouter) {
+    if (index != tabsRouter.activeIndex) {
+      tabsRouter.setActiveIndex(index);
+
+      switch (index) {
+        case 4:
+          context.read<SettingsBloc>().add(FetchUserSettingsEvent());
+          break;
+        default:
+      }
+    }
   }
 }

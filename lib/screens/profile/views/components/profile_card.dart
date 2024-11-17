@@ -9,7 +9,7 @@ class ProfileCard extends StatelessWidget {
     required this.name,
     required this.email,
     required this.imageSrc,
-    this.proLableText = "Pro",
+    this.proLableText = "Partner",
     this.isPro = false,
     this.press,
     this.isShowHi = true,

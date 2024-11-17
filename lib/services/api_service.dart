@@ -1,4 +1,5 @@
 // api_service.dart
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:e_commerce_app/endpoints/endpoints.dart';
@@ -16,8 +17,11 @@ class ApiService {
   Future<Response> getUserAddresses(int perPage) async {
     try {
       return await _dioClient.dio.get(
-        Endpoints.userAddresses.replaceFirst('{perPage}', perPage.toString()),
-      );
+          Endpoints.userAddresses.replaceFirst(
+            '{perPage}',
+            perPage.toString(),
+          ),
+          options: Options(contentType: "application/json"));
     } catch (e) {
       rethrow;
     }
@@ -87,20 +91,25 @@ class ApiService {
 
   // Authentication
   Future<Response> loginUser(String email, String password) async {
-    print('$email $password');
-
     try {
       final response = await _dioClient.dio.post(
         Endpoints.userLogin,
         data: {'email': email, 'password': password},
       );
-      if (response.data['errors'] == false) {
-        final token = response.data['data']['token'];
+      log(response.data);
+      Map<String, dynamic> decodedJson = json.decode(response.data);
+      if (decodedJson['errors'] == false) {
+        log('errors');
+
+        final token = decodedJson['data']['token'];
+        log(token);
+
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('auth_token', token); // Store token securely
       }
       return response;
     } catch (e) {
+      log('error $e');
       rethrow;
     }
   }
@@ -553,8 +562,11 @@ class ApiService {
   }
 
   Future<Response> getUserSettings() async {
+    log('getUserSettings');
     try {
-      return await _dioClient.dio.get(Endpoints.getUserSettings);
+      return await _dioClient.dio.get(
+        Endpoints.getUserSettings,
+      );
     } catch (e) {
       rethrow;
     }

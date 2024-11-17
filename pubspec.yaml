@@ -31,6 +31,8 @@ dependencies:
   barcode_widget: ^2.0.4
   dio: ^5.7.0
   equatable: ^2.0.5
+  get_it: ^8.0.2
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:
