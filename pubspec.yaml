@@ -25,7 +25,9 @@ dependencies:
   provider: ^6.1.2
   coupon_uikit: ^0.2.1
   gap: ^3.0.1
-  u_credit_card: ^1.4.0
+  u_credit_card:
+    git:
+      url: https://github.com/utpal-barman/u-credit-card-flutter.git
   barcode_widget: ^2.0.4
   dio: ^5.7.0
   equatable: ^2.0.5

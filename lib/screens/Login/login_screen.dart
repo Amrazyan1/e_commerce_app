@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/blocs/login/bloc/login_bloc.dart';
 import 'package:e_commerce_app/blocs/login/bloc/login_event.dart';
 import 'package:e_commerce_app/blocs/login/bloc/login_state.dart';
+import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,8 +18,16 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
 
   bool _isPasswordValid(String password) {
-    final passwordRegex = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$');
-    return passwordRegex.hasMatch(password);
+    return true;
+    // final passwordRegex = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$');
+    // return passwordRegex.hasMatch(password);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _usernameController.text = 'karen.baghdasaryan@algorithm.am';
+    _passwordController.text = '123456789';
   }
 
   @override
@@ -33,6 +42,9 @@ class _LoginPageState extends State<LoginPage> {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Login Successful!')),
               );
+
+              AutoRouter.of(context).replace(EntryPoint());
+
               // Navigate to the next screen
             } else if (state is LoginFailure) {
               ScaffoldMessenger.of(context).showSnackBar(

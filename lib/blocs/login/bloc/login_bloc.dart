@@ -18,6 +18,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           emit(LoginFailure(error: 'Invalid credentials'));
         }
       } catch (e) {
+        print(e);
         emit(LoginFailure(error: e.toString()));
       }
     });

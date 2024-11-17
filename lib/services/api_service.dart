@@ -1,5 +1,8 @@
 // api_service.dart
+import 'dart:developer';
+
 import 'package:e_commerce_app/endpoints/endpoints.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dio_client.dart';
 import 'package:dio/dio.dart';
@@ -84,11 +87,19 @@ class ApiService {
 
   // Authentication
   Future<Response> loginUser(String email, String password) async {
+    print('$email $password');
+
     try {
-      return await _dioClient.dio.post(
+      final response = await _dioClient.dio.post(
         Endpoints.userLogin,
         data: {'email': email, 'password': password},
       );
+      if (response.data['errors'] == false) {
+        final token = response.data['data']['token'];
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('auth_token', token); // Store token securely
+      }
+      return response;
     } catch (e) {
       rethrow;
     }

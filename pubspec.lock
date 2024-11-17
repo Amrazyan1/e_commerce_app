@@ -1085,10 +1085,11 @@ packages:
   u_credit_card:
     dependency: "direct main"
     description:
-      name: u_credit_card
-      sha256: "97fb11becedd3159f1f7b19cbafb1a64661733aaedc254aef5023bfc5d140b21"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "18b0ba46d3308a347f7e58fe162e573cd0901671"
+      url: "https://github.com/utpal-barman/u-credit-card-flutter.git"
+    source: git
     version: "1.4.0"
   uuid:
     dependency: transitive
