@@ -1,5 +1,7 @@
 import 'dart:developer';
 import 'package:auto_route/auto_route.dart';
+import 'package:e_commerce_app/blocs/categories/bloc/categories_bloc.dart';
+import 'package:e_commerce_app/blocs/categories/bloc/categories_event.dart';
 import 'package:e_commerce_app/blocs/settings/bloc/settings_bloc.dart';
 import 'package:e_commerce_app/blocs/settings/bloc/settings_event.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
@@ -119,6 +121,10 @@ class _EntryPointState extends State<EntryPoint> {
       switch (index) {
         case 4:
           context.read<SettingsBloc>().add(FetchUserSettingsEvent());
+          break;
+        case 1:
+          context.read<CategoriesBloc>().add(FetchCategoriesEvent());
+
           break;
         default:
       }

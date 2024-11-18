@@ -246,7 +246,7 @@ class ApiService {
   }
 
   // Categories
-  Future<Response> getCategories(int perPage) async {
+  Future<Response> getCategories({int perPage = 20}) async {
     try {
       return await _dioClient.dio.get(
         Endpoints.getCategories.replaceFirst('{perPage}', perPage.toString()),

@@ -1,4 +1,5 @@
 import 'package:e_commerce_app/Provider/main_provider.dart';
+import 'package:e_commerce_app/blocs/categories/bloc/categories_bloc.dart';
 import 'package:e_commerce_app/blocs/login/bloc/login_bloc.dart';
 import 'package:e_commerce_app/blocs/settings/bloc/settings_bloc.dart';
 import 'package:e_commerce_app/injector.dart';
@@ -23,10 +24,13 @@ void main() {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (_) => LoginBloc(), // Provide the LoginBloc
+            create: (_) => LoginBloc(),
           ),
           BlocProvider(
             create: (context) => SettingsBloc(),
+          ),
+          BlocProvider(
+            create: (context) => CategoriesBloc(),
           ),
         ],
         child: const MainApp(),
