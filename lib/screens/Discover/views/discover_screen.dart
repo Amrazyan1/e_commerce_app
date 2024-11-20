@@ -114,13 +114,14 @@ class _categoryItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if ((category.subcategories ?? []).isNotEmpty) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => DiscoverScreen(
-                  // categories: category.subcategories, // Pass subcategories
-                  ),
-            ),
-          );
+          AutoRouter.of(context).push(const DiscoverRoute());
+          // Navigator.of(context).push(
+          //   MaterialPageRoute(
+          //     builder: (_) => DiscoverScreen(
+          //         // categories: category.subcategories, // Pass subcategories
+          //         ),
+          //   ),
+          // );
           context.read<CategoriesBloc>().add(FetchSubcategories(category));
         } else {
           context.read<MainProvider>().categoryName =

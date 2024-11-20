@@ -46,7 +46,8 @@ class BestSellers extends StatelessWidget {
                 price: demoBestSellersProducts[index].price,
                 priceAfetDiscount:
                     demoBestSellersProducts[index].priceAfetDiscount,
-                dicountpercent: demoBestSellersProducts[index].dicountpercent,
+                dicountpercent:
+                    '${demoBestSellersProducts[index].dicountpercent}',
                 press: () {
                   context.read<MainProvider>().currentProductModel =
                       demoBestSellersProducts[index];

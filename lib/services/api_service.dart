@@ -499,6 +499,16 @@ class ApiService {
     }
   }
 
+  Future<Response> getTrendNewestProducts() async {
+    try {
+      return await _dioClient.dio.get(
+        Endpoints.getTrendNewestProduct,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   // Professions
   Future<Response> getProfessions() async {
     try {

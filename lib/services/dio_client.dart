@@ -1,5 +1,6 @@
 // dio_client.dart
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,7 +11,7 @@ class DioClient {
   DioClient()
       : _dio = Dio(
           BaseOptions(
-            baseUrl: 'https://api.shinmag.am/v1',
+            baseUrl: 'http://imexpro.am/v1',
             connectTimeout: Duration(milliseconds: 5000),
             receiveTimeout: Duration(milliseconds: 3000),
             headers: {
@@ -34,6 +35,7 @@ class DioClient {
       onResponse: (response, handler) {
         // Manually decode response if it's a String
         response.data = json.encode(response.data);
+        log(response.data);
         // if (response.data is String) {
         //   try {
         //     response.data = json.decode(response.data);

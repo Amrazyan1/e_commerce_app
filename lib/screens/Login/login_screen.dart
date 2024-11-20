@@ -26,8 +26,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    _usernameController.text = 'karen.baghdasaryan@algorithm.am';
-    _passwordController.text = '123456789';
+    _usernameController.text = 'info@origins.am';
+    _passwordController.text = 'secret';
   }
 
   @override

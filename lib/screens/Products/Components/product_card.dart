@@ -11,14 +11,15 @@ class ProductCard extends StatelessWidget {
     required this.price,
     this.priceAfetDiscount,
     this.dicountpercent,
+    this.priceText,
     required this.press,
   });
   final String image, brandName, title;
   final double price;
   final double? priceAfetDiscount;
-  final int? dicountpercent;
+  final String? dicountpercent;
   final VoidCallback press;
-
+  final String? priceText;
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
@@ -56,7 +57,7 @@ class ProductCard extends StatelessWidget {
                             Radius.circular(defaultBorderRadious)),
                       ),
                       child: Text(
-                        "$dicountpercent% off",
+                        "$dicountpercent off",
                         style: const TextStyle(
                             color: Colors.white,
                             fontSize: 10,
@@ -84,12 +85,14 @@ class ProductCard extends StatelessWidget {
                         .copyWith(fontSize: 12, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: defaultPadding / 4),
-                  Text(
-                    title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontSize: 10),
+                  Flexible(
+                    child: Text(
+                      title,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(fontSize: 10),
+                    ),
                   ),
                   Row(
                     children: [
@@ -100,7 +103,7 @@ class ProductCard extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "\$$priceAfetDiscount",
+                                    "$priceAfetDiscount",
                                     style: const TextStyle(
                                       color: ksecondaryColor,
                                       fontWeight: FontWeight.w500,
@@ -109,7 +112,7 @@ class ProductCard extends StatelessWidget {
                                   ),
                                   // const SizedBox(width: defaultPadding / 4),
                                   Text(
-                                    "\$$price",
+                                    "\$${priceText ?? price}",
                                     style: TextStyle(
                                       color: Theme.of(context)
                                           .textTheme
@@ -122,7 +125,7 @@ class ProductCard extends StatelessWidget {
                                 ],
                               )
                             : Text(
-                                "\$$price",
+                                "$price",
                                 style: const TextStyle(
                                   color: ksecondaryColor,
                                   fontWeight: FontWeight.w500,

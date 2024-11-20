@@ -50,14 +50,16 @@ class BannerMStyle3 extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: defaultPadding / 2),
-                    Text(
-                      title.toUpperCase(),
-                      style: const TextStyle(
-                        fontFamily: grandisExtendedFont,
-                        fontSize: 28,
-                        fontWeight: FontWeight.w900,
-                        color: Colors.white,
-                        height: 1,
+                    Flexible(
+                      child: Text(
+                        title.toUpperCase(),
+                        style: const TextStyle(
+                          fontFamily: grandisExtendedFont,
+                          fontSize: 28,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                          height: 1,
+                        ),
                       ),
                     ),
                   ],

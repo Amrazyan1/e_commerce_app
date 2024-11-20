@@ -58,7 +58,8 @@ class FlashSale extends StatelessWidget {
                 price: demoFlashSaleProducts[index].price,
                 priceAfetDiscount:
                     demoFlashSaleProducts[index].priceAfetDiscount,
-                dicountpercent: demoFlashSaleProducts[index].dicountpercent,
+                dicountpercent:
+                    '${demoFlashSaleProducts[index].dicountpercent}',
                 press: () {
                   context.read<MainProvider>().currentProductModel =
                       demoPopularProducts[index];

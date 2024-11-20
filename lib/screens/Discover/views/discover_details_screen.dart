@@ -59,7 +59,8 @@ class DiscoverDetailsScreen extends StatelessWidget {
                     price: demoPopularProducts[index].price,
                     priceAfetDiscount:
                         demoPopularProducts[index].priceAfetDiscount,
-                    dicountpercent: demoPopularProducts[index].dicountpercent,
+                    dicountpercent:
+                        '${demoPopularProducts[index].dicountpercent}',
                     press: () {
                       context.read<MainProvider>().currentProductModel =
                           demoPopularProducts[index];

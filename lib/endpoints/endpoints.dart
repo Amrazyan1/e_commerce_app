@@ -70,7 +70,7 @@ class Endpoints {
   static const String removeProductFromFavorites = '/products/favorites/{id}';
   static const String getTrendProducts =
       '/products/trends/{trend}?perPage={perPage}';
-
+  static const String getTrendNewestProduct = '/products/trends/newest';
   // Professions
   static const String getProfessions = '/professions';
 

@@ -80,7 +80,7 @@ class _OffersCarouselState extends State<OffersCarousel> {
             BorderRadius.circular(15), // Rounded corners with radius 30
         child: SizedBox(
           width: 368, // Set width of the carousel
-          height: 115, // Set height of the carousel
+          height: 130, // Set height of the carousel
           child: Stack(
             alignment: Alignment.bottomRight,
             children: [

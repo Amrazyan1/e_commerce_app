@@ -122,7 +122,7 @@ class ProductDetailsScreen extends StatelessWidget {
                       brandName: "product",
                       price: 24.65,
                       priceAfetDiscount: index.isEven ? 20.99 : null,
-                      dicountpercent: index.isEven ? 25 : null,
+                      dicountpercent: index.isEven ? '25' : null,
                       press: () {},
                     ),
                   ),

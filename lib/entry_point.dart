@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'blocs/products/trending/bloc/trend_new_products_bloc.dart';
+
 @RoutePage()
 class EntryPoint extends StatefulWidget {
   const EntryPoint({super.key});
@@ -50,12 +52,24 @@ class _EntryPointState extends State<EntryPoint> {
 
         return WillPopScope(
           onWillPop: () async {
-            if (tabsRouter.activeIndex != 0) {
-              // Navigate back to the first tab (Home tab)
-              tabsRouter.setActiveIndex(0);
-              log('Navigated back to Home tab.');
-              return false; // Prevent system back pop
-            }
+            // if (tabsRouter.activeIndex != 0) {
+            //   if (tabsRouter.activeIndex == 1) {
+            //     // Access the router stack for the Discover tab
+            //     final discoverRouter = tabsRouter.stackRouterOfIndex(1);
+
+            //     // Check if the Discover tab has nested pages
+            //     if (discoverRouter != null && discoverRouter.hasEntries) {
+            //       // Pop the topmost nested page in Discover
+            //       discoverRouter.maybePop();
+            //       return false; // Prevent system back pop
+            //     }
+            //   }
+
+            //   // Navigate back to the first tab (Home tab)
+            //   tabsRouter.setActiveIndex(0);
+            //   log('Navigated back to Home tab.');
+            //   return false; // Prevent system back pop
+            // }
             return true; // Allow system back pop (exit app)
           },
           child: Scaffold(
@@ -119,6 +133,12 @@ class _EntryPointState extends State<EntryPoint> {
       tabsRouter.setActiveIndex(index);
 
       switch (index) {
+        case 0:
+          context
+              .read<TrendNewProductsBloc>()
+              .add(FetchTrendNewProductsEvent());
+
+          break;
         case 4:
           context.read<SettingsBloc>().add(FetchUserSettingsEvent());
           break;
