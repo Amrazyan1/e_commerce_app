@@ -6,3 +6,5 @@ sealed class PopularProductsEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class FetchTrendPopularProductsEvent extends PopularProductsEvent {}

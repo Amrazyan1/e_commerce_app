@@ -71,6 +71,10 @@ class Endpoints {
   static const String getTrendProducts =
       '/products/trends/{trend}?perPage={perPage}';
   static const String getTrendNewestProduct = '/products/trends/newest';
+  static const String getTrendPopularProduct =
+      '/products/trends/popular?perPage=12';
+  static const String getTrendDiscountProduct = '/products/trends/discounted';
+
   // Professions
   static const String getProfessions = '/professions';
 

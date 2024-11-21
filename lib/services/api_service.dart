@@ -509,6 +509,26 @@ class ApiService {
     }
   }
 
+  Future<Response> getTrendPopularProducts() async {
+    try {
+      return await _dioClient.dio.get(
+        Endpoints.getTrendPopularProduct,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> getDiscountedProducts() async {
+    try {
+      return await _dioClient.dio.get(
+        Endpoints.getTrendDiscountProduct,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   // Professions
   Future<Response> getProfessions() async {
     try {
