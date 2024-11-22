@@ -10,6 +10,8 @@ import 'package:e_commerce_app/screens/Products/product_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../blocs/products/discounts/bloc/discounted_bloc.dart';
+
 class FlashSale extends StatelessWidget {
   const FlashSale({
     super.key,
@@ -27,7 +29,7 @@ class FlashSale extends StatelessWidget {
         //   text: "Super Flash Sale \n50% Off",
         //   press: () {},
         // ),
-        _barcodeItem(),
+        const _barcodeItem(),
         const SizedBox(height: defaultPadding / 2),
         Padding(
           padding: const EdgeInsets.all(defaultPadding),
@@ -38,40 +40,54 @@ class FlashSale extends StatelessWidget {
         ),
         // While loading show 👇
         // const ProductsSkelton(),
-        SizedBox(
-          height: 220,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            // Find demoFlashSaleProducts on models/ProductModel.dart
-            itemCount: demoFlashSaleProducts.length,
-            itemBuilder: (context, index) => Padding(
-              padding: EdgeInsets.only(
-                left: defaultPadding,
-                right: index == demoFlashSaleProducts.length - 1
-                    ? defaultPadding
-                    : 0,
-              ),
-              child: ProductCard(
-                image: demoFlashSaleProducts[index].imageUrl,
-                brandName: demoFlashSaleProducts[index].brandName,
-                title: demoFlashSaleProducts[index].title,
-                price: demoFlashSaleProducts[index].price,
-                priceAfetDiscount:
-                    demoFlashSaleProducts[index].priceAfetDiscount,
-                dicountpercent:
-                    '${demoFlashSaleProducts[index].dicountpercent}',
-                press: () {
-                  context.read<MainProvider>().currentProductModel =
-                      demoPopularProducts[index];
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ProductDetailsScreen(),
+        BlocBuilder<DiscountedBloc, DiscountedBlocState>(
+          builder: (context, state) {
+            if (state is DiscountedBlocLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is DiscountedBlocError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    duration: const Duration(seconds: 5),
+                    content: Text(state.message)),
+              );
+            } else if (state is DiscountedBlocLoaded) {
+              final products = state.discountedProducts;
+
+              return SizedBox(
+                height: 220,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  // Find demoFlashSaleProducts on models/ProductModel.dart
+                  itemCount: products.length,
+                  itemBuilder: (context, index) => Padding(
+                    padding: EdgeInsets.only(
+                      left: defaultPadding,
+                      right: index == products.length - 1 ? defaultPadding : 0,
                     ),
-                  );
-                },
-              ),
-            ),
-          ),
+                    child: ProductCard(
+                      id: products[index].id,
+                      image: products[index].images!.main!.src!,
+                      brandName: products[index].name!,
+                      title: products[index].description!,
+                      priceText: products[index].price!,
+                      priceAfetDiscount: products[index].discountedPrice,
+                      dicountpercent: products[index].discount,
+                      press: () {
+                        context.read<MainProvider>().currentProductModel =
+                            products[index];
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const ProductDetailsScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              );
+            }
+            return Container();
+          },
         ),
       ],
     );
@@ -93,7 +109,7 @@ class _barcodeItem extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white, // Background color of the container
           borderRadius: BorderRadius.circular(16), // Adjust as needed
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.black26,
               blurRadius: 4,
@@ -104,7 +120,7 @@ class _barcodeItem extends StatelessWidget {
         padding: EdgeInsets.all(16), // Padding inside the container
         child: Column(
           children: [
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
@@ -120,7 +136,7 @@ class _barcodeItem extends StatelessWidget {
               height: 120,
               drawText: false,
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(

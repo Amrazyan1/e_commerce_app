@@ -37,7 +37,7 @@ class ProductModel {
 }
 
 class Product {
-  String? id;
+  String id;
   String? name;
   String? description;
   String? count;
@@ -52,7 +52,7 @@ class Product {
   dynamic bonus;
 
   Product({
-    this.id,
+    required this.id,
     this.name,
     this.description,
     this.count,

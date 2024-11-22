@@ -16,9 +16,9 @@ class SecondaryProductCard extends StatelessWidget {
     this.style,
   });
   final String image, brandName, title;
-  final double price;
-  final double? priceAfetDiscount;
-  final int? dicountpercent;
+  final String price;
+  final String? priceAfetDiscount;
+  final String? dicountpercent;
   final VoidCallback? press;
 
   final ButtonStyle? style;

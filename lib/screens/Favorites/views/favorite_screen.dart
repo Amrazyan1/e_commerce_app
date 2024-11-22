@@ -52,12 +52,13 @@ class FavoriteScreen extends StatelessWidget {
                           child: Card(
                             margin: EdgeInsets.all(8.0),
                             child: ListTile(
-                              leading: Image.network(item.imageUrl),
-                              title: Text(item.title),
+                              leading:
+                                  Image.network(item.images?.main?.src ?? ''),
+                              title: Text(item.name!),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(item.title),
+                                  Text(item.name!),
                                   // Text(
                                   //     '\$${(item.price * item.quantity).toStringAsFixed(2)}'),
                                 ],

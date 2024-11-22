@@ -12,6 +12,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'blocs/products/discounts/bloc/discounted_bloc.dart';
+import 'blocs/products/popular/bloc/popular_products_bloc.dart';
 import 'blocs/products/trending/bloc/trend_new_products_bloc.dart'; // Import flutter_bloc
 
 final _appRouter = AppRouter(); // Initialize the AppRouter
@@ -36,6 +38,12 @@ void main() {
           ),
           BlocProvider(
             create: (_) => TrendNewProductsBloc(),
+          ),
+          BlocProvider(
+            create: (_) => DiscountedBloc(),
+          ),
+          BlocProvider(
+            create: (_) => PopularProductsBloc(),
           ),
         ],
         child: const MainApp(),

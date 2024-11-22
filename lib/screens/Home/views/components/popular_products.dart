@@ -33,7 +33,7 @@ class PopularProducts extends StatelessWidget {
             } else if (state is TrendNewProductsError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                    duration: Duration(seconds: 15),
+                    duration: const Duration(seconds: 15),
                     content: Text(state.message)),
               );
             } else if (state is TrendNewProductsLoaded) {
@@ -50,16 +50,16 @@ class PopularProducts extends StatelessWidget {
                       right: index == products.length - 1 ? defaultPadding : 0,
                     ),
                     child: ProductCard(
+                      id: products[index].id,
                       image: products[index].images!.main!.src!,
                       brandName: products[index].name!,
                       title: products[index].description!,
-                      price: 0,
                       priceText: products[index].price!,
-                      priceAfetDiscount: 150000,
+                      priceAfetDiscount: products[index].discountedPrice,
                       dicountpercent: products[index].discount,
                       press: () {
-                        // context.read<MainProvider>().currentProductModel =
-                        //     products[index];
+                        context.read<MainProvider>().currentProductModel =
+                            products[index];
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => ProductDetailsScreen(),

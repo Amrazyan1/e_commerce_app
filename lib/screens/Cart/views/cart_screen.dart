@@ -20,24 +20,25 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   void _increaseQuantity(int index) {
-    setState(() {
-      context.read<MainProvider>().cartProducts[index].quantity++;
-    });
+    // setState(() {
+    //   context.read<MainProvider>().cartProducts[index].quantity++;
+    // });
   }
 
   void _decreaseQuantity(int index) {
-    if (context.read<MainProvider>().cartProducts[index].quantity > 1) {
-      setState(() {
-        context.read<MainProvider>().cartProducts[index].quantity--;
-      });
-    }
+    // if (context.read<MainProvider>().cartProducts[index].quantity > 1) {
+    //   setState(() {
+    //     context.read<MainProvider>().cartProducts[index].quantity--;
+    //   });
+    // }
   }
 
   double _calculateTotal() {
-    return context.read<MainProvider>().cartProducts.fold(
-          0,
-          (sum, item) => sum + (item.price * item.quantity),
-        );
+    return 0;
+    // return context.read<MainProvider>().cartProducts.fold(
+    //       0,
+    //       (sum, item) => sum + (item.price * item.quantity),
+    //     );
   }
 
   @override
@@ -58,7 +59,7 @@ class _CartScreenState extends State<CartScreen> {
               itemBuilder: (context, index) {
                 final item = context.read<MainProvider>().cartProducts[index];
                 return Dismissible(
-                  key: Key(item.title
+                  key: Key(item.name
                       .toString()), // Ensure each item has a unique key
                   direction: DismissDirection.endToStart,
                   onDismissed: (direction) {
@@ -66,35 +67,33 @@ class _CartScreenState extends State<CartScreen> {
                   },
                   background: Container(
                     alignment: Alignment.centerRight,
-                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     color: Colors.red,
-                    child: Icon(
+                    child: const Icon(
                       Icons.delete,
                       color: Colors.white,
                     ),
                   ),
                   child: GestureDetector(
                     onTap: () {
-                      // context.read<MainProvider>().currentProductModel =
-                      //   demoPopularProducts[index];
+                      context.read<MainProvider>().currentProductModel = item;
 
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => ProductDetailsScreen(),
+                          builder: (context) => const ProductDetailsScreen(),
                         ),
                       );
                     },
                     child: Card(
-                      margin: EdgeInsets.all(8.0),
+                      margin: const EdgeInsets.all(8.0),
                       child: ListTile(
-                        leading: Image.network(item.imageUrl),
-                        title: Text(item.title),
+                        leading: Image.network(item.images?.main?.src ?? ''),
+                        title: Text(item.name!),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(item.title),
-                            Text(
-                                '\$${(item.price * item.quantity).toStringAsFixed(2)}'),
+                            Text(item.name!),
+                            Text('\$${(item.price)}'),
                           ],
                         ),
                         trailing: Row(
@@ -104,9 +103,9 @@ class _CartScreenState extends State<CartScreen> {
                               icon: Icon(Icons.remove),
                               onPressed: () => _decreaseQuantity(index),
                             ),
-                            Text('${item.quantity}'),
+                            Text('${item.count}'),
                             IconButton(
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.add,
                                 color: kprimaryColor,
                               ),

@@ -53,22 +53,21 @@ class DiscoverDetailsScreen extends StatelessWidget {
                 itemCount: demoPopularProducts.length,
                 itemBuilder: (context, index) {
                   return ProductCard(
+                    id: '0000-0000',
                     image: demoPopularProducts[index].imageUrl,
                     brandName: demoPopularProducts[index].brandName,
                     title: demoPopularProducts[index].title,
-                    price: demoPopularProducts[index].price,
-                    priceAfetDiscount:
-                        demoPopularProducts[index].priceAfetDiscount,
+                    priceAfetDiscount: 'discount price',
                     dicountpercent:
                         '${demoPopularProducts[index].dicountpercent}',
                     press: () {
-                      context.read<MainProvider>().currentProductModel =
-                          demoPopularProducts[index];
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ProductDetailsScreen(),
-                        ),
-                      );
+                      // context.read<MainProvider>().currentProductModel =
+                      //     demoPopularProducts[index];
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (context) => ProductDetailsScreen(),
+                      //   ),
+                      // );
                     },
                   );
                 },

@@ -49,12 +49,11 @@ class ProductInfo extends StatelessWidget {
                     context.read<MainProvider>().addToFavourites(null);
                   },
                   child: Icon(
-                    context
-                            .watch<MainProvider>()
-                            .currentProductModel
-                            .isFavourite
-                        ? Icons.favorite
-                        : Icons.favorite_border_outlined,
+                    // context
+                    //         .watch<MainProvider>()
+                    //         .currentProductModel
+                    //         .isFavourite
+                    true ? Icons.favorite : Icons.favorite_border_outlined,
                     color: kprimaryColor,
                   ),
                 )

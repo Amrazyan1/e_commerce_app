@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'blocs/products/discounts/bloc/discounted_bloc.dart';
+import 'blocs/products/popular/bloc/popular_products_bloc.dart';
 import 'blocs/products/trending/bloc/trend_new_products_bloc.dart';
 
 @RoutePage()
@@ -21,6 +23,14 @@ class EntryPoint extends StatefulWidget {
 }
 
 class _EntryPointState extends State<EntryPoint> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<TrendNewProductsBloc>().add(FetchTrendNewProductsEvent());
+    context.read<DiscountedBloc>().add(FetchDiscountedProductsEvent());
+    context.read<PopularProductsBloc>().add(FetchTrendPopularProductsEvent());
+  }
+
   @override
   Widget build(BuildContext context) {
     SvgPicture svgIcon(String src, {Color? color}) {
@@ -137,7 +147,10 @@ class _EntryPointState extends State<EntryPoint> {
           context
               .read<TrendNewProductsBloc>()
               .add(FetchTrendNewProductsEvent());
-
+          context.read<DiscountedBloc>().add(FetchDiscountedProductsEvent());
+          context
+              .read<PopularProductsBloc>()
+              .add(FetchTrendPopularProductsEvent());
           break;
         case 4:
           context.read<SettingsBloc>().add(FetchUserSettingsEvent());

@@ -36,8 +36,8 @@ class _QuantityWidgetState extends State<QuantityWidget> {
         _count++;
         _controller.text = _count.toString();
       });
-      context.read<MainProvider>().detailButtonPriceSum =
-          _count * context.read<MainProvider>().currentProductModel.price;
+      // context.read<MainProvider>().detailButtonPriceSum =
+      //     _count * context.read<MainProvider>().currentProductModel.price;
     }
   }
 
@@ -47,8 +47,8 @@ class _QuantityWidgetState extends State<QuantityWidget> {
         _count--;
         _controller.text = _count.toString();
       });
-      context.read<MainProvider>().detailButtonPriceSum =
-          _count * context.read<MainProvider>().currentProductModel.price;
+      // context.read<MainProvider>().detailButtonPriceSum =
+      //     _count * context.read<MainProvider>().currentProductModel.price;
     }
   }
 

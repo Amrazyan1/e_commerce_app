@@ -1,19 +1,20 @@
-import 'package:e_commerce_app/models/product_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import '../models/Product/product_model.dart';
 
 class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
   void fakeNotifyListener() {
     notifyListeners();
   }
 
-  late ProductModel _currentProductModel;
+  late Product _currentProductModel;
 
-  ProductModel get currentProductModel => _currentProductModel;
+  Product get currentProductModel => _currentProductModel;
 
-  set currentProductModel(ProductModel value) {
+  set currentProductModel(Product value) {
     _currentProductModel = value;
-    _detialButtonPriceSum = value.price;
+    // _detialButtonPriceSum = value.price;
     notifyListeners();
   }
 
@@ -35,43 +36,43 @@ class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void addToFavourites(ProductModel? model) {
+  void addToFavourites(Product? model) {
     model ??= currentProductModel;
 
-    model.isFavourite = !model.isFavourite;
-    if (model.isFavourite) {
-      favouriteProducts.add(model);
-    } else {
-      favouriteProducts.remove(model);
-    }
-    notifyListeners();
+    // model.isFavourite = !model.isFavourite;
+    // if (model.isFavourite) {
+    //   favouriteProducts.add(model);
+    // } else {
+    //   favouriteProducts.remove(model);
+    // }
+    // notifyListeners();
   }
 
-  void addToCart(ProductModel model) {
+  void addToCart(Product model) {
     cartProducts.add(model);
 
     notifyListeners();
   }
 
-  void removefromCart(ProductModel model) {
+  void removefromCart(Product model) {
     cartProducts.remove(model);
 
     notifyListeners();
   }
 
-  List<ProductModel> _cartProducts = [];
+  List<Product> _cartProducts = [];
 
-  List<ProductModel> get cartProducts => _cartProducts;
+  List<Product> get cartProducts => _cartProducts;
 
-  set cartProducts(List<ProductModel> value) {
+  set cartProducts(List<Product> value) {
     _cartProducts = value;
   }
 
-  List<ProductModel> _favouriteProducts = [];
+  List<Product> _favouriteProducts = [];
 
-  List<ProductModel> get favouriteProducts => _favouriteProducts;
+  List<Product> get favouriteProducts => _favouriteProducts;
 
-  set favouriteProducts(List<ProductModel> value) {
+  set favouriteProducts(List<Product> value) {
     _favouriteProducts = value;
   }
 

@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../blocs/products/trending/bloc/trend_new_products_bloc.dart';
+
 class ProductDetailsScreen extends StatelessWidget {
   const ProductDetailsScreen({
     super.key,
@@ -41,16 +43,34 @@ class ProductDetailsScreen extends StatelessWidget {
             ),
             ProductImages(
               images: [
-                context.read<MainProvider>().currentProductModel.imageUrl,
-                context.read<MainProvider>().currentProductModel.imageUrl,
-                context.read<MainProvider>().currentProductModel.imageUrl
+                context
+                        .read<MainProvider>()
+                        .currentProductModel
+                        .images
+                        ?.main
+                        ?.src ??
+                    '',
+                context
+                        .read<MainProvider>()
+                        .currentProductModel
+                        .images
+                        ?.main
+                        ?.src ??
+                    '',
+                context
+                        .read<MainProvider>()
+                        .currentProductModel
+                        .images
+                        ?.main
+                        ?.src ??
+                    '',
               ],
             ),
             ProductInfo(
               brand:
-                  '${context.watch<MainProvider>().currentProductModel.brandName}',
+                  '${context.watch<MainProvider>().currentProductModel.name}',
               title:
-                  '${context.watch<MainProvider>().currentProductModel.title}',
+                  '${context.watch<MainProvider>().currentProductModel.description}',
               isAvailable: true,
               description:
                   "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
@@ -106,28 +126,58 @@ class ProductDetailsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 220,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 5,
-                  itemBuilder: (context, index) => Padding(
-                    padding: EdgeInsets.only(
-                        left: defaultPadding,
-                        right: index == 4 ? defaultPadding : 0),
-                    child: ProductCard(
-                      image: productDemoImg2,
-                      title: "Product",
-                      brandName: "product",
-                      price: 24.65,
-                      priceAfetDiscount: index.isEven ? 20.99 : null,
-                      dicountpercent: index.isEven ? '25' : null,
-                      press: () {},
+            BlocBuilder<TrendNewProductsBloc, TrendNewProductsState>(
+              builder: (context, state) {
+                if (state is TrendNewProductsLoading) {
+                  return const SliverToBoxAdapter(
+                      child: Center(child: CircularProgressIndicator()));
+                } else if (state is TrendNewProductsError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        duration: const Duration(seconds: 15),
+                        content: Text(state.message)),
+                  );
+                } else if (state is TrendNewProductsLoaded) {
+                  final products = state.products;
+
+                  return SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 220,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: products.length,
+                        itemBuilder: (context, index) => Padding(
+                          padding: EdgeInsets.only(
+                            left: defaultPadding,
+                            right: index == products.length - 1
+                                ? defaultPadding
+                                : 0,
+                          ),
+                          child: ProductCard(
+                            id: products[index].id,
+                            image: products[index].images!.main!.src!,
+                            brandName: products[index].name!,
+                            title: products[index].description!,
+                            priceText: products[index].price!,
+                            priceAfetDiscount: products[index].discountedPrice,
+                            dicountpercent: products[index].discount,
+                            press: () {
+                              context.read<MainProvider>().currentProductModel =
+                                  products[index];
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ProductDetailsScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
+                  );
+                }
+                return Container();
+              },
             ),
             const SliverToBoxAdapter(
               child: SizedBox(height: defaultPadding),

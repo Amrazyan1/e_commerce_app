@@ -5,18 +5,17 @@ import 'package:flutter/material.dart';
 class ProductCard extends StatelessWidget {
   const ProductCard({
     super.key,
+    required this.id,
     required this.image,
     required this.brandName,
     required this.title,
-    required this.price,
     this.priceAfetDiscount,
     this.dicountpercent,
     this.priceText,
     required this.press,
   });
-  final String image, brandName, title;
-  final double price;
-  final double? priceAfetDiscount;
+  final String id, image, brandName, title;
+  final String? priceAfetDiscount;
   final String? dicountpercent;
   final VoidCallback press;
   final String? priceText;
@@ -112,7 +111,7 @@ class ProductCard extends StatelessWidget {
                                   ),
                                   // const SizedBox(width: defaultPadding / 4),
                                   Text(
-                                    "\$${priceText ?? price}",
+                                    "${priceText}",
                                     style: TextStyle(
                                       color: Theme.of(context)
                                           .textTheme
@@ -125,7 +124,7 @@ class ProductCard extends StatelessWidget {
                                 ],
                               )
                             : Text(
-                                "$price",
+                                "$priceText",
                                 style: const TextStyle(
                                   color: ksecondaryColor,
                                   fontWeight: FontWeight.w500,

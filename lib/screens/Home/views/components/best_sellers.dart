@@ -6,6 +6,8 @@ import 'package:e_commerce_app/screens/Products/product_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../blocs/products/trending/bloc/trend_new_products_bloc.dart';
+
 class BestSellers extends StatelessWidget {
   const BestSellers({
     super.key,
@@ -24,42 +26,53 @@ class BestSellers extends StatelessWidget {
             style: Theme.of(context).textTheme.titleSmall,
           ),
         ),
-        // While loading use 👇
-        // const ProductsSkelton(),
-        SizedBox(
-          height: 220,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            // Find demoBestSellersProducts on models/ProductModel.dart
-            itemCount: demoBestSellersProducts.length,
-            itemBuilder: (context, index) => Padding(
-              padding: EdgeInsets.only(
-                left: defaultPadding,
-                right: index == demoBestSellersProducts.length - 1
-                    ? defaultPadding
-                    : 0,
-              ),
-              child: ProductCard(
-                image: demoBestSellersProducts[index].imageUrl,
-                brandName: demoBestSellersProducts[index].brandName,
-                title: demoBestSellersProducts[index].title,
-                price: demoBestSellersProducts[index].price,
-                priceAfetDiscount:
-                    demoBestSellersProducts[index].priceAfetDiscount,
-                dicountpercent:
-                    '${demoBestSellersProducts[index].dicountpercent}',
-                press: () {
-                  context.read<MainProvider>().currentProductModel =
-                      demoBestSellersProducts[index];
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ProductDetailsScreen(),
+        BlocBuilder<TrendNewProductsBloc, TrendNewProductsState>(
+          builder: (context, state) {
+            if (state is TrendNewProductsLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is TrendNewProductsError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    duration: const Duration(seconds: 15),
+                    content: Text(state.message)),
+              );
+            } else if (state is TrendNewProductsLoaded) {
+              final products = state.products;
+
+              return SizedBox(
+                height: 220,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: products.length,
+                  itemBuilder: (context, index) => Padding(
+                    padding: EdgeInsets.only(
+                      left: defaultPadding,
+                      right: index == products.length - 1 ? defaultPadding : 0,
                     ),
-                  );
-                },
-              ),
-            ),
-          ),
+                    child: ProductCard(
+                      id: products[index].id,
+                      image: products[index].images!.main!.src!,
+                      brandName: products[index].name!,
+                      title: products[index].description!,
+                      priceText: products[index].price!,
+                      priceAfetDiscount: products[index].discountedPrice,
+                      dicountpercent: products[index].discount,
+                      press: () {
+                        context.read<MainProvider>().currentProductModel =
+                            products[index];
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetailsScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              );
+            }
+            return Container();
+          },
         )
       ],
     );
