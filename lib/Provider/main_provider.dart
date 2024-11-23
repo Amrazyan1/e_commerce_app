@@ -1,9 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import '../models/Product/product_model.dart';
+import '../services/api_service.dart';
+import '../services/products_service.dart';
 
 class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
+  final ApiService _apiService = GetIt.I<ApiService>();
+  final ProductsService _productsService = GetIt.I<ProductsService>();
+
   void fakeNotifyListener() {
     notifyListeners();
   }
@@ -48,24 +56,38 @@ class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
     // notifyListeners();
   }
 
-  void addToCart(Product model) {
-    cartProducts.add(model);
+  void addToCartById(String id) async {
+    try {
+      var response = await _apiService.addToCart({"id": id, "count": 1});
 
-    notifyListeners();
+      // _productsService.cartProducts.add(model);
+      notifyListeners();
+    } catch (e) {
+      log('Error on addToCart product ${e.toString()}');
+    }
   }
 
-  void removefromCart(Product model) {
-    cartProducts.remove(model);
+  void addToCart(Product model) async {
+    try {
+      var response = await _apiService.addToCart({"id": model.id, "count": 1});
 
-    notifyListeners();
+      // _productsService.cartProducts.add(model);
+      notifyListeners();
+    } catch (e) {
+      log('Error on addToCart product ${e.toString()}');
+    }
   }
 
-  List<Product> _cartProducts = [];
+  void removefromCart(Product model) async {
+    try {
+      var response = await _apiService.reduceCart({"id": model.id, "count": 1});
 
-  List<Product> get cartProducts => _cartProducts;
+      _productsService.cartProducts.remove(model);
 
-  set cartProducts(List<Product> value) {
-    _cartProducts = value;
+      notifyListeners();
+    } catch (e) {
+      log('Error on removefromCart product ${e.toString()}');
+    }
   }
 
   List<Product> _favouriteProducts = [];

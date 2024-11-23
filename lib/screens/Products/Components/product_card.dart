@@ -1,6 +1,8 @@
+import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/components/network_image_with_loader.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
@@ -21,6 +23,10 @@ class ProductCard extends StatelessWidget {
   final String? priceText;
   @override
   Widget build(BuildContext context) {
+    void addToCart() {
+      context.read<MainProvider>().addToCartById(id);
+    }
+
     return OutlinedButton(
       onPressed: press,
       style: OutlinedButton.styleFrom(
@@ -111,7 +117,7 @@ class ProductCard extends StatelessWidget {
                                   ),
                                   // const SizedBox(width: defaultPadding / 4),
                                   Text(
-                                    "${priceText}",
+                                    "$priceText",
                                     style: TextStyle(
                                       color: Theme.of(context)
                                           .textTheme
@@ -146,7 +152,7 @@ class ProductCard extends StatelessWidget {
                               color: Colors.white,
                             ),
                             padding: EdgeInsets.zero, // Removes default padding
-                            onPressed: () {},
+                            onPressed: addToCart,
                           ),
                         ),
                       ),

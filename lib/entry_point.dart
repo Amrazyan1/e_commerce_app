@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:auto_route/auto_route.dart';
+import 'package:e_commerce_app/blocs/cart/bloc/cart_bloc.dart';
 import 'package:e_commerce_app/blocs/categories/bloc/categories_bloc.dart';
 import 'package:e_commerce_app/blocs/categories/bloc/categories_event.dart';
 import 'package:e_commerce_app/blocs/settings/bloc/settings_bloc.dart';
@@ -144,21 +145,26 @@ class _EntryPointState extends State<EntryPoint> {
 
       switch (index) {
         case 0:
-          context
-              .read<TrendNewProductsBloc>()
-              .add(FetchTrendNewProductsEvent());
-          context.read<DiscountedBloc>().add(FetchDiscountedProductsEvent());
-          context
-              .read<PopularProductsBloc>()
-              .add(FetchTrendPopularProductsEvent());
-          break;
-        case 4:
-          context.read<SettingsBloc>().add(FetchUserSettingsEvent());
+          // context
+          //     .read<TrendNewProductsBloc>()
+          //     .add(FetchTrendNewProductsEvent());
+          // context.read<DiscountedBloc>().add(FetchDiscountedProductsEvent());
+          // context
+          //     .read<PopularProductsBloc>()
+          //     .add(FetchTrendPopularProductsEvent());
           break;
         case 1:
           context.read<CategoriesBloc>().add(FetchCategoriesEvent());
 
           break;
+        case 2:
+          context.read<CartBloc>().add(LoadCart());
+
+          break;
+        case 4:
+          context.read<SettingsBloc>().add(FetchUserSettingsEvent());
+          break;
+
         default:
       }
     }

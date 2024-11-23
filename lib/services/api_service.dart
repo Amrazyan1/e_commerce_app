@@ -235,7 +235,7 @@ class ApiService {
     }
   }
 
-  Future<Response> deleteCartById(String id) async {
+  Future<Response> deleteCartItemById(String id) async {
     try {
       return await _dioClient.dio.delete(
         Endpoints.cartById.replaceFirst('{id}', id),

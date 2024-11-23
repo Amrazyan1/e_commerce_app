@@ -12,9 +12,14 @@ class CartInitial extends CartState {}
 class CartLoading extends CartState {}
 
 class CartLoaded extends CartState {
-  final List<Product> cartItems;
+  final String? subtotal;
+  final String? discount;
+  final String? total;
+  final int? count;
+  final List<CartProductItem> cartItems;
 
-  CartLoaded(this.cartItems);
+  CartLoaded(
+      this.cartItems, this.subtotal, this.discount, this.total, this.count);
 }
 
 class CartError extends CartState {

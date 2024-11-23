@@ -10,6 +10,8 @@ import 'package:e_commerce_app/screens/Products/product_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../blocs/cart/bloc/cart_bloc.dart';
+
 @RoutePage()
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -33,14 +35,6 @@ class _CartScreenState extends State<CartScreen> {
     // }
   }
 
-  double _calculateTotal() {
-    return 0;
-    // return context.read<MainProvider>().cartProducts.fold(
-    //       0,
-    //       (sum, item) => sum + (item.price * item.quantity),
-    //     );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,72 +47,96 @@ class _CartScreenState extends State<CartScreen> {
       ),
       body: Column(
         children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: context.watch<MainProvider>().cartProducts.length,
-              itemBuilder: (context, index) {
-                final item = context.read<MainProvider>().cartProducts[index];
-                return Dismissible(
-                  key: Key(item.name
-                      .toString()), // Ensure each item has a unique key
-                  direction: DismissDirection.endToStart,
-                  onDismissed: (direction) {
-                    context.read<MainProvider>().removefromCart(item);
-                  },
-                  background: Container(
-                    alignment: Alignment.centerRight,
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    color: Colors.red,
-                    child: const Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                    ),
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      context.read<MainProvider>().currentProductModel = item;
+          BlocBuilder<CartBloc, CartState>(
+            builder: (context, state) {
+              if (state is CartLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (state is CartLoaded) {
+                if (state.cartItems.isEmpty) {
+                  return const Center(
+                    child: Text('There is no cart items'),
+                  );
+                }
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: state.cartItems.length,
+                    itemBuilder: (context, index) {
+                      final item = state.cartItems[index];
+                      return Dismissible(
+                        key: Key(item.product!.name
+                            .toString()), // Ensure each item has a unique key
+                        direction: DismissDirection.endToStart,
+                        onDismissed: (direction) {
+                          context
+                              .read<MainProvider>()
+                              .removefromCart(item!.product!);
+                        },
+                        background: Container(
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          color: Colors.red,
+                          child: const Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            context.read<MainProvider>().currentProductModel =
+                                item.product!;
 
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const ProductDetailsScreen(),
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const ProductDetailsScreen(),
+                              ),
+                            );
+                          },
+                          child: Card(
+                            margin: const EdgeInsets.all(8.0),
+                            child: ListTile(
+                              leading: Image.network(
+                                  item.product!.images?.main?.src ?? ''),
+                              title: Text(item.product!.name!),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(item.product!.name!),
+                                  Text('\$${(item.product!.price)}'),
+                                ],
+                              ),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.remove),
+                                    onPressed: () => _decreaseQuantity(index),
+                                  ),
+                                  Text('${item.count}'),
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.add,
+                                      color: kprimaryColor,
+                                    ),
+                                    onPressed: () => _increaseQuantity(index),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
                       );
                     },
-                    child: Card(
-                      margin: const EdgeInsets.all(8.0),
-                      child: ListTile(
-                        leading: Image.network(item.images?.main?.src ?? ''),
-                        title: Text(item.name!),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(item.name!),
-                            Text('\$${(item.price)}'),
-                          ],
-                        ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.remove),
-                              onPressed: () => _decreaseQuantity(index),
-                            ),
-                            Text('${item.count}'),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.add,
-                                color: kprimaryColor,
-                              ),
-                              onPressed: () => _increaseQuantity(index),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                   ),
                 );
-              },
-            ),
+              }
+              return Center(
+                child: Text('Cart Load error ${(state as CartError).message}'),
+              );
+            },
           ),
           Column(
             children: [
@@ -153,12 +171,21 @@ class _CartScreenState extends State<CartScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    "Go To Checkout (${_calculateTotal().toStringAsFixed(2)} ֏)",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall!
-                                        .copyWith(color: Colors.white),
+                                  BlocBuilder<CartBloc, CartState>(
+                                    builder: (context, state) {
+                                      if (state is CartLoaded) {
+                                        return Text(
+                                          "Go To Checkout (${state.total} ֏)",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall!
+                                              .copyWith(color: Colors.white),
+                                        );
+                                      }
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    },
                                   ),
                                 ],
                               ),
@@ -176,20 +203,4 @@ class _CartScreenState extends State<CartScreen> {
       ),
     );
   }
-}
-
-class CartItem {
-  final String imageUrl;
-  final String title;
-  final String info;
-  final double price;
-  int quantity;
-
-  CartItem({
-    required this.imageUrl,
-    required this.title,
-    required this.info,
-    required this.price,
-    this.quantity = 1,
-  });
 }
