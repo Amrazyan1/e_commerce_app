@@ -38,7 +38,8 @@ class Endpoints {
       '/categories?perPage={perPage}&with-subcategories=true&page=2';
   static const String getSubcategoriesById =
       '/categories/{id}?perPage={perPage}';
-  static const String getCategoryBreadcrumbs = '/categories/{id}/breadcrumbs';
+  // static const String getCategoryBreadcrumbs = '/categories/{id}/breadcrumbs';
+  static const String getProductsByCategory = '/categories/{id}/products';
 
   // Contents
   static const String getContentsByKeys = '/contents?keys={keys}';
@@ -61,8 +62,7 @@ class Endpoints {
   static const String certificatePartner = '/partners/certificate';
 
   // Products
-  static const String getProductsByCategory =
-      '/categories/{id}/products?perPage={perPage}';
+
   static const String getProductById = '/products/{id}?perPage={perPage}';
   static const String getProductRatings = '/products/{product:id}/ratings';
   static const String addProductRating = '/products/{product:id}/ratings';
@@ -95,6 +95,6 @@ class Endpoints {
   static const String getUserOrders = '/users/orders?perPage={perPage}';
   static const String getUserSettings = '/users/settings';
   static const String deleteUser = '/users';
-  static const String updateUserSettings = '/auth/settings';
-  static const String updateUserPassword = '/auth/settings/password';
+  static const String updateUserSettings = '/users/settings';
+  static const String updateUserPassword = '/users/settings/password';
 }

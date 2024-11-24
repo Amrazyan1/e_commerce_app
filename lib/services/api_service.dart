@@ -268,16 +268,6 @@ class ApiService {
     }
   }
 
-  Future<Response> getCategoryBreadcrumbs(String id) async {
-    try {
-      return await _dioClient.dio.get(
-        Endpoints.getCategoryBreadcrumbs.replaceFirst('{id}', id),
-      );
-    } catch (e) {
-      rethrow;
-    }
-  }
-
   // Contents
   Future<Response> getContentsByKeys(String keys) async {
     try {
@@ -412,13 +402,12 @@ class ApiService {
   }
 
   // Products
-  Future<Response> getProductsByCategory(String id, int perPage) async {
+  Future<Response> getProductsByCategory(String id) async {
     try {
-      return await _dioClient.dio.get(
-        Endpoints.getProductsByCategory
-            .replaceFirst('{id}', id)
-            .replaceFirst('{perPage}', perPage.toString()),
-      );
+      return await _dioClient.dio
+          .get(Endpoints.getProductsByCategory.replaceFirst('{id}', id)
+              // .replaceFirst('{perPage}', perPage.toString()),
+              );
     } catch (e) {
       rethrow;
     }

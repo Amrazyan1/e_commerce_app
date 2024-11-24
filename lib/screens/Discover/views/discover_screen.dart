@@ -14,6 +14,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../blocs/categories/bloc/categories_bloc.dart';
 import '../../../blocs/categories/bloc/categories_state.dart';
+import '../../../models/Product/product_model.dart';
 
 @RoutePage()
 class DiscoverScreen extends StatefulWidget {
@@ -65,8 +66,11 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                         itemCount: state.categories.length,
                         itemBuilder: (context, index) {
                           final category = state.categories[index];
+                          final products = state.products;
+
                           return _categoryItem(
                             category: category,
+                            productList: products,
                           );
                         },
                       );
@@ -102,12 +106,11 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
 }
 
 class _categoryItem extends StatelessWidget {
-  const _categoryItem({
-    super.key,
-    required this.category,
-  });
+  const _categoryItem(
+      {super.key, required this.category, required this.productList});
 
   final Category category;
+  final List<Product> productList;
 
   @override
   Widget build(BuildContext context) {
@@ -123,14 +126,19 @@ class _categoryItem extends StatelessWidget {
           //   ),
           // );
           context.read<CategoriesBloc>().add(FetchSubcategories(category));
-        } else {
+        } else if (productList.isNotEmpty) {
           context.read<MainProvider>().categoryName =
               category.name ?? 'Unknown';
-          AutoRouter.of(context).push(DiscoverDetailsRoute());
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('${category.name} has no subcategories')),
-          );
+          AutoRouter.of(context)
+              .push(DiscoverDetailsRoute(products: productList));
+        } else {
+          if (category.productsCount! > 0) {
+            context.read<CategoriesBloc>().add(FetchSubcategories(category));
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('${category.name} has no subcategories')),
+            );
+          }
         }
       },
       child: Container(

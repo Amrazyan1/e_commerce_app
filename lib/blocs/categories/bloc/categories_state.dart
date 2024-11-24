@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/models/Product/product_model.dart';
 import 'package:e_commerce_app/models/category_model_real.dart';
 import 'package:equatable/equatable.dart';
 
@@ -12,11 +13,11 @@ class CategoriesLoading extends CategoriesState {}
 
 class CategoriesLoaded extends CategoriesState {
   final List<Category> categories;
-
-  CategoriesLoaded(this.categories);
+  final List<Product> products;
+  CategoriesLoaded({required this.categories, this.products = const []});
 
   @override
-  List<Object?> get props => [categories];
+  List<Object?> get props => [categories, products];
 }
 
 class CategoriesError extends CategoriesState {

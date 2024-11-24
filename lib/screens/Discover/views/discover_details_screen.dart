@@ -10,9 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../models/Product/product_model.dart';
+
 @RoutePage()
 class DiscoverDetailsScreen extends StatelessWidget {
-  const DiscoverDetailsScreen({super.key});
+  final List<Product> products;
+  const DiscoverDetailsScreen({super.key, required this.products});
 
   @override
   Widget build(BuildContext context) {
@@ -50,24 +53,23 @@ class DiscoverDetailsScreen extends StatelessWidget {
                   crossAxisSpacing: 8.0,
                   childAspectRatio: 140 / 220, // Match item dimensions
                 ),
-                itemCount: demoPopularProducts.length,
+                itemCount: products.length,
                 itemBuilder: (context, index) {
                   return ProductCard(
-                    id: '0000-0000',
-                    image: demoPopularProducts[index].imageUrl,
-                    brandName: demoPopularProducts[index].brandName,
-                    title: demoPopularProducts[index].title,
-                    priceAfetDiscount: 'discount price',
-                    dicountpercent:
-                        '${demoPopularProducts[index].dicountpercent}',
+                    id: products[index].id,
+                    image: products[index].images?.main?.src ?? '',
+                    brandName: products[index].name!,
+                    title: products[index].description!,
+                    priceAfetDiscount: products[index].discountedPrice!,
+                    dicountpercent: '${products[index].discount}',
                     press: () {
-                      // context.read<MainProvider>().currentProductModel =
-                      //     demoPopularProducts[index];
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute(
-                      //     builder: (context) => ProductDetailsScreen(),
-                      //   ),
-                      // );
+                      context.read<MainProvider>().currentProductModel =
+                          products[index];
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const ProductDetailsScreen(),
+                        ),
+                      );
                     },
                   );
                 },

@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:e_commerce_app/models/category_model_real.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../models/Product/product_model.dart';
+import '../../../models/productby_categoryid.dart';
 import '../../../services/api_service.dart';
 import 'categories_event.dart';
 import 'categories_state.dart';
@@ -17,7 +19,8 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
         final response = await _apiService.getCategories(perPage: 10);
         log('$response');
         if (response.statusCode == 200) {
-          emit(CategoriesLoaded(categoryModelFromJson(response.data).data!));
+          emit(CategoriesLoaded(
+              categories: categoryModelFromJson(response.data).data!));
         } else {
           emit(CategoriesError('Failed to fetch categories'));
         }
@@ -31,9 +34,24 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
       try {
         final subcategories = event.parentCategory.subcategories ?? [];
         if (subcategories.isEmpty) {
-          emit(CategoriesLoaded([])); // No subcategories
+          if (event.parentCategory.productsCount! > 0) {
+            final response = await _apiService
+                .getProductsByCategory(event.parentCategory.id!);
+
+            var sgaag = productsByCategroyIdResponseFromJson(response.data);
+            var products = sgaag.data!.products!;
+
+            emit(CategoriesLoaded(
+              categories: [],
+              products: products.data!,
+            ));
+          } else {
+            emit(CategoriesLoaded(
+              categories: [],
+            ));
+          }
         } else {
-          emit(CategoriesLoaded(subcategories));
+          emit(CategoriesLoaded(categories: subcategories));
         }
       } catch (e) {
         emit(CategoriesError(e.toString()));

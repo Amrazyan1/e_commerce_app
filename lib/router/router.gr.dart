@@ -10,6 +10,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i22;
 import 'package:e_commerce_app/entry_point.dart' as _i11;
+import 'package:e_commerce_app/models/Product/product_model.dart' as _i24;
 import 'package:e_commerce_app/router/EmptyForHomePage.dart' as _i9;
 import 'package:e_commerce_app/router/EmptyRouterPage.dart' as _i10;
 import 'package:e_commerce_app/screens/bonuscard_screen.dart' as _i2;
@@ -157,10 +158,18 @@ class DeliveryAddresseRoute extends _i22.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i7.DiscoverDetailsScreen]
-class DiscoverDetailsRoute extends _i22.PageRouteInfo<void> {
-  const DiscoverDetailsRoute({List<_i22.PageRouteInfo>? children})
-      : super(
+class DiscoverDetailsRoute
+    extends _i22.PageRouteInfo<DiscoverDetailsRouteArgs> {
+  DiscoverDetailsRoute({
+    _i23.Key? key,
+    required List<_i24.Product> products,
+    List<_i22.PageRouteInfo>? children,
+  }) : super(
           DiscoverDetailsRoute.name,
+          args: DiscoverDetailsRouteArgs(
+            key: key,
+            products: products,
+          ),
           initialChildren: children,
         );
 
@@ -169,9 +178,29 @@ class DiscoverDetailsRoute extends _i22.PageRouteInfo<void> {
   static _i22.PageInfo page = _i22.PageInfo(
     name,
     builder: (data) {
-      return const _i7.DiscoverDetailsScreen();
+      final args = data.argsAs<DiscoverDetailsRouteArgs>();
+      return _i7.DiscoverDetailsScreen(
+        key: args.key,
+        products: args.products,
+      );
     },
   );
+}
+
+class DiscoverDetailsRouteArgs {
+  const DiscoverDetailsRouteArgs({
+    this.key,
+    required this.products,
+  });
+
+  final _i23.Key? key;
+
+  final List<_i24.Product> products;
+
+  @override
+  String toString() {
+    return 'DiscoverDetailsRouteArgs{key: $key, products: $products}';
+  }
 }
 
 /// generated route for
