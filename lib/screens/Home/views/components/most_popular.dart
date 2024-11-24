@@ -29,7 +29,6 @@ class MostPopular extends StatelessWidget {
             style: Theme.of(context).textTheme.titleSmall,
           ),
         ),
-        // While loading use 👇
         // SeconderyProductsSkelton(),
         BlocBuilder<PopularProductsBloc, PopularProductsState>(
           builder: (context, state) {
@@ -65,6 +64,7 @@ class MostPopular extends StatelessWidget {
                       right: index == products.length - 1 ? defaultPadding : 0,
                     ),
                     child: SecondaryProductCard(
+                      key: ValueKey(products[index].id),
                       image: products[index].images!.main!.src!,
                       brandName: products[index].name!,
                       title: products[index].description!,
@@ -72,8 +72,8 @@ class MostPopular extends StatelessWidget {
                       priceAfetDiscount: products[index].discountedPrice,
                       dicountpercent: products[index].discount,
                       press: () {
-                        // context.read<MainProvider>().currentProductModel =
-                        //     products[index];
+                        context.read<MainProvider>().currentProductModel =
+                            products[index];
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => const ProductDetailsScreen(),

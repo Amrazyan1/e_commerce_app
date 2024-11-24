@@ -80,7 +80,7 @@ class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   void removefromCart(Product model) async {
     try {
-      var response = await _apiService.reduceCart({"id": model.id, "count": 1});
+      var response = await _apiService.deleteCartItemById(model.id);
 
       _productsService.cartProducts.remove(model);
 

@@ -34,7 +34,8 @@ class Endpoints {
   static const String cartById = '/carts/{id}';
 
   // Categories
-  static const String getCategories = '/categories?perPage={perPage}';
+  static const String getCategories =
+      '/categories?perPage={perPage}&with-subcategories=true&page=2';
   static const String getSubcategoriesById =
       '/categories/{id}?perPage={perPage}';
   static const String getCategoryBreadcrumbs = '/categories/{id}/breadcrumbs';

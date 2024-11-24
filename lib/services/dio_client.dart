@@ -30,6 +30,9 @@ class DioClient {
           options.headers['Authorization'] = 'Bearer $token';
         }
         options.contentType = Headers.jsonContentType;
+        log('${options.path}');
+        log('${options.data}');
+        log('------------------------------------');
         return handler.next(options);
       },
       onResponse: (response, handler) {
