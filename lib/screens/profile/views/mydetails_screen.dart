@@ -1,6 +1,11 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:e_commerce_app/blocs/settings/bloc/settings_event.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../blocs/settings/bloc/settings_bloc.dart';
+import '../../../blocs/settings/bloc/settings_state.dart';
 
 @RoutePage()
 class MyDetailsScreen extends StatelessWidget {
@@ -8,6 +13,9 @@ class MyDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController nameController = TextEditingController(),
+        emailController = TextEditingController(),
+        phoneController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -19,44 +27,52 @@ class MyDetailsScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(defaultPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
-              _buildInputField(
-                label: 'Name',
-                defaultValue: 'John Doe',
-                keyboardType: TextInputType.name,
-              ),
-              const SizedBox(height: 20),
-              _buildInputField(
-                label: 'Email',
-                defaultValue: 'johndoe@example.com',
-                keyboardType: TextInputType.emailAddress,
-              ),
-              const SizedBox(height: 20),
-              _buildInputField(
-                label: 'Date',
-                defaultValue: '1997-01-01',
-                keyboardType: TextInputType.datetime,
-              ),
-              const SizedBox(height: 20),
-              _buildInputField(
-                label: 'Phone Number',
-                defaultValue: '+3744567890',
-                keyboardType: TextInputType.phone,
-              ),
-              const SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: () {
-                  // Handle save action
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Details saved!')),
-                  );
-                },
-                child: const Text('Save Details'),
-              ),
-            ],
+          child: BlocBuilder<SettingsBloc, SettingsState>(
+            builder: (context, state) {
+              if (state is SettingsLoaded) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20),
+                    _buildInputField(
+                      controller: nameController,
+                      label: 'Name',
+                      defaultValue: '${state.settings.data!.fullName}',
+                      keyboardType: TextInputType.name,
+                    ),
+                    const SizedBox(height: 20),
+                    _buildInputField(
+                      controller: emailController,
+                      label: 'Email',
+                      defaultValue: '${state.settings.data!.email}',
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    const SizedBox(height: 20),
+                    _buildInputField(
+                      controller: phoneController,
+                      label: 'Phone Number',
+                      defaultValue: '${state.settings.data!.phone}',
+                      keyboardType: TextInputType.phone,
+                    ),
+                    const SizedBox(height: 30),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Handle save action
+                        context.read<SettingsBloc>().add(SettingsUpdate(
+                            name: nameController.text,
+                            email: emailController.text,
+                            phone: phoneController.text));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Details saved!')),
+                        );
+                      },
+                      child: const Text('Save Details'),
+                    ),
+                  ],
+                );
+              }
+              return const CircularProgressIndicator();
+            },
           ),
         ),
       ),
@@ -64,10 +80,14 @@ class MyDetailsScreen extends StatelessWidget {
   }
 
   Widget _buildInputField({
+    required TextEditingController controller,
     required String label,
     required String defaultValue,
     required TextInputType keyboardType,
   }) {
+    if (controller.text.isEmpty) {
+      controller.text = defaultValue;
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -80,9 +100,9 @@ class MyDetailsScreen extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         TextField(
-          controller: TextEditingController(text: defaultValue),
+          controller: controller,
           keyboardType: keyboardType,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
           decoration: InputDecoration(
             hintText: label,
             border: const UnderlineInputBorder(),

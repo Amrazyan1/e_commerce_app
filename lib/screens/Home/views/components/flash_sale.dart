@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../blocs/products/discounts/bloc/discounted_bloc.dart';
+import '../../../../components/Shimmers/product_shimmer_portrait.dart';
 
 class FlashSale extends StatelessWidget {
   const FlashSale({
@@ -19,77 +20,102 @@ class FlashSale extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // While loading show 👇
-        // const BannerMWithCounterSkelton(),
-        // BannerMWithCounter(
-        //   duration: const Duration(hours: 8),
-        //   text: "Super Flash Sale \n50% Off",
-        //   press: () {},
-        // ),
-        const _barcodeItem(),
-        const SizedBox(height: defaultPadding / 2),
-        Padding(
-          padding: const EdgeInsets.all(defaultPadding),
-          child: Text(
-            "Flash sale",
-            style: Theme.of(context).textTheme.titleSmall,
+    return BlocListener<DiscountedBloc, DiscountedBlocState>(
+      listener: (context, state) {
+        if (state is DiscountedBlocError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                duration: const Duration(seconds: 5),
+                content: Text(state.message)),
+          );
+        }
+        // TODO: implement listener
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // While loading show 👇
+          // const BannerMWithCounterSkelton(),
+          // BannerMWithCounter(
+          //   duration: const Duration(hours: 8),
+          //   text: "Super Flash Sale \n50% Off",
+          //   press: () {},
+          // ),
+          const _barcodeItem(),
+          const SizedBox(height: defaultPadding / 2),
+          Padding(
+            padding: const EdgeInsets.all(defaultPadding),
+            child: Text(
+              "Flash sale",
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
           ),
-        ),
-        // While loading show 👇
-        // const ProductsSkelton(),
-        BlocBuilder<DiscountedBloc, DiscountedBlocState>(
-          builder: (context, state) {
-            if (state is DiscountedBlocLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is DiscountedBlocError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                    duration: const Duration(seconds: 5),
-                    content: Text(state.message)),
-              );
-            } else if (state is DiscountedBlocLoaded) {
-              final products = state.discountedProducts;
 
-              return SizedBox(
-                height: 220,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  // Find demoFlashSaleProducts on models/ProductModel.dart
-                  itemCount: products.length,
-                  itemBuilder: (context, index) => Padding(
-                    padding: EdgeInsets.only(
-                      left: defaultPadding,
-                      right: index == products.length - 1 ? defaultPadding : 0,
-                    ),
-                    child: ProductCard(
-                      id: products[index].id,
-                      image: products[index].images!.main!.src!,
-                      brandName: products[index].name!,
-                      title: products[index].description!,
-                      priceText: products[index].price!,
-                      priceAfetDiscount: products[index].discountedPrice,
-                      dicountpercent: products[index].discount,
-                      press: () {
-                        context.read<MainProvider>().currentProductModel =
-                            products[index];
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const ProductDetailsScreen(),
-                          ),
-                        );
-                      },
+          BlocBuilder<DiscountedBloc, DiscountedBlocState>(
+            builder: (context, state) {
+              if (state is DiscountedBlocLoading) {
+                return SizedBox(
+                  height: 220,
+                  child: ListView.builder(
+                      itemCount: 5,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return const ShimmerProductPortrait();
+                      }),
+                );
+              } else if (state is DiscountedBlocError) {
+                return SizedBox(
+                  height: 220,
+                  child: ListView.builder(
+                      itemCount: 5,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return const ShimmerProductPortrait();
+                      }),
+                );
+              } else if (state is DiscountedBlocLoaded) {
+                final products = state.discountedProducts;
+
+                return SizedBox(
+                  height: 220,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    // Find demoFlashSaleProducts on models/ProductModel.dart
+                    itemCount: products.length,
+                    itemBuilder: (context, index) => Padding(
+                      padding: EdgeInsets.only(
+                        left: defaultPadding,
+                        right:
+                            index == products.length - 1 ? defaultPadding : 0,
+                      ),
+                      child: ProductCard(
+                        id: products[index].id,
+                        image: products[index].images!.main!.src!,
+                        brandName: products[index].name!,
+                        title: products[index].description!,
+                        priceText: products[index].price!,
+                        priceAfetDiscount: products[index].discountedPrice,
+                        dicountpercent: products[index].discount,
+                        press: () {
+                          context.read<MainProvider>().currentProductModel =
+                              products[index];
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const ProductDetailsScreen(),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-              );
-            }
-            return Container();
-          },
-        ),
-      ],
+                );
+              }
+              return Container();
+            },
+          ),
+        ],
+      ),
     );
   }
 }

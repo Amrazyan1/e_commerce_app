@@ -1,4 +1,5 @@
 import 'package:e_commerce_app/Provider/main_provider.dart';
+import 'package:e_commerce_app/components/Shimmers/product_shimmer_portrait.dart';
 import 'package:e_commerce_app/screens/Products/Components/product_card.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/models/product_model.dart';
@@ -15,66 +16,93 @@ class PopularProducts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: defaultPadding / 2),
-        Padding(
-          padding: const EdgeInsets.all(defaultPadding),
-          child: Text(
-            "Popular products",
-            style: Theme.of(context).textTheme.titleSmall,
+    return BlocListener<TrendNewProductsBloc, TrendNewProductsState>(
+      listener: (context, state) {
+        if (state is TrendNewProductsError) {
+          // Show a SnackBar when there's an error
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: defaultPadding / 2),
+          Padding(
+            padding: const EdgeInsets.all(defaultPadding),
+            child: Text(
+              "Popular products",
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
           ),
-        ),
-        BlocBuilder<TrendNewProductsBloc, TrendNewProductsState>(
-          builder: (context, state) {
-            if (state is TrendNewProductsLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is TrendNewProductsError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                    duration: const Duration(seconds: 15),
-                    content: Text(state.message)),
-              );
-            } else if (state is TrendNewProductsLoaded) {
-              final products = state.products;
+          BlocBuilder<TrendNewProductsBloc, TrendNewProductsState>(
+            builder: (context, state) {
+              if (state is TrendNewProductsLoading) {
+                return SizedBox(
+                  height: 220,
+                  child: ListView.builder(
+                      itemCount: 5,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return const ShimmerProductPortrait();
+                      }),
+                );
+              } else if (state is TrendNewProductsError) {
+                return SizedBox(
+                  height: 220,
+                  child: ListView.builder(
+                      itemCount: 5,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return const ShimmerProductPortrait();
+                      }),
+                );
+              } else if (state is TrendNewProductsLoaded) {
+                final products = state.products;
 
-              return SizedBox(
-                height: 220,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: products.length,
-                  itemBuilder: (context, index) => Padding(
-                    padding: EdgeInsets.only(
-                      left: defaultPadding,
-                      right: index == products.length - 1 ? defaultPadding : 0,
-                    ),
-                    child: ProductCard(
-                      id: products[index].id,
-                      image: products[index].images!.main!.src!,
-                      brandName: products[index].name!,
-                      title: products[index].description!,
-                      priceText: products[index].price!,
-                      priceAfetDiscount: products[index].discountedPrice,
-                      dicountpercent: products[index].discount,
-                      press: () {
-                        context.read<MainProvider>().currentProductModel =
-                            products[index];
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ProductDetailsScreen(),
-                          ),
-                        );
-                      },
+                return SizedBox(
+                  height: 220,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: products.length,
+                    itemBuilder: (context, index) => Padding(
+                      padding: EdgeInsets.only(
+                        left: defaultPadding,
+                        right:
+                            index == products.length - 1 ? defaultPadding : 0,
+                      ),
+                      child: ProductCard(
+                        id: products[index].id,
+                        image: products[index].images!.main!.src!,
+                        brandName: products[index].name!,
+                        title: products[index].description!,
+                        priceText: products[index].price!,
+                        priceAfetDiscount: products[index].discountedPrice,
+                        dicountpercent: products[index].discount,
+                        press: () {
+                          context.read<MainProvider>().currentProductModel =
+                              products[index];
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const ProductDetailsScreen(),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-              );
-            }
-            return Container();
-          },
-        )
-      ],
+                );
+              }
+              return Container();
+            },
+          )
+        ],
+      ),
     );
   }
 }

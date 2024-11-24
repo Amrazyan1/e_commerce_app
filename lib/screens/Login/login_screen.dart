@@ -39,13 +39,7 @@ class _LoginPageState extends State<LoginPage> {
         child: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
             if (state is LoginSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Login Successful!')),
-              );
-
-              AutoRouter.of(context).replace(EntryPoint());
-
-              // Navigate to the next screen
+              AutoRouter.of(context).replace(const EntryPoint());
             } else if (state is LoginFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.error)),

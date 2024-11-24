@@ -31,7 +31,7 @@ class ReviewCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(0.035),
         borderRadius:
-            const BorderRadius.all(Radius.circular(defaultBorderRadious)),
+            const BorderRadius.all(Radius.circular(defaultBorderRadius)),
       ),
       child: Row(
         children: [
@@ -121,7 +121,7 @@ class RateBar extends StatelessWidget {
           Expanded(
             child: ClipRRect(
               borderRadius: const BorderRadius.all(
-                Radius.circular(defaultBorderRadious),
+                Radius.circular(defaultBorderRadius),
               ),
               child: LinearProgressIndicator(
                 minHeight: 6,

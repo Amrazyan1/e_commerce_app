@@ -89,7 +89,7 @@ class ButtonMainWidget extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
-          Radius.circular(defaultBorderRadious),
+          Radius.circular(defaultBorderRadius),
         ),
       ),
       child: InkWell(

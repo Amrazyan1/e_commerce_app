@@ -72,7 +72,7 @@ class _CartScreenState extends State<CartScreen> {
                         onDismissed: (direction) {
                           context
                               .read<MainProvider>()
-                              .removefromCart(item!.product!);
+                              .removefromCart(item.product!);
                         },
                         background: Container(
                           alignment: Alignment.centerRight,
@@ -149,7 +149,7 @@ class _CartScreenState extends State<CartScreen> {
                     clipBehavior: Clip.hardEdge,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(
-                        Radius.circular(defaultBorderRadious),
+                        Radius.circular(defaultBorderRadius),
                       ),
                     ),
                     child: InkWell(
@@ -175,7 +175,7 @@ class _CartScreenState extends State<CartScreen> {
                                     builder: (context, state) {
                                       if (state is CartLoaded) {
                                         return Text(
-                                          "Go To Checkout (${state.total} ֏)",
+                                          "Go To Checkout (${state.total})",
                                           style: Theme.of(context)
                                               .textTheme
                                               .titleSmall!

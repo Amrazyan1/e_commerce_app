@@ -28,5 +28,18 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         emit(SettingsError(e.toString()));
       }
     });
+    on<SettingsUpdate>((event, emit) async {
+      try {
+        final response = await _apiService.updateUserSettings(
+            {"name": event.name, "email": event.email, 'phone': event.phone});
+
+        log('${response.data}');
+        // log('${json.encode(response.data['data'])}');
+        if (response.statusCode == 200) {
+        } else {}
+      } catch (e) {
+        log('Setting update error ${e.toString()}');
+      }
+    });
   }
 }

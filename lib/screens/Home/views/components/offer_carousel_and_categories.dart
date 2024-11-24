@@ -11,12 +11,12 @@ class OffersCarouselAndCategories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // While loading use 👇
         // const OffersSkelton(),
-        const Padding(
+        Padding(
           padding: EdgeInsets.only(left: 24, right: 24),
           child: OffersCarousel(),
         ),

@@ -48,7 +48,7 @@ class ProfileCard extends StatelessWidget {
               decoration: const BoxDecoration(
                 color: kprimaryColor,
                 borderRadius:
-                    BorderRadius.all(Radius.circular(defaultBorderRadious)),
+                    BorderRadius.all(Radius.circular(defaultBorderRadius)),
               ),
               child: Text(
                 proLableText,
