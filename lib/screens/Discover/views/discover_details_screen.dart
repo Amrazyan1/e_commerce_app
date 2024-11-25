@@ -22,6 +22,7 @@ class DiscoverDetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        automaticallyImplyLeading: true,
         title: Text(
           context.watch<MainProvider>().categoryName,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),

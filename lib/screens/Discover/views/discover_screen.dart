@@ -14,6 +14,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../blocs/categories/bloc/categories_bloc.dart';
 import '../../../blocs/categories/bloc/categories_state.dart';
+import '../../../blocs/categorydetails/bloc/category_detail_bloc.dart';
+import '../../../blocs/categorydetails/bloc/category_detail_event.dart';
 import '../../../models/Product/product_model.dart';
 
 @RoutePage()
@@ -30,59 +32,71 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _handleBackNavigation,
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text(
-            'Find Products',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-        ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(25),
-              child: SearchInputField(),
+    return BlocListener<CategoriesBloc, CategoriesState>(
+      listener: (context, state) {
+        if (state is CategoriesLoaded) {
+          if (state.products.isNotEmpty) {
+            //            context.read<MainProvider>().categoryName =
+            // category.name ?? 'Unknown';
+            AutoRouter.of(context)
+                .push(DiscoverDetailsRoute(products: state.products));
+          }
+        }
+      },
+      child: WillPopScope(
+        onWillPop: _handleBackNavigation,
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: const Text(
+              'Find Products',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: BlocBuilder<CategoriesBloc, CategoriesState>(
-                  builder: (context, state) {
-                    if (state is CategoriesLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (state is CategoriesLoaded) {
-                      return GridView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 8.0,
-                          crossAxisSpacing: 8.0,
-                          childAspectRatio: 174.5 / 189,
-                        ),
-                        itemCount: state.categories.length,
-                        itemBuilder: (context, index) {
-                          final category = state.categories[index];
-                          final products = state.products;
+          ),
+          body: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(25),
+                child: SearchInputField(),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: BlocBuilder<CategoriesBloc, CategoriesState>(
+                    builder: (context, state) {
+                      if (state is CategoriesLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (state is CategoriesLoaded) {
+                        return GridView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 8.0,
+                            crossAxisSpacing: 8.0,
+                            childAspectRatio: 174.5 / 189,
+                          ),
+                          itemCount: state.categories.length,
+                          itemBuilder: (context, index) {
+                            final category = state.categories[index];
+                            final products = state.products;
 
-                          return _categoryItem(
-                            category: category,
-                            productList: products,
-                          );
-                        },
-                      );
-                    } else if (state is CategoriesError) {
-                      return Center(child: Text('Error: ${state.error}'));
-                    }
-                    return const Center(child: Text('No Data'));
-                  },
+                            return _categoryItem(
+                              category: category,
+                              productList: products,
+                            );
+                          },
+                        );
+                      } else if (state is CategoriesError) {
+                        return Center(child: Text('Error: ${state.error}'));
+                      }
+                      return const Center(child: Text('No Data'));
+                    },
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -126,15 +140,19 @@ class _categoryItem extends StatelessWidget {
           //   ),
           // );
           context.read<CategoriesBloc>().add(FetchSubcategories(category));
-        } else if (productList.isNotEmpty) {
+        } else if (category.productsCount! > 0) {
           context.read<MainProvider>().categoryName =
               category.name ?? 'Unknown';
+          context
+              .read<CategoryDetailBloc>()
+              .add(FetchCategoryProductsEvent(id: category.categoryParentId!));
           AutoRouter.of(context)
               .push(DiscoverDetailsRoute(products: productList));
         } else {
-          if (category.productsCount! > 0) {
-            context.read<CategoriesBloc>().add(FetchSubcategories(category));
-          } else {
+          // if (category.productsCount! > 0) {
+          //   context.read<CategoriesBloc>().add(FetchSubcategories(category));
+          // } else
+          {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('${category.name} has no subcategories')),
             );

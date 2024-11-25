@@ -3,6 +3,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/blocs/cart/bloc/cart_bloc.dart';
 import 'package:e_commerce_app/blocs/categories/bloc/categories_bloc.dart';
 import 'package:e_commerce_app/blocs/categories/bloc/categories_event.dart';
+import 'package:e_commerce_app/blocs/favourites/bloc/favourites_bloc.dart';
 import 'package:e_commerce_app/blocs/settings/bloc/settings_bloc.dart';
 import 'package:e_commerce_app/blocs/settings/bloc/settings_event.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
@@ -81,7 +82,7 @@ class _EntryPointState extends State<EntryPoint> {
             //   log('Navigated back to Home tab.');
             //   return false; // Prevent system back pop
             // }
-            return true; // Allow system back pop (exit app)
+            return false; // Allow system back pop (exit app)
           },
           child: Scaffold(
             body: child,
@@ -159,6 +160,10 @@ class _EntryPointState extends State<EntryPoint> {
           break;
         case 2:
           context.read<CartBloc>().add(LoadCart());
+
+          break;
+        case 3:
+          context.read<FavouritesBloc>().add(FetchFavouritesEvent());
 
           break;
         case 4:

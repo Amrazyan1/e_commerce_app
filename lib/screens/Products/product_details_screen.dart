@@ -77,13 +77,15 @@ class ProductDetailsScreen extends StatelessWidget {
                 ],
               ),
               ProductInfo(
+                productId:
+                    '${context.read<MainProvider>().currentProductModel.id}',
                 brand:
-                    '${context.watch<MainProvider>().currentProductModel.name}',
+                    '${context.read<MainProvider>().currentProductModel.name}',
                 title:
-                    '${context.watch<MainProvider>().currentProductModel.description}',
+                    '${context.read<MainProvider>().currentProductModel.name}',
                 isAvailable: true,
                 description:
-                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+                    '${context.read<MainProvider>().currentProductModel.description}',
                 rating: 4.4,
                 numOfReviews: 126,
                 price:

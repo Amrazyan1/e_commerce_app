@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:e_commerce_app/Provider/main_provider.dart';
+import 'package:e_commerce_app/blocs/favourites/bloc/favourites_bloc.dart';
 import 'package:e_commerce_app/screens/Products/Components/product_availability_tag.dart';
 import 'package:e_commerce_app/screens/Products/Components/quantity_widget.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import '../../../constants.dart';
 class ProductInfo extends StatelessWidget {
   const ProductInfo({
     super.key,
+    required this.productId,
     required this.title,
     required this.brand,
     required this.description,
@@ -20,7 +22,7 @@ class ProductInfo extends StatelessWidget {
     required this.isAvailable,
     required this.price,
   });
-
+  final String productId;
   final String title, brand, description;
   final double rating;
   final int numOfReviews;
@@ -38,15 +40,19 @@ class ProductInfo extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(brand.toUpperCase(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(fontWeight: FontWeight.bold)),
+                Flexible(
+                  child: Text(brand.toUpperCase(),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge!
+                          .copyWith(fontWeight: FontWeight.bold)),
+                ),
                 GestureDetector(
                   onTap: () {
                     log('IS favorite true');
-                    context.read<MainProvider>().addToFavourites(null);
+                    context
+                        .read<FavouritesBloc>()
+                        .add(AddToFavouritesEvent(productId));
                   },
                   child: Icon(
                     // context

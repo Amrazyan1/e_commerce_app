@@ -23,7 +23,6 @@ class AppRouter extends RootStackRouter {
           AutoRoute(page: EmptyHomeRouter.page, path: 'home', children: [
             AutoRoute(page: HomeRoute.page, path: ''),
             AutoRoute(page: BonusCarRoute.page, path: 'bonuscard'),
-            AutoRoute(page: DiscoverDetailsRoute.page, path: 'discoverdetail'),
           ]),
           AutoRoute(page: DiscoverRoute.page, path: 'discover'),
           AutoRoute(page: FavoriteRoute.page, path: 'favorites'),
@@ -42,6 +41,7 @@ class AppRouter extends RootStackRouter {
             AutoRoute(page: DeliveryAddressInfoRoute.page, path: 'addressinfo'),
           ]),
         ]),
+        AutoRoute(page: DiscoverDetailsRoute.page, path: '/discoverdetail'),
 
         AutoRoute(page: FakeProifleRoute.page, path: '/FakeProifleRoute'),
       ];

@@ -51,7 +51,7 @@ class ProductsByCategroyIdResponse {
 class Data {
   List<dynamic>? colors;
   Filters? filters;
-  ProductModel? products;
+  Products? products;
 
   Data({
     this.colors,
@@ -62,7 +62,7 @@ class Data {
   Data copyWith({
     List<dynamic>? colors,
     Filters? filters,
-    ProductModel? products,
+    Products? products,
   }) =>
       Data(
         colors: colors ?? this.colors,
@@ -78,7 +78,7 @@ class Data {
             json["filters"] == null ? null : Filters.fromJson(json["filters"]),
         products: json["products"] == null
             ? null
-            : ProductModel.fromJson(json["products"]),
+            : Products.fromJson(json["products"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -90,7 +90,7 @@ class Data {
 }
 
 class Filters {
-  List<String>? empty;
+  Map<String, String>? empty;
   List<String>? fluffy;
   List<String>? purple;
   Map<String, double>? filters;
@@ -103,7 +103,7 @@ class Filters {
   });
 
   Filters copyWith({
-    List<String>? empty,
+    Map<String, String>? empty,
     List<String>? fluffy,
     List<String>? purple,
     Map<String, double>? filters,
@@ -116,9 +116,8 @@ class Filters {
       );
 
   factory Filters.fromJson(Map<String, dynamic> json) => Filters(
-        empty: json["Բռենդ"] == null
-            ? []
-            : List<String>.from(json["Բռենդ"]!.map((x) => x)),
+        empty: Map.from(json["Բռենդ"]!)
+            .map((k, v) => MapEntry<String, String>(k, v)),
         fluffy: json["Երկարություն"] == null
             ? []
             : List<String>.from(json["Երկարություն"]!.map((x) => x)),
@@ -130,13 +129,53 @@ class Filters {
       );
 
   Map<String, dynamic> toJson() => {
-        "Բռենդ": empty == null ? [] : List<dynamic>.from(empty!.map((x) => x)),
+        "Բռենդ":
+            Map.from(empty!).map((k, v) => MapEntry<String, dynamic>(k, v)),
         "Երկարություն":
             fluffy == null ? [] : List<dynamic>.from(fluffy!.map((x) => x)),
         "Գույն":
             purple == null ? [] : List<dynamic>.from(purple!.map((x) => x)),
         "Գին":
             Map.from(filters!).map((k, v) => MapEntry<String, dynamic>(k, v)),
+      };
+}
+
+class Products {
+  List<Product>? data;
+  Links? links;
+  Meta? meta;
+
+  Products({
+    this.data,
+    this.links,
+    this.meta,
+  });
+
+  Products copyWith({
+    List<Product>? data,
+    Links? links,
+    Meta? meta,
+  }) =>
+      Products(
+        data: data ?? this.data,
+        links: links ?? this.links,
+        meta: meta ?? this.meta,
+      );
+
+  factory Products.fromJson(Map<String, dynamic> json) => Products(
+        data: json["data"] == null
+            ? []
+            : List<Product>.from(json["data"]!.map((x) => Product.fromJson(x))),
+        links: json["links"] == null ? null : Links.fromJson(json["links"]),
+        meta: json["meta"] == null ? null : Meta.fromJson(json["meta"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "links": links?.toJson(),
+        "meta": meta?.toJson(),
       };
 }
 

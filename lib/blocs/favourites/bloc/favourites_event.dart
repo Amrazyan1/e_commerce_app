@@ -8,3 +8,9 @@ abstract class FavouritesEvent extends Equatable {
 }
 
 class FetchFavouritesEvent extends FavouritesEvent {}
+
+class AddToFavouritesEvent extends FavouritesEvent {
+  final String productId;
+
+  AddToFavouritesEvent(this.productId);
+}

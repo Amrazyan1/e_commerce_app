@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get_it/get_it.dart';
@@ -13,6 +15,22 @@ class FavouritesBloc extends Bloc<FavouritesEvent, FavouritesState> {
 
   FavouritesBloc() : super(FavouritesInitial()) {
     on<FetchFavouritesEvent>(_onFetchFavourites);
+    on<AddToFavouritesEvent>(_onFavAdded);
+  }
+  Future<void> _onFavAdded(
+    AddToFavouritesEvent event,
+    Emitter<FavouritesState> emit,
+  ) async {
+    try {
+      final response = await _apiService.addProductToFavorites({
+        'products': ['${event.productId}']
+      });
+      if (response.statusCode == 200) {
+        favouriteProducts = productModelFromJson(response.data).data!;
+      } else {}
+    } catch (error) {
+      log('add fav error $error');
+    }
   }
 
   Future<void> _onFetchFavourites(

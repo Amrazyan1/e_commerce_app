@@ -33,26 +33,27 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
       emit(CategoriesLoading());
       try {
         final subcategories = event.parentCategory.subcategories ?? [];
-        if (subcategories.isEmpty) {
-          if (event.parentCategory.productsCount! > 0) {
-            final response = await _apiService
-                .getProductsByCategory(event.parentCategory.id!);
+        emit(CategoriesLoaded(categories: subcategories));
 
-            var sgaag = productsByCategroyIdResponseFromJson(response.data);
-            var products = sgaag.data!.products!;
+        // if (subcategories.isEmpty) {
+        //   if (event.parentCategory.productsCount! > 0) {
+        //     final response = await _apiService
+        //         .getProductsByCategory(event.parentCategory.id!);
 
-            emit(CategoriesLoaded(
-              categories: [],
-              products: products.data!,
-            ));
-          } else {
-            emit(CategoriesLoaded(
-              categories: [],
-            ));
-          }
-        } else {
-          emit(CategoriesLoaded(categories: subcategories));
-        }
+        //     var sgaag = productsByCategroyIdResponseFromJson(response.data);
+        //     var products = sgaag.data!.products!;
+
+        //     emit(CategoriesLoaded(
+        //       categories: [],
+        //       products: products.data!,
+        //     ));
+        //   } else {
+        //     emit(CategoriesLoaded(
+        //       categories: [],
+        //     ));
+        //   }
+        // } else {
+        // }
       } catch (e) {
         emit(CategoriesError(e.toString()));
       }
