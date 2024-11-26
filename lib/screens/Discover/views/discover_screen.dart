@@ -38,8 +38,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           if (state.products.isNotEmpty) {
             //            context.read<MainProvider>().categoryName =
             // category.name ?? 'Unknown';
-            AutoRouter.of(context)
-                .push(DiscoverDetailsRoute(products: state.products));
+            AutoRouter.of(context).push(const DiscoverDetailsRoute());
           }
         }
       },
@@ -145,9 +144,8 @@ class _categoryItem extends StatelessWidget {
               category.name ?? 'Unknown';
           context
               .read<CategoryDetailBloc>()
-              .add(FetchCategoryProductsEvent(id: category.categoryParentId!));
-          AutoRouter.of(context)
-              .push(DiscoverDetailsRoute(products: productList));
+              .add(FetchCategoryProductsEvent(id: category.id!));
+          AutoRouter.of(context).push(const DiscoverDetailsRoute());
         } else {
           // if (category.productsCount! > 0) {
           //   context.read<CategoriesBloc>().add(FetchSubcategories(category));

@@ -13,14 +13,14 @@ class ProductCard extends StatelessWidget {
     required this.title,
     this.priceAfetDiscount,
     this.dicountpercent,
-    this.priceText,
+    required this.priceText,
     required this.press,
   });
   final String id, image, brandName, title;
   final String? priceAfetDiscount;
   final String? dicountpercent;
   final VoidCallback press;
-  final String? priceText;
+  final String priceText;
   @override
   Widget build(BuildContext context) {
     void addToCart() {
@@ -117,7 +117,7 @@ class ProductCard extends StatelessWidget {
                                   ),
                                   // const SizedBox(width: defaultPadding / 4),
                                   Text(
-                                    "$priceText",
+                                    priceText,
                                     style: TextStyle(
                                       color: Theme.of(context)
                                           .textTheme
@@ -130,7 +130,7 @@ class ProductCard extends StatelessWidget {
                                 ],
                               )
                             : Text(
-                                "$priceText",
+                                priceText,
                                 style: const TextStyle(
                                   color: ksecondaryColor,
                                   fontWeight: FontWeight.w500,

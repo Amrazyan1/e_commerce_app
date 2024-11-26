@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'blocs/cart/bloc/cart_bloc.dart';
+import 'blocs/categorydetails/bloc/category_detail_bloc.dart';
 import 'blocs/favourites/bloc/favourites_bloc.dart';
 import 'blocs/products/discounts/bloc/discounted_bloc.dart';
 import 'blocs/products/popular/bloc/popular_products_bloc.dart';
@@ -52,6 +53,9 @@ void main() {
           ),
           BlocProvider(
             create: (_) => FavouritesBloc(),
+          ),
+          BlocProvider(
+            create: (_) => CategoryDetailBloc(),
           ),
         ],
         child: const MainApp(),

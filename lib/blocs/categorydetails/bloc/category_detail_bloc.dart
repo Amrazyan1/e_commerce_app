@@ -18,18 +18,16 @@ class CategoryDetailBloc
         {
           final response = await _apiService.getProductsByCategory(event.id!);
 
-          var sgaag = productsByCategroyIdResponseFromJson(response.data);
-          var products = sgaag.data!.products!;
-
-          // if (response.statusCode == 200) {
-          //   final subcategories =
-          //       productByCategoryIdFromJson(response.data).data;
-          //   emit(CategoryDetailLoaded(subcategories: subcategories!));
-          // } else {
-          //   emit(CategoryDetailError('Failed to fetch subcategories'));
-          // }
+          if (response.statusCode == 200) {
+            var sgaag = productsByCategroyIdResponseFromJson(response.data);
+            var products = sgaag.data!.products!;
+            emit(CategoryDetailLoaded(products: products.data!));
+          } else {
+            emit(CategoryDetailError('Failed to fetch subcategories'));
+          }
         }
       } catch (e) {
+        log(e.toString());
         emit(CategoryDetailError(e.toString()));
       }
     });

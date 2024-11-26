@@ -405,9 +405,7 @@ class ApiService {
   Future<Response> getProductsByCategory(String id) async {
     try {
       return await _dioClient.dio
-          .get(Endpoints.getProductsByCategory.replaceFirst('{id}', id)
-              // .replaceFirst('{perPage}', perPage.toString()),
-              );
+          .get(Endpoints.getProductsByCategory.replaceFirst('{id}', id));
     } catch (e) {
       rethrow;
     }

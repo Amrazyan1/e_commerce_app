@@ -7,9 +7,9 @@ class CategoryDetailInitial extends CategoryDetailState {}
 class CategoryDetailLoading extends CategoryDetailState {}
 
 class CategoryDetailLoaded extends CategoryDetailState {
-  final List<ProductModel> subcategories;
+  final List<Product> products;
 
-  CategoryDetailLoaded({required this.subcategories});
+  CategoryDetailLoaded({required this.products});
 }
 
 class CategoryDetailError extends CategoryDetailState {
