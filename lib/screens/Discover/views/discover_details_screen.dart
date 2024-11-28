@@ -1,8 +1,5 @@
 import 'package:auto_route/annotations.dart';
 import 'package:e_commerce_app/Provider/main_provider.dart';
-import 'package:e_commerce_app/components/search_bar_input_field.dart';
-import 'package:e_commerce_app/constants.dart';
-import 'package:e_commerce_app/models/product_model.dart';
 import 'package:e_commerce_app/screens/Discover/views/filter_screen.dart';
 import 'package:e_commerce_app/screens/Products/Components/product_card.dart';
 import 'package:e_commerce_app/screens/Products/product_details_screen.dart';
@@ -12,7 +9,6 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../blocs/categorydetails/bloc/category_detail_bloc.dart';
 import '../../../blocs/categorydetails/bloc/category_detail_state.dart';
-import '../../../models/Product/product_model.dart';
 
 @RoutePage()
 class DiscoverDetailsScreen extends StatelessWidget {
@@ -64,13 +60,7 @@ class DiscoverDetailsScreen extends StatelessWidget {
                       itemCount: state.products.length,
                       itemBuilder: (context, index) {
                         return ProductCard(
-                          id: products[index].id,
-                          image: products[index].images?.main?.src ?? '',
-                          brandName: products[index].name!,
-                          title: products[index].description!,
-                          priceAfetDiscount: products[index].discountedPrice!,
-                          dicountpercent: '${products[index].discount}',
-                          priceText: products[index].price ?? '',
+                          product: products[index],
                           press: () {
                             context.read<MainProvider>().currentProductModel =
                                 products[index];

@@ -4,31 +4,59 @@ import 'package:e_commerce_app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ProductCard extends StatelessWidget {
+import '../../../models/Product/product_model.dart';
+import '../../../models/cart_products_response.dart';
+
+class ProductCard extends StatefulWidget {
   const ProductCard({
     super.key,
-    required this.id,
-    required this.image,
-    required this.brandName,
-    required this.title,
-    this.priceAfetDiscount,
-    this.dicountpercent,
-    required this.priceText,
+    required this.product,
+    // required this.id,
+    // required this.image,
+    // required this.brandName,
+    // required this.title,
+    // this.priceAfterDiscount,
+    // this.dicountpercent,
+    // required this.priceText,
     required this.press,
   });
-  final String id, image, brandName, title;
-  final String? priceAfetDiscount;
-  final String? dicountpercent;
+  final Product product;
+  // final String id, image, brandName, title;
+  // final String? priceAfterDiscount;
+  // final String? dicountpercent;
   final VoidCallback press;
-  final String priceText;
+  // final String priceText;
+
+  @override
+  State<ProductCard> createState() => _ProductCardState();
+}
+
+class _ProductCardState extends State<ProductCard> {
+  bool isAddedToCart = false;
+
+  void addToCart() async {
+    CartProductItem? cardProdItem =
+        await context.read<MainProvider>().addToCartById(widget.product.id);
+    if (cardProdItem != null) {
+      setState(() {
+        isAddedToCart = true;
+      });
+
+      // Revert back to the initial state after a delay
+      Future.delayed(const Duration(seconds: 2), () {
+        if (mounted) {
+          setState(() {
+            isAddedToCart = false;
+          });
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    void addToCart() {
-      context.read<MainProvider>().addToCartById(id);
-    }
-
     return OutlinedButton(
-      onPressed: press,
+      onPressed: widget.press,
       style: OutlinedButton.styleFrom(
         minimumSize: const Size(140, 220),
         maximumSize: const Size(140, 220),
@@ -47,8 +75,9 @@ class ProductCard extends StatelessWidget {
             aspectRatio: 1.15,
             child: Stack(
               children: [
-                NetworkImageWithLoader(image, radius: defaultBorderRadius),
-                if (dicountpercent != null)
+                NetworkImageWithLoader(widget.product.images!.main!.src!,
+                    radius: defaultBorderRadius),
+                if (widget.product.discount != null)
                   Positioned(
                     right: defaultPadding / 2,
                     top: defaultPadding / 2,
@@ -62,7 +91,7 @@ class ProductCard extends StatelessWidget {
                             Radius.circular(defaultBorderRadius)),
                       ),
                       child: Text(
-                        "$dicountpercent off",
+                        "${widget.product.discount} off",
                         style: const TextStyle(
                             color: Colors.white,
                             fontSize: 10,
@@ -81,7 +110,7 @@ class ProductCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    brandName.toUpperCase(),
+                    widget.product.name!.toUpperCase(),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context)
@@ -92,7 +121,7 @@ class ProductCard extends StatelessWidget {
                   const SizedBox(height: defaultPadding / 4),
                   Flexible(
                     child: Text(
-                      title,
+                      widget.product.description!,
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium!
@@ -102,13 +131,13 @@ class ProductCard extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: priceAfetDiscount != null
+                        child: widget.product.discountedPrice != null
                             ? Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "$priceAfetDiscount",
+                                    "${widget.product.discountedPrice}",
                                     style: const TextStyle(
                                       color: ksecondaryColor,
                                       fontWeight: FontWeight.w500,
@@ -117,7 +146,7 @@ class ProductCard extends StatelessWidget {
                                   ),
                                   // const SizedBox(width: defaultPadding / 4),
                                   Text(
-                                    priceText,
+                                    widget.product.price!,
                                     style: TextStyle(
                                       color: Theme.of(context)
                                           .textTheme
@@ -130,7 +159,7 @@ class ProductCard extends StatelessWidget {
                                 ],
                               )
                             : Text(
-                                priceText,
+                                widget.product.price!,
                                 style: const TextStyle(
                                   color: ksecondaryColor,
                                   fontWeight: FontWeight.w500,
@@ -147,11 +176,21 @@ class ProductCard extends StatelessWidget {
                         ),
                         child: Center(
                           child: IconButton(
-                            icon: const Icon(
-                              Icons.add,
-                              color: Colors.white,
+                            icon: AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 300),
+                              child: isAddedToCart
+                                  ? const Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                      key: ValueKey('checkIcon'),
+                                    )
+                                  : const Icon(
+                                      Icons.add,
+                                      color: Colors.white,
+                                      key: ValueKey('addIcon'),
+                                    ),
                             ),
-                            padding: EdgeInsets.zero, // Removes default padding
+                            padding: EdgeInsets.zero,
                             onPressed: addToCart,
                           ),
                         ),

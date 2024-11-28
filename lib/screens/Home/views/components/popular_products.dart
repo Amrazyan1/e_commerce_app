@@ -76,13 +76,7 @@ class PopularProducts extends StatelessWidget {
                             index == products.length - 1 ? defaultPadding : 0,
                       ),
                       child: ProductCard(
-                        id: products[index].id,
-                        image: products[index].images!.main!.src!,
-                        brandName: products[index].name!,
-                        title: products[index].description!,
-                        priceText: products[index].price!,
-                        priceAfetDiscount: products[index].discountedPrice,
-                        dicountpercent: products[index].discount,
+                        product: products[index],
                         press: () {
                           context.read<MainProvider>().currentProductModel =
                               products[index];

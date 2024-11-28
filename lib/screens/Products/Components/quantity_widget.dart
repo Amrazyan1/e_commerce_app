@@ -7,13 +7,15 @@ class QuantityWidget extends StatefulWidget {
   final int initialCount;
   final int minCount;
   final int maxCount;
+  final Function(int value) callback;
 
-  const QuantityWidget({
-    Key? key,
-    this.initialCount = 1,
-    this.minCount = 1,
-    this.maxCount = 100,
-  }) : super(key: key);
+  const QuantityWidget(
+      {Key? key,
+      this.initialCount = 1,
+      this.minCount = 1,
+      this.maxCount = 100,
+      required this.callback})
+      : super(key: key);
 
   @override
   _QuantityWidgetState createState() => _QuantityWidgetState();
@@ -36,6 +38,7 @@ class _QuantityWidgetState extends State<QuantityWidget> {
         _count++;
         _controller.text = _count.toString();
       });
+      widget.callback(_count);
       // context.read<MainProvider>().detailButtonPriceSum =
       //     _count * context.read<MainProvider>().currentProductModel.price;
     }
@@ -47,6 +50,8 @@ class _QuantityWidgetState extends State<QuantityWidget> {
         _count--;
         _controller.text = _count.toString();
       });
+      widget.callback(_count);
+
       // context.read<MainProvider>().detailButtonPriceSum =
       //     _count * context.read<MainProvider>().currentProductModel.price;
     }
@@ -74,7 +79,7 @@ class _QuantityWidgetState extends State<QuantityWidget> {
                   borderSide: BorderSide(color: Colors.black.withOpacity(0.5))),
               isDense: true,
               contentPadding:
-                  EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 10),
+                  const EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 10),
             ),
             keyboardType: TextInputType.number,
             onChanged: (value) {

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../models/Product/product_model.dart';
+import '../models/cart_products_response.dart';
 import '../services/api_service.dart';
 import '../services/products_service.dart';
 
@@ -23,15 +24,6 @@ class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
   set currentProductModel(Product value) {
     _currentProductModel = value;
     // _detialButtonPriceSum = value.price;
-    notifyListeners();
-  }
-
-  double _detialButtonPriceSum = 0;
-
-  double get detailButtonPriceSum => _detialButtonPriceSum;
-
-  set detailButtonPriceSum(double value) {
-    _detialButtonPriceSum = value;
     notifyListeners();
   }
 
@@ -56,15 +48,37 @@ class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
     // notifyListeners();
   }
 
-  void addToCartById(String id) async {
+  Future<CartProductItem?> addToCartById(String id) async {
     try {
       var response = await _apiService.addToCart({"id": id, "count": 1});
-
       // _productsService.cartProducts.add(model);
-      notifyListeners();
+      if (response.statusCode == 200) {
+        var cartProduct = CartProductItem.fromJson(response.data);
+        notifyListeners();
+        return cartProduct;
+      }
     } catch (e) {
       log('Error on addToCart product ${e.toString()}');
+      return null;
     }
+    return null;
+  }
+
+  Future<CartProductItem?> changeCountCartByProductId(
+      String id, int count) async {
+    try {
+      var response = await _apiService.changeCart({"id": id, "count": count});
+      // _productsService.cartProducts.add(model);
+      if (response.statusCode == 200) {
+        var cartProduct = CartProductItem.fromJson(response.data);
+        notifyListeners();
+        return cartProduct;
+      }
+    } catch (e) {
+      log('Error on addToCart product ${e.toString()}');
+      return null;
+    }
+    return null;
   }
 
   void addToCart(Product model) async {

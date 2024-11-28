@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/components/added_to_cart_message_screen.dart';
 import 'package:e_commerce_app/components/custom_modal_bottom_sheet.dart';
@@ -11,12 +13,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../blocs/favourites/bloc/favourites_bloc.dart';
 import '../../blocs/products/trending/bloc/trend_new_products_bloc.dart';
+import '../../models/cart_products_response.dart';
+import 'Components/quantity_widget.dart';
 
-class ProductDetailsScreen extends StatelessWidget {
+class ProductDetailsScreen extends StatefulWidget {
   const ProductDetailsScreen({
     super.key,
   });
+
+  @override
+  State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
+}
+
+class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  bool canShowquantity = false;
+  void addToCart(int count) async {
+    CartProductItem? cardProdItem = await context
+        .read<MainProvider>()
+        .changeCountCartByProductId(
+            context.read<MainProvider>().currentProductModel.id, count);
+    setState(() {
+      canShowquantity = true;
+    });
+    if (cardProdItem != null) {
+      setState(() {
+        canShowquantity = true;
+      });
+    }
+    // customModalBottomSheet(
+    //   context,
+    //   isDismissible: true,
+    //   child: const AddedToCartMessageScreen(),
+    // );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,19 +62,7 @@ class ProductDetailsScreen extends StatelessWidget {
         }
       },
       child: Scaffold(
-        bottomNavigationBar: CartButton(
-          price: context.watch<MainProvider>().detailButtonPriceSum,
-          press: () {
-            context
-                .read<MainProvider>()
-                .addToCart(context.read<MainProvider>().currentProductModel);
-            customModalBottomSheet(
-              context,
-              isDismissible: true,
-              child: const AddedToCartMessageScreen(),
-            );
-          },
-        ),
+        bottomNavigationBar: CartButton(press: () => {addToCart(1)}),
         body: SafeArea(
           child: CustomScrollView(
             slivers: [
@@ -76,21 +95,110 @@ class ProductDetailsScreen extends StatelessWidget {
                       '',
                 ],
               ),
-              ProductInfo(
-                productId:
-                    '${context.read<MainProvider>().currentProductModel.id}',
-                brand:
-                    '${context.read<MainProvider>().currentProductModel.name}',
-                title:
-                    '${context.read<MainProvider>().currentProductModel.name}',
-                isAvailable: true,
-                description:
-                    '${context.read<MainProvider>().currentProductModel.description}',
-                rating: 4.4,
-                numOfReviews: 126,
-                price:
-                    '${context.watch<MainProvider>().currentProductModel.price}',
+              SliverPadding(
+                padding: const EdgeInsets.all(defaultPadding),
+                sliver: SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Text(
+                                context
+                                    .read<MainProvider>()
+                                    .currentProductModel
+                                    .name!
+                                    .toUpperCase(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .copyWith(fontWeight: FontWeight.bold)),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              log('IS favorite true');
+                              context.read<FavouritesBloc>().add(
+                                  AddToFavouritesEvent(context
+                                      .read<MainProvider>()
+                                      .currentProductModel
+                                      .id));
+                            },
+                            child: Icon(
+                              // context
+                              //         .watch<MainProvider>()
+                              //         .currentProductModel
+                              //         .isFavourite
+                              true
+                                  ? Icons.favorite
+                                  : Icons.favorite_border_outlined,
+                              color: kprimaryColor,
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: defaultPadding / 2),
+                      Text(
+                        '${context.read<MainProvider>().currentProductModel.name}',
+                        maxLines: 2,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleSmall!
+                            .copyWith(color: Colors.black.withOpacity(0.5)),
+                      ),
+                      const SizedBox(height: defaultPadding),
+                      Row(
+                        children: [
+                          // ProductAvailabilityTag(isAvailable: isAvailable),
+                          Visibility(
+                            visible: canShowquantity,
+                            child: QuantityWidget(
+                              initialCount: 1,
+                              callback: addToCart,
+                            ),
+                          ),
+                          const Spacer(),
+                          const SizedBox(width: defaultPadding / 4),
+                          Text(
+                            '${context.watch<MainProvider>().currentProductModel.price}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .copyWith(
+                                    fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: defaultPadding),
+                      Text(
+                        "Product info",
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(height: defaultPadding / 2),
+                      Text(
+                        '${context.read<MainProvider>().currentProductModel.description}',
+                        style: const TextStyle(height: 1.4),
+                      ),
+                      const SizedBox(height: defaultPadding / 2),
+                    ],
+                  ),
+                ),
               ),
+              // ProductInfo(
+              //   productId: '',
+              //   brand: '',
+              //   title: '',
+              //   isAvailable: true,
+              //   description:
+              //       ,
+              //   rating: 4.4,
+              //   numOfReviews: 126,
+              //   price: '',
+              // ),
               // ProductListTile(
               //   svgSrc: "assets/icons/Product.svg",
               //   title: "Product Details",
@@ -166,14 +274,7 @@ class ProductDetailsScreen extends StatelessWidget {
                                   : 0,
                             ),
                             child: ProductCard(
-                              id: products[index].id,
-                              image: products[index].images!.main!.src!,
-                              brandName: products[index].name!,
-                              title: products[index].description!,
-                              priceText: products[index].price!,
-                              priceAfetDiscount:
-                                  products[index].discountedPrice,
-                              dicountpercent: products[index].discount,
+                              product: products[index],
                               press: () {
                                 context
                                     .read<MainProvider>()
@@ -181,7 +282,7 @@ class ProductDetailsScreen extends StatelessWidget {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        ProductDetailsScreen(),
+                                        const ProductDetailsScreen(),
                                   ),
                                 );
                               },

@@ -78,8 +78,9 @@ class ProductInfo extends StatelessWidget {
             Row(
               children: [
                 // ProductAvailabilityTag(isAvailable: isAvailable),
-                const QuantityWidget(
+                QuantityWidget(
                   initialCount: 1,
+                  callback: (value) {},
                 ),
                 const Spacer(),
                 const SizedBox(width: defaultPadding / 4),
