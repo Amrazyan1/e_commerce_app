@@ -9,7 +9,10 @@ import 'package:e_commerce_app/components/Banners/S/banner_s_style_1.dart';
 import 'package:e_commerce_app/components/Banners/S/banner_s_style_5.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
+
+import '../../../blocs/search/bloc/global_search_bloc.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -38,26 +41,6 @@ class HomeScreen extends StatelessWidget {
                 letterSpacing: 0,
               ),
         ),
-        leading: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [],
-        ),
-        // actions: IconButton(
-        //   icon: Container(
-        //     width: 28,
-        //     height: 28,
-        //     decoration: BoxDecoration(
-        //       borderRadius: BorderRadius.circular(16),
-        //       color: Theme.of(context).colorScheme.onPrimary,
-        //     ),
-        //     child: Icon(
-        //       Icons.plus_one,
-        //       size: 18,
-        //       color: Theme.of(context).colorScheme.background,
-        //     ),
-        //   ),
-        //   onPressed: () {},
-        // ),
         searchBar: SuperSearchBar(
           searchFocusNode: _searchFocusNode,
           searchController: _searchTextController,
@@ -67,6 +50,61 @@ class HomeScreen extends StatelessWidget {
           },
           cancelTextStyle: Theme.of(context).textTheme.bodyLarge!,
           onChanged: (value) {},
+          onSubmitted: (value) {
+            context.read<GlobalSearchBloc>().add(PerformGlobalSearch(
+                  keyword: value,
+                  perPage: 20,
+                ));
+          },
+          searchResult: BlocBuilder<GlobalSearchBloc, GlobalSearchState>(
+            builder: (context, state) {
+              if (state is GlobalSearchLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is GlobalSearchLoaded) {
+                // Display results in a GridView
+                return GridView.builder(
+                  itemCount: state.results.data!.products!.data!.data!.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, // Customize grid layout
+                    crossAxisSpacing: 8.0,
+                    mainAxisSpacing: 8.0,
+                    childAspectRatio: 0.75,
+                  ),
+                  itemBuilder: (context, index) {
+                    final product =
+                        state.results.data!.products!.data!.data![index];
+                    return Card(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Image.network(
+                              product.images!.main!.src ?? '',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              product.name!,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              } else if (state is GlobalSearchError) {
+                return Center(child: Text(state.message));
+              } else {
+                // Initial state or no results
+                return const Center(child: Text('Start typing to search'));
+              }
+            },
+          ),
         ),
       ),
       body: SafeArea(
