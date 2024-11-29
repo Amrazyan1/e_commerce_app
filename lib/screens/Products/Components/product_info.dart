@@ -54,7 +54,7 @@ class ProductInfo extends StatelessWidget {
                         .read<FavouritesBloc>()
                         .add(AddToFavouritesEvent(productId));
                   },
-                  child: Icon(
+                  child: const Icon(
                     // context
                     //         .watch<MainProvider>()
                     //         .currentProductModel

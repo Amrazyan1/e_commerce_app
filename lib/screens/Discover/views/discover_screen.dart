@@ -17,7 +17,10 @@ import '../../../blocs/categories/bloc/categories_bloc.dart';
 import '../../../blocs/categories/bloc/categories_state.dart';
 import '../../../blocs/categorydetails/bloc/category_detail_bloc.dart';
 import '../../../blocs/categorydetails/bloc/category_detail_event.dart';
+import '../../../blocs/search/bloc/global_search_bloc.dart';
 import '../../../models/Product/product_model.dart';
+import '../../Products/Components/product_card.dart';
+import '../../Products/product_details_screen.dart';
 
 @RoutePage()
 class DiscoverScreen extends StatefulWidget {
@@ -90,8 +93,59 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               onFocused: (value) {
                 if (!value) {}
               },
+              onSubmitted: (value) {
+                context.read<GlobalSearchBloc>().add(PerformGlobalSearch(
+                      keyword: value,
+                      perPage: 20,
+                    ));
+              },
               cancelTextStyle: Theme.of(context).textTheme.bodyLarge!,
               onChanged: (value) {},
+              searchResult: BlocBuilder<GlobalSearchBloc, GlobalSearchState>(
+                builder: (context, state) {
+                  if (state is GlobalSearchLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is GlobalSearchLoaded) {
+                    // Display results in a GridView
+                    return Padding(
+                      padding: const EdgeInsets.all(defaultPadding),
+                      child: GridView.builder(
+                        itemCount:
+                            state.results.data!.products!.data!.data!.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2, // Customize grid layout
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 8.0,
+                          childAspectRatio: 0.75,
+                        ),
+                        itemBuilder: (context, index) {
+                          final product =
+                              state.results.data!.products!.data!.data![index];
+                          return ProductCard(
+                            product: product,
+                            press: () {
+                              context.read<MainProvider>().currentProductModel =
+                                  product;
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ProductDetailsScreen(),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    );
+                  } else if (state is GlobalSearchError) {
+                    return Center(child: Text(state.message));
+                  } else {
+                    // Initial state or no results
+                    return const Center(child: Text('Start typing to search'));
+                  }
+                },
+              ),
             ),
           ),
           body: Column(

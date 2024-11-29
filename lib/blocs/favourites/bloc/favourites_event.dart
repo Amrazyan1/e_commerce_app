@@ -14,3 +14,9 @@ class AddToFavouritesEvent extends FavouritesEvent {
 
   AddToFavouritesEvent(this.productId);
 }
+
+class RemoveFavouritesEvent extends FavouritesEvent {
+  final String productId;
+
+  RemoveFavouritesEvent(this.productId);
+}
