@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:e_commerce_app/models/Product/product_model.dart';
+
 GlobalSearchResponse globalSearchResponseFromJson(String str) =>
     GlobalSearchResponse.fromJson(json.decode(str));
 
@@ -107,7 +109,7 @@ class Products {
 }
 
 class ProductsData {
-  List<Datum>? data;
+  List<Product>? data;
   Links? links;
   Meta? meta;
 
@@ -118,7 +120,7 @@ class ProductsData {
   });
 
   ProductsData copyWith({
-    List<Datum>? data,
+    List<Product>? data,
     Links? links,
     Meta? meta,
   }) =>
@@ -131,7 +133,7 @@ class ProductsData {
   factory ProductsData.fromJson(Map<String, dynamic> json) => ProductsData(
         data: json["data"] == null
             ? []
-            : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
+            : List<Product>.from(json["data"]!.map((x) => Product.fromJson(x))),
         links: json["links"] == null ? null : Links.fromJson(json["links"]),
         meta: json["meta"] == null ? null : Meta.fromJson(json["meta"]),
       );
@@ -142,97 +144,6 @@ class ProductsData {
             : List<dynamic>.from(data!.map((x) => x.toJson())),
         "links": links?.toJson(),
         "meta": meta?.toJson(),
-      };
-}
-
-class Datum {
-  String? id;
-  String? name;
-  String? description;
-  String? count;
-  int? isNew;
-  int? isPopular;
-  Unit? unit;
-  Category? category;
-  String? price;
-  String? discount;
-  String? discountedPrice;
-  Images? images;
-
-  Datum({
-    this.id,
-    this.name,
-    this.description,
-    this.count,
-    this.isNew,
-    this.isPopular,
-    this.unit,
-    this.category,
-    this.price,
-    this.discount,
-    this.discountedPrice,
-    this.images,
-  });
-
-  Datum copyWith({
-    String? id,
-    String? name,
-    String? description,
-    String? count,
-    int? isNew,
-    int? isPopular,
-    Unit? unit,
-    Category? category,
-    String? price,
-    String? discount,
-    String? discountedPrice,
-    Images? images,
-  }) =>
-      Datum(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        description: description ?? this.description,
-        count: count ?? this.count,
-        isNew: isNew ?? this.isNew,
-        isPopular: isPopular ?? this.isPopular,
-        unit: unit ?? this.unit,
-        category: category ?? this.category,
-        price: price ?? this.price,
-        discount: discount ?? this.discount,
-        discountedPrice: discountedPrice ?? this.discountedPrice,
-        images: images ?? this.images,
-      );
-
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        id: json["id"],
-        name: json["name"],
-        description: json["description"],
-        count: json["count"],
-        isNew: json["isNew"],
-        isPopular: json["isPopular"],
-        unit: json["unit"] == null ? null : Unit.fromJson(json["unit"]),
-        category: json["category"] == null
-            ? null
-            : Category.fromJson(json["category"]),
-        price: json["price"],
-        discount: json["discount"],
-        discountedPrice: json["discountedPrice"],
-        images: json["images"] == null ? null : Images.fromJson(json["images"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "description": description,
-        "count": count,
-        "isNew": isNew,
-        "isPopular": isPopular,
-        "unit": unit?.toJson(),
-        "category": category?.toJson(),
-        "price": price,
-        "discount": discount,
-        "discountedPrice": discountedPrice,
-        "images": images?.toJson(),
       };
 }
 

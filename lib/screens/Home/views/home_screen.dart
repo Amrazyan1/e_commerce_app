@@ -12,7 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 
+import '../../../Provider/main_provider.dart';
 import '../../../blocs/search/bloc/global_search_bloc.dart';
+import '../../Products/Components/product_card.dart';
+import '../../Products/product_details_screen.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -27,11 +30,17 @@ class HomeScreen extends StatelessWidget {
       appBar: SuperAppBar(
         backgroundColor:
             Theme.of(context).colorScheme.background.withOpacity(.5),
-        title: Text(
-          'Yerevan, Davitashen',
-          style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Yerevan, Davitashen',
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+            ),
+          ],
         ),
         largeTitle: SuperLargeTitle(
           largeTitle: 'Yerevan, Davitashen',
@@ -62,40 +71,35 @@ class HomeScreen extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is GlobalSearchLoaded) {
                 // Display results in a GridView
-                return GridView.builder(
-                  itemCount: state.results.data!.products!.data!.data!.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, // Customize grid layout
-                    crossAxisSpacing: 8.0,
-                    mainAxisSpacing: 8.0,
-                    childAspectRatio: 0.75,
+                return Padding(
+                  padding: const EdgeInsets.all(defaultPadding),
+                  child: GridView.builder(
+                    itemCount: state.results.data!.products!.data!.data!.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // Customize grid layout
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 8.0,
+                      childAspectRatio: 0.75,
+                    ),
+                    itemBuilder: (context, index) {
+                      final product =
+                          state.results.data!.products!.data!.data![index];
+                      return ProductCard(
+                        product: product,
+                        press: () {
+                          context.read<MainProvider>().currentProductModel =
+                              product;
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const ProductDetailsScreen(),
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
-                  itemBuilder: (context, index) {
-                    final product =
-                        state.results.data!.products!.data!.data![index];
-                    return Card(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Image.network(
-                              product.images!.main!.src ?? '',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              product.name!,
-                              style: Theme.of(context).textTheme.bodyMedium,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
                 );
               } else if (state is GlobalSearchError) {
                 return Center(child: Text(state.message));

@@ -29,17 +29,25 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   bool canShowquantity = false;
+  bool isLoading = false;
+
+  String countOfItem = '';
+  String total = '';
   void addToCart(int count) async {
+    setState(() {
+      isLoading = true;
+    });
     CartProductItem? cardProdItem = await context
         .read<MainProvider>()
         .changeCountCartByProductId(
             context.read<MainProvider>().currentProductModel.id, count);
-    setState(() {
-      canShowquantity = true;
-    });
+
     if (cardProdItem != null) {
       setState(() {
         canShowquantity = true;
+        countOfItem = cardProdItem.count.toString();
+        total = cardProdItem.total.toString();
+        isLoading = false;
       });
     }
     // customModalBottomSheet(
@@ -62,7 +70,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         }
       },
       child: Scaffold(
-        bottomNavigationBar: CartButton(press: () => {addToCart(1)}),
+        bottomNavigationBar: CartButton(
+          press: (isLoading || countOfItem.isNotEmpty)
+              ? () {}
+              : () => {addToCart(1)},
+          infoWidget: isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Text(
+                  '${countOfItem.isNotEmpty ? '$countOfItem items added' : 'Add to basket'}',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(color: Colors.white),
+                ),
+        ),
         body: SafeArea(
           child: CustomScrollView(
             slivers: [
@@ -125,7 +148,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       .currentProductModel
                                       .id));
                             },
-                            child: Icon(
+                            child: const Icon(
                               // context
                               //         .watch<MainProvider>()
                               //         .currentProductModel
@@ -161,7 +184,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           const Spacer(),
                           const SizedBox(width: defaultPadding / 4),
                           Text(
-                            '${context.watch<MainProvider>().currentProductModel.price}',
+                            '${total.isNotEmpty ? total : context.watch<MainProvider>().currentProductModel.price}',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge!

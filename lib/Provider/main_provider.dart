@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
@@ -53,8 +54,11 @@ class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
       var response = await _apiService.addToCart({"id": id, "count": 1});
       // _productsService.cartProducts.add(model);
       if (response.statusCode == 200) {
-        var cartProduct = CartProductItem.fromJson(response.data);
-        notifyListeners();
+        Map<String, dynamic> parsedJson = jsonDecode(response.data);
+        int count = parsedJson['data']['count'];
+        String total = parsedJson['data']['total'];
+        CartProductItem cartProduct =
+            CartProductItem(count: count, total: total);
         return cartProduct;
       }
     } catch (e) {
@@ -68,9 +72,12 @@ class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
       String id, int count) async {
     try {
       var response = await _apiService.changeCart({"id": id, "count": count});
-      // _productsService.cartProducts.add(model);
       if (response.statusCode == 200) {
-        var cartProduct = CartProductItem.fromJson(response.data);
+        Map<String, dynamic> parsedJson = jsonDecode(response.data);
+        int count = parsedJson['data']['count'];
+        String total = parsedJson['data']['total'];
+        CartProductItem cartProduct =
+            CartProductItem(count: count, total: total);
         notifyListeners();
         return cartProduct;
       }

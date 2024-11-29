@@ -5,13 +5,15 @@ class CartButton extends StatelessWidget {
   const CartButton({
     super.key,
     // required this.price,
-    this.title = "Add to basket",
+
     // this.subTitle = "",
+    required this.infoWidget,
     required this.press,
   });
 
   // final double price;
-  final String title; //, subTitle;
+  final Widget infoWidget;
+
   final VoidCallback press;
 
   @override
@@ -66,13 +68,14 @@ class CartButton extends StatelessWidget {
                       alignment: Alignment.center,
                       height: double.infinity,
                       color: Colors.black.withOpacity(0.15),
-                      child: Text(
-                        title,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleSmall!
-                            .copyWith(color: Colors.white),
-                      ),
+                      child: infoWidget,
+                      //  Text(
+                      //   title,
+                      //   style: Theme.of(context)
+                      //       .textTheme
+                      //       .titleSmall!
+                      //       .copyWith(color: Colors.white),
+                      // ),
                     ),
                   ),
                 ],

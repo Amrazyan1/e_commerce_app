@@ -11,21 +11,11 @@ class ProductCard extends StatefulWidget {
   const ProductCard({
     super.key,
     required this.product,
-    // required this.id,
-    // required this.image,
-    // required this.brandName,
-    // required this.title,
-    // this.priceAfterDiscount,
-    // this.dicountpercent,
-    // required this.priceText,
     required this.press,
   });
   final Product product;
-  // final String id, image, brandName, title;
-  // final String? priceAfterDiscount;
-  // final String? dicountpercent;
+
   final VoidCallback press;
-  // final String priceText;
 
   @override
   State<ProductCard> createState() => _ProductCardState();

@@ -47,9 +47,10 @@ class _CartScreenState extends State<CartScreen> {
             Theme.of(context).colorScheme.background.withOpacity(.5),
         title: Text(
           'Cart',
-          style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(context)
+              .textTheme
+              .labelMedium!
+              .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
         ),
         largeTitle: SuperLargeTitle(
           largeTitle: 'Cart',
