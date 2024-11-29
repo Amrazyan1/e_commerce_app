@@ -9,6 +9,7 @@ import 'package:e_commerce_app/components/Banners/S/banner_s_style_1.dart';
 import 'package:e_commerce_app/components/Banners/S/banner_s_style_5.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -16,38 +17,61 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final _searchFocusNode = FocusNode();
+
+    final _searchTextController = TextEditingController();
+    return SuperScaffold(
+      appBar: SuperAppBar(
+        backgroundColor:
+            Theme.of(context).colorScheme.background.withOpacity(.5),
+        title: Text(
+          'Yerevan, Davitashen',
+          style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+        ),
+        largeTitle: SuperLargeTitle(
+          largeTitle: 'Yerevan, Davitashen',
+          textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+                fontWeight: FontWeight.w700,
+                fontSize: 24,
+                letterSpacing: 0,
+              ),
+        ),
+        leading: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [],
+        ),
+        // actions: IconButton(
+        //   icon: Container(
+        //     width: 28,
+        //     height: 28,
+        //     decoration: BoxDecoration(
+        //       borderRadius: BorderRadius.circular(16),
+        //       color: Theme.of(context).colorScheme.onPrimary,
+        //     ),
+        //     child: Icon(
+        //       Icons.plus_one,
+        //       size: 18,
+        //       color: Theme.of(context).colorScheme.background,
+        //     ),
+        //   ),
+        //   onPressed: () {},
+        // ),
+        searchBar: SuperSearchBar(
+          searchFocusNode: _searchFocusNode,
+          searchController: _searchTextController,
+          textStyle: Theme.of(context).textTheme.bodyLarge!,
+          onFocused: (value) {
+            if (!value) {}
+          },
+          cancelTextStyle: Theme.of(context).textTheme.bodyLarge!,
+          onChanged: (value) {},
+        ),
+      ),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/icons/icon.png',
-                    width: 30,
-                    height: 25,
-                  ),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.location_on_rounded),
-                      Text(
-                        'Yerevan, Davitashen',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SliverToBoxAdapter(
-                child: Padding(
-              padding: const EdgeInsets.all(25),
-              child: SearchInputField(),
-            )),
             const SliverToBoxAdapter(child: OffersCarouselAndCategories()),
             const SliverToBoxAdapter(child: PopularProducts()),
             const SliverPadding(

@@ -17,7 +17,7 @@ class OffersCarouselAndCategories extends StatelessWidget {
         // While loading use 👇
         // const OffersSkelton(),
         Padding(
-          padding: EdgeInsets.only(left: 24, right: 24),
+          padding: EdgeInsets.only(left: 16, right: 16),
           child: OffersCarousel(),
         ),
         // const SizedBox(height: defaultPadding / 2),

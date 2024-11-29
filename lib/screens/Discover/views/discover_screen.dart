@@ -11,6 +11,7 @@ import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 
 import '../../../blocs/categories/bloc/categories_bloc.dart';
 import '../../../blocs/categories/bloc/categories_state.dart';
@@ -29,7 +30,9 @@ class DiscoverScreen extends StatefulWidget {
 class _DiscoverScreenState extends State<DiscoverScreen> {
   final List<List<Category>> _categoryStack =
       []; // Stack to keep track of navigation
+  final _searchFocusNode = FocusNode();
 
+  final _searchTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return BlocListener<CategoriesBloc, CategoriesState>(
@@ -44,20 +47,54 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       },
       child: WillPopScope(
         onWillPop: _handleBackNavigation,
-        child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text(
-              'Find Products',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        child: SuperScaffold(
+          appBar: SuperAppBar(
+            backgroundColor:
+                Theme.of(context).colorScheme.background.withOpacity(.5),
+            title: Text(
+              'Find products',
+              style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+            ),
+            largeTitle: SuperLargeTitle(
+              largeTitle: 'Find products',
+              textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 24,
+                    letterSpacing: 0,
+                  ),
+            ),
+
+            // actions: IconButton(
+            //   icon: Container(
+            //     width: 28,
+            //     height: 28,
+            //     decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(16),
+            //       color: Theme.of(context).colorScheme.onPrimary,
+            //     ),
+            //     child: Icon(
+            //       Icons.plus_one,
+            //       size: 18,
+            //       color: Theme.of(context).colorScheme.background,
+            //     ),
+            //   ),
+            //   onPressed: () {},
+            // ),
+            searchBar: SuperSearchBar(
+              searchFocusNode: _searchFocusNode,
+              searchController: _searchTextController,
+              textStyle: Theme.of(context).textTheme.bodyLarge!,
+              onFocused: (value) {
+                if (!value) {}
+              },
+              cancelTextStyle: Theme.of(context).textTheme.bodyLarge!,
+              onChanged: (value) {},
             ),
           ),
           body: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(25),
-                child: SearchInputField(),
-              ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
