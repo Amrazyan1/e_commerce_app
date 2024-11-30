@@ -34,6 +34,8 @@ class AppRouter extends RootStackRouter {
             AutoRoute(
                 page: DeliveryAddresseRoute.page, path: 'deliveryAddressRoute'),
             AutoRoute(
+                page: DeliveryAddressNew.page, path: 'deliveryAddressNewRoute'),
+            AutoRoute(
                 page: PaymentmethodsRoute.page, path: 'paymentmethodsRoute'),
             AutoRoute(page: OrdersRoute.page, path: 'ordersRoute'),
             AutoRoute(page: OrderInfoRoute.page, path: 'ordersInfoRoute'),

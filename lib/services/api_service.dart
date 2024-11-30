@@ -13,6 +13,20 @@ class ApiService {
 
   ApiService(this._dioClient);
 
+  Future<Map<String, dynamic>> reverseGeocode(double lat, double lon) async {
+    final response = await _dioClient.dio.get(
+      'https://nominatim.openstreetmap.org/reverse',
+      queryParameters: {
+        'format': 'json',
+        'lat': lat.toString(),
+        'lon': lon.toString(),
+        'zoom': '18',
+        'addressdetails': '1',
+      },
+    );
+    return response.data;
+  }
+
   // User Addresses
   Future<Response> getUserAddresses(int perPage) async {
     try {
