@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:e_commerce_app/endpoints/endpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/reverse_geocode_model.dart';
 import 'dio_client.dart';
 import 'package:dio/dio.dart';
 
@@ -13,7 +14,7 @@ class ApiService {
 
   ApiService(this._dioClient);
 
-  Future<Map<String, dynamic>> reverseGeocode(double lat, double lon) async {
+  Future<ReverseGeocodeResponse> reverseGeocode(double lat, double lon) async {
     final response = await _dioClient.dio.get(
       'https://nominatim.openstreetmap.org/reverse',
       queryParameters: {
@@ -24,7 +25,12 @@ class ApiService {
         'addressdetails': '1',
       },
     );
-    return response.data;
+
+    if (response.statusCode == 200) {
+      return reverseGeocodeResponseFromJson(response.data);
+    } else {
+      throw Exception('Failed to fetch reverse geocode data');
+    }
   }
 
   // User Addresses

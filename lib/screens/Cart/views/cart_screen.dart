@@ -46,14 +46,14 @@ class _CartScreenState extends State<CartScreen> {
         backgroundColor:
             Theme.of(context).colorScheme.background.withOpacity(.5),
         title: Text(
-          'Cart',
+          'Your Cart',
           style: Theme.of(context)
               .textTheme
               .labelMedium!
               .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
         ),
         largeTitle: SuperLargeTitle(
-          largeTitle: 'Cart',
+          largeTitle: 'Your Cart',
           textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
                 fontWeight: FontWeight.w700,
                 fontSize: 24,
@@ -66,14 +66,18 @@ class _CartScreenState extends State<CartScreen> {
           BlocBuilder<CartBloc, CartState>(
             builder: (context, state) {
               if (state is CartLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
+                return const Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
                 );
               }
               if (state is CartLoaded) {
                 if (state.cartItems.isEmpty) {
-                  return const Center(
-                    child: Text('There is no cart items'),
+                  return const Expanded(
+                    child: Center(
+                      child: Text('There is no cart items'),
+                    ),
                   );
                 }
                 return Expanded(
@@ -185,6 +189,7 @@ class _CartScreenState extends State<CartScreen> {
               );
             },
           ),
+          const Spacer(),
           Column(
             children: [
               Padding(
