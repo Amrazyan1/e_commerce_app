@@ -51,6 +51,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       child: WillPopScope(
         onWillPop: _handleBackNavigation,
         child: SuperScaffold(
+          key: Key('discvoer'),
           appBar: SuperAppBar(
             backgroundColor:
                 Theme.of(context).colorScheme.background.withOpacity(.5),
@@ -114,10 +115,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                             state.results.data!.products!.data!.data!.length,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, // Customize grid layout
-                          crossAxisSpacing: 12,
+                          crossAxisCount: 2,
                           mainAxisSpacing: 8.0,
-                          childAspectRatio: 0.75,
+                          crossAxisSpacing: 8.0,
+                          childAspectRatio: 140 / 220, // Match item dimensions
                         ),
                         itemBuilder: (context, index) {
                           final product =
@@ -125,14 +126,22 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                           return ProductCard(
                             product: product,
                             press: () {
-                              context.read<MainProvider>().currentProductModel =
-                                  product;
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ProductDetailsScreen(),
-                                ),
-                              );
+                              _searchFocusNode.requestFocus();
+                              Future.delayed(const Duration(milliseconds: 10),
+                                  () {
+                                _searchFocusNode.unfocus();
+                                _searchTextController.clear();
+
+                                context
+                                    .read<MainProvider>()
+                                    .currentProductModel = product;
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ProductDetailsScreen(),
+                                  ),
+                                );
+                              });
                             },
                           );
                         },
@@ -194,19 +203,20 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   }
 
   Future<bool> _handleBackNavigation() async {
-    log('${_categoryStack.length}');
-    if (_categoryStack.length > 1) {
-      _categoryStack.removeLast(); // Remove current category
-      final previousCategories = _categoryStack.last;
+    return true;
+    // log('${_categoryStack.length}');
+    // if (_categoryStack.length > 1) {
+    //   _categoryStack.removeLast(); // Remove current category
+    //   final previousCategories = _categoryStack.last;
 
-      context.read<CategoriesBloc>().add(
-            FetchSubcategories(
-                previousCategories.first), // Go back to previous category
-          );
+    //   context.read<CategoriesBloc>().add(
+    //         FetchSubcategories(
+    //             previousCategories.first), // Go back to previous category
+    //       );
 
-      return false; // Prevent the app from closing
-    }
-    return true; // Allow the app to close
+    //   return false; // Prevent the app from closing
+    // }
+    // return true; // Allow the app to close
   }
 }
 

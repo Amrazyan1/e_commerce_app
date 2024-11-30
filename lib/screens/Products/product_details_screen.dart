@@ -41,12 +41,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         .read<MainProvider>()
         .changeCountCartByProductId(
             context.read<MainProvider>().currentProductModel.id, count);
-
+    print(cardProdItem.toString());
     if (cardProdItem != null) {
       setState(() {
         canShowquantity = true;
         countOfItem = cardProdItem.count.toString();
         total = cardProdItem.total.toString();
+        isLoading = false;
+      });
+    } else {
+      setState(() {
         isLoading = false;
       });
     }
@@ -55,6 +59,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     //   isDismissible: true,
     //   child: const AddedToCartMessageScreen(),
     // );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override

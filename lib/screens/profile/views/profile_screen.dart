@@ -73,28 +73,28 @@ class ProfileScreen extends StatelessWidget {
             text: "My Details",
             svgSrc: "assets/icons/my_details.svg",
             press: () {
-              AutoRouter.of(context).push(MyDetailsRoute());
+              AutoRouter.of(context).push(const MyDetailsRoute());
             },
           ),
           ProfileMenuListTile(
             text: "Delivery Address",
             svgSrc: "assets/icons/Address.svg",
             press: () {
-              AutoRouter.of(context).push(DeliveryAddresseRoute());
+              AutoRouter.of(context).push(const DeliveryAddresseRoute());
             },
           ),
           ProfileMenuListTile(
             text: "Payment Methods",
             svgSrc: "assets/icons/payment.svg",
             press: () {
-              AutoRouter.of(context).push(PaymentmethodsRoute());
+              AutoRouter.of(context).push(const PaymentmethodsRoute());
             },
           ),
           ProfileMenuListTile(
             text: "Promo Codes",
             svgSrc: "assets/icons/promo_code.svg",
             press: () {
-              AutoRouter.of(context).push(CouponsRoute());
+              AutoRouter.of(context).push(const CouponsRoute());
             },
           ),
           const SizedBox(height: defaultPadding),

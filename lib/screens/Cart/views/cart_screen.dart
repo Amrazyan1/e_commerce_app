@@ -113,31 +113,62 @@ class _CartScreenState extends State<CartScreen> {
                           },
                           child: Card(
                             margin: const EdgeInsets.all(8.0),
-                            child: ListTile(
-                              leading: Image.network(
-                                  item.product!.images?.main?.src ?? ''),
-                              title: Text(item.product!.name!),
-                              subtitle: Column(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(item.product!.name!),
-                                  Text('\$${(item.product!.price)}'),
-                                ],
-                              ),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.remove),
-                                    onPressed: () => _decreaseQuantity(index),
-                                  ),
-                                  Text('${item.count}'),
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.add,
-                                      color: kprimaryColor,
+                                  // Leading Image
+                                  SizedBox(
+                                    width: 50,
+                                    height: 50,
+                                    child: Image.network(
+                                      item.product!.images?.main?.src ??
+                                          'https://via.placeholder.com/50',
+                                      fit: BoxFit.cover,
                                     ),
-                                    onPressed: () => _increaseQuantity(index),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  // Title and Subtitle
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          item.product!.name!,
+                                          // style: Theme.of(context)
+                                          //     .textTheme
+                                          //     .subtitle1,
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          '\$${item.product!.price}',
+                                          // style: Theme.of(context)
+                                          //     .textTheme
+                                          //     .bodyText2!
+                                          //     .copyWith(color: Colors.grey),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  // Trailing Actions
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(Icons.remove),
+                                        onPressed: () =>
+                                            _decreaseQuantity(index),
+                                      ),
+                                      Text('${item.count}'),
+                                      IconButton(
+                                        icon: const Icon(Icons.add,
+                                            color: kprimaryColor),
+                                        onPressed: () =>
+                                            _increaseQuantity(index),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),

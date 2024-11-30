@@ -90,7 +90,7 @@ class Data {
 }
 
 class Filters {
-  Map<String, String>? empty;
+  List<String>? empty;
   List<String>? fluffy;
   List<String>? purple;
   Map<String, double>? filters;
@@ -103,7 +103,7 @@ class Filters {
   });
 
   Filters copyWith({
-    Map<String, String>? empty,
+    List<String>? empty,
     List<String>? fluffy,
     List<String>? purple,
     Map<String, double>? filters,
@@ -116,8 +116,9 @@ class Filters {
       );
 
   factory Filters.fromJson(Map<String, dynamic> json) => Filters(
-        empty: Map.from(json["Բռենդ"]!)
-            .map((k, v) => MapEntry<String, String>(k, v)),
+        empty: json["Բռենդ"] == null
+            ? []
+            : List<String>.from(json["Բռենդ"]!.map((x) => x)),
         fluffy: json["Երկարություն"] == null
             ? []
             : List<String>.from(json["Երկարություն"]!.map((x) => x)),
@@ -129,8 +130,7 @@ class Filters {
       );
 
   Map<String, dynamic> toJson() => {
-        "Բռենդ":
-            Map.from(empty!).map((k, v) => MapEntry<String, dynamic>(k, v)),
+        "Բռենդ": empty == null ? [] : List<dynamic>.from(empty!.map((x) => x)),
         "Երկարություն":
             fluffy == null ? [] : List<dynamic>.from(fluffy!.map((x) => x)),
         "Գույն":

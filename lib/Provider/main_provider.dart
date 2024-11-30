@@ -78,14 +78,13 @@ class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
         String total = parsedJson['data']['total'];
         CartProductItem cartProduct =
             CartProductItem(count: count, total: total);
-        notifyListeners();
+        print('aaa' + cartProduct.toString());
         return cartProduct;
       }
     } catch (e) {
       log('Error on addToCart product ${e.toString()}');
       return null;
     }
-    return null;
   }
 
   void addToCart(Product model) async {
