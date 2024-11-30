@@ -29,6 +29,7 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
 
   LatLng? _selectedLocation;
   List<Map<String, String>> _addressItems = [];
+  String? _regionId; // Example: Can be updated dynamically based on the region.
 
   void _onMapTap(LatLng position) async {
     setState(() {
@@ -64,16 +65,47 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
   }
 
   void _addNewAddress() async {
+    if (_selectedLocation == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please select a location on the map.")),
+      );
+      return;
+    }
+
     setState(() {
       loading = true;
     });
+
     try {
-      final addressesAdded = await widget.apiService
-          .addAddress({'regionId': '', 'address': '', 'details': ''});
-      if (addressesAdded.statusCode == 200) {
+      // Construct the address details
+      final addressDetails = {
+        'regionId':
+            _regionId ?? '2', // Set the regionId dynamically if applicable
+        'address': _addressItems
+            .map((item) => item['value'])
+            .join(', '), // Combine all address items
+        'details': 'details',
+        'latitude': _selectedLocation!.latitude.toString(),
+        'longitude': _selectedLocation!.longitude.toString(),
+      };
+
+      // Send the data to the backend
+      final response = await widget.apiService.addAddress(addressDetails);
+
+      if (response.statusCode == 200) {
         AutoRouter.of(context).maybePop();
+      } else {
+        throw Exception("Failed to add address");
       }
-    } catch (e) {}
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to add address: $e")),
+      );
+    } finally {
+      setState(() {
+        loading = false;
+      });
+    }
   }
 
   @override
@@ -84,13 +116,15 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
       ),
       bottomNavigationBar: CartButton(
         press: _addNewAddress,
-        infoWidget: Text(
-          'Add address',
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall!
-              .copyWith(color: Colors.white),
-        ),
+        infoWidget: loading
+            ? const CircularProgressIndicator(color: Colors.white)
+            : Text(
+                'Add Address',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleSmall!
+                    .copyWith(color: Colors.white),
+              ),
       ),
       body: Column(
         children: [

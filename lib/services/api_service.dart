@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:e_commerce_app/endpoints/endpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/delivery_addreses_model.dart';
 import '../models/reverse_geocode_model.dart';
 import 'dio_client.dart';
 import 'package:dio/dio.dart';
@@ -34,16 +35,17 @@ class ApiService {
   }
 
   // User Addresses
-  Future<Response> getUserAddresses(int perPage) async {
-    try {
-      return await _dioClient.dio.get(
-          Endpoints.userAddresses.replaceFirst(
-            '{perPage}',
-            perPage.toString(),
-          ),
-          options: Options(contentType: "application/json"));
-    } catch (e) {
-      rethrow;
+  Future<DeliveryAddressesResponse> getUserAddresses(int perPage) async {
+    final response = await _dioClient.dio.get(
+        Endpoints.userAddresses.replaceFirst(
+          '{perPage}',
+          perPage.toString(),
+        ),
+        options: Options(contentType: "application/json"));
+    if (response.statusCode == 200) {
+      return deliveryAddressesResponseFromJson(response.data);
+    } else {
+      throw Exception('Failed to fetch reverse geocode data');
     }
   }
 
