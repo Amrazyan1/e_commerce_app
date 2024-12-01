@@ -53,6 +53,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         child: SuperScaffold(
           key: Key('discvoer'),
           appBar: SuperAppBar(
+            automaticallyImplyLeading: false,
             backgroundColor:
                 Theme.of(context).colorScheme.background.withOpacity(.5),
             title: Text(

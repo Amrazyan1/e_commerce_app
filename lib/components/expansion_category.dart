@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:e_commerce_app/models/category_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
 
 import '../../../../constants.dart';
 
@@ -61,10 +62,14 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
                   widget.title,
                   style: const TextStyle(fontSize: 14),
                 ),
-                Text(
-                  selectedInfo.isEmpty ? widget.info : selectedInfo,
-                  style: const TextStyle(
-                      fontSize: 14, color: Colors.grey), // Optional style
+                const Gap(50),
+                Flexible(
+                  child: Text(
+                    overflow: TextOverflow.ellipsis,
+                    selectedInfo.isEmpty ? widget.info : selectedInfo,
+                    style: const TextStyle(
+                        fontSize: 14, color: Colors.grey), // Optional style
+                  ),
                 ),
               ],
             ),
@@ -91,11 +96,19 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
                         }
                       });
                     },
-                    title: Text(
-                      widget.subCategory[index].title,
-                      style: const TextStyle(fontSize: 14),
+                    title: Flexible(
+                      child: Text(
+                        overflow: TextOverflow.ellipsis,
+                        widget.subCategory[index].title,
+                        style: const TextStyle(fontSize: 14),
+                      ),
                     ),
-                    trailing: Text(widget.subCategory[index].info),
+                    trailing: SizedBox(
+                      width: 100,
+                      child: Text(
+                          overflow: TextOverflow.ellipsis,
+                          widget.subCategory[index].info ?? ''),
+                    ),
                   ),
                   if (index < widget.subCategory.length - 1)
                     const Divider(height: 1),

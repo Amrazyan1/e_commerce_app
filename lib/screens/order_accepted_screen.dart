@@ -1,4 +1,6 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/components/checkout_modal.dart';
+import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,31 +11,31 @@ class OrderAcceptedScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         width: double.maxFinite,
-        padding: EdgeInsets.symmetric(horizontal: 25),
+        padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Spacer(
+            const Spacer(
               flex: 10,
             ),
             SizedBox(
                 width: 200,
                 height: 200,
                 child: Image.asset("assets/Illustration/success.png")),
-            Spacer(
+            const Spacer(
               flex: 8,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 40),
               child: Text(
                 "You Order Has Been Accepted",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
               ),
             ),
-            Spacer(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
+            const Spacer(),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 40),
               child: Text(
                 "Your item has been placed and is on it's way to being processed",
                 textAlign: TextAlign.center,
@@ -43,7 +45,7 @@ class OrderAcceptedScreen extends StatelessWidget {
                     fontWeight: FontWeight.w600),
               ),
             ),
-            Spacer(
+            const Spacer(
               flex: 8,
             ),
             SizedBox(
@@ -52,22 +54,24 @@ class OrderAcceptedScreen extends StatelessWidget {
                 text: 'Track order',
                 callback: () {
                   Navigator.pop(context);
+                  AutoRouter.of(context)
+                      .navigate(const EmptyRouter(children: [OrdersRoute()]));
                 },
               ),
             ),
-            Spacer(
+            const Spacer(
               flex: 2,
             ),
             InkWell(
               onTap: () {
                 Navigator.pop(context);
               },
-              child: Text(
+              child: const Text(
                 "Back To Home",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
-            Spacer(
+            const Spacer(
               flex: 10,
             ),
           ],

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/Provider/main_provider.dart';
@@ -5,6 +7,7 @@ import 'package:e_commerce_app/components/added_to_cart_message_screen.dart';
 import 'package:e_commerce_app/components/checkout_modal.dart';
 import 'package:e_commerce_app/components/custom_modal_bottom_sheet.dart';
 import 'package:e_commerce_app/constants.dart';
+import 'package:e_commerce_app/models/cart_products_response.dart';
 import 'package:e_commerce_app/models/product_model.dart';
 import 'package:e_commerce_app/screens/Products/product_details_screen.dart';
 import 'package:flutter/material.dart';
@@ -40,25 +43,34 @@ class _CartScreenState extends State<CartScreen> {
     // }
   }
   void gotoCheckout() async {
+    log('gotoCheckout ----------------------------------------------------------------');
     context.read<CartBloc>().add(CartCreateOrder());
   }
+
+  bool _isModalShown = false;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<CartBloc, CartState>(
       listener: (context, state) {
-        if (state is CartPlaceOrderState) {
+        if (state is CartPlaceOrderState && !_isModalShown) {
+          _isModalShown = true; // Ensure modal is shown only once
+
           customModalBottomSheet(
             context,
             isDismissible: true,
             child: CheckoutModal(
               data: state.vieworder,
             ),
-          );
+          ).then((_) {
+            // Reset the flag when the modal is dismissed
+            _isModalShown = false;
+          });
         }
       },
       child: SuperScaffold(
         appBar: SuperAppBar(
+          automaticallyImplyLeading: false,
           searchBar: SuperSearchBar(
             enabled: false,
           ),
@@ -101,105 +113,11 @@ class _CartScreenState extends State<CartScreen> {
                   }
                   return Expanded(
                     child: ListView.builder(
+                      shrinkWrap: false,
                       itemCount: state.cartItems.length,
                       itemBuilder: (context, index) {
                         final item = state.cartItems[index];
-                        return Dismissible(
-                          key: Key(item.product!.name
-                              .toString()), // Ensure each item has a unique key
-                          direction: DismissDirection.endToStart,
-                          onDismissed: (direction) {
-                            context
-                                .read<MainProvider>()
-                                .removefromCart(item.product!);
-                          },
-                          background: Container(
-                            alignment: Alignment.centerRight,
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 20.0),
-                            color: Colors.red,
-                            child: const Icon(
-                              Icons.delete,
-                              color: Colors.white,
-                            ),
-                          ),
-                          child: GestureDetector(
-                            onTap: () {
-                              context.read<MainProvider>().currentProductModel =
-                                  item.product!;
-
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ProductDetailsScreen(),
-                                ),
-                              );
-                            },
-                            child: Card(
-                              margin: const EdgeInsets.all(8.0),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // Leading Image
-                                    SizedBox(
-                                      width: 50,
-                                      height: 50,
-                                      child: Image.network(
-                                        item.product!.images?.main?.src ??
-                                            'https://via.placeholder.com/50',
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 16),
-                                    // Title and Subtitle
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            item.product!.name!,
-                                            // style: Theme.of(context)
-                                            //     .textTheme
-                                            //     .subtitle1,
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            '\$${item.product!.price}',
-                                            // style: Theme.of(context)
-                                            //     .textTheme
-                                            //     .bodyText2!
-                                            //     .copyWith(color: Colors.grey),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    // Trailing Actions
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        IconButton(
-                                          icon: const Icon(Icons.remove),
-                                          onPressed: () =>
-                                              _decreaseQuantity(index),
-                                        ),
-                                        Text('${item.count}'),
-                                        IconButton(
-                                          icon: const Icon(Icons.add,
-                                              color: kprimaryColor),
-                                          onPressed: () =>
-                                              _increaseQuantity(index),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
+                        return _cartItem(item, context, index);
                       },
                     ),
                   );
@@ -210,7 +128,6 @@ class _CartScreenState extends State<CartScreen> {
                 );
               },
             ),
-            const Spacer(),
             Column(
               children: [
                 Padding(
@@ -275,6 +192,95 @@ class _CartScreenState extends State<CartScreen> {
               ],
             )
           ],
+        ),
+      ),
+    );
+  }
+
+  Dismissible _cartItem(CartProductItem item, BuildContext context, int index) {
+    return Dismissible(
+      key: Key(
+          item.product!.name.toString()), // Ensure each item has a unique key
+      direction: DismissDirection.endToStart,
+      onDismissed: (direction) {
+        context.read<MainProvider>().removefromCart(item.product!);
+      },
+      background: Container(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        color: Colors.red,
+        child: const Icon(
+          Icons.delete,
+          color: Colors.white,
+        ),
+      ),
+      child: GestureDetector(
+        onTap: () {
+          context.read<MainProvider>().currentProductModel = item.product!;
+
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const ProductDetailsScreen(),
+            ),
+          );
+        },
+        child: Card(
+          margin: const EdgeInsets.all(8.0),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Leading Image
+                SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: Image.network(
+                    item.product!.images?.main?.src ??
+                        'https://via.placeholder.com/50',
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        'assets/images/placeholder.png', // Path to your fallback image
+                        height: 50,
+                        width: 50,
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.product!.name!,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '\$${item.product!.price}',
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.remove),
+                      onPressed: () => _decreaseQuantity(index),
+                    ),
+                    Text('${item.count}'),
+                    IconButton(
+                      icon: const Icon(Icons.add, color: kprimaryColor),
+                      onPressed: () => _increaseQuantity(index),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

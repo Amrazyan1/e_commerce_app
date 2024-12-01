@@ -4,6 +4,7 @@ import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/blocs/categories/bloc/categories_bloc.dart';
 import 'package:e_commerce_app/blocs/login/bloc/login_bloc.dart';
 import 'package:e_commerce_app/blocs/orders/bloc/orders_bloc.dart';
+import 'package:e_commerce_app/blocs/orders/details/bloc/orderdetail_bloc.dart';
 import 'package:e_commerce_app/blocs/settings/bloc/settings_bloc.dart';
 import 'package:e_commerce_app/injector.dart';
 import 'package:e_commerce_app/router/router.dart';
@@ -73,6 +74,9 @@ void main() {
           ),
           BlocProvider(
             create: (_) => OrdersBloc(),
+          ),
+          BlocProvider(
+            create: (_) => OrderDetailBloc(),
           ),
         ],
         child: const MainApp(),

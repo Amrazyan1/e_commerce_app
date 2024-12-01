@@ -92,6 +92,9 @@ class _CheckoutModalState extends State<CheckoutModal> {
       );
     } catch (e) {
       log('order creation failed ${e.toString()}');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
     }
   }
 
@@ -169,7 +172,7 @@ class ButtonMainWidget extends StatelessWidget {
     return Material(
       color: kprimaryColor,
       clipBehavior: Clip.hardEdge,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(defaultBorderRadius),
         ),

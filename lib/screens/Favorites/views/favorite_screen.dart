@@ -61,6 +61,14 @@ class FavoriteScreen extends StatelessWidget {
                     fit: BoxFit.cover,
                     width: 50,
                     height: 50,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        'assets/images/placeholder.png', // Path to your fallback image
+                        height: 50,
+                        width: 50,
+                        fit: BoxFit.cover,
+                      );
+                    },
                   ),
                   title: Text(product.name!),
                   subtitle: Text('${product.price}'),
