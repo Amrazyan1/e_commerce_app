@@ -587,10 +587,10 @@ class ApiService {
   }
 
   // User
-  Future<Response> getUserOrders(int perPage) async {
+  Future<Response> getUserOrders() async {
     try {
       return await _dioClient.dio.get(
-        Endpoints.getUserOrders.replaceFirst('{perPage}', perPage.toString()),
+        Endpoints.getUserOrders,
       );
     } catch (e) {
       rethrow;

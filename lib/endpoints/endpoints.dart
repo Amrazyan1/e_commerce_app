@@ -92,7 +92,7 @@ class Endpoints {
   static const String getSpheres = '/spheres';
 
   // User
-  static const String getUserOrders = '/users/orders?perPage={perPage}';
+  static const String getUserOrders = '/users/orders';
   static const String getUserSettings = '/users/settings';
   static const String deleteUser = '/users';
   static const String updateUserSettings = '/users/settings';
