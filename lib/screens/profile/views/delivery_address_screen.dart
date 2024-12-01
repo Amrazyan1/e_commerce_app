@@ -106,48 +106,74 @@ class _DeliveryAddresseScreenState extends State<DeliveryAddresseScreen> {
                           final address = addresses[index];
                           final bool isSelected = address['selected'] as bool;
 
-                          return GestureDetector(
-                            onTap: () => _selectAddress(index),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Icon(
-                                  Icons.location_on,
-                                  color: Colors.blue,
-                                  size: 30,
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        address['address']!,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 5),
-                                      Text(
-                                        address['info']!,
-                                        style: const TextStyle(
-                                            fontSize: 14, color: Colors.grey),
-                                      ),
-                                    ],
+                          return Dismissible(
+                            key: Key(address['id']
+                                .toString()), // Ensure each item has a unique key
+                            direction: DismissDirection.endToStart,
+                            onDismissed: (direction) {
+                              setState(() {
+                                addresses.removeAt(index);
+                              });
+                              _apiService
+                                  .deleteAddressById(address['id'].toString());
+                              // Optionally, show a snackbar or some feedback
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("Address removed")),
+                              );
+                            },
+                            background: Container(
+                              alignment: Alignment.centerRight,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              color: Colors.red,
+                              child: const Icon(
+                                Icons.delete,
+                                color: Colors.white,
+                              ),
+                            ),
+                            child: GestureDetector(
+                              onTap: () => _selectAddress(index),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Icon(
+                                    Icons.location_on,
+                                    color: Colors.blue,
+                                    size: 30,
                                   ),
-                                ),
-                                const SizedBox(width: 10),
-                                Icon(
-                                  isSelected
-                                      ? Icons.check_circle
-                                      : Icons.circle_outlined,
-                                  color: isSelected
-                                      ? ksecondaryColor
-                                      : Colors.grey,
-                                ),
-                              ],
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          address['address']!,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 5),
+                                        Text(
+                                          address['info']!,
+                                          style: const TextStyle(
+                                              fontSize: 14, color: Colors.grey),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Icon(
+                                    isSelected
+                                        ? Icons.check_circle
+                                        : Icons.circle_outlined,
+                                    color: isSelected
+                                        ? ksecondaryColor
+                                        : Colors.grey,
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         },

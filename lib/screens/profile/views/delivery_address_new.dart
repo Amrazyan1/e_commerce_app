@@ -79,11 +79,11 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
     try {
       // Construct the address details
       final addressDetails = {
-        'name': _addressItems.first['value'],
+        'name': _addressItems[2]['value'],
         'address': _addressItems
             .map((item) => item['value'])
             .join(', '), // Combine all address items
-        'details': 'details',
+        'details': _addressItems.map((item) => item['value']).join(', '),
         // 'latitude': _selectedLocation!.latitude.toString(),
         // 'longitude': _selectedLocation!.longitude.toString(),
       };
