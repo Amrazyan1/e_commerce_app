@@ -238,6 +238,7 @@ class ApiService {
         data: cartData,
       );
     } catch (e) {
+      log('Error reduceCart ${e.toString()}');
       rethrow;
     }
   }

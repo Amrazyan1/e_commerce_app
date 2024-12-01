@@ -78,11 +78,13 @@ class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
         String total = parsedJson['data']['total'];
         CartProductItem cartProduct =
             CartProductItem(count: count, total: total);
-        print('aaa' + cartProduct.toString());
+        print('aaaaaaaaaa' + cartProduct.toString());
         return cartProduct;
+      } else {
+        return null;
       }
     } catch (e) {
-      log('Error on addToCart product ${e.toString()}');
+      log('Error on changeCountCartByProductId product ${e.toString()}');
       return null;
     }
   }

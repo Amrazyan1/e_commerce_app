@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:e_commerce_app/Provider/main_provider.dart';
@@ -9,9 +10,11 @@ import 'package:e_commerce_app/screens/Products/Components/product_images.dart';
 import 'package:e_commerce_app/screens/Products/Components/product_info.dart';
 import 'package:e_commerce_app/screens/Products/Components/review_card.dart';
 import 'package:e_commerce_app/screens/Products/Components/cart_button.dart';
+import 'package:e_commerce_app/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../blocs/favourites/bloc/favourites_bloc.dart';
 import '../../blocs/products/trending/bloc/trend_new_products_bloc.dart';
@@ -28,6 +31,8 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  final ApiService _apiService = GetIt.I<ApiService>();
+
   bool canShowquantity = false;
   bool isLoading = false;
 
@@ -37,11 +42,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     setState(() {
       isLoading = true;
     });
-    CartProductItem? cardProdItem = await context
-        .read<MainProvider>()
-        .changeCountCartByProductId(
-            context.read<MainProvider>().currentProductModel.id, count);
-    print(cardProdItem.toString());
+    // CartProductItem? cardProdItem = await context
+    //     .read<MainProvider>()
+    //     .changeCountCartByProductId(
+    //        , count);
+    var response = await _apiService.changeCart({
+      "id": context.read<MainProvider>().currentProductModel.id,
+      "count": count
+    });
+    Map<String, dynamic> parsedJson = jsonDecode(response.data);
+    int countTot = parsedJson['data']['count'];
+    String total = parsedJson['data']['total'];
+    CartProductItem cardProdItem =
+        CartProductItem(count: countTot, total: total);
+
     if (cardProdItem != null) {
       setState(() {
         canShowquantity = true;
@@ -204,19 +218,47 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ],
                       ),
                       const SizedBox(height: defaultPadding),
-                      Text(
-                        "Product info",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(fontWeight: FontWeight.w500),
+                      Visibility(
+                        visible: context
+                            .read<MainProvider>()
+                            .currentProductModel
+                            .description!
+                            .isNotEmpty,
+                        child: Column(
+                          children: [
+                            Text(
+                              "Product info",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(fontWeight: FontWeight.w500),
+                            ),
+                            const SizedBox(height: defaultPadding / 2),
+                            Text(
+                              '${context.read<MainProvider>().currentProductModel.description}',
+                              style: const TextStyle(height: 1.4),
+                            ),
+                            const SizedBox(height: defaultPadding / 2),
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: defaultPadding / 2),
-                      Text(
-                        '${context.read<MainProvider>().currentProductModel.description}',
-                        style: const TextStyle(height: 1.4),
-                      ),
-                      const SizedBox(height: defaultPadding / 2),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Unit",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.w500),
+                          ),
+                          const SizedBox(height: defaultPadding / 2),
+                          Text(
+                            '${context.read<MainProvider>().currentProductModel.unit?.value} ${context.read<MainProvider>().currentProductModel.unit?.name ?? ''}',
+                            style: const TextStyle(height: 1.4),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -248,20 +290,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               //   isShowBottomBorder: true,
               //   press: () {},
               // ),
-              const SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.all(defaultPadding),
-                  child: ReviewCard(
-                    rating: 4.3,
-                    numOfReviews: 128,
-                    numOfFiveStar: 80,
-                    numOfFourStar: 30,
-                    numOfThreeStar: 5,
-                    numOfTwoStar: 4,
-                    numOfOneStar: 1,
-                  ),
-                ),
-              ),
+              // const SliverToBoxAdapter(
+              //   child: Padding(
+              //     padding: EdgeInsets.all(defaultPadding),
+              //     child: ReviewCard(
+              //       rating: 4.3,
+              //       numOfReviews: 128,
+              //       numOfFiveStar: 80,
+              //       numOfFourStar: 30,
+              //       numOfThreeStar: 5,
+              //       numOfTwoStar: 4,
+              //       numOfOneStar: 1,
+              //     ),
+              //   ),
+              // ),
               // ProductListTile(
               //   svgSrc: "assets/icons/Chat.svg",
               //   title: "Reviews",

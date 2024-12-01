@@ -33,7 +33,10 @@ class NetworkImageWithLoader extends StatelessWidget {
           ),
         ),
         placeholder: (context, url) => const Skeleton(),
-        errorWidget: (context, url, error) => const Icon(Icons.error),
+        errorWidget: (context, url, error) => Image.asset(
+          'assets/images/placeholder.png', // Path to your fallback image
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

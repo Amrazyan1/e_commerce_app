@@ -38,17 +38,19 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     on<AddToCart>((event, emit) async {
       try {
-        emit(CartLoading());
-        final response =
-            await _apiService.addToCart({"id": event.id, "count": 1});
-        CartResponseData responseData =
-            cartProductsResponseFromJson(response.data).data!;
-        products = responseData.list;
-        _productsService.cartProducts = products ?? [];
-        emit(CartLoaded(products ?? [], responseData.subtotal,
-            responseData.discount, responseData.total, responseData.count));
+        // emit(CartLoading());
+        await _apiService.addToCart({"id": event.id, "count": 1});
+        add(LoadCart());
+        // final response =
+        //     await
+        // CartResponseData responseData =
+        //     cartProductsResponseFromJson(response.data).data!;
+        // products = responseData.list;
+        // _productsService.cartProducts = products ?? [];
+        // emit(CartLoaded(products ?? [], responseData.subtotal,
+        //     responseData.discount, responseData.total, responseData.count));
       } catch (e) {
-        emit(CartError(e.toString()));
+        // emit(CartError(e.toString()));
       }
     });
 
@@ -96,17 +98,20 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     on<ReduceFromCart>((event, emit) async {
       try {
-        emit(CartLoading());
-        final response =
-            await _apiService.reduceCart({"id": event.id, "count": 1});
-        CartResponseData responseData =
-            cartProductsResponseFromJson(response.data).data!;
-        products = responseData.list;
-        _productsService.cartProducts = products ?? [];
-        emit(CartLoaded(products ?? [], responseData.subtotal,
-            responseData.discount, responseData.total, responseData.count));
+        await _apiService.reduceCart({"id": event.id, "count": 1});
+        add(LoadCart());
+
+        // emit(CartLoading());
+        // final response =
+        //     await
+        // CartResponseData responseData =
+        //     cartProductsResponseFromJson(response.data).data!;
+        // products = responseData.list;
+        // _productsService.cartProducts = products ?? [];
+        // emit(CartLoaded(products ?? [], responseData.subtotal,
+        //     responseData.discount, responseData.total, responseData.count));
       } catch (e) {
-        emit(CartError(e.toString()));
+        // emit(CartError(e.toString()));
       }
     });
 
@@ -128,14 +133,17 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     on<RemoveFromCart>((event, emit) async {
       try {
-        emit(CartLoading());
-        final response = await _apiService.deleteCartItemById(event.id);
-        CartResponseData responseData =
-            cartProductsResponseFromJson(response.data).data!;
-        products = responseData.list;
-        _productsService.cartProducts = products ?? [];
-        emit(CartLoaded(products ?? [], responseData.subtotal,
-            responseData.discount, responseData.total, responseData.count));
+        await _apiService.deleteCartItemById(event.id);
+        add(LoadCart());
+
+        // emit(CartLoading());
+        // final response =
+        // CartResponseData responseData =
+        //     cartProductsResponseFromJson(response.data).data!;
+        // products = responseData.list;
+        // _productsService.cartProducts = products ?? [];
+        // emit(CartLoaded(products ?? [], responseData.subtotal,
+        //     responseData.discount, responseData.total, responseData.count));
       } catch (e) {
         emit(CartError(e.toString()));
       }

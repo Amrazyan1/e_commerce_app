@@ -16,6 +16,7 @@ import 'package:get_it/get_it.dart';
 import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 
 import '../../../blocs/cart/bloc/cart_bloc.dart';
+import '../../../components/network_image_with_loader.dart';
 import '../../../services/api_service.dart';
 
 @RoutePage()
@@ -29,19 +30,27 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   final ApiService apiService = GetIt.I<ApiService>();
 
-  void _increaseQuantity(int index) {
+  void _increaseQuantity(String id) {
+    context.read<CartBloc>().add(AddToCart(id: id));
+
     // setState(() {
     //   context.read<MainProvider>().cartProducts[index].quantity++;
     // });
   }
 
-  void _decreaseQuantity(int index) {
+  void _decreaseQuantity(String id, int count) {
+    if (count == 1) {
+      context.read<CartBloc>().add(RemoveFromCart(id: id));
+    } else {
+      context.read<CartBloc>().add(ReduceFromCart(id: id));
+    }
     // if (context.read<MainProvider>().cartProducts[index].quantity > 1) {
     //   setState(() {
     //     context.read<MainProvider>().cartProducts[index].quantity--;
     //   });
     // }
   }
+
   void gotoCheckout() async {
     log('gotoCheckout ----------------------------------------------------------------');
     context.read<CartBloc>().add(CartCreateOrder());
@@ -235,18 +244,9 @@ class _CartScreenState extends State<CartScreen> {
                 SizedBox(
                   width: 50,
                   height: 50,
-                  child: Image.network(
-                    item.product!.images?.main?.src ??
-                        'https://via.placeholder.com/50',
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Image.asset(
-                        'assets/images/placeholder.png', // Path to your fallback image
-                        height: 50,
-                        width: 50,
-                        fit: BoxFit.cover,
-                      );
-                    },
+                  child: NetworkImageWithLoader(
+                    item.product!.images?.main?.src ?? '',
+                    radius: 0,
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -269,12 +269,13 @@ class _CartScreenState extends State<CartScreen> {
                   children: [
                     IconButton(
                       icon: const Icon(Icons.remove),
-                      onPressed: () => _decreaseQuantity(index),
+                      onPressed: () =>
+                          _decreaseQuantity(item.product!.id!, item.count!),
                     ),
                     Text('${item.count}'),
                     IconButton(
                       icon: const Icon(Icons.add, color: kprimaryColor),
-                      onPressed: () => _increaseQuantity(index),
+                      onPressed: () => _increaseQuantity(item.product!.id!),
                     ),
                   ],
                 ),
