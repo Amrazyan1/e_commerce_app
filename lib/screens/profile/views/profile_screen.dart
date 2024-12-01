@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:e_commerce_app/blocs/orders/bloc/orders_bloc.dart';
+import 'package:e_commerce_app/blocs/orders/bloc/orders_event.dart';
 import 'package:e_commerce_app/blocs/settings/bloc/settings_bloc.dart';
 import 'package:e_commerce_app/blocs/settings/bloc/settings_state.dart';
 import 'package:e_commerce_app/components/list_tile/divider_list_tile.dart';
@@ -65,6 +67,7 @@ class ProfileScreen extends StatelessWidget {
             text: "Orders",
             svgSrc: "assets/icons/Order.svg",
             press: () {
+              context.read<OrdersBloc>().add(FetchOrders());
               AutoRouter.of(context).push(const OrdersRoute());
             },
           ),
