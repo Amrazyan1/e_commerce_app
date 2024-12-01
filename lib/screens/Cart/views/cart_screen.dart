@@ -9,9 +9,11 @@ import 'package:e_commerce_app/models/product_model.dart';
 import 'package:e_commerce_app/screens/Products/product_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 
 import '../../../blocs/cart/bloc/cart_bloc.dart';
+import '../../../services/api_service.dart';
 
 @RoutePage()
 class CartScreen extends StatefulWidget {
@@ -22,6 +24,8 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  final ApiService apiService = GetIt.I<ApiService>();
+
   void _increaseQuantity(int index) {
     // setState(() {
     //   context.read<MainProvider>().cartProducts[index].quantity++;
@@ -35,223 +39,243 @@ class _CartScreenState extends State<CartScreen> {
     //   });
     // }
   }
+  void gotoCheckout() async {
+    context.read<CartBloc>().add(CartCreateOrder());
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SuperScaffold(
-      appBar: SuperAppBar(
-        searchBar: SuperSearchBar(
-          enabled: false,
+    return BlocListener<CartBloc, CartState>(
+      listener: (context, state) {
+        if (state is CartPlaceOrderState) {
+          customModalBottomSheet(
+            context,
+            isDismissible: true,
+            child: CheckoutModal(
+              data: state.vieworder,
+            ),
+          );
+        }
+      },
+      child: SuperScaffold(
+        appBar: SuperAppBar(
+          searchBar: SuperSearchBar(
+            enabled: false,
+          ),
+          backgroundColor:
+              Theme.of(context).colorScheme.background.withOpacity(.5),
+          title: Text(
+            'Your Cart',
+            style: Theme.of(context)
+                .textTheme
+                .labelMedium!
+                .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+          ),
+          largeTitle: SuperLargeTitle(
+            largeTitle: 'Your Cart',
+            textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 24,
+                  letterSpacing: 0,
+                ),
+          ),
         ),
-        backgroundColor:
-            Theme.of(context).colorScheme.background.withOpacity(.5),
-        title: Text(
-          'Your Cart',
-          style: Theme.of(context)
-              .textTheme
-              .labelMedium!
-              .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-        ),
-        largeTitle: SuperLargeTitle(
-          largeTitle: 'Your Cart',
-          textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-                fontWeight: FontWeight.w700,
-                fontSize: 24,
-                letterSpacing: 0,
-              ),
-        ),
-      ),
-      body: Column(
-        children: [
-          BlocBuilder<CartBloc, CartState>(
-            builder: (context, state) {
-              if (state is CartLoading) {
-                return const Expanded(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
-              if (state is CartLoaded) {
-                if (state.cartItems.isEmpty) {
+        body: Column(
+          children: [
+            BlocBuilder<CartBloc, CartState>(
+              builder: (context, state) {
+                if (state is CartLoading) {
                   return const Expanded(
                     child: Center(
-                      child: Text('There is no cart items'),
+                      child: CircularProgressIndicator(),
                     ),
                   );
                 }
-                return Expanded(
-                  child: ListView.builder(
-                    itemCount: state.cartItems.length,
-                    itemBuilder: (context, index) {
-                      final item = state.cartItems[index];
-                      return Dismissible(
-                        key: Key(item.product!.name
-                            .toString()), // Ensure each item has a unique key
-                        direction: DismissDirection.endToStart,
-                        onDismissed: (direction) {
-                          context
-                              .read<MainProvider>()
-                              .removefromCart(item.product!);
-                        },
-                        background: Container(
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          color: Colors.red,
-                          child: const Icon(
-                            Icons.delete,
-                            color: Colors.white,
-                          ),
-                        ),
-                        child: GestureDetector(
-                          onTap: () {
-                            context.read<MainProvider>().currentProductModel =
-                                item.product!;
-
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const ProductDetailsScreen(),
-                              ),
-                            );
+                if (state is CartLoaded) {
+                  if (state.cartItems.isEmpty) {
+                    return const Expanded(
+                      child: Center(
+                        child: Text('There is no cart items'),
+                      ),
+                    );
+                  }
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: state.cartItems.length,
+                      itemBuilder: (context, index) {
+                        final item = state.cartItems[index];
+                        return Dismissible(
+                          key: Key(item.product!.name
+                              .toString()), // Ensure each item has a unique key
+                          direction: DismissDirection.endToStart,
+                          onDismissed: (direction) {
+                            context
+                                .read<MainProvider>()
+                                .removefromCart(item.product!);
                           },
-                          child: Card(
-                            margin: const EdgeInsets.all(8.0),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Leading Image
-                                  SizedBox(
-                                    width: 50,
-                                    height: 50,
-                                    child: Image.network(
-                                      item.product!.images?.main?.src ??
-                                          'https://via.placeholder.com/50',
-                                      fit: BoxFit.cover,
+                          background: Container(
+                            alignment: Alignment.centerRight,
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            color: Colors.red,
+                            child: const Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                            ),
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              context.read<MainProvider>().currentProductModel =
+                                  item.product!;
+
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ProductDetailsScreen(),
+                                ),
+                              );
+                            },
+                            child: Card(
+                              margin: const EdgeInsets.all(8.0),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Leading Image
+                                    SizedBox(
+                                      width: 50,
+                                      height: 50,
+                                      child: Image.network(
+                                        item.product!.images?.main?.src ??
+                                            'https://via.placeholder.com/50',
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 16),
-                                  // Title and Subtitle
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                    const SizedBox(width: 16),
+                                    // Title and Subtitle
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            item.product!.name!,
+                                            // style: Theme.of(context)
+                                            //     .textTheme
+                                            //     .subtitle1,
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            '\$${item.product!.price}',
+                                            // style: Theme.of(context)
+                                            //     .textTheme
+                                            //     .bodyText2!
+                                            //     .copyWith(color: Colors.grey),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    // Trailing Actions
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Text(
-                                          item.product!.name!,
-                                          // style: Theme.of(context)
-                                          //     .textTheme
-                                          //     .subtitle1,
+                                        IconButton(
+                                          icon: const Icon(Icons.remove),
+                                          onPressed: () =>
+                                              _decreaseQuantity(index),
                                         ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          '\$${item.product!.price}',
-                                          // style: Theme.of(context)
-                                          //     .textTheme
-                                          //     .bodyText2!
-                                          //     .copyWith(color: Colors.grey),
+                                        Text('${item.count}'),
+                                        IconButton(
+                                          icon: const Icon(Icons.add,
+                                              color: kprimaryColor),
+                                          onPressed: () =>
+                                              _increaseQuantity(index),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                  // Trailing Actions
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      IconButton(
-                                        icon: const Icon(Icons.remove),
-                                        onPressed: () =>
-                                            _decreaseQuantity(index),
-                                      ),
-                                      Text('${item.count}'),
-                                      IconButton(
-                                        icon: const Icon(Icons.add,
-                                            color: kprimaryColor),
-                                        onPressed: () =>
-                                            _increaseQuantity(index),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              }
-              return Center(
-                child: Text('Cart Load error ${(state as CartError).message}'),
-              );
-            },
-          ),
-          const Spacer(),
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SizedBox(
-                  height: 64,
-                  child: Material(
-                    color: kprimaryColor,
-                    clipBehavior: Clip.hardEdge,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(defaultBorderRadius),
-                      ),
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        customModalBottomSheet(
-                          context,
-                          isDismissible: true,
-                          child: const CheckoutModal(),
                         );
                       },
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 4,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: defaultPadding),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  BlocBuilder<CartBloc, CartState>(
-                                    builder: (context, state) {
-                                      if (state is CartLoaded) {
-                                        return Text(
-                                          "Go To Checkout (${state.total})",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleSmall!
-                                              .copyWith(color: Colors.white),
+                    ),
+                  );
+                }
+                return Center(
+                  child:
+                      Text('Cart Load error ${(state as CartError).message}'),
+                );
+              },
+            ),
+            const Spacer(),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SizedBox(
+                    height: 64,
+                    child: Material(
+                      color: kprimaryColor,
+                      clipBehavior: Clip.hardEdge,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(defaultBorderRadius),
+                        ),
+                      ),
+                      child: InkWell(
+                        onTap: gotoCheckout,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 4,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: defaultPadding),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    BlocBuilder<CartBloc, CartState>(
+                                      builder: (context, state) {
+                                        if (state
+                                            is CartPlaceOrderStateLoading) {
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        }
+                                        if (state is CartLoaded ||
+                                            state is CartPlaceOrderState) {
+                                          state = state as CartLoaded;
+                                          return Text(
+                                            "Go To Checkout (${state.total})",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleSmall!
+                                                .copyWith(color: Colors.white),
+                                          );
+                                        }
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
                                         );
-                                      }
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    },
-                                  ),
-                                ],
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          )
-        ],
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

@@ -65,7 +65,7 @@ class ProfileScreen extends StatelessWidget {
             text: "Orders",
             svgSrc: "assets/icons/Order.svg",
             press: () {
-              AutoRouter.of(context).push(OrdersRoute());
+              AutoRouter.of(context).push(const OrdersRoute());
             },
           ),
 

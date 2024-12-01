@@ -16,7 +16,7 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
     on<FetchCategoriesEvent>((event, emit) async {
       emit(CategoriesLoading());
       try {
-        final response = await _apiService.getCategories(perPage: 10);
+        final response = await _apiService.getCategories(perPage: 30);
         log('$response');
         if (response.statusCode == 200) {
           emit(CategoriesLoaded(

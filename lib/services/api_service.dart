@@ -36,11 +36,7 @@ class ApiService {
 
   // User Addresses
   Future<DeliveryAddressesResponse> getUserAddresses(int perPage) async {
-    final response = await _dioClient.dio.get(
-        Endpoints.userAddresses.replaceFirst(
-          '{perPage}',
-          perPage.toString(),
-        ),
+    final response = await _dioClient.dio.get(Endpoints.userAddresses,
         options: Options(contentType: "application/json"));
     if (response.statusCode == 200) {
       return deliveryAddressesResponseFromJson(response.data);
@@ -345,10 +341,10 @@ class ApiService {
     }
   }
 
-  Future<Response> processOrder(Map<String, dynamic> data) async {
+  Future<Response> processOrder(String id, Map<String, dynamic> data) async {
     try {
       return await _dioClient.dio.put(
-        Endpoints.processOrder,
+        Endpoints.processOrder.replaceFirst('{id}', id),
         data: data,
       );
     } catch (e) {
@@ -357,13 +353,14 @@ class ApiService {
   }
 
   Future<Response> payOrder(
-      String id, String method, Map<String, dynamic> data) async {
+    String id,
+    String method,
+  ) async {
     try {
       return await _dioClient.dio.post(
         Endpoints.payOrder
             .replaceFirst('{id}', id)
             .replaceFirst('{method}', method),
-        data: data,
       );
     } catch (e) {
       rethrow;

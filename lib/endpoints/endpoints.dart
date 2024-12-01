@@ -2,7 +2,7 @@
 
 class Endpoints {
   // User addresses
-  static const String userAddresses = '/users/addresses/?perPage={perPage}';
+  static const String userAddresses = '/users/addresses';
   static const String setDefaultAddress = '/users/addresses/{id}/set-default';
   static const String addAddress = '/users/addresses';
   static const String updateAddressById = '/users/addresses/{id}';
@@ -35,7 +35,7 @@ class Endpoints {
 
   // Categories
   static const String getCategories =
-      '/categories?perPage={perPage}&with-subcategories=true&page=2';
+      '/categories?perPage={perPage}&with-subcategories=true';
   static const String getSubcategoriesById =
       '/categories/{id}?perPage={perPage}';
   // static const String getCategoryBreadcrumbs = '/categories/{id}/breadcrumbs';
@@ -51,7 +51,7 @@ class Endpoints {
   static const String getOrderById = '/orders/{id}';
   static const String deleteOrderById = '/orders/{id}';
   static const String createOrder = '/orders';
-  static const String processOrder = '/orders/process';
+  static const String processOrder = '/orders/{id}/process';
   static const String payOrder = '/orders/{id}/pay/{method}';
   static const String notifyOrder = '/orders/{id}/notify';
 

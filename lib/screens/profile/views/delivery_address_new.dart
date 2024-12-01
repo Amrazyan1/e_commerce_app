@@ -79,24 +79,18 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
     try {
       // Construct the address details
       final addressDetails = {
-        'regionId':
-            _regionId ?? '2', // Set the regionId dynamically if applicable
+        'name': _addressItems.first['value'],
         'address': _addressItems
             .map((item) => item['value'])
             .join(', '), // Combine all address items
         'details': 'details',
-        'latitude': _selectedLocation!.latitude.toString(),
-        'longitude': _selectedLocation!.longitude.toString(),
+        // 'latitude': _selectedLocation!.latitude.toString(),
+        // 'longitude': _selectedLocation!.longitude.toString(),
       };
 
       // Send the data to the backend
       final response = await widget.apiService.addAddress(addressDetails);
-
-      if (response.statusCode == 200) {
-        AutoRouter.of(context).maybePop();
-      } else {
-        throw Exception("Failed to add address");
-      }
+      AutoRouter.of(context).maybePop();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Failed to add address: $e")),

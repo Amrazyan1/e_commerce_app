@@ -36,3 +36,5 @@ class RemoveFromCart extends CartEvent {
 class ClearCart extends CartEvent {
   ClearCart();
 }
+
+class CartCreateOrder extends CartEvent {}

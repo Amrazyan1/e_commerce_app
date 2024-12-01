@@ -22,6 +22,17 @@ class CartLoaded extends CartState {
       this.cartItems, this.subtotal, this.discount, this.total, this.count);
 }
 
+class CartPlaceOrderStateLoading extends CartLoaded {
+  CartPlaceOrderStateLoading(super.cartItems, super.subtotal, super.discount,
+      super.total, super.count);
+}
+
+class CartPlaceOrderState extends CartLoaded {
+  final ViewOrderData vieworder;
+  CartPlaceOrderState(super.cartItems, super.subtotal, super.discount,
+      super.total, super.count, this.vieworder);
+}
+
 class CartError extends CartState {
   final String message;
 

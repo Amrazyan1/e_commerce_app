@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/components/checkout_modal.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import '../../../models/delivery_addreses_model.dart';
 import '../../../services/api_service.dart';
 
 @RoutePage()
@@ -27,16 +30,16 @@ class _DeliveryAddresseScreenState extends State<DeliveryAddresseScreen> {
 
   Future<void> _loadAddresses() async {
     try {
-      final response = await _apiService.getUserAddresses(1);
-      final List<Map<String, dynamic>> fetchedAddresses =
-          (response.data as List)
-              .map((e) => {
-                    'id': e['id'],
-                    'address': e['address'],
-                    'info': e['details'],
-                    'selected': e['isDefault'] ?? false,
-                  })
-              .toList();
+      final DeliveryAddressesResponse response =
+          await _apiService.getUserAddresses(1);
+      final List<Map<String, dynamic>> fetchedAddresses = (response.data ?? [])
+          .map((e) => {
+                'id': e.id,
+                'address': e.address,
+                'info': e.details,
+                'selected': e.isDefault ?? false,
+              })
+          .toList();
 
       setState(() {
         addresses = fetchedAddresses;
@@ -46,6 +49,7 @@ class _DeliveryAddresseScreenState extends State<DeliveryAddresseScreen> {
       setState(() {
         isLoading = false;
       });
+      log('Failed to load addresses: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to load addresses: $e')),
       );
@@ -55,6 +59,10 @@ class _DeliveryAddresseScreenState extends State<DeliveryAddresseScreen> {
   void _selectAddress(int index) {
     setState(() {
       for (int i = 0; i < addresses.length; i++) {
+        if (i == index) {
+          log(addresses[i]['id'].toString());
+          _apiService.setDefaultAddress(addresses[i]['id'].toString());
+        }
         addresses[i]['selected'] = i == index;
       }
     });
@@ -68,6 +76,19 @@ class _DeliveryAddresseScreenState extends State<DeliveryAddresseScreen> {
         title: const Text(
           'Delivery Addresses',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(defaultPadding),
+        child: SizedBox(
+          height: 60,
+          width: double.infinity,
+          child: ButtonMainWidget(
+            text: 'Add new address',
+            callback: () {
+              AutoRouter.of(context).push(DeliveryAddressNew());
+            },
+          ),
         ),
       ),
       body: isLoading
@@ -130,19 +151,6 @@ class _DeliveryAddresseScreenState extends State<DeliveryAddresseScreen> {
                             ),
                           );
                         },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(defaultPadding),
-                      child: SizedBox(
-                        height: 60,
-                        width: double.infinity,
-                        child: ButtonMainWidget(
-                          text: 'Add new address',
-                          callback: () {
-                            AutoRouter.of(context).push(DeliveryAddressNew());
-                          },
-                        ),
                       ),
                     ),
                   ],

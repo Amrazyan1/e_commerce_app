@@ -4,14 +4,14 @@ class CategoryModel {
 
   final String? image, svgSrc;
   final List<CategoryModel>? subCategories;
-
-  CategoryModel({
-    required this.title,
-    required this.info,
-    this.image,
-    this.svgSrc,
-    this.subCategories,
-  });
+  final String? paytipe;
+  CategoryModel(
+      {required this.title,
+      required this.info,
+      this.image,
+      this.svgSrc,
+      this.subCategories,
+      this.paytipe});
 }
 
 final List<CategoryModel> demoCategoriesWithImage = [
