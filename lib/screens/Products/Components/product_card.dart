@@ -111,7 +111,7 @@ class _ProductCardState extends State<ProductCard> {
                   const SizedBox(height: defaultPadding / 4),
                   Flexible(
                     child: Text(
-                      widget.product.description!,
+                      widget.product.description ?? '',
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium!

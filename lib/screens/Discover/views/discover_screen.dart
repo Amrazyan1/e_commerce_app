@@ -11,12 +11,14 @@ import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
 import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 
 import '../../../blocs/categories/bloc/categories_bloc.dart';
 import '../../../blocs/categories/bloc/categories_state.dart';
 import '../../../blocs/categorydetails/bloc/category_detail_bloc.dart';
 import '../../../blocs/categorydetails/bloc/category_detail_event.dart';
+import '../../../blocs/categorydetails/bloc/category_detail_state.dart';
 import '../../../blocs/search/bloc/global_search_bloc.dart';
 import '../../../models/Product/product_model.dart';
 import '../../Products/Components/product_card.dart';
@@ -36,14 +38,50 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   final _searchFocusNode = FocusNode();
 
   final _searchTextController = TextEditingController();
+
+  final ScrollController _scrollController = ScrollController();
+  bool _isLoadingMore = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    log('onscroll');
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 100) {
+      // Close to the end of the scroll
+      log('onscroll +++++');
+
+      if (!_isLoadingMore) {
+        setState(() {
+          _isLoadingMore = true;
+        });
+
+        context.read<CategoryDetailBloc>().add(FetchCategoryProductsEvent(
+            id: context.read<CategoryDetailBloc>().categoryId, page: 1));
+      }
+      Future.delayed(Duration(seconds: 2));
+      setState(() {
+        _isLoadingMore = false;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<CategoriesBloc, CategoriesState>(
       listener: (context, state) {
         if (state is CategoriesLoaded) {
           if (state.products.isNotEmpty) {
-            //            context.read<MainProvider>().categoryName =
-            // category.name ?? 'Unknown';
             AutoRouter.of(context).push(const DiscoverDetailsRoute());
           }
         }
@@ -71,23 +109,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                     letterSpacing: 0,
                   ),
             ),
-
-            // actions: IconButton(
-            //   icon: Container(
-            //     width: 28,
-            //     height: 28,
-            //     decoration: BoxDecoration(
-            //       borderRadius: BorderRadius.circular(16),
-            //       color: Theme.of(context).colorScheme.onPrimary,
-            //     ),
-            //     child: Icon(
-            //       Icons.plus_one,
-            //       size: 18,
-            //       color: Theme.of(context).colorScheme.background,
-            //     ),
-            //   ),
-            //   onPressed: () {},
-            // ),
             searchBar: SuperSearchBar(
               searchFocusNode: _searchFocusNode,
               searchController: _searchTextController,
@@ -158,10 +179,12 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               ),
             ),
           ),
-          body: Column(
-            children: [
-              Expanded(
-                child: Padding(
+          body: SingleChildScrollView(
+            controller: _scrollController,
+            child: Column(
+              children: [
+                // Categories Section
+                Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: BlocBuilder<CategoriesBloc, CategoriesState>(
                     builder: (context, state) {
@@ -169,7 +192,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                         return const Center(child: CircularProgressIndicator());
                       } else if (state is CategoriesLoaded) {
                         return GridView.builder(
-                          physics: const BouncingScrollPhysics(),
+                          physics:
+                              const NeverScrollableScrollPhysics(), // Prevent nested scroll
+                          shrinkWrap:
+                              true, // Make it fit within the scroll view
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
@@ -195,8 +221,76 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                     },
                   ),
                 ),
-              ),
-            ],
+                Gap(20),
+                // Category Details Section
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: BlocBuilder<CategoryDetailBloc, CategoryDetailState>(
+                    builder: (context, state) {
+                      if (state is CategoryDetailLoaded) {
+                        final products = state.products;
+                        return Stack(
+                          children: [
+                            GridView.builder(
+                              padding: EdgeInsets.only(bottom: 80),
+                              physics:
+                                  const NeverScrollableScrollPhysics(), // Prevent nested scroll
+                              shrinkWrap:
+                                  true, // Make it fit within the scroll view
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 8.0,
+                                crossAxisSpacing: 8.0,
+                                childAspectRatio:
+                                    140 / 220, // Match item dimensions
+                              ),
+                              itemCount: state.products.length,
+                              itemBuilder: (context, index) {
+                                return ProductCard(
+                                  product: products[index],
+                                  press: () {
+                                    context
+                                        .read<MainProvider>()
+                                        .currentProductModel = products[index];
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ProductDetailsScreen(),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                            const Positioned(
+                              bottom: 20,
+                              left: 0,
+                              right: 0,
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      } else if (state is CategoryDetailLoading) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (state is CategoryDetailError) {
+                        return Center(
+                          child: Text(state.message),
+                        );
+                      }
+                      return Container();
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -222,16 +316,19 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
 }
 
 class _categoryItem extends StatelessWidget {
-  const _categoryItem(
-      {super.key, required this.category, required this.productList});
+  const _categoryItem({
+    super.key,
+    required this.category,
+    required this.productList,
+  });
 
   final Category category;
   final List<Product> productList;
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        context.read<CategoryDetailBloc>().categoryId = category.id!;
         if ((category.subcategories ?? []).isNotEmpty) {
           AutoRouter.of(context).push(const DiscoverRoute());
           // Navigator.of(context).push(
@@ -242,12 +339,17 @@ class _categoryItem extends StatelessWidget {
           //   ),
           // );
           context.read<CategoriesBloc>().add(FetchSubcategories(category));
+          if (category.productsCount! > 0) {
+            context
+                .read<CategoryDetailBloc>()
+                .add(FetchCategoryProductsEvent(id: category.id!, page: 0));
+          }
         } else if (category.productsCount! > 0) {
           context.read<MainProvider>().categoryName =
               category.name ?? 'Unknown';
           context
               .read<CategoryDetailBloc>()
-              .add(FetchCategoryProductsEvent(id: category.id!));
+              .add(FetchCategoryProductsEvent(id: category.id!, page: 0));
           AutoRouter.of(context).push(const DiscoverDetailsRoute());
         } else {
           // if (category.productsCount! > 0) {

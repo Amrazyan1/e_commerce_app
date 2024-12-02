@@ -220,10 +220,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       const SizedBox(height: defaultPadding),
                       Visibility(
                         visible: context
-                            .read<MainProvider>()
-                            .currentProductModel
-                            .description!
-                            .isNotEmpty,
+                                .read<MainProvider>()
+                                .currentProductModel
+                                .description !=
+                            null,
                         child: Column(
                           children: [
                             Text(
