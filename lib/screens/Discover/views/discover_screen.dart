@@ -343,6 +343,7 @@ class _categoryItem extends StatelessWidget {
           //   ),
           // );
           context.read<CategoriesBloc>().add(FetchSubcategories(category));
+          context.read<CategoryDetailBloc>().cancelLoadProducts();
           if (category.productsCount! > 0) {
             context
                 .read<CategoryDetailBloc>()

@@ -24,121 +24,129 @@ class OrderInfoScreen extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
       ),
-      body: BlocBuilder<OrderDetailBloc, OrderDetailState>(
-        builder: (context, state) {
-          if (state is OrderDetailLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: BlocListener<OrderDetailBloc, OrderDetailState>(
+        listener: (context, state) {
           if (state is OrderDetailError) {
-            return Center(child: Text(state.error));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.error)),
+            );
           }
-          if (state is OrderDetailLoaded) {
-            final products = state.orderDetail.data!.items!;
-            return ListView.builder(
-              padding: const EdgeInsets.all(defaultPadding),
-              itemCount: products.length + 1, // Products + summary info
-              itemBuilder: (context, index) {
-                if (index < products.length) {
-                  final product = products[index];
-                  return SizedBox(
-                    height: 70,
-                    child: Row(
-                      children: [
-                        Image.network(
-                          product.product?.images?.main?.src ?? '',
-                          height: 50,
-                          width: 50,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Image.asset(
-                              'assets/images/placeholder.png', // Path to your fallback image
-                              height: 50,
-                              width: 50,
-                              fit: BoxFit.cover,
-                            );
-                          },
-                        ),
-                        const SizedBox(width: 15),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              AutoSizeText(
-                                product.product?.name.toString() ??
-                                    'Product name',
-                                maxLines: 2,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12, // Max font size
-                                ),
-                                minFontSize: 8, // Minimum font size
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Flexible(
-                                child: Text(
-                                  overflow: TextOverflow.ellipsis,
-                                  product.product?.description ?? 'Description',
+        },
+        child: BlocBuilder<OrderDetailBloc, OrderDetailState>(
+          builder: (context, state) {
+            if (state is OrderDetailLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (state is OrderDetailLoaded) {
+              final products = state.orderDetail.data!.items!;
+              return ListView.builder(
+                padding: const EdgeInsets.all(defaultPadding),
+                itemCount: products.length + 1, // Products + summary info
+                itemBuilder: (context, index) {
+                  if (index < products.length) {
+                    final product = products[index];
+                    return SizedBox(
+                      height: 70,
+                      child: Row(
+                        children: [
+                          Image.network(
+                            product.product?.images?.main?.src ?? '',
+                            height: 50,
+                            width: 50,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                'assets/images/placeholder.png', // Path to your fallback image
+                                height: 50,
+                                width: 50,
+                                fit: BoxFit.cover,
+                              );
+                            },
+                          ),
+                          const SizedBox(width: 15),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                AutoSizeText(
+                                  product.product?.name.toString() ??
+                                      'Product name',
+                                  maxLines: 2,
                                   style: const TextStyle(
-                                      fontSize: 12, color: Colors.grey),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12, // Max font size
+                                  ),
+                                  minFontSize: 8, // Minimum font size
+                                  overflow: TextOverflow.ellipsis,
                                 ),
+                                Flexible(
+                                  child: Text(
+                                    overflow: TextOverflow.ellipsis,
+                                    product.product?.description ??
+                                        'Description',
+                                    style: const TextStyle(
+                                        fontSize: 12, color: Colors.grey),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                'x${product.product?.count}',
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                product.product?.price ?? 'Price',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              'x${product.product?.count}',
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              product.product?.price ?? 'Price',
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    final orderData = state.orderDetail.data;
+                    // After products, display summary information
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildInfoRow(
+                            'Delivery', '${orderData?.addresses?.first.name}'),
+                        _buildInfoRow('Payment',
+                            '${orderData?.paymentMethods?.first.name}'),
+                        // _buildInfoRow('Promo Code', 'SUMMER2024'),
+                        _buildInfoRow(
+                            'Total Cost', '${orderData?.total ?? 'Total'}'),
+                        _buildInfoRow(
+                            'Status', '${orderData?.status ?? 'Status'}'),
+                        // SizedBox(
+                        //   height: 60,
+                        //   child: Row(
+                        //     children: [
+                        //       Expanded(
+                        //           child: ButtonMainWidget(text: 'Order Again')),
+                        //       Gap(10),
+                        //       Expanded(
+                        //           child: ButtonMainWidget(text: 'Cancel Order')),
+                        //     ],
+                        //   ),
+                        // )
                       ],
-                    ),
-                  );
-                } else {
-                  final orderData = state.orderDetail.data;
-                  // After products, display summary information
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildInfoRow(
-                          'Delivery', '${orderData?.addresses?.first.name}'),
-                      _buildInfoRow('Payment',
-                          '${orderData?.paymentMethods?.first.name}'),
-                      // _buildInfoRow('Promo Code', 'SUMMER2024'),
-                      _buildInfoRow(
-                          'Total Cost', '${orderData?.total ?? 'Total'}'),
-                      _buildInfoRow(
-                          'Status', '${orderData?.status ?? 'Status'}'),
-                      // SizedBox(
-                      //   height: 60,
-                      //   child: Row(
-                      //     children: [
-                      //       Expanded(
-                      //           child: ButtonMainWidget(text: 'Order Again')),
-                      //       Gap(10),
-                      //       Expanded(
-                      //           child: ButtonMainWidget(text: 'Cancel Order')),
-                      //     ],
-                      //   ),
-                      // )
-                    ],
-                  );
-                }
-              },
-            );
-          }
-          return const Center(child: CircularProgressIndicator());
-        },
+                    );
+                  }
+                },
+              );
+            }
+            return const Center(child: CircularProgressIndicator());
+          },
+        ),
       ),
     );
   }

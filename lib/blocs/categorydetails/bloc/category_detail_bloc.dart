@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../models/Product/product_model.dart';
 import '../../../models/productby_categoryid.dart';
@@ -14,18 +15,23 @@ class CategoryDetailBloc
   int pagination = 1;
   String categoryId = '';
   List<Product> allProducts = [];
+  CancelToken? _cancelToken =
+      CancelToken(); // CancelToken for HTTP cancellation
+
   CategoryDetailBloc() : super(CategoryDetailInitial()) {
     on<FetchCategoryProductsEvent>((event, emit) async {
       log('Start loadddd FetchCategoryProductsEvent');
       // emit(CategoryDetailLoading());
       try {
         {
+          cancelLoadProducts();
           if (event.page == 0) {
             pagination = 1;
             allProducts.clear();
+            emit(CategoryDetailLoaded(products: allProducts));
           }
-          final response =
-              await _apiService.getProductsByCategory(event.id!, pagination);
+          final response = await _apiService.getProductsByCategory(
+              event.id!, pagination, _cancelToken!);
 
           if (response.statusCode == 200) {
             pagination++;
@@ -45,5 +51,10 @@ class CategoryDetailBloc
         emit(CategoryDetailError(e.toString()));
       }
     });
+  }
+
+  void cancelLoadProducts() {
+    _cancelToken?.cancel();
+    _cancelToken = CancelToken();
   }
 }

@@ -131,10 +131,7 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                   );
                 }
-                return Center(
-                  child:
-                      Text('Cart Load error ${(state as CartError).message}'),
-                );
+                return Container();
               },
             ),
             Column(

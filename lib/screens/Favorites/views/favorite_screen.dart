@@ -20,6 +20,7 @@ class FavoriteScreen extends StatelessWidget {
         searchBar: SuperSearchBar(
           enabled: false,
         ),
+        automaticallyImplyLeading: false,
         backgroundColor:
             Theme.of(context).colorScheme.background.withOpacity(.5),
         title: Text(
