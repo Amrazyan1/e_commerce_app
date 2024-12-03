@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:auto_route/annotations.dart';
@@ -5,7 +7,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
+import 'package:location/location.dart' as loc;
 import '../../../services/api_service.dart';
 import '../../Products/Components/cart_button.dart';
 
@@ -30,6 +32,70 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
   LatLng? _selectedLocation;
   List<Map<String, String>> _addressItems = [];
   String? _regionId; // Example: Can be updated dynamically based on the region.
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentLocation();
+  }
+
+  void getCurrentLocation() async {
+    loc.Location location = loc.Location();
+    print("getCurrentLocation");
+    bool serviceEnabled;
+    loc.PermissionStatus permissionGranted;
+
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
+    print("_serviceEnabled");
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == loc.PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != loc.PermissionStatus.granted) {
+        return;
+      }
+    }
+    print("try location getted");
+    // if (context.read<MapProvider>().currentLocation == null) {
+    //   location.getLocation().then(
+    //     (location) {
+    //       context.read<MapProvider>().currentLocation = location;
+    //       // destination = LatLng(
+    //       //     context.read<MapProvider>().currentLocation!.latitude!,
+    //       //     context.read<MapProvider>().currentLocation!.longitude!);
+
+    //       // print("location getted " + location!.latitude!.toString());
+    //       // if (this.mounted) {
+    //       //   setState(() {
+    //       //     // Your state change code goes here
+    //       //   });
+    //       // }
+    //     },
+    //   );
+    // }
+    log('START GoogleMapController');
+    // GoogleMapController googleMapController = await _mapController.future;
+    // log('START CameraUpdate');
+    // Timer(const Duration(milliseconds: 100), () async {
+    //   log('START ANIMATE');
+    //   await googleMapController.animateCamera(
+    //     CameraUpdate.newCameraPosition(
+    //       CameraPosition(
+    //         zoom: 10,
+    //         target: LatLng(
+    //           context.read<MapProvider>().currentLocation!.latitude!,
+    //           context.read<MapProvider>().currentLocation!.longitude!,
+    //         ),
+    //       ),
+    //     ),
+    //   );
+    // });
+  }
 
   void _onMapTap(LatLng position) async {
     setState(() {
@@ -126,6 +192,10 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
           SizedBox(
             height: 300,
             child: GoogleMap(
+              mapToolbarEnabled: true,
+              compassEnabled: true,
+              myLocationButtonEnabled: true,
+
               cloudMapId:
                   Platform.isAndroid ? "97362ebb6d78549a" : "5f89739bf4061586",
               initialCameraPosition: _initialPosition,
