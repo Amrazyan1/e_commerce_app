@@ -40,7 +40,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   final _searchTextController = TextEditingController();
 
   final ScrollController _scrollController = ScrollController();
-  bool _isLoadingMore = false;
 
   @override
   void initState() {
@@ -55,18 +54,15 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       // Close to the end of the scroll
       log('onscroll +++++');
 
-      if (!_isLoadingMore) {
-        setState(() {
-          _isLoadingMore = true;
-        });
+      if (!context.read<MainProvider>().isLoadingMore) {
+        if (context.read<CategoryDetailBloc>().categoryId.isEmpty) {
+          return;
+        }
+        context.read<MainProvider>().isLoadingMore = true;
 
         context.read<CategoryDetailBloc>().add(FetchCategoryProductsEvent(
             id: context.read<CategoryDetailBloc>().categoryId, page: 1));
       }
-      Future.delayed(Duration(seconds: 2));
-      setState(() {
-        _isLoadingMore = false;
-      });
     }
   }
 
@@ -179,23 +175,40 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               ),
             ),
           ),
-          body: SingleChildScrollView(
+          body: CustomScrollView(
             controller: _scrollController,
-            child: Column(
-              children: [
-                // Categories Section
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
+            slivers: [
+              // Categories Section
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                sliver: BlocListener<CategoriesBloc, CategoriesState>(
+                  listener: (context, state) {
+                    if (state is CategoriesError) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            duration: const Duration(seconds: 5),
+                            content: Text(state.error)),
+                      );
+                    }
+                  },
                   child: BlocBuilder<CategoriesBloc, CategoriesState>(
                     builder: (context, state) {
                       if (state is CategoriesLoading) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const SliverToBoxAdapter(
+                            child: Center(child: CircularProgressIndicator()));
                       } else if (state is CategoriesLoaded) {
-                        return GridView.builder(
-                          physics:
-                              const NeverScrollableScrollPhysics(), // Prevent nested scroll
-                          shrinkWrap:
-                              true, // Make it fit within the scroll view
+                        return SliverGrid(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              final category = state.categories[index];
+                              final products = state.products;
+                              return _categoryItem(
+                                category: category,
+                                productList: products,
+                              );
+                            },
+                            childCount: state.categories.length,
+                          ),
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
@@ -203,50 +216,41 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                             crossAxisSpacing: 8.0,
                             childAspectRatio: 174.5 / 189,
                           ),
-                          itemCount: state.categories.length,
-                          itemBuilder: (context, index) {
-                            final category = state.categories[index];
-                            final products = state.products;
-
-                            return _categoryItem(
-                              category: category,
-                              productList: products,
-                            );
-                          },
                         );
-                      } else if (state is CategoriesError) {
-                        return Center(child: Text('Error: ${state.error}'));
                       }
-                      return const Center(child: Text('No Data'));
+                      return const SliverToBoxAdapter(
+                          child: Center(child: Text('No Data')));
                     },
                   ),
                 ),
-                Gap(20),
-                // Category Details Section
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 20)), // Spacer
+
+              // Category Details Section
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                sliver: BlocListener<CategoryDetailBloc, CategoryDetailState>(
+                  listener: (context, state) {
+                    if (state is CategoryDetailLoaded) {
+                      context.read<MainProvider>().isLoadingMore = false;
+                    }
+                    if (state is CategoryDetailError) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            duration: const Duration(seconds: 5),
+                            content: Text(state.message)),
+                      );
+                    }
+                  },
                   child: BlocBuilder<CategoryDetailBloc, CategoryDetailState>(
                     builder: (context, state) {
                       if (state is CategoryDetailLoaded) {
                         final products = state.products;
-                        return Stack(
-                          children: [
-                            GridView.builder(
-                              padding: EdgeInsets.only(bottom: 80),
-                              physics:
-                                  const NeverScrollableScrollPhysics(), // Prevent nested scroll
-                              shrinkWrap:
-                                  true, // Make it fit within the scroll view
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 8.0,
-                                crossAxisSpacing: 8.0,
-                                childAspectRatio:
-                                    140 / 220, // Match item dimensions
-                              ),
-                              itemCount: state.products.length,
-                              itemBuilder: (context, index) {
+                        return SliverPadding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          sliver: SliverGrid(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) {
                                 return ProductCard(
                                   product: products[index],
                                   press: () {
@@ -262,35 +266,35 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                                   },
                                 );
                               },
+                              childCount: state.products.length,
                             ),
-                            const Positioned(
-                              bottom: 20,
-                              left: 0,
-                              right: 0,
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 8.0,
+                              crossAxisSpacing: 8.0,
+                              childAspectRatio: 140 / 220,
                             ),
-                          ],
+                          ),
                         );
                       } else if (state is CategoryDetailLoading) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (state is CategoryDetailError) {
-                        return Center(
-                          child: Text(state.message),
+                        return const SliverToBoxAdapter(
+                          child: Center(child: CircularProgressIndicator()),
                         );
                       }
-                      return Container();
+                      return const SliverToBoxAdapter(child: SizedBox.shrink());
                     },
                   ),
                 ),
-              ],
-            ),
+              ),
+
+              if (context.watch<MainProvider>().isLoadingMore == true)
+                const SliverToBoxAdapter(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+            ],
           ),
         ),
       ),

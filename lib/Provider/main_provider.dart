@@ -28,6 +28,15 @@ class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
+  bool _isLoadingMore = false;
+  bool get isLoadingMore => _isLoadingMore;
+
+  set isLoadingMore(bool value) {
+    _isLoadingMore = value;
+    log('isloading oreeee $_isLoadingMore');
+    notifyListeners();
+  }
+
   String _categoryName = '';
 
   String get categoryName => _categoryName;

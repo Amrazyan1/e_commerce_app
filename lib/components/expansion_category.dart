@@ -96,12 +96,16 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
                         }
                       });
                     },
-                    title: Flexible(
-                      child: Text(
-                        overflow: TextOverflow.ellipsis,
-                        widget.subCategory[index].title,
-                        style: const TextStyle(fontSize: 14),
-                      ),
+                    title: Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            overflow: TextOverflow.ellipsis,
+                            widget.subCategory[index].title,
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ),
+                      ],
                     ),
                     trailing: SizedBox(
                       width: 100,
