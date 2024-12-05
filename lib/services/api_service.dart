@@ -15,6 +15,24 @@ class ApiService {
 
   ApiService(this._dioClient);
 
+  Future<void> sendPhoneNumber(String phoneNumber) async {
+    final response = await _dioClient.dio.post(
+        'https://your-api-endpoint.com/auth',
+        data: {'phone': phoneNumber});
+    if (response.statusCode != 200) {
+      throw Exception('Failed to send phone number');
+    }
+  }
+
+  Future<void> verifyOtp(String phoneNumber, String otp) async {
+    final response = await _dioClient.dio.post(
+        'https://your-api-endpoint.com/verify',
+        data: {'phone': phoneNumber, 'otp': otp});
+    if (response.statusCode != 200) {
+      throw Exception('OTP verification failed');
+    }
+  }
+
   Future<ReverseGeocodeResponse> reverseGeocode(double lat, double lon) async {
     final response = await _dioClient.dio.get(
       'https://nominatim.openstreetmap.org/reverse',

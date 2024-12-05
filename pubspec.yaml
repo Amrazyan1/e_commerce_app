@@ -37,6 +37,11 @@ dependencies:
   auto_size_text: ^3.0.0
   permission_handler: ^11.3.1
   location: ^6.0.2
+  flutter_keyboard_visibility: ^6.0.0
+  modal_bottom_sheet: ^3.0.0
+  swipeable_page_route: ^0.4.4
+  wolt_modal_sheet: ^0.9.4
+  widget_and_text_animator: ^1.1.5
 
 dev_dependencies:
   flutter_test:
