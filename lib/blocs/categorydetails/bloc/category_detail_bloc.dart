@@ -42,12 +42,14 @@ class CategoryDetailBloc
           if (response.statusCode == 200) {
             pagination++;
 
-            var sgaag = productsByCategroyIdResponseFromJson(response.data);
-            var products = sgaag.data!.products!;
-
+            var responseData =
+                productsByCategroyIdResponseFromJson(response.data);
+            var products = responseData.data!.products;
+            print(responseData.data!.filters);
             allProducts.addAll(products.data!);
 
-            emit(CategoryDetailLoaded(products: allProducts));
+            emit(CategoryDetailLoaded(
+                products: allProducts, filters: responseData.data!.filters));
           } else {
             emit(CategoryDetailError('Failed to fetch subcategories'));
           }

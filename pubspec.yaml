@@ -42,6 +42,7 @@ dependencies:
   swipeable_page_route: ^0.4.4
   wolt_modal_sheet: ^0.9.4
   widget_and_text_animator: ^1.1.5
+  sms_autofill: ^2.3.1
 
 dev_dependencies:
   flutter_test:

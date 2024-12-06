@@ -9,6 +9,7 @@ import 'package:e_commerce_app/components/search_bar_input_field.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/models/category_model_real.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
+import 'package:e_commerce_app/screens/Discover/views/filter_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -100,9 +101,29 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         }
       },
       child: SuperScaffold(
-        key: Key('discvoer'),
+        key: const Key('discvoer'),
         appBar: SuperAppBar(
           automaticallyImplyLeading: false,
+          actions: !_isInitialScreen
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => FilterScreen(
+                              isFirst: true,
+                            ),
+                          ),
+                        );
+                      },
+                      icon: SvgPicture.asset("assets/icons/filter.svg",
+                          color: Theme.of(context).textTheme.bodyLarge!.color),
+                    ),
+                  ],
+                )
+              : null,
           leading: !_isInitialScreen
               ? GestureDetector(
                   onTap: () {
@@ -346,7 +367,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       context.read<MainProvider>().categoryName = category.name ?? 'Unknown';
       context
           .read<CategoryDetailCopyBloc>()
-          .add(FetchCategoryProductsEventCopy(id: category.id!, page: 1));
+          .add(FetchCategoryProductsEventCopy(id: category.id!, page: 0));
       context.router.push(const DiscoverDetailsRoute());
     } else {
       {
@@ -370,6 +391,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     if (_categoryStack.isNotEmpty) {
       // Fetch products for the previous category
       final previousCategory = _categoryStack.last;
+      context.read<CategoryDetailBloc>().categoryId = previousCategory.id!;
       context.read<CategoryDetailBloc>().add(
             FetchCategoryProductsEvent(id: previousCategory.id!, page: 0),
           );

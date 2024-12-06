@@ -15,7 +15,7 @@ class AppRouter extends RootStackRouter {
         ),
         AutoRoute(
           page: AuthorizationRoute.page,
-          path: '/ss',
+          path: '/as',
         ),
         AutoRoute(
           page: OtpRoute.page,

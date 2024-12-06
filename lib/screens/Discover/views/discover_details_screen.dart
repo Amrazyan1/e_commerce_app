@@ -31,7 +31,7 @@ class _DiscoverDetailsScreenState extends State<DiscoverDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SuperScaffold(
-        key: Key('discvoerdetail'),
+        key: const Key('discvoerdetail'),
         transitionBetweenRoutes: true,
         appBar: SuperAppBar(
           automaticallyImplyLeading: false,
@@ -54,7 +54,9 @@ class _DiscoverDetailsScreenState extends State<DiscoverDetailsScreen> {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => FilterScreen(),
+                      builder: (context) => FilterScreen(
+                        isFirst: false,
+                      ),
                     ),
                   );
                 },

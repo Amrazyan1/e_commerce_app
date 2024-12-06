@@ -30,16 +30,16 @@ class DioClient {
           options.headers['Authorization'] = 'Bearer $token';
         }
         options.contentType = Headers.jsonContentType;
-        log('---------------Request -> ${options.path}---------------------');
-        log('${options.data}');
-        log('------------------------------------');
+        // log('---------------Request -> ${options.path}---------------------');
+        // log('${options.data}');
+        // log('------------------------------------');
         return handler.next(options);
       },
       onResponse: (response, handler) {
         // Manually decode response if it's a String
         response.data = json.encode(response.data);
-        log('---------------Response---------------------');
-        log(response.data);
+        // log('---------------Response---------------------');
+        // log(response.data);
         // if (response.data is String) {
         //   try {
         //     response.data = json.decode(response.data);

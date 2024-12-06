@@ -8,8 +8,12 @@ class CategoryDetailLoading extends CategoryDetailState {}
 
 class CategoryDetailLoaded extends CategoryDetailState {
   final List<Product> products;
+  final Map<String, dynamic>? filters; // Add filters here
 
-  CategoryDetailLoaded({required this.products});
+  CategoryDetailLoaded({
+    required this.products,
+    this.filters,
+  });
 }
 
 class CategoryDetailError extends CategoryDetailState {
