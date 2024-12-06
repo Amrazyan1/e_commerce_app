@@ -30,8 +30,10 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
   bool loading = false;
 
   LatLng? _selectedLocation;
-  List<Map<String, String>> _addressItems = [];
   String? _regionId; // Example: Can be updated dynamically based on the region.
+  String _address = ""; // Store address as a single editable string
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
 
   @override
   void initState() {
@@ -41,7 +43,6 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
 
   void getCurrentLocation() async {
     loc.Location location = loc.Location();
-    print("getCurrentLocation");
     bool serviceEnabled;
     loc.PermissionStatus permissionGranted;
 
@@ -52,7 +53,6 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
         return;
       }
     }
-    print("_serviceEnabled");
     permissionGranted = await location.hasPermission();
     if (permissionGranted == loc.PermissionStatus.denied) {
       permissionGranted = await location.requestPermission();
@@ -60,72 +60,33 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
         return;
       }
     }
-    print("try location getted");
-    // if (context.read<MapProvider>().currentLocation == null) {
-    //   location.getLocation().then(
-    //     (location) {
-    //       context.read<MapProvider>().currentLocation = location;
-    //       // destination = LatLng(
-    //       //     context.read<MapProvider>().currentLocation!.latitude!,
-    //       //     context.read<MapProvider>().currentLocation!.longitude!);
-
-    //       // print("location getted " + location!.latitude!.toString());
-    //       // if (this.mounted) {
-    //       //   setState(() {
-    //       //     // Your state change code goes here
-    //       //   });
-    //       // }
-    //     },
-    //   );
-    // }
-    log('START GoogleMapController');
-    // GoogleMapController googleMapController = await _mapController.future;
-    // log('START CameraUpdate');
-    // Timer(const Duration(milliseconds: 100), () async {
-    //   log('START ANIMATE');
-    //   await googleMapController.animateCamera(
-    //     CameraUpdate.newCameraPosition(
-    //       CameraPosition(
-    //         zoom: 10,
-    //         target: LatLng(
-    //           context.read<MapProvider>().currentLocation!.latitude!,
-    //           context.read<MapProvider>().currentLocation!.longitude!,
-    //         ),
-    //       ),
-    //     ),
-    //   );
-    // });
   }
 
   void _onMapTap(LatLng position) async {
     setState(() {
       _selectedLocation = position;
-      _addressItems = []; // Clear previous address items
     });
 
     try {
       final reverseGeocodeResponse = await widget.apiService
           .reverseGeocode(position.latitude, position.longitude);
 
-      // Extract individual fields from the address
       final address = reverseGeocodeResponse.address;
       setState(() {
-        _addressItems = [
-          if (address?.houseNumber != null)
-            {'label': 'House Number', 'value': address!.houseNumber!},
-          if (address?.road != null) {'label': 'Road', 'value': address!.road!},
-          if (address?.city != null) {'label': 'City', 'value': address!.city!},
-          if (address?.postcode != null)
-            {'label': 'Postcode', 'value': address!.postcode!},
-          if (address?.country != null)
-            {'label': 'Country', 'value': address!.country!},
-        ];
+        _nameController.text = address!.city ?? 'New address';
+        _address = [
+          if (address?.houseNumber != null) address!.houseNumber!,
+          if (address?.road != null) address!.road!,
+          if (address?.city != null) address!.city!,
+          if (address?.postcode != null) address!.postcode!,
+          if (address?.country != null) address!.country!,
+        ].join(', ');
+        _addressController.text = _address;
       });
     } catch (e) {
       setState(() {
-        _addressItems = [
-          {'label': 'Error', 'value': 'Failed to fetch address: $e'},
-        ];
+        _address = "Failed to fetch address: $e";
+        _addressController.text = _address;
       });
     }
   }
@@ -143,18 +104,12 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
     });
 
     try {
-      // Construct the address details
       final addressDetails = {
-        'name': _addressItems[2]['value'],
-        'address': _addressItems
-            .map((item) => item['value'])
-            .join(', '), // Combine all address items
-        'details': _addressItems.map((item) => item['value']).join(', '),
-        // 'latitude': _selectedLocation!.latitude.toString(),
-        // 'longitude': _selectedLocation!.longitude.toString(),
+        'name': _nameController.text,
+        'address': _address,
+        'details': _address,
       };
 
-      // Send the data to the backend
       final response = await widget.apiService.addAddress(addressDetails);
       AutoRouter.of(context).maybePop();
     } catch (e) {
@@ -186,61 +141,73 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
                     .copyWith(color: Colors.white),
               ),
       ),
-      body: Column(
-        children: [
-          // Google Map
-          SizedBox(
-            height: 300,
-            child: GoogleMap(
-              mapToolbarEnabled: true,
-              compassEnabled: true,
-              myLocationButtonEnabled: true,
-
-              cloudMapId:
-                  Platform.isAndroid ? "97362ebb6d78549a" : "5f89739bf4061586",
-              initialCameraPosition: _initialPosition,
-              onMapCreated: (GoogleMapController controller) {
-                mapController = controller;
-              },
-              onTap: _onMapTap, // Set tap handler to get location
-              markers: _selectedLocation != null
-                  ? {
-                      Marker(
-                        markerId: const MarkerId('selected_location'),
-                        position: _selectedLocation!,
-                      ),
-                    }
-                  : {},
-              myLocationEnabled: true,
-              zoomControlsEnabled: true,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 300,
+              child: GoogleMap(
+                mapToolbarEnabled: true,
+                compassEnabled: true,
+                myLocationButtonEnabled: true,
+                cloudMapId: Platform.isAndroid
+                    ? "97362ebb6d78549a"
+                    : "5f89739bf4061586",
+                initialCameraPosition: _initialPosition,
+                onMapCreated: (GoogleMapController controller) {
+                  mapController = controller;
+                },
+                onTap: _onMapTap,
+                markers: _selectedLocation != null
+                    ? {
+                        Marker(
+                          markerId: const MarkerId('selected_location'),
+                          position: _selectedLocation!,
+                        ),
+                      }
+                    : {},
+                myLocationEnabled: true,
+                zoomControlsEnabled: true,
+              ),
             ),
-          ),
-
-          // Address Info in ListTiles
-          Expanded(
-            child: _addressItems.isNotEmpty
-                ? ListView.builder(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    itemCount: _addressItems.length,
-                    itemBuilder: (context, index) {
-                      final item = _addressItems[index];
-                      return ListTile(
-                        leading: const Icon(Icons.location_on),
-                        title: Text(item['label']!),
-                        subtitle: Text(item['value']!),
-                      );
-                    },
-                  )
-                : const Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Text(
-                      "Tap on the map to select a location",
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextFormField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                  labelText: "Address name",
+                  border: OutlineInputBorder(),
+                ),
+                minLines: 1, // Minimum height
+                maxLines: null, // Makes the height dynamic based on content
+                keyboardType: TextInputType.multiline, // Allows multiline input
+                onChanged: (value) {
+                  setState(() {
+                    _address = value;
+                  });
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextFormField(
+                controller: _addressController,
+                decoration: const InputDecoration(
+                  labelText: "Delivery Address",
+                  border: OutlineInputBorder(),
+                ),
+                minLines: 1, // Minimum height
+                maxLines: null, // Makes the height dynamic based on content
+                keyboardType: TextInputType.multiline, // Allows multiline input
+                onChanged: (value) {
+                  setState(() {
+                    _address = value;
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
