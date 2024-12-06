@@ -203,18 +203,6 @@ class _FilterScreenState extends State<FilterScreen> {
               controlAffinity: ListTileControlAffinity.leading,
             );
           }),
-        if (value is String || value is num)
-          CheckboxListTile(
-            title: Text(value.toString()),
-            activeColor: ksecondaryColor,
-            value: filterSelections[title]![value.toString()] ??= false,
-            onChanged: (isChecked) {
-              setState(() {
-                filterSelections[title]![value.toString()] = isChecked!;
-              });
-            },
-            controlAffinity: ListTileControlAffinity.leading,
-          ),
         Divider(),
       ],
     );
@@ -225,32 +213,70 @@ class _FilterScreenState extends State<FilterScreen> {
       return MapEntry(
         key,
         options.entries
-            .where((entry) => entry.value) // Only selected items
+            .where((entry) => entry.value) // Include only selected items
             .map((entry) => entry.key)
             .toList(),
       );
     });
 
     log('Selected Filters: $selectedFilters');
-    buildFilterQuery(filterSelections);
-    // Send `selectedFilters` to the server in your desired format
-  }
 
-  String buildFilterQuery(Map<String, Map<String, bool>> filterSelections) {
-    final Map<String, dynamic> queryParameters = {};
+    // Build query parameters dynamically
+    final queryParams = buildDynamicFilterQuery(selectedFilters);
 
-    filterSelections.forEach((key, values) {
-      final selectedValues = values.entries
-          .where((entry) => entry.value) // Include only selected values
-          .map((entry) => entry.key)
-          .toList();
+    // Base query parameters
+    Map<String, dynamic> queryParameters = {
+      'perPage': '20',
+      'page': '1',
+    };
 
-      if (selectedValues.isNotEmpty) {
-        queryParameters['filters[$key][]'] = selectedValues;
+    // Add generated query parameters to the base
+    queryParams.forEach((key, value) {
+      if (key == 'price') {
+        // Add price ranges explicitly
+        value.forEach((rangeKey, rangeValue) {
+          queryParameters['price[$rangeKey]'] = rangeValue;
+        });
+      } else {
+        // Handle all other filters dynamically
+        queryParameters['$key[]'] = value;
       }
     });
-    print(queryParameters);
-    return Uri(queryParameters: queryParameters).query;
+
+    log('Final Query Parameters: $queryParameters');
+
+    // Dispatch event to update the Bloc
+    context.read<CategoryDetailCopyBloc>().add(
+          UpdateFiltersEventCopy(filters: queryParams),
+        );
+
+    // Navigator.of(context).maybePop(); // Close the filter screen
+  }
+
+  Map<String, dynamic> buildDynamicFilterQuery(
+      Map<String, List<String>> selectedFilters) {
+    final Map<String, dynamic> queryParameters = {};
+
+    selectedFilters.forEach((key, selectedValues) {
+      if (selectedValues.isNotEmpty) {
+        if (key == 'price') {
+          // Handle price ranges explicitly
+          final priceParams = <String, String>{};
+          selectedValues.forEach((range) {
+            final rangeKeyValue = range.split(':'); // e.g., "min:2700"
+            if (rangeKeyValue.length == 2) {
+              priceParams[rangeKeyValue[0]] = rangeKeyValue[1];
+            }
+          });
+          queryParameters[key] = priceParams; // Store as map for price
+        } else {
+          // Correctly format filters[key][]
+          queryParameters['filters[$key][]'] = selectedValues;
+        }
+      }
+    });
+
+    return queryParameters;
   }
 
   // Section title widget

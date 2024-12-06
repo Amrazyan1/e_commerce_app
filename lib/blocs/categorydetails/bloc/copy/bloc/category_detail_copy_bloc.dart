@@ -18,6 +18,8 @@ class CategoryDetailCopyBloc
   int pagination = 1;
   String categoryId = '';
   List<Product> allProducts = [];
+  Map<String, dynamic>? currentFilters;
+
   CancelToken? _cancelToken =
       CancelToken(); // CancelToken for HTTP cancellation
   CategoryDetailCopyBloc() : super(CategoryDetailCopyInitial()) {
@@ -33,18 +35,20 @@ class CategoryDetailCopyBloc
             allProducts.clear();
             // emit(CategoryDetailCopyLoaded(products: allProducts));
           }
-          final queryParameters = {
+          Map<String, dynamic> queryParameters = {
             'perPage': 20.toString(),
             'page': pagination.toString(),
           };
-          // Add filters to query parameters if provided
           if (event.filters != null && event.filters!.isNotEmpty) {
-            event.filters!.forEach((key, values) {
-              if (values is List) {
-                queryParameters.addAll(
-                    {for (var value in values) 'filters[$key][]': value});
-              } else {
-                queryParameters['filters[$key][]'] = values.toString();
+            event.filters!.forEach((key, value) {
+              if (key == 'price' && value is Map<String, String>) {
+                // Add price ranges explicitly
+                value.forEach((rangeKey, rangeValue) {
+                  queryParameters['price[$rangeKey]'] = rangeValue;
+                });
+              } else if (value is List) {
+                // Handle dynamic list-based filters
+                queryParameters[key] = value;
               }
             });
           }
@@ -71,6 +75,18 @@ class CategoryDetailCopyBloc
         log(e.toString());
         emit(CategoryDetailCopyError(e.toString()));
       }
+    });
+
+    on<UpdateFiltersEventCopy>((event, emit) async {
+      // Update current filters with the new filters
+      currentFilters = event.filters;
+
+      // Recall FetchCategoryProductsEventCopy with updated filters
+      add(FetchCategoryProductsEventCopy(
+        id: categoryId,
+        page: 0,
+        filters: currentFilters,
+      ));
     });
   }
   void cancelLoadProducts() {

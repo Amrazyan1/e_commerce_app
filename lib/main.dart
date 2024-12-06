@@ -11,6 +11,8 @@ import 'package:e_commerce_app/injector.dart';
 import 'package:e_commerce_app/router/router.dart';
 import 'package:e_commerce_app/services/api_service.dart';
 import 'package:e_commerce_app/services/dio_client.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization_loader/easy_localization_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,61 +31,76 @@ import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platf
 
 final _appRouter = AppRouter(); // Initialize the AppRouter
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   injectGetItServices();
+
   final GoogleMapsFlutterPlatform mapsImplementation =
       GoogleMapsFlutterPlatform.instance;
   if (mapsImplementation is GoogleMapsFlutterAndroid) {
     initializeMapRenderer();
   }
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => MainProvider()),
-      ],
-      child: MultiBlocProvider(
+    EasyLocalization(
+      supportedLocales: const [Locale('en', 'US')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('en', 'US'),
+      assetLoader: SmartNetworkAssetLoader(
+          // token: 'clcbI7yVPTF2ijzmK76oOEvQYr4IHOBi',
+          assetsPath: 'assets/translations',
+          localCacheDuration: const Duration(minutes: 1),
+          localeUrl: (String localeName) =>
+              "https://localise.biz/api/export/locale/",
+          timeout: const Duration(seconds: 15)),
+      child: MultiProvider(
         providers: [
-          BlocProvider(
-            create: (_) => LoginBloc(),
-          ),
-          BlocProvider(
-            create: (context) => SettingsBloc(),
-          ),
-          BlocProvider(
-            create: (context) => CategoriesBloc(),
-          ),
-          BlocProvider(
-            create: (_) => TrendNewProductsBloc(),
-          ),
-          BlocProvider(
-            create: (_) => DiscountedBloc(),
-          ),
-          BlocProvider(
-            create: (_) => PopularProductsBloc(),
-          ),
-          BlocProvider(
-            create: (_) => CartBloc(),
-          ),
-          BlocProvider(
-            create: (_) => FavouritesBloc(),
-          ),
-          BlocProvider(
-            create: (_) => CategoryDetailBloc(),
-          ),
-          BlocProvider(
-            create: (_) => GlobalSearchBloc(),
-          ),
-          BlocProvider(
-            create: (_) => OrdersBloc(),
-          ),
-          BlocProvider(
-            create: (_) => OrderDetailBloc(),
-          ),
-          BlocProvider(
-            create: (_) => CategoryDetailCopyBloc(),
-          ),
+          ChangeNotifierProvider(create: (_) => MainProvider()),
         ],
-        child: const MainApp(),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (_) => LoginBloc(),
+            ),
+            BlocProvider(
+              create: (context) => SettingsBloc(),
+            ),
+            BlocProvider(
+              create: (context) => CategoriesBloc(),
+            ),
+            BlocProvider(
+              create: (_) => TrendNewProductsBloc(),
+            ),
+            BlocProvider(
+              create: (_) => DiscountedBloc(),
+            ),
+            BlocProvider(
+              create: (_) => PopularProductsBloc(),
+            ),
+            BlocProvider(
+              create: (_) => CartBloc(),
+            ),
+            BlocProvider(
+              create: (_) => FavouritesBloc(),
+            ),
+            BlocProvider(
+              create: (_) => CategoryDetailBloc(),
+            ),
+            BlocProvider(
+              create: (_) => GlobalSearchBloc(),
+            ),
+            BlocProvider(
+              create: (_) => OrdersBloc(),
+            ),
+            BlocProvider(
+              create: (_) => OrderDetailBloc(),
+            ),
+            BlocProvider(
+              create: (_) => CategoryDetailCopyBloc(),
+            ),
+          ],
+          child: const MainApp(),
+        ),
       ),
     ),
   );
