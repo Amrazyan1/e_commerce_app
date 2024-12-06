@@ -1,14 +1,12 @@
 import 'package:auto_route/annotations.dart';
 import 'package:e_commerce_app/Provider/main_provider.dart';
+import 'package:e_commerce_app/blocs/categorydetails/bloc/copy/bloc/category_detail_copy_bloc.dart';
 import 'package:e_commerce_app/screens/Discover/views/filter_screen.dart';
 import 'package:e_commerce_app/screens/Products/Components/product_card.dart';
 import 'package:e_commerce_app/screens/Products/product_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../../../blocs/categorydetails/bloc/category_detail_bloc.dart';
-import '../../../blocs/categorydetails/bloc/category_detail_state.dart';
 
 @RoutePage()
 class DiscoverDetailsScreen extends StatelessWidget {
@@ -39,9 +37,9 @@ class DiscoverDetailsScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocBuilder<CategoryDetailBloc, CategoryDetailState>(
+      body: BlocBuilder<CategoryDetailCopyBloc, CategoryDetailCopyState>(
         builder: (context, state) {
-          if (state is CategoryDetailLoaded) {
+          if (state is CategoryDetailCopyLoaded) {
             final products = state.products;
             return Column(
               children: [
@@ -78,11 +76,11 @@ class DiscoverDetailsScreen extends StatelessWidget {
                 ),
               ],
             );
-          } else if (state is CategoryDetailLoading) {
+          } else if (state is CategoryDetailCopyLoading) {
             return const Center(
               child: CircularProgressIndicator(),
             );
-          } else if (state is CategoryDetailError) {
+          } else if (state is CategoryDetailCopyError) {
             return Center(
               child: Text(state.message),
             );

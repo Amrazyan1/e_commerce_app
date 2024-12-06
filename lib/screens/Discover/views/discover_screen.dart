@@ -4,6 +4,7 @@ import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/blocs/categories/bloc/categories_event.dart';
+import 'package:e_commerce_app/blocs/categorydetails/bloc/copy/bloc/category_detail_copy_bloc.dart';
 import 'package:e_commerce_app/components/search_bar_input_field.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/models/category_model_real.dart';
@@ -33,31 +34,41 @@ class DiscoverScreen extends StatefulWidget {
 }
 
 class _DiscoverScreenState extends State<DiscoverScreen> {
-  final List<List<Category>> _categoryStack =
-      []; // Stack to keep track of navigation
+  final List<Category> _categoryStack = []; // Stack to keep track of navigation
   final _searchFocusNode = FocusNode();
 
   final _searchTextController = TextEditingController();
 
   final ScrollController _scrollController = ScrollController();
+  bool _isInitialScreen = true;
 
   @override
   void initState() {
     super.initState();
+    // Fetch categories on first navigation
+    final categoriesState = context.read<CategoriesBloc>().state;
+    if (categoriesState is! CategoriesLoaded) {
+      context.read<CategoriesBloc>().add(FetchCategoriesEvent());
+    } else {
+      setState(() {
+        _isInitialScreen =
+            false; // Set to false if categories are already loaded
+      });
+    }
     _scrollController.addListener(_onScroll);
   }
 
   void _onScroll() {
-    log('onscroll');
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 100) {
       // Close to the end of the scroll
-      log('onscroll +++++');
-
+      log('onscroll +++++ ${context.read<MainProvider>().isLoadingMore}');
       if (!context.read<MainProvider>().isLoadingMore) {
         if (context.read<CategoryDetailBloc>().categoryId.isEmpty) {
           return;
         }
+        log('onscroll +++++');
+
         context.read<MainProvider>().isLoadingMore = true;
 
         context.read<CategoryDetailBloc>().add(FetchCategoryProductsEvent(
@@ -76,301 +87,301 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   Widget build(BuildContext context) {
     return BlocListener<CategoriesBloc, CategoriesState>(
       listener: (context, state) {
+        if (state is CategoriesLoaded && _categoryStack.isEmpty) {
+          setState(() {
+            _isInitialScreen =
+                true; // Ensure this is set only after initial load
+          });
+        }
         if (state is CategoriesLoaded) {
           if (state.products.isNotEmpty) {
             AutoRouter.of(context).push(const DiscoverDetailsRoute());
           }
         }
       },
-      child: WillPopScope(
-        onWillPop: _handleBackNavigation,
-        child: SuperScaffold(
-          key: Key('discvoer'),
-          appBar: SuperAppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor:
-                Theme.of(context).colorScheme.background.withOpacity(.5),
-            title: Text(
-              'Find products',
-              style: Theme.of(context)
-                  .textTheme
-                  .labelMedium!
-                  .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-            ),
-            largeTitle: SuperLargeTitle(
-              largeTitle: 'Find products',
-              textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 24,
-                    letterSpacing: 0,
-                  ),
-            ),
-            searchBar: SuperSearchBar(
-              searchFocusNode: _searchFocusNode,
-              searchController: _searchTextController,
-              textStyle: Theme.of(context).textTheme.bodyLarge!,
-              onFocused: (value) {
-                if (!value) {}
+      child: SuperScaffold(
+        appBar: SuperAppBar(
+          automaticallyImplyLeading: false,
+          leading: !_isInitialScreen
+              ? IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: _handleBackNavigation,
+                )
+              : null,
+          backgroundColor:
+              Theme.of(context).colorScheme.background.withOpacity(.5),
+          title: Text(
+            'Find products',
+            style: Theme.of(context)
+                .textTheme
+                .labelMedium!
+                .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+          ),
+          largeTitle: SuperLargeTitle(
+            largeTitle: 'Find products',
+            textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 24,
+                  letterSpacing: 0,
+                ),
+          ),
+          searchBar: SuperSearchBar(
+            searchFocusNode: _searchFocusNode,
+            searchController: _searchTextController,
+            textStyle: Theme.of(context).textTheme.bodyLarge!,
+            onFocused: (value) {
+              if (!value) {}
+            },
+            onSubmitted: (value) {
+              context.read<GlobalSearchBloc>().add(PerformGlobalSearch(
+                    keyword: value,
+                    perPage: 20,
+                  ));
+            },
+            cancelTextStyle: Theme.of(context).textTheme.bodyLarge!,
+            onChanged: (value) {},
+            searchResult: BlocBuilder<GlobalSearchBloc, GlobalSearchState>(
+              builder: (context, state) {
+                if (state is GlobalSearchLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is GlobalSearchLoaded) {
+                  // Display results in a GridView
+                  return Padding(
+                    padding: const EdgeInsets.all(defaultPadding),
+                    child: GridView.builder(
+                      itemCount:
+                          state.results.data!.products!.data!.data!.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 8.0,
+                        crossAxisSpacing: 8.0,
+                        childAspectRatio: 140 / 220, // Match item dimensions
+                      ),
+                      itemBuilder: (context, index) {
+                        final product =
+                            state.results.data!.products!.data!.data![index];
+                        return ProductCard(
+                          product: product,
+                          press: () {
+                            _searchFocusNode.requestFocus();
+                            Future.delayed(const Duration(milliseconds: 10),
+                                () {
+                              _searchFocusNode.unfocus();
+                              _searchTextController.clear();
+
+                              context.read<MainProvider>().currentProductModel =
+                                  product;
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ProductDetailsScreen(),
+                                ),
+                              );
+                            });
+                          },
+                        );
+                      },
+                    ),
+                  );
+                } else if (state is GlobalSearchError) {
+                  return Center(child: Text(state.message));
+                } else {
+                  // Initial state or no results
+                  return const Center(child: Text('Start typing to search'));
+                }
               },
-              onSubmitted: (value) {
-                context.read<GlobalSearchBloc>().add(PerformGlobalSearch(
-                      keyword: value,
-                      perPage: 20,
-                    ));
-              },
-              cancelTextStyle: Theme.of(context).textTheme.bodyLarge!,
-              onChanged: (value) {},
-              searchResult: BlocBuilder<GlobalSearchBloc, GlobalSearchState>(
-                builder: (context, state) {
-                  if (state is GlobalSearchLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state is GlobalSearchLoaded) {
-                    // Display results in a GridView
-                    return Padding(
-                      padding: const EdgeInsets.all(defaultPadding),
-                      child: GridView.builder(
-                        itemCount:
-                            state.results.data!.products!.data!.data!.length,
+            ),
+          ),
+        ),
+        body: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            // Categories Section
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              sliver: BlocListener<CategoriesBloc, CategoriesState>(
+                listener: (context, state) {
+                  if (state is CategoriesError) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                          duration: const Duration(seconds: 5),
+                          content: Text(state.error)),
+                    );
+                  }
+                },
+                child: BlocBuilder<CategoriesBloc, CategoriesState>(
+                  builder: (context, state) {
+                    if (state is CategoriesLoading) {
+                      return const SliverToBoxAdapter(
+                          child: Center(child: CircularProgressIndicator()));
+                    } else if (state is CategoriesLoaded) {
+                      return SliverGrid(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            final category = state.categories[index];
+                            final products = state.products;
+                            return _categoryItem(
+                                category: category,
+                                productList: products,
+                                onTap: _onCategoryTap);
+                          },
+                          childCount: state.categories.length,
+                        ),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           mainAxisSpacing: 8.0,
                           crossAxisSpacing: 8.0,
-                          childAspectRatio: 140 / 220, // Match item dimensions
+                          childAspectRatio: 174.5 / 189,
                         ),
-                        itemBuilder: (context, index) {
-                          final product =
-                              state.results.data!.products!.data!.data![index];
-                          return ProductCard(
-                            product: product,
-                            press: () {
-                              _searchFocusNode.requestFocus();
-                              Future.delayed(const Duration(milliseconds: 10),
-                                  () {
-                                _searchFocusNode.unfocus();
-                                _searchTextController.clear();
-
-                                context
-                                    .read<MainProvider>()
-                                    .currentProductModel = product;
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ProductDetailsScreen(),
-                                  ),
-                                );
-                              });
-                            },
-                          );
-                        },
-                      ),
-                    );
-                  } else if (state is GlobalSearchError) {
-                    return Center(child: Text(state.message));
-                  } else {
-                    // Initial state or no results
-                    return const Center(child: Text('Start typing to search'));
-                  }
-                },
-              ),
-            ),
-          ),
-          body: CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              // Categories Section
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                sliver: BlocListener<CategoriesBloc, CategoriesState>(
-                  listener: (context, state) {
-                    if (state is CategoriesError) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                            duration: const Duration(seconds: 5),
-                            content: Text(state.error)),
                       );
                     }
+                    return const SliverToBoxAdapter(
+                        child: Center(child: Text('No Data')));
                   },
-                  child: BlocBuilder<CategoriesBloc, CategoriesState>(
-                    builder: (context, state) {
-                      if (state is CategoriesLoading) {
-                        return const SliverToBoxAdapter(
-                            child: Center(child: CircularProgressIndicator()));
-                      } else if (state is CategoriesLoaded) {
-                        return SliverGrid(
+                ),
+              ),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 20)), // Spacer
+
+            // Category Details Section
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              sliver: BlocListener<CategoryDetailBloc, CategoryDetailState>(
+                listener: (context, state) {
+                  if (state is CategoryDetailLoaded) {
+                    context.read<MainProvider>().isLoadingMore = false;
+                  }
+                  if (state is CategoryDetailError) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                          duration: const Duration(seconds: 5),
+                          content: Text(state.message)),
+                    );
+                  }
+                },
+                child: BlocBuilder<CategoryDetailBloc, CategoryDetailState>(
+                  builder: (context, state) {
+                    if (state is CategoryDetailLoaded) {
+                      final products = state.products;
+                      return SliverPadding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        sliver: SliverGrid(
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
-                              final category = state.categories[index];
-                              final products = state.products;
-                              return _categoryItem(
-                                category: category,
-                                productList: products,
+                              return ProductCard(
+                                product: products[index],
+                                press: () {
+                                  context
+                                      .read<MainProvider>()
+                                      .currentProductModel = products[index];
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ProductDetailsScreen(),
+                                    ),
+                                  );
+                                },
                               );
                             },
-                            childCount: state.categories.length,
+                            childCount: state.products.length,
                           ),
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             mainAxisSpacing: 8.0,
                             crossAxisSpacing: 8.0,
-                            childAspectRatio: 174.5 / 189,
+                            childAspectRatio: 140 / 220,
                           ),
-                        );
-                      }
+                        ),
+                      );
+                    } else if (state is CategoryDetailLoading) {
                       return const SliverToBoxAdapter(
-                          child: Center(child: Text('No Data')));
-                    },
-                  ),
-                ),
-              ),
-              const SliverToBoxAdapter(child: SizedBox(height: 20)), // Spacer
-
-              // Category Details Section
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                sliver: BlocListener<CategoryDetailBloc, CategoryDetailState>(
-                  listener: (context, state) {
-                    if (state is CategoryDetailLoaded) {
-                      context.read<MainProvider>().isLoadingMore = false;
-                    }
-                    if (state is CategoryDetailError) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                            duration: const Duration(seconds: 5),
-                            content: Text(state.message)),
+                        child: Center(child: CircularProgressIndicator()),
                       );
                     }
+                    return const SliverToBoxAdapter(child: SizedBox.shrink());
                   },
-                  child: BlocBuilder<CategoryDetailBloc, CategoryDetailState>(
-                    builder: (context, state) {
-                      if (state is CategoryDetailLoaded) {
-                        final products = state.products;
-                        return SliverPadding(
-                          padding: const EdgeInsets.only(bottom: 20),
-                          sliver: SliverGrid(
-                            delegate: SliverChildBuilderDelegate(
-                              (context, index) {
-                                return ProductCard(
-                                  product: products[index],
-                                  press: () {
-                                    context
-                                        .read<MainProvider>()
-                                        .currentProductModel = products[index];
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ProductDetailsScreen(),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                              childCount: state.products.length,
-                            ),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 8.0,
-                              crossAxisSpacing: 8.0,
-                              childAspectRatio: 140 / 220,
-                            ),
-                          ),
-                        );
-                      } else if (state is CategoryDetailLoading) {
-                        return const SliverToBoxAdapter(
-                          child: Center(child: CircularProgressIndicator()),
-                        );
-                      }
-                      return const SliverToBoxAdapter(child: SizedBox.shrink());
-                    },
-                  ),
                 ),
               ),
+            ),
 
-              if (context.watch<MainProvider>().isLoadingMore == true)
-                const SliverToBoxAdapter(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
+            if (context.watch<MainProvider>().isLoadingMore == true)
+              const SliverToBoxAdapter(
+                child: Center(
+                  child: CircularProgressIndicator(),
                 ),
-            ],
-          ),
+              ),
+          ],
         ),
       ),
     );
   }
 
-  Future<bool> _handleBackNavigation() async {
-    return true;
-    // log('${_categoryStack.length}');
-    // if (_categoryStack.length > 1) {
-    //   _categoryStack.removeLast(); // Remove current category
-    //   final previousCategories = _categoryStack.last;
+  void _onCategoryTap(Category category) {
+    context.read<CategoryDetailBloc>().categoryId = category.id!;
 
-    //   context.read<CategoriesBloc>().add(
-    //         FetchSubcategories(
-    //             previousCategories.first), // Go back to previous category
-    //       );
-
-    //   return false; // Prevent the app from closing
-    // }
-    // return true; // Allow the app to close
+    if ((category.subcategories ?? []).isNotEmpty) {
+      setState(() {
+        _categoryStack.add(category);
+        _isInitialScreen = false; // Add the new category to the stack
+      });
+      context.read<CategoriesBloc>().add(FetchSubcategories(category));
+      context.read<CategoryDetailBloc>().cancelLoadProducts();
+      if (category.productsCount! > 0) {
+        context
+            .read<CategoryDetailBloc>()
+            .add(FetchCategoryProductsEvent(id: category.id!, page: 0));
+      }
+    } else if (category.productsCount! > 0) {
+      context.read<MainProvider>().categoryName = category.name ?? 'Unknown';
+      context
+          .read<CategoryDetailCopyBloc>()
+          .add(FetchCategoryProductsEventCopy(id: category.id!, page: 0));
+      context.router.push(const DiscoverDetailsRoute());
+    } else {
+      {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('${category.name} has no subcategories')),
+        );
+      }
+    }
   }
-}
 
-class _categoryItem extends StatelessWidget {
-  const _categoryItem({
-    super.key,
-    required this.category,
-    required this.productList,
-  });
+  void _handleBackNavigation() {
+    setState(() {
+      if (_categoryStack.isNotEmpty) {
+        _categoryStack.removeLast(); // Go back in stack
+      }
+      context.read<CategoryDetailBloc>().categoryId = '';
+      _isInitialScreen = _categoryStack.isEmpty;
+      context.read<CategoriesBloc>().add(FetchCategoriesEvent());
+      context.read<CategoryDetailBloc>().add(
+            FetchCategoryProductsEvent(id: '', page: 0),
+          );
+    });
 
-  final Category category;
-  final List<Product> productList;
-  @override
-  Widget build(BuildContext context) {
+    if (_categoryStack.isNotEmpty) {
+      // Fetch products for the previous category
+      final previousCategory = _categoryStack.last;
+      context.read<CategoryDetailBloc>().add(
+            FetchCategoryProductsEvent(id: previousCategory.id!, page: 0),
+          );
+    }
+  }
+
+  Widget _categoryItem({
+    required Category category,
+    required List<Product> productList,
+    required void Function(Category category) onTap,
+  }) {
     return GestureDetector(
-      onTap: () {
-        context.read<CategoryDetailBloc>().categoryId = category.id!;
-        if ((category.subcategories ?? []).isNotEmpty) {
-          AutoRouter.of(context).push(const DiscoverRoute());
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (_) => DiscoverScreen(
-          //         // categories: category.subcategories, // Pass subcategories
-          //         ),
-          //   ),
-          // );
-          context.read<CategoriesBloc>().add(FetchSubcategories(category));
-          context.read<CategoryDetailBloc>().cancelLoadProducts();
-          if (category.productsCount! > 0) {
-            context
-                .read<CategoryDetailBloc>()
-                .add(FetchCategoryProductsEvent(id: category.id!, page: 0));
-          }
-        } else if (category.productsCount! > 0) {
-          context.read<MainProvider>().categoryName =
-              category.name ?? 'Unknown';
-          context
-              .read<CategoryDetailBloc>()
-              .add(FetchCategoryProductsEvent(id: category.id!, page: 0));
-          AutoRouter.of(context).push(const DiscoverDetailsRoute());
-        } else {
-          // if (category.productsCount! > 0) {
-          //   context.read<CategoriesBloc>().add(FetchSubcategories(category));
-          // } else
-          {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('${category.name} has no subcategories')),
-            );
-          }
-        }
-      },
+      onTap: () => onTap(category),
       child: Container(
         width: 174.5,
         height: 189,
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: ksecondaryColor.withOpacity(0.2),
           borderRadius: BorderRadius.circular(10),
@@ -411,8 +422,6 @@ class _categoryItem extends StatelessWidget {
         width: 60,
         height: 60,
         placeholderBuilder: (context) => const CircularProgressIndicator(),
-        // errorBuilder: (context, error, stackTrace) =>
-        //     const Icon(Icons.error, size: 60),
       );
     } else {
       return Image.network(
