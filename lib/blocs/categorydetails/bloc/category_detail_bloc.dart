@@ -27,8 +27,11 @@ class CategoryDetailBloc
           cancelLoadProducts();
           if (event.page == 0) {
             pagination = 1;
+
             allProducts.clear();
+            log('CLEAR CategoryDetailLoaded');
             emit(CategoryDetailLoaded(products: allProducts));
+            return;
           }
           if (event.id.isEmpty) {
             return;

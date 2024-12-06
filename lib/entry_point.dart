@@ -3,6 +3,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/blocs/cart/bloc/cart_bloc.dart';
 import 'package:e_commerce_app/blocs/categories/bloc/categories_bloc.dart';
 import 'package:e_commerce_app/blocs/categories/bloc/categories_event.dart';
+import 'package:e_commerce_app/blocs/categorydetails/bloc/category_detail_bloc.dart';
+import 'package:e_commerce_app/blocs/categorydetails/bloc/category_detail_event.dart';
 import 'package:e_commerce_app/blocs/favourites/bloc/favourites_bloc.dart';
 import 'package:e_commerce_app/blocs/settings/bloc/settings_bloc.dart';
 import 'package:e_commerce_app/blocs/settings/bloc/settings_event.dart';
@@ -156,6 +158,10 @@ class _EntryPointState extends State<EntryPoint> {
           break;
         case 1:
           context.read<CategoriesBloc>().add(FetchCategoriesEvent());
+          context.read<CategoryDetailBloc>().cancelLoadProducts();
+          context
+              .read<CategoryDetailBloc>()
+              .add(FetchCategoryProductsEvent(id: '', page: 0));
 
           break;
         case 2:

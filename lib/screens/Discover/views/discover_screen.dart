@@ -100,12 +100,20 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         }
       },
       child: SuperScaffold(
+        key: Key('discvoer'),
         appBar: SuperAppBar(
           automaticallyImplyLeading: false,
           leading: !_isInitialScreen
-              ? IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: _handleBackNavigation,
+              ? GestureDetector(
+                  onTap: () {
+                    _handleBackNavigation();
+                  },
+                  child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+                    child: SvgPicture.asset("assets/icons/arrow_back.svg",
+                        color: Theme.of(context).textTheme.bodyLarge!.color),
+                  ),
                 )
               : null,
           backgroundColor:
@@ -332,13 +340,13 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       if (category.productsCount! > 0) {
         context
             .read<CategoryDetailBloc>()
-            .add(FetchCategoryProductsEvent(id: category.id!, page: 0));
+            .add(FetchCategoryProductsEvent(id: category.id!, page: 1));
       }
     } else if (category.productsCount! > 0) {
       context.read<MainProvider>().categoryName = category.name ?? 'Unknown';
       context
           .read<CategoryDetailCopyBloc>()
-          .add(FetchCategoryProductsEventCopy(id: category.id!, page: 0));
+          .add(FetchCategoryProductsEventCopy(id: category.id!, page: 1));
       context.router.push(const DiscoverDetailsRoute());
     } else {
       {
@@ -350,16 +358,13 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   }
 
   void _handleBackNavigation() {
+    context.read<CategoryDetailBloc>().cancelLoadProducts();
+
     setState(() {
       if (_categoryStack.isNotEmpty) {
         _categoryStack.removeLast(); // Go back in stack
       }
-      context.read<CategoryDetailBloc>().categoryId = '';
       _isInitialScreen = _categoryStack.isEmpty;
-      context.read<CategoriesBloc>().add(FetchCategoriesEvent());
-      context.read<CategoryDetailBloc>().add(
-            FetchCategoryProductsEvent(id: '', page: 0),
-          );
     });
 
     if (_categoryStack.isNotEmpty) {
@@ -367,6 +372,12 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       final previousCategory = _categoryStack.last;
       context.read<CategoryDetailBloc>().add(
             FetchCategoryProductsEvent(id: previousCategory.id!, page: 0),
+          );
+    } else {
+      context.read<CategoryDetailBloc>().categoryId = '';
+      context.read<CategoriesBloc>().add(FetchCategoriesEvent());
+      context.read<CategoryDetailBloc>().add(
+            FetchCategoryProductsEvent(id: '', page: 0),
           );
     }
   }
