@@ -41,7 +41,8 @@ class Endpoints {
   // static const String getCategoryBreadcrumbs = '/categories/{id}/breadcrumbs';
   static const String getProductsByCategory =
       '/categories/{id}/products?perPage={perPage}&page={page}';
-
+  static const String getProductsByCategoryWithQuery =
+      '/categories/{id}/products';
   // Contents
   static const String getContentsByKeys = '/contents?keys={keys}';
 

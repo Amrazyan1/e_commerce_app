@@ -22,19 +22,20 @@ class _FilterScreenState extends State<FilterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.isFirst ? _catDetailBloc() : _catDetailCopyBloc();
+    return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text(
+            'Filters',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+        ),
+        body: widget.isFirst ? _catDetailBloc() : _catDetailCopyBloc());
   }
 
-  Scaffold _catDetailBloc() {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          'Filters',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        ),
-      ),
-      body: BlocBuilder<CategoryDetailBloc, CategoryDetailState>(
+  Container _catDetailBloc() {
+    return Container(
+      child: BlocBuilder<CategoryDetailBloc, CategoryDetailState>(
         builder: (context, state) {
           if (state is CategoryDetailLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -78,7 +79,6 @@ class _FilterScreenState extends State<FilterScreen> {
                       ],
                     ),
                   ),
-                  _catDetailCopyBloc(),
                   SizedBox(
                       height: 50,
                       child: ButtonMainWidget(
@@ -96,16 +96,9 @@ class _FilterScreenState extends State<FilterScreen> {
     );
   }
 
-  Scaffold _catDetailCopyBloc() {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          'Filters',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        ),
-      ),
-      body: BlocBuilder<CategoryDetailCopyBloc, CategoryDetailCopyState>(
+  Container _catDetailCopyBloc() {
+    return Container(
+      child: BlocBuilder<CategoryDetailCopyBloc, CategoryDetailCopyState>(
         builder: (context, state) {
           if (state is CategoryDetailCopyLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -149,7 +142,6 @@ class _FilterScreenState extends State<FilterScreen> {
                       ],
                     ),
                   ),
-                  _catDetailCopyBloc(),
                   SizedBox(
                       height: 50,
                       child: ButtonMainWidget(

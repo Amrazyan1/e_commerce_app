@@ -26,14 +26,31 @@ class CategoryDetailCopyBloc
       emit(CategoryDetailCopyLoading());
       try {
         {
+          categoryId = event.id;
           cancelLoadProducts();
           if (event.page == 0) {
             pagination = 1;
             allProducts.clear();
             // emit(CategoryDetailCopyLoaded(products: allProducts));
           }
-          final response = await _apiService.getProductsByCategory(
-              event.id!, pagination, _cancelToken!);
+          final queryParameters = {
+            'perPage': 20.toString(),
+            'page': pagination.toString(),
+          };
+          // Add filters to query parameters if provided
+          if (event.filters != null && event.filters!.isNotEmpty) {
+            event.filters!.forEach((key, values) {
+              if (values is List) {
+                queryParameters.addAll(
+                    {for (var value in values) 'filters[$key][]': value});
+              } else {
+                queryParameters['filters[$key][]'] = values.toString();
+              }
+            });
+          }
+
+          final response = await _apiService.getProductsByCategoryWithQuery(
+              event.id!, queryParameters, _cancelToken!);
 
           if (response.statusCode == 200) {
             pagination++;

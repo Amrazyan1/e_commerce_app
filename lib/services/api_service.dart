@@ -452,6 +452,18 @@ class ApiService {
     }
   }
 
+  Future<Response> getProductsByCategoryWithQuery(String id,
+      Map<String, dynamic> queryParams, CancelToken cancelToken) async {
+    try {
+      return await _dioClient.dio.get(
+          Endpoints.getProductsByCategoryWithQuery.replaceFirst('{id}', id),
+          queryParameters: queryParams,
+          cancelToken: cancelToken);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<Response> getProductById(String id, int perPage) async {
     try {
       return await _dioClient.dio.get(
