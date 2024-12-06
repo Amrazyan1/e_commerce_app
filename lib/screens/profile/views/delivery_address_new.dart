@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:e_commerce_app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -59,6 +60,16 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
       if (permissionGranted != loc.PermissionStatus.granted) {
         return;
       }
+    }
+
+    final userLocation = await location.getLocation();
+    if (userLocation.latitude != null && userLocation.longitude != null) {
+      mapController.animateCamera(
+        CameraUpdate.newLatLng(
+          LatLng(userLocation.latitude!, userLocation.longitude!),
+        ),
+      );
+      _onMapTap(LatLng(userLocation.latitude!, userLocation.longitude!));
     }
   }
 
@@ -146,28 +157,42 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
           children: [
             SizedBox(
               height: 300,
-              child: GoogleMap(
-                mapToolbarEnabled: true,
-                compassEnabled: true,
-                myLocationButtonEnabled: true,
-                cloudMapId: Platform.isAndroid
-                    ? "97362ebb6d78549a"
-                    : "5f89739bf4061586",
-                initialCameraPosition: _initialPosition,
-                onMapCreated: (GoogleMapController controller) {
-                  mapController = controller;
-                },
-                onTap: _onMapTap,
-                markers: _selectedLocation != null
-                    ? {
-                        Marker(
-                          markerId: const MarkerId('selected_location'),
-                          position: _selectedLocation!,
-                        ),
-                      }
-                    : {},
-                myLocationEnabled: true,
-                zoomControlsEnabled: true,
+              child: Stack(
+                children: [
+                  GoogleMap(
+                    mapToolbarEnabled: true,
+                    compassEnabled: true,
+                    myLocationButtonEnabled: true,
+                    cloudMapId: Platform.isAndroid
+                        ? "97362ebb6d78549a"
+                        : "5f89739bf4061586",
+                    initialCameraPosition: _initialPosition,
+                    onMapCreated: (GoogleMapController controller) {
+                      mapController = controller;
+                    },
+                    onTap: _onMapTap,
+                    markers: _selectedLocation != null
+                        ? {
+                            Marker(
+                              markerId: const MarkerId('selected_location'),
+                              position: _selectedLocation!,
+                            ),
+                          }
+                        : {},
+                    myLocationEnabled: true,
+                    zoomControlsEnabled: false,
+                  ),
+                  Positioned(
+                    bottom: 16, // Position slightly above the bottom of the map
+                    right: 16, // Position slightly from the right edge
+                    child: FloatingActionButton(
+                      backgroundColor: kprimaryColor,
+                      onPressed:
+                          getCurrentLocation, // Centers map on current location
+                      child: const Icon(Icons.my_location, color: Colors.white),
+                    ),
+                  ),
+                ],
               ),
             ),
             Padding(
