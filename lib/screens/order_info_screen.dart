@@ -118,9 +118,8 @@ class OrderInfoScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildInfoRow(
-                            'Delivery', '${orderData?.addresses?.first.name}'),
-                        _buildInfoRow('Payment',
-                            '${orderData?.paymentMethods?.first.name}'),
+                            'Delivery', '${orderData?.address['name']}'),
+                        _buildInfoRow('Payment', '${orderData?.method}'),
                         // _buildInfoRow('Promo Code', 'SUMMER2024'),
                         _buildInfoRow(
                             'Total Cost', '${orderData?.total ?? 'Total'}'),
