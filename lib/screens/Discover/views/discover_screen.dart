@@ -155,73 +155,76 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                 ),
           ),
           searchBar: SuperSearchBar(
-            searchFocusNode: _searchFocusNode,
-            searchController: _searchTextController,
-            textStyle: Theme.of(context).textTheme.bodyLarge!,
-            onFocused: (value) {
-              if (!value) {}
-            },
-            onSubmitted: (value) {
-              context.read<GlobalSearchBloc>().add(PerformGlobalSearch(
-                    keyword: value,
-                    perPage: 20,
-                  ));
-            },
-            cancelTextStyle: Theme.of(context).textTheme.bodyLarge!,
-            onChanged: (value) {},
-            searchResult: BlocBuilder<GlobalSearchBloc, GlobalSearchState>(
-              builder: (context, state) {
-                if (state is GlobalSearchLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is GlobalSearchLoaded) {
-                  // Display results in a GridView
-                  return Padding(
-                    padding: const EdgeInsets.all(defaultPadding),
-                    child: GridView.builder(
-                      itemCount:
-                          state.results.data!.products!.data!.data!.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 8.0,
-                        crossAxisSpacing: 8.0,
-                        childAspectRatio: 140 / 220, // Match item dimensions
-                      ),
-                      itemBuilder: (context, index) {
-                        final product =
-                            state.results.data!.products!.data!.data![index];
-                        return ProductCard(
-                          product: product,
-                          press: () {
-                            _searchFocusNode.requestFocus();
-                            Future.delayed(const Duration(milliseconds: 10),
-                                () {
-                              _searchFocusNode.unfocus();
-                              _searchTextController.clear();
-
-                              context.read<MainProvider>().currentProductModel =
-                                  product;
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ProductDetailsScreen(),
-                                ),
-                              );
-                            });
-                          },
-                        );
-                      },
-                    ),
-                  );
-                } else if (state is GlobalSearchError) {
-                  return Center(child: Text(state.message));
-                } else {
-                  // Initial state or no results
-                  return const Center(child: Text('Start typing to search'));
-                }
-              },
-            ),
+            enabled: false,
           ),
+          // searchBar: SuperSearchBar(
+          //   searchFocusNode: _searchFocusNode,
+          //   searchController: _searchTextController,
+          //   textStyle: Theme.of(context).textTheme.bodyLarge!,
+          //   onFocused: (value) {
+          //     if (!value) {}
+          //   },
+          //   onSubmitted: (value) {
+          //     context.read<GlobalSearchBloc>().add(PerformGlobalSearch(
+          //           keyword: value,
+          //           perPage: 20,
+          //         ));
+          //   },
+          //   cancelTextStyle: Theme.of(context).textTheme.bodyLarge!,
+          //   onChanged: (value) {},
+          //   searchResult: BlocBuilder<GlobalSearchBloc, GlobalSearchState>(
+          //     builder: (context, state) {
+          //       if (state is GlobalSearchLoading) {
+          //         return const Center(child: CircularProgressIndicator());
+          //       } else if (state is GlobalSearchLoaded) {
+          //         // Display results in a GridView
+          //         return Padding(
+          //           padding: const EdgeInsets.all(defaultPadding),
+          //           child: GridView.builder(
+          //             itemCount:
+          //                 state.results.data!.products!.data!.data!.length,
+          //             gridDelegate:
+          //                 const SliverGridDelegateWithFixedCrossAxisCount(
+          //               crossAxisCount: 2,
+          //               mainAxisSpacing: 8.0,
+          //               crossAxisSpacing: 8.0,
+          //               childAspectRatio: 140 / 220, // Match item dimensions
+          //             ),
+          //             itemBuilder: (context, index) {
+          //               final product =
+          //                   state.results.data!.products!.data!.data![index];
+          //               return ProductCard(
+          //                 product: product,
+          //                 press: () {
+          //                   _searchFocusNode.requestFocus();
+          //                   Future.delayed(const Duration(milliseconds: 10),
+          //                       () {
+          //                     _searchFocusNode.unfocus();
+          //                     _searchTextController.clear();
+
+          //                     context.read<MainProvider>().currentProductModel =
+          //                         product;
+          //                     Navigator.of(context).push(
+          //                       MaterialPageRoute(
+          //                         builder: (context) =>
+          //                             const ProductDetailsScreen(),
+          //                       ),
+          //                     );
+          //                   });
+          //                 },
+          //               );
+          //             },
+          //           ),
+          //         );
+          //       } else if (state is GlobalSearchError) {
+          //         return Center(child: Text(state.message));
+          //       } else {
+          //         // Initial state or no results
+          //         return const Center(child: Text('Start typing to search'));
+          //       }
+          //     },
+          //   ),
+          // ),
         ),
         body: CustomScrollView(
           controller: _scrollController,

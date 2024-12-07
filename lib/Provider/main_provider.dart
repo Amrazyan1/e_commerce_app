@@ -37,6 +37,15 @@ class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
+  bool _isProcessOrder = false;
+  bool get isProcessOrder => _isProcessOrder;
+
+  set isProcessOrder(bool value) {
+    _isProcessOrder = value;
+    log('isloading oreeee $_isProcessOrder');
+    notifyListeners();
+  }
+
   String _categoryName = '';
 
   String get categoryName => _categoryName;

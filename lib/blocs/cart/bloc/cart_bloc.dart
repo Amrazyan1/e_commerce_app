@@ -151,14 +151,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     on<ClearCart>((event, emit) async {
       try {
-        emit(CartLoading());
+        // emit(CartLoading());
         final response = await _apiService.deleteCarts();
-        CartResponseData responseData =
-            cartProductsResponseFromJson(response.data).data!;
-        products = responseData.list;
-        _productsService.cartProducts = products ?? [];
-        emit(CartLoaded(products ?? [], responseData.subtotal,
-            responseData.discount, responseData.total, responseData.count));
+        if (response.statusCode == 200) {
+          products = [];
+          _productsService.cartProducts = products ?? [];
+          emit(CartLoaded(products ?? [], '0.00', '0.00', '0.00', 0));
+        }
       } catch (e) {
         emit(CartError(e.toString()));
       }

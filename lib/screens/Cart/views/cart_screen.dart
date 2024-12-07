@@ -64,7 +64,7 @@ class _CartScreenState extends State<CartScreen> {
       listener: (context, state) {
         if (state is CartPlaceOrderState && !_isModalShown) {
           _isModalShown = true; // Ensure modal is shown only once
-
+          context.read<MainProvider>().isProcessOrder = false;
           customModalBottomSheet(
             context,
             isDismissible: true,

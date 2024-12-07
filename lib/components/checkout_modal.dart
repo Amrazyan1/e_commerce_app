@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:e_commerce_app/Provider/main_provider.dart';
+import 'package:e_commerce_app/blocs/cart/bloc/cart_bloc.dart';
+import 'package:e_commerce_app/blocs/categories/bloc/categories_bloc.dart';
 import 'package:e_commerce_app/components/expansion_category.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/models/category_model.dart';
@@ -8,6 +11,7 @@ import 'package:e_commerce_app/screens/order_accepted_screen.dart';
 import 'package:e_commerce_app/services/api_service.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 
@@ -77,7 +81,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
       DateTime now = DateTime.now();
       String formattedDate = DateFormat('yyyy-MM-dd').format(now);
       print(formattedDate);
-
+      context.read<MainProvider>().isProcessOrder = true;
       final response = await _apiService.processOrder(widget.data.id!, {
         'address': address,
         'addressName': address,
@@ -92,6 +96,8 @@ class _CheckoutModalState extends State<CheckoutModal> {
         responseId,
         payType,
       );
+      context.read<MainProvider>().isProcessOrder = false;
+      context.read<CartBloc>().add(ClearCart());
       Navigator.of(context).pop();
       Navigator.of(context).push(
         MaterialPageRoute(
@@ -159,6 +165,10 @@ class _CheckoutModalState extends State<CheckoutModal> {
                     height: 50,
                     child: ButtonMainWidget(
                       text: 'Place order',
+                      customwidget:
+                          context.watch<MainProvider>().isProcessOrder == true
+                              ? const CircularProgressIndicator()
+                              : null,
                       callback: processOrder,
                     )),
               ),
@@ -174,9 +184,11 @@ class ButtonMainWidget extends StatelessWidget {
   ButtonMainWidget({
     super.key,
     required this.text,
+    this.customwidget,
     this.callback,
   });
   final String text;
+  Widget? customwidget;
   VoidCallback? callback;
   @override
   Widget build(BuildContext context) {
@@ -191,13 +203,14 @@ class ButtonMainWidget extends StatelessWidget {
       child: InkWell(
         onTap: callback ?? () {},
         child: Center(
-          child: Text(
-            text,
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(color: Colors.white),
-          ),
+          child: customwidget ??
+              Text(
+                text,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(color: Colors.white),
+              ),
         ),
       ),
     );
