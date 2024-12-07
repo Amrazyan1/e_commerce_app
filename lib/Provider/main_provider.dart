@@ -46,6 +46,17 @@ class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
+  bool _isAvailable = false;
+
+  bool get isAvailable {
+    return _isAvailable;
+  }
+
+  set isAvailable(bool value) {
+    _isAvailable = value;
+    notifyListeners();
+  }
+
   String _categoryName = '';
 
   String get categoryName => _categoryName;

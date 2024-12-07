@@ -1,10 +1,16 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/blocs/login/bloc/login_bloc.dart';
 import 'package:e_commerce_app/blocs/login/bloc/login_event.dart';
 import 'package:e_commerce_app/blocs/login/bloc/login_state.dart';
+import 'package:e_commerce_app/components/checkout_modal.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 
 @RoutePage()
 class LoginPage extends StatefulWidget {
@@ -14,7 +20,11 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _dateTimeController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
 
   bool _isPasswordValid(String password) {
@@ -32,8 +42,33 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    Future<DateTime?> showDialog(Widget child) async {
+      DateTime? picked = await showCupertinoModalPopup<DateTime>(
+        context: context,
+        builder: (BuildContext context) => Container(
+          height: 216,
+          padding: const EdgeInsets.only(top: 6.0),
+          // The Bottom margin is provided to align the popup above the system
+          // navigation bar.
+          margin: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          // Provide a background color for the popup.
+          color: CupertinoColors.systemBackground.resolveFrom(context),
+          // Use a SafeArea widget to avoid system overlaps.
+          child: SafeArea(
+            top: false,
+            child: child,
+          ),
+        ),
+      );
+      // This block is executed when the date picker is dismissed.
+      print('Date Picker closed. Selected Date: $picked');
+      // Return the selected date (or null if the picker was dismissed without a selection).
+      return picked;
+    }
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: BlocConsumer<LoginBloc, LoginState>(
@@ -52,10 +87,10 @@ class _LoginPageState extends State<LoginPage> {
                 child: Form(
                   key: _formKey,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'Welcome Back!',
+                        'Sign Up',
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
@@ -64,19 +99,15 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 16),
                       const Text(
-                        'Please sign in to continue',
+                        'Enter your credentials to continue',
                         style: TextStyle(fontSize: 16, color: Colors.grey),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 32),
                       TextFormField(
                         controller: _usernameController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Username',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          prefixIcon: const Icon(Icons.person),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -85,81 +116,131 @@ class _LoginPageState extends State<LoginPage> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 16),
+                      const Gap(16),
                       TextFormField(
-                        controller: _passwordController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          prefixIcon: const Icon(Icons.lock),
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.visibility),
-                            onPressed: () {
-                              // Handle password visibility toggle
-                            },
-                          ),
+                        controller: _emailController,
+                        decoration: const InputDecoration(
+                          labelText: 'Email',
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
-                          }
-                          if (!_isPasswordValid(value)) {
-                            return 'Password must be at least 8 characters,\ninclude an uppercase letter, lowercase letter, and a number.';
+                            return 'Please enter your email';
                           }
                           return null;
                         },
                       ),
-                      const SizedBox(height: 16),
-                      state is LoginLoading
-                          ? const Center(child: CircularProgressIndicator())
-                          : ElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  context.read<LoginBloc>().add(
-                                        LoginSubmitted(
-                                          username:
-                                              _usernameController.text.trim(),
-                                          password:
-                                              _passwordController.text.trim(),
-                                        ),
-                                      );
-                                }
+                      const Gap(16),
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            CupertinoDatePicker(
+                              initialDateTime: DateTime.now(),
+
+                              mode: CupertinoDatePickerMode.date,
+                              use24hFormat: true,
+                              // This shows day of week alongside day of month
+                              showDayOfWeek: true,
+                              // This is called when the user changes the date.
+                              onDateTimeChanged: (DateTime newDate) {
+                                log(newDate.toString());
+                                String formattedDate =
+                                    DateFormat('yyyy-MM-dd').format(newDate);
+
+                                _dateTimeController.text = formattedDate;
                               },
-                              style: ElevatedButton.styleFrom(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 14.0),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              child: const Text(
-                                'Sign In',
-                                style: TextStyle(fontSize: 18),
+                            ),
+                          );
+                        },
+                        child: AbsorbPointer(
+                          child: TextFormField(
+                            controller: _dateTimeController,
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              labelText: 'Birth date',
+                              suffixIcon: IconButton(
+                                icon: const Icon(Icons.calendar_month),
+                                onPressed: () {
+                                  // Handle password visibility toggle
+                                },
                               ),
                             ),
-                      const SizedBox(height: 16),
-                      TextButton(
-                        onPressed: () {
-                          // Navigate to Forgot Password Page
-                        },
-                        child: const Text('Forgot Password?'),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text('Don’t have an account?'),
-                          TextButton(
-                            onPressed: () {
-                              // Navigate to Registration Page
-                            },
-                            child: const Text('Sign Up'),
                           ),
-                        ],
+                        ),
                       ),
+                      const Gap(16),
+                      // TextFormField(
+                      //   controller: _passwordController,
+                      //   obscureText: true,
+                      //   decoration: InputDecoration(
+                      //     labelText: 'Password',
+                      //     border: OutlineInputBorder(
+                      //       borderRadius: BorderRadius.circular(8),
+                      //     ),
+                      //     prefixIcon: const Icon(Icons.lock),
+                      //     suffixIcon: IconButton(
+                      //       icon: const Icon(Icons.visibility),
+                      //       onPressed: () {
+                      //         // Handle password visibility toggle
+                      //       },
+                      //     ),
+                      //   ),
+                      //   validator: (value) {
+                      //     if (value == null || value.isEmpty) {
+                      //       return 'Please enter your password';
+                      //     }
+                      //     if (!_isPasswordValid(value)) {
+                      //       return 'Password must be at least 8 characters,\ninclude an uppercase letter, lowercase letter, and a number.';
+                      //     }
+                      //     return null;
+                      //   },
+                      // ),
+                      // const SizedBox(height: 16),
+                      state is LoginLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : SizedBox(
+                              height: 50,
+                              child: ButtonMainWidget(
+                                text: 'Sign In',
+                                callback: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    context.read<LoginBloc>().add(
+                                          LoginSubmitted(
+                                            username:
+                                                _usernameController.text.trim(),
+                                            password:
+                                                _passwordController.text.trim(),
+                                          ),
+                                        );
+                                  }
+                                },
+                              ),
+                            ),
+                      // ElevatedButton(
+                      //     onPressed: () {
+                      //       if (_formKey.currentState!.validate()) {
+                      //         context.read<LoginBloc>().add(
+                      //               LoginSubmitted(
+                      //                 username:
+                      //                     _usernameController.text.trim(),
+                      //                 password:
+                      //                     _passwordController.text.trim(),
+                      //               ),
+                      //             );
+                      //       }
+                      //     },
+                      //     style: ElevatedButton.styleFrom(
+                      //       padding:
+                      //           const EdgeInsets.symmetric(vertical: 14.0),
+                      //       shape: RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(8),
+                      //       ),
+                      //     ),
+                      //     child: const Text(
+                      //       'Sign In',
+                      //       style: TextStyle(fontSize: 18),
+                      //     ),
+                      //   ),
+                      const Gap(16),
                     ],
                   ),
                 ),

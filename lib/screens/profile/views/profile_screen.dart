@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/blocs/orders/bloc/orders_bloc.dart';
 import 'package:e_commerce_app/blocs/orders/bloc/orders_event.dart';
 import 'package:e_commerce_app/blocs/settings/bloc/settings_bloc.dart';
@@ -10,6 +11,7 @@ import 'package:e_commerce_app/components/list_tile/divider_list_tile.dart';
 import 'package:e_commerce_app/components/network_image_with_loader.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -109,15 +111,51 @@ class ProfileScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
-          DividerListTileWithTrilingText(
-            svgSrc: "assets/icons/Notification.svg",
-            title: "Notification",
-            trilingText: "Off",
-            press: () {
-              // AutoRouter.of(context)
-              //     .push(FakeProifleRoute(pageName: 'Orders screen'));
-            },
+          Column(
+            children: [
+              ListTile(
+                onTap: () {
+                  context.read<MainProvider>().isAvailable =
+                      !context.read<MainProvider>().isAvailable;
+                },
+                minLeadingWidth: 24,
+                leading: SvgPicture.asset(
+                  "assets/icons/Notification.svg",
+                  height: 24,
+                  width: 24,
+                  colorFilter: ColorFilter.mode(
+                      Theme.of(context).iconTheme.color!, BlendMode.srcIn),
+                ),
+                title: const Text(
+                  'Notification',
+                  style: TextStyle(fontSize: 14, height: 1),
+                ),
+                trailing: SizedBox(
+                  width: 50,
+                  child: Row(
+                    children: [
+                      const Spacer(),
+                      CupertinoSwitch(
+                        // overrides the default green color of the track
+                        activeColor: const Color.fromARGB(255, 123, 193, 125),
+                        // color of the round icon, which moves from right to left
+                        thumbColor: Colors.white,
+                        // when the switch is off
+                        // trackColor: kButtonColor,
+                        // boolean variable value
+                        value: context.watch<MainProvider>().isAvailable,
+                        // changes the state of the switch
+                        onChanged: (value) {
+                          context.read<MainProvider>().isAvailable = value;
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
+          Divider(),
           ProfileMenuListTile(
             text: "Help",
             svgSrc: "assets/icons/help.svg",

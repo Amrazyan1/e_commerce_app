@@ -45,6 +45,7 @@ dependencies:
   sms_autofill: ^2.3.1
   easy_localization: ^3.0.7
   easy_localization_loader: ^2.0.2
+  flutter_cupertino_datetime_picker: ^3.0.0
 
 dev_dependencies:
   flutter_test:
