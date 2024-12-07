@@ -65,7 +65,7 @@ class OrdersScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: Container(
-                      height: 81,
+                      // height: 81,
                       decoration: BoxDecoration(
                         color: containerColor,
                         borderRadius: BorderRadius.circular(20),
@@ -102,11 +102,13 @@ class OrdersScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(
-                                order.address?.name ?? 'No Address',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey,
+                              Flexible(
+                                child: Text(
+                                  order.address?.name ?? 'No Address',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               ),
                             ],

@@ -124,6 +124,7 @@ class OrderInfoScreen extends StatelessWidget {
                         // _buildInfoRow('Promo Code', 'SUMMER2024'),
                         _buildInfoRow(
                             'Total Cost', '${orderData?.total ?? 'Total'}'),
+                        _buildInfoRow('Date', '${orderData?.date ?? 'Date'}'),
                         _buildInfoRow(
                             'Status', '${orderData?.status ?? 'Status'}'),
                         // SizedBox(

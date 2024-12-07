@@ -34,13 +34,12 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
   @override
   void initState() {
     super.initState();
-    // Set default values to the first item if the list is not empty
     if (widget.subCategory.isNotEmpty) {
-      selectedCategory = widget.subCategory.first;
+      selectedCategory =
+          widget.subCategory.where((x) => x.isSelected == true).first;
       selectedInfo = selectedCategory!.info;
 
-      // Trigger the callback if provided, to inform parent about the default selection
-      if (widget.onCategorySelected != null) {
+      if (widget.onCategorySelected != null && selectedCategory != null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           widget.onCategorySelected!(selectedCategory!);
         });

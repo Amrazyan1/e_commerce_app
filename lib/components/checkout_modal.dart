@@ -6,6 +6,7 @@ import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/models/category_model.dart';
 import 'package:e_commerce_app/screens/order_accepted_screen.dart';
 import 'package:e_commerce_app/services/api_service.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
@@ -23,6 +24,8 @@ class CheckoutModal extends StatefulWidget {
 class _CheckoutModalState extends State<CheckoutModal> {
   final ApiService _apiService = GetIt.I<ApiService>();
   String payType = 'cash';
+  String address = 'address';
+
   List<CategoryModel> categories = [];
   @override
   void initState() {
@@ -34,10 +37,11 @@ class _CheckoutModalState extends State<CheckoutModal> {
           info: "Select address",
           subCategories: (widget.data.addresses!)
               .map((address) => CategoryModel(
-                    title: address.name ?? 'name',
-                    info: address.details ?? 'details',
-                    subCategories: [],
-                  ))
+                  title: address.name ?? 'name',
+                  info: address.details ?? 'details',
+                  subCategories: [],
+                  address: '${address.name},${address.details}',
+                  isSelected: address.isDefault))
               .toList(),
         ),
       );
@@ -50,11 +54,11 @@ class _CheckoutModalState extends State<CheckoutModal> {
           info: "Select Payment",
           subCategories: (widget.data.paymentMethods!)
               .map((payment) => CategoryModel(
-                    title: payment.name ?? 'payment',
-                    info: payment.name ?? 'payment',
-                    paytipe: payment.slug,
-                    subCategories: [],
-                  ))
+                  title: payment.name ?? 'payment',
+                  info: payment.name ?? 'payment',
+                  paytipe: payment.slug,
+                  subCategories: [],
+                  isSelected: payment.slug == 'cash'))
               .toList(),
         ),
       );
@@ -70,13 +74,17 @@ class _CheckoutModalState extends State<CheckoutModal> {
 
   void processOrder() async {
     try {
+      DateTime now = DateTime.now();
+      String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+      print(formattedDate);
+
       final response = await _apiService.processOrder(widget.data.id!, {
-        'address': 'New Afdfdfdddress 17',
-        'addressName': 'Addressname',
-        'additional': '  take from outside',
-        'date': '2023-04-03',
-        'start': '07:00',
-        'end': '21:00'
+        'address': address,
+        'addressName': address,
+        'additional': 'info',
+        'date': formattedDate,
+        'start': '${widget.data.start}',
+        'end': '${widget.data.end}'
       });
 
       String responseId = jsonDecode(response.data)['data']['id'];
@@ -137,7 +145,10 @@ class _CheckoutModalState extends State<CheckoutModal> {
                       if (selectedCategory.paytipe != null) {
                         payType = selectedCategory.paytipe!;
                       }
-                      log("Selected category: ${payType}, Info: ${selectedCategory.paytipe}");
+                      if (selectedCategory.address != null) {
+                        address = selectedCategory.address!;
+                      }
+                      log("Selected category: ${selectedCategory.paytipe}, Info: ${selectedCategory.address}");
                     },
                   ),
                 ),
