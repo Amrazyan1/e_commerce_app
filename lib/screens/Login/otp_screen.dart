@@ -59,7 +59,7 @@ class OtpScreen extends StatelessWidget {
           body: BlocListener<AuthBloc, AuthState>(
             listener: (context, state) {
               if (state is AuthVerified) {
-                //NAVIGATE TO REGISTER SCREEN
+                AutoRouter.of(context).replaceAll([const LoginRoute()]);
               } else if (state is AuthError) {
                 ScaffoldMessenger.of(context)
                     .showSnackBar(SnackBar(content: Text(state.message)));

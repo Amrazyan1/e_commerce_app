@@ -41,18 +41,20 @@ void main() async {
   if (mapsImplementation is GoogleMapsFlutterAndroid) {
     initializeMapRenderer();
   }
+  EasyLocalization.logger.enableLevels = [EasyLocalization.logger.defaultLevel];
+
   runApp(
     EasyLocalization(
-      supportedLocales: const [Locale('en', 'US')],
+      supportedLocales: const [Locale('en'), Locale('ar')],
       path: 'assets/translations',
-      fallbackLocale: const Locale('en', 'US'),
-      assetLoader: SmartNetworkAssetLoader(
-          // token: 'clcbI7yVPTF2ijzmK76oOEvQYr4IHOBi',
-          assetsPath: 'assets/translations',
-          localCacheDuration: const Duration(minutes: 1),
-          localeUrl: (String localeName) =>
-              "https://localise.biz/api/export/locale/",
-          timeout: const Duration(seconds: 15)),
+      fallbackLocale: const Locale('ar'),
+      // assetLoader: SmartNetworkAssetLoader(
+      //     // token: 'clcbI7yVPTF2ijzmK76oOEvQYr4IHOBi',
+      //     assetsPath: 'assets/translations',
+      //     localCacheDuration: const Duration(minutes: 1),
+      //     localeUrl: (String localeName) =>
+      //         "https://localise.biz/api/export/locale/",
+      //     timeout: const Duration(seconds: 15)),
       child: MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => MainProvider()),
@@ -152,6 +154,9 @@ class MainApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp.router(
           debugShowCheckedModeBanner: false,
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
           title: 'Shop Template by The Flutter Way',
           themeMode: ThemeMode.light,
           routerDelegate: _appRouter.delegate(),

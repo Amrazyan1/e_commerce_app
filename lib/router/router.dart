@@ -15,7 +15,8 @@ class AppRouter extends RootStackRouter {
         ),
         AutoRoute(
           page: AuthorizationRoute.page,
-          path: '/as',
+          path: '/',
+          initial: true,
         ),
         AutoRoute(
           page: OtpRoute.page,
@@ -23,8 +24,7 @@ class AppRouter extends RootStackRouter {
         ),
         AutoRoute(
           page: LoginRoute.page,
-          path: '/',
-          initial: true,
+          path: '/login',
         ),
 
         AutoRoute(page: EntryPoint.page, path: '/entry', children: [

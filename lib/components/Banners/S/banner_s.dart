@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../network_image_with_loader.dart';
+import 'dart:ui' as ui;
 
 class BannerS extends StatelessWidget {
   const BannerS(
@@ -15,16 +17,21 @@ class BannerS extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 2.56,
-      child: GestureDetector(
-        onTap: press,
-        child: Stack(
-          children: [
-            NetworkImageWithLoader(image, radius: 0),
-            Container(color: Colors.black45),
-            ...children,
-          ],
+    return Directionality(
+      textDirection: context.locale.languageCode == 'ar'
+          ? ui.TextDirection.rtl
+          : ui.TextDirection.ltr,
+      child: AspectRatio(
+        aspectRatio: 2.56,
+        child: GestureDetector(
+          onTap: press,
+          child: Stack(
+            children: [
+              NetworkImageWithLoader(image, radius: 0),
+              Container(color: Colors.black45),
+              ...children,
+            ],
+          ),
         ),
       ),
     );

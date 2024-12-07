@@ -1,5 +1,6 @@
 import 'package:e_commerce_app/components/network_image_with_loader.dart';
 import 'package:e_commerce_app/constants.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -23,6 +24,10 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void _changeLanguage(Locale locale) {
+      context.setLocale(locale);
+    }
+
     return ListTile(
       onTap: press,
       leading: CircleAvatar(
@@ -66,9 +71,18 @@ class ProfileCard extends StatelessWidget {
       ),
       subtitle: Text(email),
       trailing: isShowArrow
-          ? SvgPicture.asset(
-              "assets/icons/miniRight.svg",
-              color: Theme.of(context).iconTheme.color!.withOpacity(0.4),
+          ? PopupMenuButton<Locale>(
+              onSelected: (locale) => _changeLanguage(locale),
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: const Locale('en'),
+                  child: const Text('English'),
+                ),
+                PopupMenuItem(
+                  value: const Locale('ar'),
+                  child: const Text('العربية'),
+                ),
+              ],
             )
           : null,
     );
