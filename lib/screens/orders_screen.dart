@@ -5,6 +5,7 @@ import 'package:e_commerce_app/blocs/orders/details/bloc/orderdetail_bloc.dart';
 import 'package:e_commerce_app/blocs/orders/details/bloc/orderdetail_event.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,9 +21,9 @@ class OrdersScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          'OrdersScreen',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        title: Text(
+          'orders_screen'.tr(),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
       ),
       body: BlocBuilder<OrdersBloc, OrdersState>(
@@ -148,7 +149,7 @@ class OrdersScreen extends StatelessWidget {
           } else if (state is OrdersError) {
             return Center(child: Text("Error: ${state.error}"));
           } else {
-            return const Center(child: Text("No orders available."));
+            return Center(child: Text("no_orders").tr());
           }
         },
       ),

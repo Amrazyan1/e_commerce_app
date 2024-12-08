@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class AddedToCartMessageScreen extends StatelessWidget {
@@ -23,15 +24,15 @@ class AddedToCartMessageScreen extends StatelessWidget {
               ),
               const Spacer(flex: 2),
               Text(
-                "Added to cart",
+                "added_to_cart".tr(),
                 style: Theme.of(context)
                     .textTheme
                     .headlineSmall!
                     .copyWith(fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: defaultPadding / 2),
-              const Text(
-                "Click the checkout button to complete the purchase process.",
+              Text(
+                "click_to_checkout".tr(),
                 textAlign: TextAlign.center,
               ),
               const Spacer(flex: 2),
@@ -40,14 +41,14 @@ class AddedToCartMessageScreen extends StatelessWidget {
                   AutoRouter.of(context).maybePop();
                   // Navigator.pushNamed(context, entryPointScreenRoute);
                 },
-                child: const Text("Continue shopping"),
+                child: Text("continue_shop".tr()),
               ),
               const SizedBox(height: defaultPadding),
               ElevatedButton(
                 onPressed: () {
                   AutoRouter.of(context).push(CartRoute());
                 },
-                child: const Text("Checkout"),
+                child: Text("checkout".tr()),
               ),
               const Spacer(),
             ],

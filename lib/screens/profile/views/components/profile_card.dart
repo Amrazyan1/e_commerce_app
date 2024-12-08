@@ -40,7 +40,7 @@ class ProfileCard extends StatelessWidget {
       title: Row(
         children: [
           Text(
-            isShowHi ? "Hi, $name" : name,
+            isShowHi ? "$name" : name,
             style: const TextStyle(fontWeight: FontWeight.w500),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

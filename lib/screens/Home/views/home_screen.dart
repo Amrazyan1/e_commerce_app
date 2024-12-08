@@ -62,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
             ),
             searchBar: SuperSearchBar(
+              placeholderText: 'search'.tr(),
               searchFocusNode: _searchFocusNode,
               searchController: _searchTextController,
               textStyle: Theme.of(context).textTheme.bodyLarge!,

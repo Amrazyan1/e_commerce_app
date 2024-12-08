@@ -37,8 +37,8 @@ class _CheckoutModalState extends State<CheckoutModal> {
     if (widget.data.addresses != null) {
       categories.add(
         CategoryModel(
-          title: "Delivery",
-          info: "Select address",
+          title: "delivery".tr(),
+          info: "sel_addr".tr(),
           subCategories: (widget.data.addresses!)
               .map((address) => CategoryModel(
                   title: address.name ?? 'name',
@@ -54,8 +54,9 @@ class _CheckoutModalState extends State<CheckoutModal> {
     if (widget.data.paymentMethods != null) {
       categories.add(
         CategoryModel(
-          title: "Payment",
-          info: "Select Payment",
+          title: "payment".tr(),
+          info: "sel_payment".tr(),
+          ignoreExpansion: true,
           subCategories: (widget.data.paymentMethods!)
               .map((payment) => CategoryModel(
                   title: payment.name ?? 'payment',
@@ -69,7 +70,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
     }
     categories.add(
       CategoryModel(
-        title: "Total Cost",
+        title: "tot_cost".tr(),
         info: '${widget.data.total}',
         subCategories: [],
       ),
@@ -125,9 +126,9 @@ class _CheckoutModalState extends State<CheckoutModal> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Checkout',
-                      style: TextStyle(
+                    Text(
+                      'checkout'.tr(),
+                      style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
                           color: Colors.black),
@@ -146,6 +147,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
                   itemBuilder: (context, index) => ExpansionCategory(
                     title: categories[index].title,
                     info: categories[index].info,
+                    ignoreExpansion: categories[index].ignoreExpansion ?? false,
                     subCategory: categories[index].subCategories!,
                     onCategorySelected: (selectedCategory) {
                       if (selectedCategory.paytipe != null) {
@@ -154,7 +156,6 @@ class _CheckoutModalState extends State<CheckoutModal> {
                       if (selectedCategory.address != null) {
                         address = selectedCategory.address!;
                       }
-                      log("Selected category: ${selectedCategory.paytipe}, Info: ${selectedCategory.address}");
                     },
                   ),
                 ),
@@ -164,7 +165,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
                 child: SizedBox(
                     height: 50,
                     child: ButtonMainWidget(
-                      text: 'Place order',
+                      text: 'place_order'.tr(),
                       customwidget:
                           context.watch<MainProvider>().isProcessOrder == true
                               ? const CircularProgressIndicator()

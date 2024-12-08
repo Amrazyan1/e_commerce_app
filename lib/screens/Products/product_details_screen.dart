@@ -11,6 +11,7 @@ import 'package:e_commerce_app/screens/Products/Components/product_info.dart';
 import 'package:e_commerce_app/screens/Products/Components/review_card.dart';
 import 'package:e_commerce_app/screens/Products/Components/cart_button.dart';
 import 'package:e_commerce_app/services/api_service.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -103,7 +104,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   child: CircularProgressIndicator(),
                 )
               : Text(
-                  '${countOfItem.isNotEmpty ? '$countOfItem items added' : 'Add to basket'}',
+                  '${countOfItem.isNotEmpty ? '$countOfItem' 'items_added'.tr() : 'add_basket'.tr()}',
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall!
@@ -227,7 +228,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         child: Column(
                           children: [
                             Text(
-                              "Product info",
+                              "product_info".tr(),
                               style: Theme.of(context)
                                   .textTheme
                                   .titleMedium!
@@ -246,7 +247,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Unit",
+                            "unit".tr(),
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium!
@@ -316,7 +317,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 padding: const EdgeInsets.all(defaultPadding),
                 sliver: SliverToBoxAdapter(
                   child: Text(
-                    "You may also like",
+                    "you_may_like".tr(),
                     style: Theme.of(context).textTheme.titleSmall!,
                   ),
                 ),

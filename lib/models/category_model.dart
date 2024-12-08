@@ -7,6 +7,7 @@ class CategoryModel {
   final String? paytipe;
   final String? address;
   final bool? isSelected;
+  final bool? ignoreExpansion;
   CategoryModel(
       {required this.title,
       required this.info,
@@ -15,7 +16,8 @@ class CategoryModel {
       this.subCategories,
       this.paytipe,
       this.address,
-      this.isSelected});
+      this.isSelected,
+      this.ignoreExpansion});
 }
 
 // final List<CategoryModel> demoCategoriesWithImage = [

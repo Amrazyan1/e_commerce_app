@@ -3,6 +3,7 @@ import 'package:e_commerce_app/blocs/orders/bloc/orders_bloc.dart';
 import 'package:e_commerce_app/blocs/orders/bloc/orders_event.dart';
 import 'package:e_commerce_app/components/checkout_modal.dart';
 import 'package:e_commerce_app/constants.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -25,9 +26,9 @@ class OrderInfoScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          'Order Info',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        title: Text(
+          'order_info'.tr(),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
       ),
       body: BlocListener<OrderDetailBloc, OrderDetailState>(
@@ -136,13 +137,13 @@ class OrderInfoScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildInfoRow(
-                            'Delivery', '${orderData?.address['name']}'),
+                            'delivery', '${orderData?.address['name']}'),
                         _buildInfoRow('Payment', '${orderData?.method}'),
                         _buildInfoRow(
-                            'Total Cost', '${orderData?.total ?? 'Total'}'),
-                        _buildInfoRow('Date', '${orderData?.date ?? 'Date'}'),
+                            'total_cost', '${orderData?.total ?? 'Total'}'),
+                        _buildInfoRow('date', '${orderData?.date ?? 'Date'}'),
                         _buildInfoRow(
-                            'Status', '${orderData?.status ?? 'Status'}'),
+                            'status', '${orderData?.status ?? 'Status'}'),
                         Visibility(
                           visible: orderData?.isCancelable ?? false,
                           child: SizedBox(
@@ -191,7 +192,7 @@ class OrderInfoScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  title,
+                  title.tr(),
                   style: const TextStyle(
                       fontSize: 14, fontWeight: FontWeight.bold),
                 ),

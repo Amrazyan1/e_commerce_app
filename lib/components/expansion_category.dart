@@ -8,13 +8,14 @@ import 'package:gap/gap.dart';
 import '../../../../constants.dart';
 
 class ExpansionCategory extends StatefulWidget {
-  const ExpansionCategory({
-    super.key,
-    required this.title,
-    required this.info,
-    required this.subCategory,
-    this.onCategorySelected,
-  });
+  const ExpansionCategory(
+      {super.key,
+      required this.title,
+      required this.info,
+      required this.subCategory,
+      this.onCategorySelected,
+      this.ignoreExpansion = false});
+  final bool? ignoreExpansion; // svgSrc;
 
   final String title; // svgSrc;
   final String info; // svgSrc;
@@ -50,72 +51,77 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
   @override
   Widget build(BuildContext context) {
     return widget.subCategory.isNotEmpty
-        ? ExpansionTile(
-            iconColor: Theme.of(context).textTheme.bodyLarge!.color,
-            collapsedIconColor: Theme.of(context).textTheme.bodyMedium!.color,
-            title: Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween, // Ensures text is at the end
-              children: [
-                Text(
-                  widget.title,
-                  style: const TextStyle(fontSize: 14),
-                ),
-                const Gap(50),
-                Flexible(
-                  child: Text(
-                    overflow: TextOverflow.ellipsis,
-                    selectedInfo.isEmpty ? widget.info : selectedInfo,
-                    style: const TextStyle(
-                        fontSize: 14, color: Colors.grey), // Optional style
-                  ),
-                ),
-              ],
-            ),
-            onExpansionChanged: (value) {
-              setState(() {
-                expanded = value;
-              });
-            },
-            textColor: Theme.of(context).textTheme.bodyLarge!.color,
-            childrenPadding: const EdgeInsets.only(left: defaultPadding),
-            children: List.generate(
-              widget.subCategory.length,
-              (index) => Column(
+        ? IgnorePointer(
+            ignoring: widget.ignoreExpansion!,
+            child: ExpansionTile(
+              iconColor: Theme.of(context).textTheme.bodyLarge!.color,
+              collapsedIconColor: Theme.of(context).textTheme.bodyMedium!.color,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment
+                    .spaceBetween, // Ensures text is at the end
                 children: [
-                  ListTile(
-                    onTap: () {
-                      setState(() {
-                        selectedInfo = widget.subCategory[index].info;
-                        expanded = false;
-
-                        if (widget.onCategorySelected != null) {
-                          widget
-                              .onCategorySelected!(widget.subCategory[index]!);
-                        }
-                      });
-                    },
-                    title: Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            overflow: TextOverflow.ellipsis,
-                            widget.subCategory[index].title,
-                            style: const TextStyle(fontSize: 14),
-                          ),
-                        ),
-                      ],
-                    ),
-                    trailing: SizedBox(
-                      width: 100,
-                      child: Text(
-                          overflow: TextOverflow.ellipsis,
-                          widget.subCategory[index].info ?? ''),
+                  Text(
+                    widget.title,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                  const Gap(50),
+                  Flexible(
+                    child: Text(
+                      overflow: TextOverflow.ellipsis,
+                      selectedInfo.isEmpty ? widget.info : selectedInfo,
+                      style: const TextStyle(
+                          fontSize: 14, color: Colors.grey), // Optional style
                     ),
                   ),
-                  if (index < widget.subCategory.length - 1)
-                    const Divider(height: 1),
                 ],
+              ),
+              onExpansionChanged: (value) {
+                log('onExpansionChanged');
+
+                setState(() {
+                  expanded = value;
+                });
+              },
+              textColor: Theme.of(context).textTheme.bodyLarge!.color,
+              childrenPadding: const EdgeInsets.only(left: defaultPadding),
+              children: List.generate(
+                widget.subCategory.length,
+                (index) => Column(
+                  children: [
+                    ListTile(
+                      onTap: () {
+                        setState(() {
+                          selectedInfo = widget.subCategory[index].info;
+                          expanded = false;
+
+                          if (widget.onCategorySelected != null) {
+                            widget.onCategorySelected!(
+                                widget.subCategory[index]!);
+                          }
+                        });
+                      },
+                      title: Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              overflow: TextOverflow.ellipsis,
+                              widget.subCategory[index].title,
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          ),
+                        ],
+                      ),
+                      trailing: SizedBox(
+                        width: 100,
+                        child: Text(
+                            overflow: TextOverflow.ellipsis,
+                            widget.subCategory[index].info ?? ''),
+                      ),
+                    ),
+                    if (index < widget.subCategory.length - 1)
+                      const Divider(height: 1),
+                  ],
+                ),
               ),
             ),
           )
