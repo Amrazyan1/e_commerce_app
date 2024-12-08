@@ -80,5 +80,7 @@
   "no_address_found": "هیچ آدرسی یافت نشد.",
   "add_new_address": "افزودن آدرس جدید",
   "address_name": "نام آدرس",
-  "add_address": "افزودن آدرس"
+  "add_address": "افزودن آدرس",
+  "cancel_order": "لغو سفارش"
+
 }

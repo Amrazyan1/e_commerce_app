@@ -79,5 +79,7 @@
   "no_address_found": "Հասցեներ չեն գտնվել։",
   "add_new_address": "Ավելացնել նոր հասցե",
   "address_name": "Հասցեի անունը",
-  "add_address": "Ավելացնել հասցե"
+  "add_address": "Ավելացնել հասցե",
+  "cancel_order": "Չեղարկել պատվերը"
+
 }

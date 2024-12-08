@@ -18,9 +18,6 @@ class DiscountedBloc extends Bloc<DiscountedBlocEvent, DiscountedBlocState> {
     FetchDiscountedProductsEvent event,
     Emitter<DiscountedBlocState> emit,
   ) async {
-    if (discountedProducts != null) {
-      return;
-    }
     emit(DiscountedBlocLoading());
     try {
       final response = await _apiService.getDiscountedProducts();

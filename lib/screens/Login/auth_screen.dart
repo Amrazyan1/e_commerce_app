@@ -38,7 +38,7 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
       child: KeyboardVisibilityBuilder(
         builder: (context, isKeyboardVisible) {
           return Directionality(
-            textDirection: context.locale.languageCode == 'de'
+            textDirection: context.locale.languageCode == 'fa'
                 ? ui.TextDirection.rtl
                 : ui.TextDirection.ltr,
             child: Scaffold(
@@ -61,7 +61,7 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                             child: Text('English'),
                           ),
                           const PopupMenuItem(
-                            value: Locale('de'),
+                            value: Locale('fa'),
                             child: Text('العربية'),
                           ),
                           const PopupMenuItem(

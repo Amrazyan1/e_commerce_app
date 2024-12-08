@@ -41,6 +41,25 @@ class _EntryPointState extends State<EntryPoint> {
     context.read<PopularProductsBloc>().add(FetchTrendPopularProductsEvent());
   }
 
+  Locale? previousLocale;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Check if the locale has changed
+    if (previousLocale != context.locale) {
+      previousLocale = context.locale;
+      _onLocaleChanged(context.locale);
+    }
+  }
+
+  void _onLocaleChanged(Locale newLocale) {
+    print('Locale changed to: $newLocale');
+    context.read<TrendNewProductsBloc>().add(FetchTrendNewProductsEvent());
+    context.read<DiscountedBloc>().add(FetchDiscountedProductsEvent());
+    context.read<PopularProductsBloc>().add(FetchTrendPopularProductsEvent());
+  }
+
   DateTime timeBackPressed = DateTime.now();
   var tabsRouter;
   @override

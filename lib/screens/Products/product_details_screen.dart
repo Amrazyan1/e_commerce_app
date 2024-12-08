@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
-
+import 'package:like_button/like_button.dart';
 import '../../blocs/favourites/bloc/favourites_bloc.dart';
 import '../../blocs/products/trending/bloc/trend_new_products_bloc.dart';
 import '../../models/cart_products_response.dart';
@@ -164,24 +164,27 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     .titleLarge!
                                     .copyWith(fontWeight: FontWeight.bold)),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              log('IS favorite true');
-                              context.read<FavouritesBloc>().add(
-                                  AddToFavouritesEvent(context
-                                      .read<MainProvider>()
-                                      .currentProductModel
-                                      .id));
-                            },
-                            child: const Icon(
-                              // context
-                              //         .watch<MainProvider>()
-                              //         .currentProductModel
-                              //         .isFavourite
-                              true
-                                  ? Icons.favorite
-                                  : Icons.favorite_border_outlined,
-                              color: kprimaryColor,
+                          Center(
+                            child: LikeButton(
+                              size: 30,
+                              onTap: (istapped) async {
+                                log('IS favorite true');
+                                context.read<FavouritesBloc>().add(
+                                    AddToFavouritesEvent(context
+                                        .read<MainProvider>()
+                                        .currentProductModel
+                                        .id));
+                                return !istapped;
+                              },
+                              likeBuilder: (isLiked) {
+                                return Icon(
+                                  Icons.favorite,
+                                  color: isLiked
+                                      ? kprimaryColor
+                                      : kprimaryColor.withOpacity(0.2),
+                                  size: 30,
+                                );
+                              },
                             ),
                           )
                         ],

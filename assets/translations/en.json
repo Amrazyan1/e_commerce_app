@@ -82,6 +82,7 @@
 ,
 "add_new_address" : "Add new address",
 "address_name" : "Address name",
-"add_address" : "Add Address"
+"add_address" : "Add Address",
+"cancel_order" : "Cancel Order"
 }
 

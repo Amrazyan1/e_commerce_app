@@ -144,6 +144,7 @@ class MyDetailsScreen extends StatelessWidget {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Details saved!')),
                             );
+                            AutoRouter.of(context).maybePop();
                           },
                         )),
                   ],

@@ -20,9 +20,6 @@ class TrendNewProductsBloc
     FetchTrendNewProductsEvent event,
     Emitter<TrendNewProductsState> emit,
   ) async {
-    if (products != null) {
-      return;
-    }
     emit(TrendNewProductsLoading());
     try {
       final response = await _apiService.getTrendNewestProducts();

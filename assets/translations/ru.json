@@ -80,6 +80,8 @@
   "no_address_found": "Адреса не найдены.",
   "add_new_address": "Добавить новый адрес",
   "address_name": "Название адреса",
-  "add_address": "Добавить адрес"
+  "add_address": "Добавить адрес",
+  "cancel_order": "Отменить заказ"
+
   }
   

@@ -18,9 +18,6 @@ class PopularProductsBloc
     FetchTrendPopularProductsEvent event,
     Emitter<PopularProductsState> emit,
   ) async {
-    if (products != null) {
-      return;
-    }
     emit(PopularProductsLoading());
     try {
       final response = await _apiService.getTrendPopularProducts();

@@ -37,12 +37,13 @@ class OrderInfoScreen extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.error)),
             );
-            context.read<OrdersBloc>().add(FetchOrders());
 
             AutoRouter.of(context).maybePop();
           }
           if (state is OrderDetailLoaded) {
             if (state.orderDetail == null) {
+              context.read<OrdersBloc>().add(FetchOrders());
+
               AutoRouter.of(context).maybePop();
             }
           }
@@ -155,7 +156,7 @@ class OrderInfoScreen extends StatelessWidget {
                                 // Gap(10),
                                 Expanded(
                                     child: ButtonMainWidget(
-                                  text: 'Cancel Order',
+                                  text: 'cancel_order'.tr(),
                                   customwidget:
                                       state is OrderDetailLoadingCancle
                                           ? const CircularProgressIndicator()

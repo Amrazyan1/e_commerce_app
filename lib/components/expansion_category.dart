@@ -36,8 +36,11 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
   void initState() {
     super.initState();
     if (widget.subCategory.isNotEmpty) {
-      selectedCategory =
-          widget.subCategory.where((x) => x.isSelected == true).first;
+      var selectedCategory =
+          widget.subCategory.where((x) => x.isSelected == true).isNotEmpty
+              ? widget.subCategory.where((x) => x.isSelected == true).first
+              : null; // Handle this default case appropriately
+
       selectedInfo = selectedCategory!.info;
 
       if (widget.onCategorySelected != null && selectedCategory != null) {
