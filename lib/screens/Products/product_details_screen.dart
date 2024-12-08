@@ -104,12 +104,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   child: CircularProgressIndicator(),
                 )
               : Text(
-                  '${countOfItem.isNotEmpty ? '$countOfItem' 'items_added'.tr() : 'add_basket'.tr()}',
+                  countOfItem.isNotEmpty
+                      ? '$countOfItem ' + 'items_added'.tr()
+                      : 'add_basket'.tr(),
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall!
                       .copyWith(color: Colors.white),
-                ),
+                ).tr(),
         ),
         body: SafeArea(
           child: CustomScrollView(

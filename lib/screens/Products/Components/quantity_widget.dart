@@ -89,6 +89,7 @@ class _QuantityWidgetState extends State<QuantityWidget> {
                   newValue <= widget.maxCount) {
                 setState(() {
                   _count = newValue;
+                  widget.callback(_count);
                 });
               } else {
                 _controller.text =
