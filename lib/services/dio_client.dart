@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:e_commerce_app/main.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DioClient {
@@ -16,7 +18,11 @@ class DioClient {
             receiveTimeout: Duration(milliseconds: 60 * 1000),
             headers: {
               'Content-Type': 'application/json; charset=UTF-8',
-              'Accept-Language': 'en',
+              'Accept-Language':
+                  EasyLocalization.of(navigatorKey.currentContext!)
+                          ?.locale
+                          .languageCode ??
+                      'en',
               'Accept': 'application/json',
               'X-CSRF-TOKEN': '', // Add token if available or leave empty
             },
@@ -26,7 +32,11 @@ class DioClient {
       onRequest: (options, handler) async {
         final prefs = await SharedPreferences.getInstance();
         final token = prefs.getString('auth_token');
-
+        options.headers['Accept-Language'] =
+            EasyLocalization.of(navigatorKey.currentContext!)
+                    ?.locale
+                    .languageCode ??
+                'en';
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
         }

@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Text('العربية'),
                 ),
                 const PopupMenuItem(
-                  value: Locale('am'),
+                  value: Locale('hy'),
                   child: Text('Հայերեն'),
                 ),
                 const PopupMenuItem(

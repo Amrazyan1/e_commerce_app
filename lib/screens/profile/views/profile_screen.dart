@@ -232,7 +232,7 @@ class ProfileScreen extends StatelessWidget {
                           ListTile(
                             title: Text('Հայերեն'),
                             onTap: () {
-                              context.setLocale(const Locale('am'));
+                              context.setLocale(const Locale('hy'));
                               Navigator.of(context).pop();
                             },
                           ),

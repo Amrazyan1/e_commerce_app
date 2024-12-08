@@ -29,8 +29,8 @@ import 'blocs/search/bloc/global_search_bloc.dart'; // Import flutter_bloc
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 
-final _appRouter = AppRouter(); // Initialize the AppRouter
-
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+final appRouter = AppRouter(); // Initialize the AppRouter
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
@@ -47,7 +47,7 @@ void main() async {
     EasyLocalization(
       supportedLocales: const [
         Locale('en'),
-        Locale('am'),
+        Locale('hy'),
         Locale('de'),
         Locale('ru')
       ],
@@ -158,14 +158,15 @@ class MainApp extends StatelessWidget {
           FontSizeResolvers.width(fontSize, instance),
       builder: (context, child) {
         return MaterialApp.router(
+          key: navigatorKey,
           debugShowCheckedModeBanner: false,
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
           locale: context.locale,
           title: 'Shop Template by The Flutter Way',
           themeMode: ThemeMode.light,
-          routerDelegate: _appRouter.delegate(),
-          routeInformationParser: _appRouter.defaultRouteParser(),
+          routerDelegate: appRouter.delegate(),
+          routeInformationParser: appRouter.defaultRouteParser(),
         );
       },
     );

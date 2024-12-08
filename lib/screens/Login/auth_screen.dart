@@ -65,7 +65,7 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                             child: Text('العربية'),
                           ),
                           const PopupMenuItem(
-                            value: Locale('am'),
+                            value: Locale('hy'),
                             child: Text('Հայերեն'),
                           ),
                           const PopupMenuItem(
