@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/components/checkout_modal.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import '../../../models/delivery_addreses_model.dart';
@@ -73,9 +74,9 @@ class _DeliveryAddresseScreenState extends State<DeliveryAddresseScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          'Delivery Addresses',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        title: Text(
+          'delivery_address'.tr(),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
       ),
       bottomNavigationBar: Padding(
@@ -84,7 +85,7 @@ class _DeliveryAddresseScreenState extends State<DeliveryAddresseScreen> {
           height: 60,
           width: double.infinity,
           child: ButtonMainWidget(
-            text: 'Add new address',
+            text: 'add_new_address'.tr(),
             callback: () {
               AutoRouter.of(context).push(DeliveryAddressNew());
             },
@@ -94,7 +95,7 @@ class _DeliveryAddresseScreenState extends State<DeliveryAddresseScreen> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : addresses.isEmpty
-              ? const Center(child: Text("No addresses found."))
+              ? Center(child: Text("no_address_found".tr()))
               : Column(
                   children: [
                     Expanded(

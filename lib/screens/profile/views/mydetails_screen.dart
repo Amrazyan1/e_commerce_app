@@ -51,9 +51,9 @@ class MyDetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          'My Details',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        title: Text(
+          'my_details'.tr(),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
       ),
       body: SingleChildScrollView(
@@ -69,14 +69,14 @@ class MyDetailsScreen extends StatelessWidget {
                     const SizedBox(height: 20),
                     _buildInputField(
                       controller: nameController,
-                      label: 'Name',
+                      label: 'name'.tr(),
                       defaultValue: '${state.settings.data!.fullName}',
                       keyboardType: TextInputType.name,
                     ),
                     const SizedBox(height: 20),
                     _buildInputField(
                       controller: emailController,
-                      label: 'Email',
+                      label: 'Email'.tr(),
                       defaultValue: '${state.settings.data!.email}',
                       keyboardType: TextInputType.emailAddress,
                     ),
@@ -127,7 +127,7 @@ class MyDetailsScreen extends StatelessWidget {
                     _buildInputField(
                       readOnly: true,
                       controller: phoneController,
-                      label: 'Phone Number',
+                      label: 'Phone Number'.tr(),
                       defaultValue: '${state.settings.data!.phone}',
                       keyboardType: TextInputType.phone,
                     ),
@@ -135,7 +135,7 @@ class MyDetailsScreen extends StatelessWidget {
                     SizedBox(
                         height: 50,
                         child: ButtonMainWidget(
-                          text: 'Save Details',
+                          text: 'save_details'.tr(),
                           callback: () {
                             context.read<SettingsBloc>().add(SettingsUpdate(
                                 name: nameController.text,

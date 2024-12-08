@@ -16,6 +16,7 @@ class DioClient {
             receiveTimeout: Duration(milliseconds: 60 * 1000),
             headers: {
               'Content-Type': 'application/json; charset=UTF-8',
+              'Accept-Language': 'en',
               'Accept': 'application/json',
               'X-CSRF-TOKEN': '', // Add token if available or leave empty
             },

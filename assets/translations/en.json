@@ -75,5 +75,13 @@
 "payment" : "Payment",
 "sel_payment" : "Select Payment",
 "tot_cost" : "Total Cost",
-"place_order" : "Place order"
+"place_order" : "Place order",
+"name" : "Name",
+"save_details" : "Save Details",
+"no_address_found" : "No addresses found."
+,
+"add_new_address" : "Add new address",
+"address_name" : "Address name",
+"add_address" : "Add Address"
 }
+

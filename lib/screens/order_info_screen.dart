@@ -138,7 +138,7 @@ class OrderInfoScreen extends StatelessWidget {
                       children: [
                         _buildInfoRow(
                             'delivery', '${orderData?.address['name']}'),
-                        _buildInfoRow('Payment', '${orderData?.method}'),
+                        _buildInfoRow('payment'.tr(), '${orderData?.method}'),
                         _buildInfoRow(
                             'total_cost', '${orderData?.total ?? 'Total'}'),
                         _buildInfoRow('date', '${orderData?.date ?? 'Date'}'),

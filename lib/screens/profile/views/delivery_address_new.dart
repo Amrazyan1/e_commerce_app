@@ -6,6 +6,7 @@ import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -143,14 +144,14 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Delivery Address"),
+        title: Text("delivery_address".tr()),
       ),
       bottomNavigationBar: CartButton(
         press: _addNewAddress,
         infoWidget: loading
             ? const CircularProgressIndicator(color: Colors.white)
             : Text(
-                'Add Address',
+                'add_address'.tr(),
                 style: Theme.of(context)
                     .textTheme
                     .titleSmall!
@@ -204,9 +205,9 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
               padding: const EdgeInsets.all(16.0),
               child: TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: "Address name",
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: "address_name".tr(),
+                  border: const OutlineInputBorder(),
                 ),
                 minLines: 1, // Minimum height
                 maxLines: null, // Makes the height dynamic based on content
@@ -222,8 +223,8 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
               padding: const EdgeInsets.all(16.0),
               child: TextFormField(
                 controller: _addressController,
-                decoration: const InputDecoration(
-                  labelText: "Delivery Address",
+                decoration: InputDecoration(
+                  labelText: "delivery_address".tr(),
                   border: OutlineInputBorder(),
                 ),
                 minLines: 1, // Minimum height
