@@ -48,7 +48,7 @@ class SecondaryProductCard extends StatelessWidget {
             child: Stack(
               children: [
                 NetworkImageWithLoader(image, radius: defaultBorderRadius),
-                if (dicountpercent != null)
+                if (dicountpercent != null && dicountpercent != "0 %")
                   Positioned(
                     right: defaultPadding / 2,
                     top: defaultPadding / 2,
@@ -62,7 +62,7 @@ class SecondaryProductCard extends StatelessWidget {
                             Radius.circular(defaultBorderRadius)),
                       ),
                       child: Text(
-                        "$dicountpercent% off",
+                        "$dicountpercent off",
                         style: const TextStyle(
                             color: Colors.white,
                             fontSize: 10,
@@ -100,7 +100,7 @@ class SecondaryProductCard extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  priceAfetDiscount != null
+                  (dicountpercent != null && dicountpercent != "0 %")
                       ? Row(
                           children: [
                             Text(

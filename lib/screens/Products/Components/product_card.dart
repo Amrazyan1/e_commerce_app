@@ -68,7 +68,8 @@ class _ProductCardState extends State<ProductCard> {
               children: [
                 NetworkImageWithLoader(widget.product.images!.main!.src!,
                     radius: defaultBorderRadius),
-                if (widget.product.discount != null)
+                if (widget.product.discount != null &&
+                    widget.product.discount != '0 %')
                   Positioned(
                     right: defaultPadding / 2,
                     top: defaultPadding / 2,
@@ -122,7 +123,8 @@ class _ProductCardState extends State<ProductCard> {
                   Row(
                     children: [
                       Expanded(
-                        child: widget.product.discountedPrice != null
+                        child: (widget.product.discount != null &&
+                                widget.product.discount != '0 %')
                             ? Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
