@@ -11,11 +11,14 @@ import 'package:e_commerce_app/components/list_tile/divider_list_tile.dart';
 import 'package:e_commerce_app/components/network_image_with_loader.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
+import 'package:e_commerce_app/services/api_service.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
+import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'dart:ui' as ui;
@@ -29,6 +32,20 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void deleteAccount() async {
+      ApiService _apiService = GetIt.I<ApiService>();
+
+      try {
+        await _apiService.deleteUser();
+      } catch (e) {
+      } finally {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.remove('auth_token');
+        Navigator.of(context).pop(); // Close the dialog
+        AutoRouter.of(context).replaceAll([const AuthorizationRoute()]);
+      }
+    }
+
     return Directionality(
       textDirection: context.locale.languageCode == 'ar'
           ? ui.TextDirection.rtl
@@ -198,34 +215,100 @@ class ProfileScreen extends StatelessWidget {
             // Log Out
             Padding(
               padding: const EdgeInsets.all(24),
-              child: Container(
-                height: 54,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF2F3F4),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: TextButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    height: 54,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF2F3F4),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: TextButton(
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                      ),
+                      onPressed: () async {
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.remove('auth_token');
+                        AutoRouter.of(context)
+                            .replaceAll([const AuthorizationRoute()]);
+                      },
+                      child: Text(
+                        'log_out'.tr(),
+                        style: const TextStyle(
+                          color: ksecondaryColor,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ),
-                  onPressed: () async {
-                    final prefs = await SharedPreferences.getInstance();
-                    await prefs.remove('auth_token');
-                    AutoRouter.of(context)
-                        .replaceAll([const AuthorizationRoute()]);
-                  },
-                  child: Text(
-                    'log_out'.tr(),
-                    style: const TextStyle(
-                      color: ksecondaryColor,
-                      fontSize: 16,
+                  const Gap(10),
+                  Container(
+                    height: 54,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF2F3F4),
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(
+                        color: Colors.red, // Red border color
+                        width: 1, // Border width
+                      ),
+                    ),
+                    child: TextButton(
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                      ),
+                      onPressed: () async {
+                        // Show Alert Dialog
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Confirm Deletion'.tr()),
+                              content: Text(
+                                  'Are you sure you want to delete your account?'
+                                      .tr()),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    // Close the dialog
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Cancel'.tr()),
+                                ),
+                                TextButton(
+                                  onPressed: deleteAccount,
+                                  child: Text(
+                                    'Delete'.tr(),
+                                    style: const TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Text(
+                        'Delete account'.tr(),
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontSize: 16,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
           ],

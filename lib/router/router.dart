@@ -52,7 +52,9 @@ class AppRouter extends RootStackRouter {
           ]),
         ]),
         AutoRoute(page: DiscoverDetailsRoute.page, path: '/discoverdetail'),
-
+        AutoRoute(
+            page: DeliveryAddressNew.page,
+            path: '/deliveryAddressNewRouteFromLogin'),
         AutoRoute(page: FakeProifleRoute.page, path: '/FakeProifleRoute'),
       ];
 }

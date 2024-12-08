@@ -80,13 +80,13 @@ class _LoginPageState extends State<LoginPage> {
             PopupMenuButton<Locale>(
               onSelected: (locale) => _changeLanguage(locale),
               itemBuilder: (context) => [
-                PopupMenuItem(
-                  value: const Locale('en'),
-                  child: const Text('English'),
+                const PopupMenuItem(
+                  value: Locale('en'),
+                  child: Text('English'),
                 ),
-                PopupMenuItem(
-                  value: const Locale('ar'),
-                  child: const Text('العربية'),
+                const PopupMenuItem(
+                  value: Locale('ar'),
+                  child: Text('العربية'),
                 ),
               ],
             ),
@@ -97,7 +97,8 @@ class _LoginPageState extends State<LoginPage> {
           child: BlocConsumer<LoginBloc, LoginState>(
             listener: (context, state) {
               if (state is LoginSuccess) {
-                AutoRouter.of(context).replace(const EntryPoint());
+                AutoRouter.of(context)
+                    .replaceAll([DeliveryAddressNew(fromLogin: true)]);
               } else if (state is LoginFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.error)),

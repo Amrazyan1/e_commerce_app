@@ -164,10 +164,14 @@ class DeliveryAddressInfoRoute extends _i25.PageRouteInfo<void> {
 class DeliveryAddressNew extends _i25.PageRouteInfo<DeliveryAddressNewArgs> {
   DeliveryAddressNew({
     _i26.Key? key,
+    bool fromLogin = false,
     List<_i25.PageRouteInfo>? children,
   }) : super(
           DeliveryAddressNew.name,
-          args: DeliveryAddressNewArgs(key: key),
+          args: DeliveryAddressNewArgs(
+            key: key,
+            fromLogin: fromLogin,
+          ),
           initialChildren: children,
         );
 
@@ -178,19 +182,27 @@ class DeliveryAddressNew extends _i25.PageRouteInfo<DeliveryAddressNewArgs> {
     builder: (data) {
       final args = data.argsAs<DeliveryAddressNewArgs>(
           orElse: () => const DeliveryAddressNewArgs());
-      return _i7.DeliveryAddressNew(key: args.key);
+      return _i7.DeliveryAddressNew(
+        key: args.key,
+        fromLogin: args.fromLogin,
+      );
     },
   );
 }
 
 class DeliveryAddressNewArgs {
-  const DeliveryAddressNewArgs({this.key});
+  const DeliveryAddressNewArgs({
+    this.key,
+    this.fromLogin = false,
+  });
 
   final _i26.Key? key;
 
+  final bool fromLogin;
+
   @override
   String toString() {
-    return 'DeliveryAddressNewArgs{key: $key}';
+    return 'DeliveryAddressNewArgs{key: $key, fromLogin: $fromLogin}';
   }
 }
 

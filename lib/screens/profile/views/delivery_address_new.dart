@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/constants.dart';
+import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -15,8 +16,8 @@ import '../../Products/Components/cart_button.dart';
 @RoutePage()
 class DeliveryAddressNew extends StatefulWidget {
   final ApiService apiService = GetIt.I<ApiService>();
-
-  DeliveryAddressNew({super.key});
+  bool fromLogin;
+  DeliveryAddressNew({super.key, this.fromLogin = false});
 
   @override
   State<DeliveryAddressNew> createState() => _DeliveryAddressNewState();
@@ -122,7 +123,11 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
       };
 
       final response = await widget.apiService.addAddress(addressDetails);
-      AutoRouter.of(context).maybePop();
+      if (widget.fromLogin) {
+        AutoRouter.of(context).replaceAll([const EntryPoint()]);
+      } else {
+        AutoRouter.of(context).maybePop();
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Failed to add address: $e")),
