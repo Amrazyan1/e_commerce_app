@@ -12,14 +12,12 @@ import 'banner_s.dart';
 class BannerSStyle5 extends StatefulWidget {
   BannerSStyle5({
     super.key,
-    this.image = "",
     this.title,
     required this.press,
     this.subtitle,
     this.bottomText,
   });
 
-  String? image;
   final String? title;
   final String? subtitle, bottomText;
 
@@ -30,6 +28,8 @@ class BannerSStyle5 extends StatefulWidget {
 }
 
 class _BannerSStyle5State extends State<BannerSStyle5> {
+  String? image = '';
+
   @override
   void initState() {
     getOfferBanners();
@@ -42,7 +42,7 @@ class _BannerSStyle5State extends State<BannerSStyle5> {
     final data = bannerModelResponseFromJson(response.data);
     if (data.data != null && data.data!.isNotEmpty) {
       setState(() {
-        widget.image = data.data!.first.src;
+        image = data.data!.first.src;
       });
     }
   }
@@ -54,7 +54,7 @@ class _BannerSStyle5State extends State<BannerSStyle5> {
           ? ui.TextDirection.rtl
           : ui.TextDirection.ltr,
       child: BannerS(
-        image: widget.image!,
+        image: image!,
         press: widget.press,
         children: [
           Padding(

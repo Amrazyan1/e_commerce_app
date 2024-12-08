@@ -29,6 +29,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
   final ApiService _apiService = GetIt.I<ApiService>();
   String payType = 'cash';
   String address = 'address';
+  String useBonus = 'false';
 
   List<CategoryModel> categories = [];
   @override
@@ -75,6 +76,17 @@ class _CheckoutModalState extends State<CheckoutModal> {
         subCategories: [],
       ),
     );
+    widget.data.availableBonuses = '5500\$';
+    if (widget.data.availableBonuses != null &&
+        widget.data.availableBonuses!.isNotEmpty) {
+      categories.add(
+        CategoryModel(
+            title: "use_bonus".tr(),
+            info: '${widget.data.availableBonuses}',
+            subCategories: [],
+            isCheckbox: true),
+      );
+    }
   }
 
   void processOrder() async {
@@ -88,6 +100,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
         'addressName': address,
         'additional': 'info',
         'date': formattedDate,
+        'usingBonus': useBonus,
         'start': '${widget.data.start}',
         'end': '${widget.data.end}'
       });
@@ -149,9 +162,14 @@ class _CheckoutModalState extends State<CheckoutModal> {
                     info: categories[index].info,
                     ignoreExpansion: categories[index].ignoreExpansion ?? false,
                     subCategory: categories[index].subCategories!,
+                    isCheckbox: categories[index].isCheckbox,
                     onCategorySelected: (selectedCategory) {
                       if (selectedCategory.paytipe != null) {
                         payType = selectedCategory.paytipe!;
+                      }
+                      if (selectedCategory.isCheckbox) {
+                        useBonus = selectedCategory.info;
+                        log('$useBonus ${selectedCategory.info}');
                       }
                       if (selectedCategory.address != null) {
                         address = selectedCategory.address!;

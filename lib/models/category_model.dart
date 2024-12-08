@@ -8,6 +8,7 @@ class CategoryModel {
   final String? address;
   final bool? isSelected;
   final bool? ignoreExpansion;
+  final bool isCheckbox;
   CategoryModel(
       {required this.title,
       required this.info,
@@ -17,6 +18,7 @@ class CategoryModel {
       this.paytipe,
       this.address,
       this.isSelected,
+      this.isCheckbox = false,
       this.ignoreExpansion});
 }
 

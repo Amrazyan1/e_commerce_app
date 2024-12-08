@@ -3,6 +3,7 @@ import 'package:e_commerce_app/blocs/orders/bloc/orders_bloc.dart';
 import 'package:e_commerce_app/blocs/orders/bloc/orders_event.dart';
 import 'package:e_commerce_app/components/checkout_modal.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,21 +29,22 @@ class OrderAcceptedScreen extends StatelessWidget {
             const Spacer(
               flex: 8,
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Text(
-                "You Order Has Been Accepted",
+                'order_accepted'.tr(),
                 textAlign: TextAlign.center,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
               ),
             ),
             const Spacer(),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Text(
-                "Your item has been placed and is on it's way to being processed",
+                'order_accepted_info'.tr(),
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 16,
                     color: Color(0xff7C7C7C),
                     fontWeight: FontWeight.w600),
@@ -54,7 +56,7 @@ class OrderAcceptedScreen extends StatelessWidget {
             SizedBox(
               height: 50,
               child: ButtonMainWidget(
-                text: 'Track order',
+                text: 'order_track'.tr(),
                 callback: () {
                   Navigator.pop(context);
                   context.read<OrdersBloc>().add(FetchOrders());
@@ -71,9 +73,10 @@ class OrderAcceptedScreen extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
               },
-              child: const Text(
-                "Back To Home",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              child: Text(
+                'back_to_home'.tr(),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
             const Spacer(

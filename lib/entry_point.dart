@@ -10,6 +10,7 @@ import 'package:e_commerce_app/blocs/settings/bloc/settings_bloc.dart';
 import 'package:e_commerce_app/blocs/settings/bloc/settings_event.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:e_commerce_app/constants.dart';
+import 'package:e_commerce_app/screens/order_accepted_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -201,9 +202,6 @@ class _EntryPointState extends State<EntryPoint> {
 
           break;
         case 4:
-          final prefs = await SharedPreferences.getInstance();
-          final asgas = prefs.getString('auth_token');
-          log('$asgas');
           context.read<SettingsBloc>().add(FetchUserSettingsEvent());
           break;
 

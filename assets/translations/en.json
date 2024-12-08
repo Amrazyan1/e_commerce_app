@@ -83,6 +83,11 @@
 "add_new_address" : "Add new address",
 "address_name" : "Address name",
 "add_address" : "Add Address",
-"cancel_order" : "Cancel Order"
+"cancel_order" : "Cancel Order",
+"order_accepted" : "You Order Has Been Accepted",
+"order_accepted_info" : "Your item has been placed and is on it's way to being processed",
+"order_track" : "Track order",
+"back_to_home" : "Back To Home"
+
 }
 

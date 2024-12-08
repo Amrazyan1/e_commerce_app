@@ -50,6 +50,7 @@ class ViewOrderData {
   String? discount;
   String? total;
   String? deliveryPrice;
+  String? availableBonuses;
   String? totalWithDelivery;
   List<PaymentMethod>? paymentMethods;
   dynamic customer;
@@ -70,6 +71,7 @@ class ViewOrderData {
     this.subtotal,
     this.discount,
     this.total,
+    this.availableBonuses,
     this.deliveryPrice,
     this.totalWithDelivery,
     this.paymentMethods,
@@ -92,6 +94,7 @@ class ViewOrderData {
     String? subtotal,
     String? discount,
     String? total,
+    String? availabelBonuses,
     String? deliveryPrice,
     String? totalWithDelivery,
     List<PaymentMethod>? paymentMethods,
@@ -113,6 +116,7 @@ class ViewOrderData {
         subtotal: subtotal ?? this.subtotal,
         discount: discount ?? this.discount,
         total: total ?? this.total,
+        availableBonuses: availableBonuses ?? this.availableBonuses,
         deliveryPrice: deliveryPrice ?? this.deliveryPrice,
         totalWithDelivery: totalWithDelivery ?? this.totalWithDelivery,
         paymentMethods: paymentMethods ?? this.paymentMethods,
@@ -136,6 +140,7 @@ class ViewOrderData {
         discount: json["discount"],
         total: json["total"],
         deliveryPrice: json["deliveryPrice"],
+        availableBonuses: json["availableBonuses"],
         totalWithDelivery: json["totalWithDelivery"],
         paymentMethods: json["paymentMethods"] == null
             ? []

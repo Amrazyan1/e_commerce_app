@@ -81,6 +81,10 @@
   "add_new_address": "افزودن آدرس جدید",
   "address_name": "نام آدرس",
   "add_address": "افزودن آدرس",
-  "cancel_order": "لغو سفارش"
-
+  "cancel_order": "لغو سفارش",
+ 
+  "order_accepted": "سفارش شما پذیرفته شد",
+  "order_accepted_info": "محصول شما ثبت شده و در حال پردازش است",
+  "order_track": "پیگیری سفارش",
+  "back_to_home": "بازگشت به خانه"
 }

@@ -275,7 +275,7 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '\$${item.product!.discount != '0 %' ? item.product!.discountedPrice : item.product!.price}',
+                        '${item.product!.discount != '0 %' ? item.product!.discountedPrice : item.product!.price}',
                       ),
                     ],
                   ),

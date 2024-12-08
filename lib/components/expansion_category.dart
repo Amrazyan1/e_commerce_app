@@ -14,8 +14,10 @@ class ExpansionCategory extends StatefulWidget {
       required this.info,
       required this.subCategory,
       this.onCategorySelected,
-      this.ignoreExpansion = false});
+      this.ignoreExpansion = false,
+      this.isCheckbox = false});
   final bool? ignoreExpansion; // svgSrc;
+  final bool isCheckbox; // svgSrc;
 
   final String title; // svgSrc;
   final String info; // svgSrc;
@@ -31,7 +33,7 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
   String selectedInfo = '';
   bool expanded = false;
   CategoryModel? selectedCategory;
-
+  bool checked = false;
   @override
   void initState() {
     super.initState();
@@ -128,15 +130,51 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
               ),
             ),
           )
-        : ListTile(
-            title: Text(
-              widget.title,
-              style: const TextStyle(fontSize: 14),
-            ),
-            subtitle: Text(
-              widget.info,
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-          );
+        : widget.isCheckbox
+            ? CheckboxListTile(
+                title: Text(widget.title + ' ' + widget.info),
+                activeColor: ksecondaryColor,
+                value: checked,
+                onChanged: (isChecked) {
+                  setState(() {
+                    checked = isChecked!;
+                    selectedInfo = widget.info;
+                    expanded = false;
+
+                    if (widget.onCategorySelected != null) {
+                      widget.onCategorySelected!(CategoryModel(
+                          title: 'checkbox',
+                          info: '$isChecked',
+                          isCheckbox: true));
+                    }
+                  });
+                },
+                controlAffinity: ListTileControlAffinity.leading,
+              )
+            // Checkbox(
+
+            //     value: subCategory.isChecked ?? false,
+            //     onChanged: (value) {
+            //       setState(() {
+            //         selectedInfo = widget.info;
+            //         expanded = false;
+
+            //         if (widget.onCategorySelected != null) {
+            //           widget.onCategorySelected!(
+            //               CategoryModel(title: 'checkbox', info: '$value'));
+            //         }
+            //       });
+            //     },
+            //   )
+            : ListTile(
+                title: Text(
+                  widget.title,
+                  style: const TextStyle(fontSize: 14),
+                ),
+                subtitle: Text(
+                  widget.info,
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+              );
   }
 }

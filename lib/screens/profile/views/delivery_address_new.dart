@@ -170,8 +170,8 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
                     compassEnabled: true,
                     myLocationButtonEnabled: true,
                     cloudMapId: Platform.isAndroid
-                        ? "97362ebb6d78549a"
-                        : "5f89739bf4061586",
+                        ? "75c80c69218fa3d7"
+                        : "f886856e2413792",
                     initialCameraPosition: _initialPosition,
                     onMapCreated: (GoogleMapController controller) {
                       mapController = controller;
