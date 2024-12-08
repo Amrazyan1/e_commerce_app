@@ -18,33 +18,29 @@ class MyDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
     TextEditingController nameController = TextEditingController(),
         emailController = TextEditingController(),
         phoneController = TextEditingController();
     final TextEditingController _dateTimeController = TextEditingController();
+
     Future<DateTime?> showDialog(Widget child) async {
       DateTime? picked = await showCupertinoModalPopup<DateTime>(
         context: context,
         builder: (BuildContext context) => Container(
           height: 216,
           padding: const EdgeInsets.only(top: 6.0),
-          // The Bottom margin is provided to align the popup above the system
-          // navigation bar.
           margin: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          // Provide a background color for the popup.
           color: CupertinoColors.systemBackground.resolveFrom(context),
-          // Use a SafeArea widget to avoid system overlaps.
           child: SafeArea(
             top: false,
             child: child,
           ),
         ),
       );
-      // This block is executed when the date picker is dismissed.
-      print('Date Picker closed. Selected Date: $picked');
-      // Return the selected date (or null if the picker was dismissed without a selection).
       return picked;
     }
 
@@ -63,91 +59,117 @@ class MyDetailsScreen extends StatelessWidget {
             builder: (context, state) {
               if (state is SettingsLoaded) {
                 _dateTimeController.text = state.settings.data!.birthday ?? '';
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 20),
-                    _buildInputField(
-                      controller: nameController,
-                      label: 'name'.tr(),
-                      defaultValue: '${state.settings.data!.fullName}',
-                      keyboardType: TextInputType.name,
-                    ),
-                    const SizedBox(height: 20),
-                    _buildInputField(
-                      controller: emailController,
-                      label: 'Email'.tr(),
-                      defaultValue: '${state.settings.data!.email}',
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    const SizedBox(height: 20),
-                    GestureDetector(
-                      onTap: () {
-                        showDialog(
-                          CupertinoDatePicker(
-                            initialDateTime: DateTime.now(),
-                            maximumDate: DateTime.now(),
-                            mode: CupertinoDatePickerMode.date,
-
-                            use24hFormat: true,
-                            // This shows day of week alongside day of month
-                            showDayOfWeek: true,
-                            // This is called when the user changes the date.
-                            onDateTimeChanged: (DateTime newDate) {
-                              log(newDate.toString());
-                              String formattedDate =
-                                  DateFormat('yyyy-MM-dd').format(newDate);
-
-                              _dateTimeController.text = formattedDate;
-                            },
-                          ),
-                        );
-                      },
-                      child: AbsorbPointer(
-                        child: TextFormField(
-                          controller: _dateTimeController,
-                          readOnly: true,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                          decoration: InputDecoration(
-                            labelText: 'Birth date'.tr(),
-                            suffixIcon: IconButton(
-                              icon: const Icon(Icons.calendar_month),
-                              onPressed: () {
-                                // Handle calendar icon action
+                return Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 20),
+                      _buildInputField(
+                        controller: nameController,
+                        label: 'name'.tr(),
+                        defaultValue: '${state.settings.data!.fullName}',
+                        keyboardType: TextInputType.name,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Name is required';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      _buildInputField(
+                        controller: emailController,
+                        label: 'Email'.tr(),
+                        defaultValue: '${state.settings.data!.email}',
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Email is required';
+                          } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                              .hasMatch(value)) {
+                            return 'Enter a valid email';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            CupertinoDatePicker(
+                              initialDateTime: DateTime.now(),
+                              maximumDate: DateTime.now(),
+                              mode: CupertinoDatePickerMode.date,
+                              use24hFormat: true,
+                              showDayOfWeek: true,
+                              onDateTimeChanged: (DateTime newDate) {
+                                String formattedDate =
+                                    DateFormat('yyyy-MM-dd').format(newDate);
+                                _dateTimeController.text = formattedDate;
                               },
                             ),
+                          );
+                        },
+                        child: AbsorbPointer(
+                          child: TextFormField(
+                            controller: _dateTimeController,
+                            readOnly: true,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                            decoration: InputDecoration(
+                              labelText: 'Birth date'.tr(),
+                              suffixIcon: IconButton(
+                                icon: const Icon(Icons.calendar_month),
+                                onPressed: () {},
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Birth date is required';
+                              }
+                              return null;
+                            },
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    _buildInputField(
-                      readOnly: true,
-                      controller: phoneController,
-                      label: 'Phone Number'.tr(),
-                      defaultValue: '${state.settings.data!.phone}',
-                      keyboardType: TextInputType.phone,
-                    ),
-                    const SizedBox(height: 30),
-                    SizedBox(
+                      const SizedBox(height: 20),
+                      _buildInputField(
+                        readOnly: true,
+                        controller: phoneController,
+                        label: 'Phone Number'.tr(),
+                        defaultValue: '${state.settings.data!.phone}',
+                        keyboardType: TextInputType.phone,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Phone number is required';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 30),
+                      SizedBox(
                         height: 50,
                         child: ButtonMainWidget(
                           text: 'save_details'.tr(),
                           callback: () {
-                            context.read<SettingsBloc>().add(SettingsUpdate(
-                                name: nameController.text,
-                                email: emailController.text,
-                                birthdate: _dateTimeController.text));
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Details saved!')),
-                            );
-                            AutoRouter.of(context).maybePop();
+                            if (_formKey.currentState?.validate() ?? false) {
+                              context.read<SettingsBloc>().add(SettingsUpdate(
+                                  name: nameController.text,
+                                  email: emailController.text,
+                                  birthdate: _dateTimeController.text));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Details saved!')),
+                              );
+                              AutoRouter.of(context).maybePop();
+                            }
                           },
-                        )),
-                  ],
+                        ),
+                      ),
+                    ],
+                  ),
                 );
               }
               return const CircularProgressIndicator();
@@ -164,6 +186,7 @@ class MyDetailsScreen extends StatelessWidget {
     required String defaultValue,
     required TextInputType keyboardType,
     bool readOnly = false,
+    String? Function(String?)? validator,
   }) {
     if (controller.text.isEmpty) {
       controller.text = defaultValue;
@@ -179,11 +202,10 @@ class MyDetailsScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        TextField(
-          // readOnly: readOnly,
-          enabled: !readOnly,
+        TextFormField(
           controller: controller,
           keyboardType: keyboardType,
+          enabled: !readOnly,
           style: const TextStyle(fontWeight: FontWeight.bold),
           decoration: InputDecoration(
             hintText: label,
@@ -199,6 +221,7 @@ class MyDetailsScreen extends StatelessWidget {
               vertical: 10,
             ),
           ),
+          validator: validator,
         ),
       ],
     );
