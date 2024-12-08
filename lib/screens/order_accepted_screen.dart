@@ -1,8 +1,11 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:e_commerce_app/blocs/orders/bloc/orders_bloc.dart';
+import 'package:e_commerce_app/blocs/orders/bloc/orders_event.dart';
 import 'package:e_commerce_app/components/checkout_modal.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class OrderAcceptedScreen extends StatelessWidget {
@@ -54,6 +57,8 @@ class OrderAcceptedScreen extends StatelessWidget {
                 text: 'Track order',
                 callback: () {
                   Navigator.pop(context);
+                  context.read<OrdersBloc>().add(FetchOrders());
+
                   AutoRouter.of(context)
                       .navigate(const EmptyRouter(children: [OrdersRoute()]));
                 },

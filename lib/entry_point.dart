@@ -13,10 +13,15 @@ import 'package:e_commerce_app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'blocs/products/discounts/bloc/discounted_bloc.dart';
 import 'blocs/products/popular/bloc/popular_products_bloc.dart';
 import 'blocs/products/trending/bloc/trend_new_products_bloc.dart';
+
+final GlobalKey<AutoTabsRouterState> autoTabsRouterKey =
+    GlobalKey<AutoTabsRouterState>();
 
 @RoutePage()
 class EntryPoint extends StatefulWidget {
@@ -35,6 +40,8 @@ class _EntryPointState extends State<EntryPoint> {
     context.read<PopularProductsBloc>().add(FetchTrendPopularProductsEvent());
   }
 
+  DateTime timeBackPressed = DateTime.now();
+  var tabsRouter;
   @override
   Widget build(BuildContext context) {
     SvgPicture svgIcon(String src, {Color? color}) {
@@ -51,42 +58,43 @@ class _EntryPointState extends State<EntryPoint> {
       );
     }
 
-    return AutoTabsRouter(
-      routes: const [
-        EmptyHomeRouter(children: [
-          HomeRoute(), // Default child of home tab
-        ]),
-        DiscoverRoute(),
-        CartRoute(),
-        FavoriteRoute(),
-        ProfileRoute(),
-      ],
-      builder: (context, child) {
-        final tabsRouter = AutoTabsRouter.of(context);
+    return WillPopScope(
+      onWillPop: () async {
+        log('WillPopScope');
+        if (tabsRouter.activeIndex == 0) {
+          final difference = DateTime.now().difference(timeBackPressed);
+          final isExitWarning = difference >= const Duration(seconds: 1);
 
-        return WillPopScope(
-          onWillPop: () async {
-            // if (tabsRouter.activeIndex != 0) {
-            //   if (tabsRouter.activeIndex == 1) {
-            //     // Access the router stack for the Discover tab
-            //     final discoverRouter = tabsRouter.stackRouterOfIndex(1);
+          timeBackPressed = DateTime.now();
 
-            //     // Check if the Discover tab has nested pages
-            //     if (discoverRouter != null && discoverRouter.hasEntries) {
-            //       // Pop the topmost nested page in Discover
-            //       discoverRouter.maybePop();
-            //       return false; // Prevent system back pop
-            //     }
-            //   }
+          if (isExitWarning) {
+            const toastMessage = "Press again to exit";
+            Fluttertoast.showToast(msg: toastMessage, fontSize: 18);
+            return false;
+          } else {
+            log('WillPopScope EXIT');
 
-            //   // Navigate back to the first tab (Home tab)
-            //   tabsRouter.setActiveIndex(0);
-            //   log('Navigated back to Home tab.');
-            //   return false; // Prevent system back pop
-            // }
-            return false; // Allow system back pop (exit app)
-          },
-          child: Scaffold(
+            Fluttertoast.cancel();
+            return true; // Return false to block the back navigation
+          }
+        }
+        return Future.value(tabsRouter.activeIndex != 0);
+      },
+      child: AutoTabsRouter(
+        key: autoTabsRouterKey,
+        routes: const [
+          EmptyHomeRouter(children: [
+            HomeRoute(), // Default child of home tab
+          ]),
+          DiscoverRoute(),
+          CartRoute(),
+          FavoriteRoute(),
+          ProfileRoute(),
+        ],
+        builder: (context, child) {
+          tabsRouter = AutoTabsRouter.of(context);
+
+          return Scaffold(
             body: child,
             bottomNavigationBar: Container(
               padding: const EdgeInsets.only(top: defaultPadding / 2),
@@ -136,13 +144,13 @@ class _EntryPointState extends State<EntryPoint> {
                 ],
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
-  void _onPageChange(int index, TabsRouter tabsRouter) {
+  void _onPageChange(int index, TabsRouter tabsRouter) async {
     if (index != tabsRouter.activeIndex) {
       tabsRouter.setActiveIndex(index);
 
@@ -173,6 +181,9 @@ class _EntryPointState extends State<EntryPoint> {
 
           break;
         case 4:
+          final prefs = await SharedPreferences.getInstance();
+          final asgas = prefs.getString('auth_token');
+          log('$asgas');
           context.read<SettingsBloc>().add(FetchUserSettingsEvent());
           break;
 

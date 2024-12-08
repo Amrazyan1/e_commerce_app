@@ -22,6 +22,7 @@ import '../../../blocs/categorydetails/bloc/category_detail_bloc.dart';
 import '../../../blocs/categorydetails/bloc/category_detail_event.dart';
 import '../../../blocs/categorydetails/bloc/category_detail_state.dart';
 import '../../../blocs/search/bloc/global_search_bloc.dart';
+import '../../../entry_point.dart';
 import '../../../models/Product/product_model.dart';
 import '../../Products/Components/product_card.dart';
 import '../../Products/product_details_screen.dart';
@@ -100,252 +101,269 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         //   }
         // }
       },
-      child: SuperScaffold(
-        key: const Key('discvoer'),
-        appBar: SuperAppBar(
-          automaticallyImplyLeading: false,
-          actions: !_isInitialScreen
-              ? Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => FilterScreen(
-                              isFirst: true,
+      child: WillPopScope(
+        onWillPop: () async {
+          if (_isInitialScreen) {
+            log('POPOIPOPOPOP  ');
+            final tabsRouter = AutoTabsRouter.of(context);
+            if (tabsRouter.activeIndex != 0) {
+              tabsRouter.setActiveIndex(0);
+              return false;
+            }
+            return true;
+          } else {
+            _handleBackNavigation();
+            return false;
+          }
+        },
+        child: SuperScaffold(
+          key: const Key('discvoer'),
+          appBar: SuperAppBar(
+            automaticallyImplyLeading: false,
+            actions: !_isInitialScreen
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => FilterScreen(
+                                isFirst: true,
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      icon: SvgPicture.asset("assets/icons/filter.svg",
+                          );
+                        },
+                        icon: SvgPicture.asset("assets/icons/filter.svg",
+                            color:
+                                Theme.of(context).textTheme.bodyLarge!.color),
+                      ),
+                    ],
+                  )
+                : null,
+            leading: !_isInitialScreen
+                ? GestureDetector(
+                    onTap: () {
+                      _handleBackNavigation();
+                    },
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+                      child: SvgPicture.asset("assets/icons/arrow_back.svg",
                           color: Theme.of(context).textTheme.bodyLarge!.color),
                     ),
-                  ],
-                )
-              : null,
-          leading: !_isInitialScreen
-              ? GestureDetector(
-                  onTap: () {
-                    _handleBackNavigation();
-                  },
-                  child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-                    child: SvgPicture.asset("assets/icons/arrow_back.svg",
-                        color: Theme.of(context).textTheme.bodyLarge!.color),
+                  )
+                : null,
+            backgroundColor:
+                Theme.of(context).colorScheme.background.withOpacity(.5),
+            title: Text(
+              'Find products',
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+            ),
+            largeTitle: SuperLargeTitle(
+              largeTitle: 'Find products',
+              textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 24,
+                    letterSpacing: 0,
                   ),
-                )
-              : null,
-          backgroundColor:
-              Theme.of(context).colorScheme.background.withOpacity(.5),
-          title: Text(
-            'Find products',
-            style: Theme.of(context)
-                .textTheme
-                .labelMedium!
-                .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-          ),
-          largeTitle: SuperLargeTitle(
-            largeTitle: 'Find products',
-            textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 24,
-                  letterSpacing: 0,
-                ),
-          ),
-          searchBar: SuperSearchBar(
-            enabled: false,
-          ),
-          // searchBar: SuperSearchBar(
-          //   searchFocusNode: _searchFocusNode,
-          //   searchController: _searchTextController,
-          //   textStyle: Theme.of(context).textTheme.bodyLarge!,
-          //   onFocused: (value) {
-          //     if (!value) {}
-          //   },
-          //   onSubmitted: (value) {
-          //     context.read<GlobalSearchBloc>().add(PerformGlobalSearch(
-          //           keyword: value,
-          //           perPage: 20,
-          //         ));
-          //   },
-          //   cancelTextStyle: Theme.of(context).textTheme.bodyLarge!,
-          //   onChanged: (value) {},
-          //   searchResult: BlocBuilder<GlobalSearchBloc, GlobalSearchState>(
-          //     builder: (context, state) {
-          //       if (state is GlobalSearchLoading) {
-          //         return const Center(child: CircularProgressIndicator());
-          //       } else if (state is GlobalSearchLoaded) {
-          //         // Display results in a GridView
-          //         return Padding(
-          //           padding: const EdgeInsets.all(defaultPadding),
-          //           child: GridView.builder(
-          //             itemCount:
-          //                 state.results.data!.products!.data!.data!.length,
-          //             gridDelegate:
-          //                 const SliverGridDelegateWithFixedCrossAxisCount(
-          //               crossAxisCount: 2,
-          //               mainAxisSpacing: 8.0,
-          //               crossAxisSpacing: 8.0,
-          //               childAspectRatio: 140 / 220, // Match item dimensions
-          //             ),
-          //             itemBuilder: (context, index) {
-          //               final product =
-          //                   state.results.data!.products!.data!.data![index];
-          //               return ProductCard(
-          //                 product: product,
-          //                 press: () {
-          //                   _searchFocusNode.requestFocus();
-          //                   Future.delayed(const Duration(milliseconds: 10),
-          //                       () {
-          //                     _searchFocusNode.unfocus();
-          //                     _searchTextController.clear();
+            ),
+            searchBar: SuperSearchBar(
+              enabled: false,
+            ),
+            // searchBar: SuperSearchBar(
+            //   searchFocusNode: _searchFocusNode,
+            //   searchController: _searchTextController,
+            //   textStyle: Theme.of(context).textTheme.bodyLarge!,
+            //   onFocused: (value) {
+            //     if (!value) {}
+            //   },
+            //   onSubmitted: (value) {
+            //     context.read<GlobalSearchBloc>().add(PerformGlobalSearch(
+            //           keyword: value,
+            //           perPage: 20,
+            //         ));
+            //   },
+            //   cancelTextStyle: Theme.of(context).textTheme.bodyLarge!,
+            //   onChanged: (value) {},
+            //   searchResult: BlocBuilder<GlobalSearchBloc, GlobalSearchState>(
+            //     builder: (context, state) {
+            //       if (state is GlobalSearchLoading) {
+            //         return const Center(child: CircularProgressIndicator());
+            //       } else if (state is GlobalSearchLoaded) {
+            //         // Display results in a GridView
+            //         return Padding(
+            //           padding: const EdgeInsets.all(defaultPadding),
+            //           child: GridView.builder(
+            //             itemCount:
+            //                 state.results.data!.products!.data!.data!.length,
+            //             gridDelegate:
+            //                 const SliverGridDelegateWithFixedCrossAxisCount(
+            //               crossAxisCount: 2,
+            //               mainAxisSpacing: 8.0,
+            //               crossAxisSpacing: 8.0,
+            //               childAspectRatio: 140 / 220, // Match item dimensions
+            //             ),
+            //             itemBuilder: (context, index) {
+            //               final product =
+            //                   state.results.data!.products!.data!.data![index];
+            //               return ProductCard(
+            //                 product: product,
+            //                 press: () {
+            //                   _searchFocusNode.requestFocus();
+            //                   Future.delayed(const Duration(milliseconds: 10),
+            //                       () {
+            //                     _searchFocusNode.unfocus();
+            //                     _searchTextController.clear();
 
-          //                     context.read<MainProvider>().currentProductModel =
-          //                         product;
-          //                     Navigator.of(context).push(
-          //                       MaterialPageRoute(
-          //                         builder: (context) =>
-          //                             const ProductDetailsScreen(),
-          //                       ),
-          //                     );
-          //                   });
-          //                 },
-          //               );
-          //             },
-          //           ),
-          //         );
-          //       } else if (state is GlobalSearchError) {
-          //         return Center(child: Text(state.message));
-          //       } else {
-          //         // Initial state or no results
-          //         return const Center(child: Text('Start typing to search'));
-          //       }
-          //     },
-          //   ),
-          // ),
-        ),
-        body: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            // Categories Section
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
-              sliver: BlocListener<CategoriesBloc, CategoriesState>(
-                listener: (context, state) {
-                  if (state is CategoriesError) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                          duration: const Duration(seconds: 5),
-                          content: Text(state.error)),
-                    );
-                  }
-                },
-                child: BlocBuilder<CategoriesBloc, CategoriesState>(
-                  builder: (context, state) {
-                    if (state is CategoriesLoading) {
-                      return const SliverToBoxAdapter(
-                          child: Center(child: CircularProgressIndicator()));
-                    } else if (state is CategoriesLoaded) {
-                      return SliverGrid(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            final category = state.categories[index];
-                            final products = state.products;
-                            return _categoryItem(
-                                category: category,
-                                productList: products,
-                                onTap: _onCategoryTap);
-                          },
-                          childCount: state.categories.length,
-                        ),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 8.0,
-                          crossAxisSpacing: 8.0,
-                          childAspectRatio: 174 / 174,
-                        ),
+            //                     context.read<MainProvider>().currentProductModel =
+            //                         product;
+            //                     Navigator.of(context).push(
+            //                       MaterialPageRoute(
+            //                         builder: (context) =>
+            //                             const ProductDetailsScreen(),
+            //                       ),
+            //                     );
+            //                   });
+            //                 },
+            //               );
+            //             },
+            //           ),
+            //         );
+            //       } else if (state is GlobalSearchError) {
+            //         return Center(child: Text(state.message));
+            //       } else {
+            //         // Initial state or no results
+            //         return const Center(child: Text('Start typing to search'));
+            //       }
+            //     },
+            //   ),
+            // ),
+          ),
+          body: CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              // Categories Section
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                sliver: BlocListener<CategoriesBloc, CategoriesState>(
+                  listener: (context, state) {
+                    if (state is CategoriesError) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            duration: const Duration(seconds: 5),
+                            content: Text(state.error)),
                       );
                     }
-                    return const SliverToBoxAdapter(
-                        child: Center(child: Text('No Data')));
                   },
-                ),
-              ),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: 20)), // Spacer
-
-            // Category Details Section
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
-              sliver: BlocListener<CategoryDetailBloc, CategoryDetailState>(
-                listener: (context, state) {
-                  if (state is CategoryDetailLoaded) {
-                    context.read<MainProvider>().isLoadingMore = false;
-                  }
-                  if (state is CategoryDetailError) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                          duration: const Duration(seconds: 5),
-                          content: Text(state.message)),
-                    );
-                  }
-                },
-                child: BlocBuilder<CategoryDetailBloc, CategoryDetailState>(
-                  builder: (context, state) {
-                    if (state is CategoryDetailLoaded) {
-                      final products = state.products;
-                      return SliverPadding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        sliver: SliverGrid(
+                  child: BlocBuilder<CategoriesBloc, CategoriesState>(
+                    builder: (context, state) {
+                      if (state is CategoriesLoading) {
+                        return const SliverToBoxAdapter(
+                            child: Center(child: CircularProgressIndicator()));
+                      } else if (state is CategoriesLoaded) {
+                        return SliverGrid(
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
-                              return ProductCard(
-                                product: products[index],
-                                press: () {
-                                  context
-                                      .read<MainProvider>()
-                                      .currentProductModel = products[index];
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const ProductDetailsScreen(),
-                                    ),
-                                  );
-                                },
-                              );
+                              final category = state.categories[index];
+                              final products = state.products;
+                              return _categoryItem(
+                                  category: category,
+                                  productList: products,
+                                  onTap: _onCategoryTap);
                             },
-                            childCount: state.products.length,
+                            childCount: state.categories.length,
                           ),
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             mainAxisSpacing: 8.0,
                             crossAxisSpacing: 8.0,
-                            childAspectRatio: 140 / 220,
+                            childAspectRatio: 174 / 174,
                           ),
-                        ),
-                      );
-                    } else if (state is CategoryDetailLoading) {
+                        );
+                      }
                       return const SliverToBoxAdapter(
-                        child: Center(child: CircularProgressIndicator()),
+                          child: Center(child: Text('No Data')));
+                    },
+                  ),
+                ),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 20)), // Spacer
+
+              // Category Details Section
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                sliver: BlocListener<CategoryDetailBloc, CategoryDetailState>(
+                  listener: (context, state) {
+                    if (state is CategoryDetailLoaded) {
+                      context.read<MainProvider>().isLoadingMore = false;
+                    }
+                    if (state is CategoryDetailError) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            duration: const Duration(seconds: 5),
+                            content: Text(state.message)),
                       );
                     }
-                    return const SliverToBoxAdapter(child: SizedBox.shrink());
                   },
+                  child: BlocBuilder<CategoryDetailBloc, CategoryDetailState>(
+                    builder: (context, state) {
+                      if (state is CategoryDetailLoaded) {
+                        final products = state.products;
+                        return SliverPadding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          sliver: SliverGrid(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) {
+                                return ProductCard(
+                                  product: products[index],
+                                  press: () {
+                                    context
+                                        .read<MainProvider>()
+                                        .currentProductModel = products[index];
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ProductDetailsScreen(),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              childCount: state.products.length,
+                            ),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 8.0,
+                              crossAxisSpacing: 8.0,
+                              childAspectRatio: 140 / 220,
+                            ),
+                          ),
+                        );
+                      } else if (state is CategoryDetailLoading) {
+                        return const SliverToBoxAdapter(
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+                      return const SliverToBoxAdapter(child: SizedBox.shrink());
+                    },
+                  ),
                 ),
               ),
-            ),
 
-            if (context.watch<MainProvider>().isLoadingMore == true)
-              const SliverToBoxAdapter(
-                child: Center(
-                  child: CircularProgressIndicator(),
+              if (context.watch<MainProvider>().isLoadingMore == true)
+                const SliverToBoxAdapter(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -416,10 +434,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       onTap: () => onTap(category),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10), // Apply radius to the child
-
         child: Container(
           decoration: BoxDecoration(
-            color: ksecondaryColor, //.withOpacity(0.2),
+            color: Colors.black45.withOpacity(0.2), // Apply opacity
             border: Border.all(color: const Color(0xFFD2B7E5)),
           ),
           child: Stack(
@@ -427,19 +444,17 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               _buildImage(category.image),
               Padding(
                 padding: const EdgeInsets.all(10),
-                child: Flexible(
-                  child: Text(
-                    category.name ?? 'Unknown',
-                    style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-
-                    textAlign: TextAlign.start,
-                    maxLines: 3, // Limit the number of lines
-                    overflow:
-                        TextOverflow.ellipsis, // Add ellipsis if text overflows
+                child: Text(
+                  category.name ?? 'Unknown',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
+                  textAlign: TextAlign.start,
+                  maxLines: 3, // Limit the number of lines
+                  overflow:
+                      TextOverflow.ellipsis, // Add ellipsis if text overflows
                 ),
               ),
             ],
@@ -469,7 +484,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           if (loadingProgress == null) {
             return child;
           }
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         },
       );
     }

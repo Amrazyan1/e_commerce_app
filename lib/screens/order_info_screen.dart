@@ -1,4 +1,6 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:e_commerce_app/blocs/orders/bloc/orders_bloc.dart';
+import 'package:e_commerce_app/blocs/orders/bloc/orders_event.dart';
 import 'package:e_commerce_app/components/checkout_modal.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +36,8 @@ class OrderInfoScreen extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.error)),
             );
+            context.read<OrdersBloc>().add(FetchOrders());
+
             AutoRouter.of(context).maybePop();
           }
           if (state is OrderDetailLoaded) {
