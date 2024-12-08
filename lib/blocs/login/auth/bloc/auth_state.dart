@@ -14,6 +14,8 @@ class AuthPhoneSent extends AuthState {
 
 class AuthVerified extends AuthState {}
 
+class AuthApproved extends AuthState {}
+
 class AuthError extends AuthState {
   final String message;
 

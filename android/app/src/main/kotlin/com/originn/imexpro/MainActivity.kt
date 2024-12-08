@@ -1,4 +1,4 @@
-package com.example.e_commerce_app
+package com.originn.imexpro
 
 import io.flutter.embedding.android.FlutterActivity
 

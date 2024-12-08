@@ -16,6 +16,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'dart:ui' as ui;
 
@@ -211,8 +212,11 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  onPressed: () {
-                    // Your logout logic here
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.remove('auth_token');
+                    AutoRouter.of(context)
+                        .replaceAll([const AuthorizationRoute()]);
                   },
                   child: Text(
                     'log_out'.tr(),

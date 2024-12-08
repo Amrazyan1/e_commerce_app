@@ -51,6 +51,7 @@ class _ProductCardState extends State<ProductCard> {
         minimumSize: const Size(140, 220),
         maximumSize: const Size(140, 220),
         padding: const EdgeInsets.all(8),
+        backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),

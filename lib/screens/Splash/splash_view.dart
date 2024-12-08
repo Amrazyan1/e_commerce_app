@@ -4,10 +4,33 @@ import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 @RoutePage()
-class SplashViewScreen extends StatelessWidget {
+class SplashViewScreen extends StatefulWidget {
   const SplashViewScreen({super.key});
+
+  @override
+  State<SplashViewScreen> createState() => _SplashViewScreenState();
+}
+
+class _SplashViewScreenState extends State<SplashViewScreen> {
+  @override
+  void initState() {
+    super.initState();
+    checkAutoLogin();
+  }
+
+  void checkAutoLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? authToken = prefs.getString('auth_token');
+    await Future.delayed(const Duration(seconds: 1));
+    if (authToken != null && authToken.isNotEmpty) {
+      AutoRouter.of(context).replaceAll([const EntryPoint()]);
+    } else {
+      AutoRouter.of(context).replace(const AuthorizationRoute());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,27 +46,20 @@ class SplashViewScreen extends StatelessWidget {
               fit: BoxFit.fill,
             ),
           ),
-          Align(
+          const Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: EdgeInsets.all(defaultPadding),
-              child: SizedBox(
-                  height: 55,
-                  child: ButtonMainWidget(
-                    text: 'Get Started',
-                    callback: () {
-                      AutoRouter.of(context).replace(EntryPoint());
-                    },
-                  )),
+              child: SizedBox(child: CircularProgressIndicator()),
             ),
           ),
-          Column(
+          const Column(
             children: [
               Gap(80),
               Padding(
-                padding: const EdgeInsets.all(defaultPadding),
+                padding: EdgeInsets.all(defaultPadding),
                 child: Text(
-                  'Welcome to our store',
+                  'Welcome to IMEXPRO',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,

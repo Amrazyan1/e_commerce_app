@@ -103,7 +103,7 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                               });
                             },
                             underline: const SizedBox(),
-                            items: ['+374', '+111'].map((code) {
+                            items: ['+374'].map((code) {
                               return DropdownMenuItem(
                                 value: code,
                                 child: Text(code),

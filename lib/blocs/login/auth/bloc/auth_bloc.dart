@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../models/otp_response_model.dart';
 import '../../../../services/api_service.dart';
 
 part 'auth_event.dart';
@@ -27,8 +29,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       try {
         final response =
             await _apiService.verifyOtp(event.phoneNumber, event.otp);
-        log(response.data);
-        emit(AuthVerified());
+        final respData = otpModelResponseFromJson(response.data);
+        if (respData.data?.user != null) {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('auth_token',
+              respData.data!.token!.plainTextToken!); // Store token securely
+          emit(AuthApproved());
+        } else {
+          emit(AuthVerified());
+        }
       } catch (e) {
         emit(AuthError('OTP verification failed'));
       }

@@ -32,6 +32,7 @@ class SecondaryProductCard extends StatelessWidget {
             minimumSize: const Size(256, 114),
             maximumSize: const Size(256, 114),
             padding: const EdgeInsets.all(8),
+            backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
