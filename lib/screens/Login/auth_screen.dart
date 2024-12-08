@@ -46,7 +46,7 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                 appBar: SuperAppBar(
                   automaticallyImplyLeading: false,
                   title: Text(
-                    'Authorization',
+                    'Authorization'.tr(),
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 20),
                   ),
@@ -54,6 +54,7 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       PopupMenuButton<Locale>(
+                        icon: const Icon(Icons.language_sharp),
                         onSelected: (locale) => _changeLanguage(locale),
                         itemBuilder: (context) => [
                           const PopupMenuItem(

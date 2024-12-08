@@ -78,6 +78,7 @@ class _LoginPageState extends State<LoginPage> {
         appBar: AppBar(
           actions: [
             PopupMenuButton<Locale>(
+              icon: const Icon(Icons.language_sharp),
               onSelected: (locale) => _changeLanguage(locale),
               itemBuilder: (context) => [
                 const PopupMenuItem(

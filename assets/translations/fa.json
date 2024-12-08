@@ -86,5 +86,8 @@
   "order_accepted": "سفارش شما پذیرفته شد",
   "order_accepted_info": "محصول شما ثبت شده و در حال پردازش است",
   "order_track": "پیگیری سفارش",
-  "back_to_home": "بازگشت به خانه"
+  "back_to_home": "بازگشت به خانه",
+  "otp_verify": "تأیید کد OTP",
+  "verify": "تأیید",
+  "use_bonus": "استفاده از امتیاز"
 }

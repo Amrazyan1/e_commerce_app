@@ -5,6 +5,7 @@ import 'package:e_commerce_app/blocs/login/auth/bloc/auth_bloc.dart';
 import 'package:e_commerce_app/components/checkout_modal.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -27,8 +28,8 @@ class OtpScreen extends StatelessWidget {
         body: SuperScaffold(
           appBar: SuperAppBar(
             automaticallyImplyLeading: false,
-            title: const Text(
-              'Otp verify',
+            title: Text(
+              'otp_verify'.tr(),
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             searchBar: SuperSearchBar(
@@ -37,7 +38,7 @@ class OtpScreen extends StatelessWidget {
               resultBehavior: SearchBarResultBehavior.neverVisible,
             ),
             largeTitle: SuperLargeTitle(
-              largeTitle: 'Otp verify',
+              largeTitle: 'otp_verify'.tr(),
               textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
                     fontWeight: FontWeight.w700,
                     fontSize: 24,
@@ -126,7 +127,7 @@ class OtpScreen extends StatelessWidget {
                       return SizedBox(
                           height: 50,
                           child: ButtonMainWidget(
-                            text: 'Verify',
+                            text: 'verify'.tr(),
                             callback: () {
                               final otp = _otpController.text;
                               BlocProvider.of<AuthBloc>(context)
