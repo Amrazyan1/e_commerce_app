@@ -10,8 +10,8 @@ class FetchUserSettingsEvent extends SettingsEvent {}
 class SettingsUpdate extends SettingsEvent {
   final String name;
   final String email;
-  final String phone;
+  final String birthdate;
 
   SettingsUpdate(
-      {required this.name, required this.email, required this.phone});
+      {required this.name, required this.email, required this.birthdate});
 }

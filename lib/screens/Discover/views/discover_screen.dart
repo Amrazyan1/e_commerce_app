@@ -265,7 +265,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                           crossAxisCount: 2,
                           mainAxisSpacing: 8.0,
                           crossAxisSpacing: 8.0,
-                          childAspectRatio: 174.5 / 189,
+                          childAspectRatio: 174 / 174,
                         ),
                       );
                     }
@@ -425,7 +425,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           child: Stack(
             children: [
               _buildImage(category.image),
-              const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Flexible(
@@ -463,7 +462,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     } else {
       return Image.network(
         imageUrl,
-        fit: BoxFit.fill,
+        fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) =>
             const Icon(Icons.error, size: 60),
         loadingBuilder: (context, child, loadingProgress) {

@@ -32,8 +32,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       try {
         final response = await _apiService.updateUserSettings({
           "name": '${event.name}',
-          // "email": '${event.email}',
-          // 'phone': '${event.phone}'
+          "email": '${event.email}',
+          'birthday': '${event.birthdate}'
         });
 
         log('${response.data}');

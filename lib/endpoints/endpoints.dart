@@ -51,7 +51,7 @@ class Endpoints {
 
   // Orders
   static const String getOrderById = '/orders/{id}';
-  static const String deleteOrderById = '/orders/{id}';
+  static const String cancelOrderById = '/orders/{id}';
   static const String createOrder = '/orders';
   static const String processOrder = '/orders/{id}/process';
   static const String payOrder = '/orders/{id}/pay/{method}';

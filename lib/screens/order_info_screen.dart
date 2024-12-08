@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import '../blocs/orders/details/bloc/orderdetail_bloc.dart';
+import '../blocs/orders/details/bloc/orderdetail_event.dart';
 import '../blocs/orders/details/bloc/orderdetail_state.dart';
 
 @RoutePage()
@@ -15,6 +16,9 @@ class OrderInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Sample product data
+    void cancelOrder(String orderId) {
+      context.read<OrderDetailBloc>().add(CancelOrderEvent(orderId));
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -30,6 +34,12 @@ class OrderInfoScreen extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.error)),
             );
+            AutoRouter.of(context).maybePop();
+          }
+          if (state is OrderDetailLoaded) {
+            if (state.orderDetail == null) {
+              AutoRouter.of(context).maybePop();
+            }
           }
         },
         child: BlocBuilder<OrderDetailBloc, OrderDetailState>(
@@ -38,8 +48,13 @@ class OrderInfoScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
 
-            if (state is OrderDetailLoaded) {
-              final products = state.orderDetail.data!.items!;
+            if (state is OrderDetailLoaded ||
+                state is OrderDetailLoadingCancle) {
+              if ((state as OrderDetailLoaded).orderDetail == null) {
+                return Container();
+              }
+              final products =
+                  (state as OrderDetailLoaded).orderDetail!.data!.items!;
               return ListView.builder(
                 padding: const EdgeInsets.all(defaultPadding),
                 itemCount: products.length + 1, // Products + summary info
@@ -112,39 +127,49 @@ class OrderInfoScreen extends StatelessWidget {
                       ),
                     );
                   } else {
-                    final orderData = state.orderDetail.data;
-                    // After products, display summary information
+                    final orderData = state.orderDetail?.data;
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildInfoRow(
                             'Delivery', '${orderData?.address['name']}'),
                         _buildInfoRow('Payment', '${orderData?.method}'),
-                        // _buildInfoRow('Promo Code', 'SUMMER2024'),
                         _buildInfoRow(
                             'Total Cost', '${orderData?.total ?? 'Total'}'),
                         _buildInfoRow('Date', '${orderData?.date ?? 'Date'}'),
                         _buildInfoRow(
                             'Status', '${orderData?.status ?? 'Status'}'),
-                        // SizedBox(
-                        //   height: 60,
-                        //   child: Row(
-                        //     children: [
-                        //       Expanded(
-                        //           child: ButtonMainWidget(text: 'Order Again')),
-                        //       Gap(10),
-                        //       Expanded(
-                        //           child: ButtonMainWidget(text: 'Cancel Order')),
-                        //     ],
-                        //   ),
-                        // )
+                        Visibility(
+                          visible: orderData?.isCancelable ?? false,
+                          child: SizedBox(
+                            height: 50,
+                            child: Row(
+                              children: [
+                                // Expanded(
+                                //     child: ButtonMainWidget(text: 'Order Again')),
+                                // Gap(10),
+                                Expanded(
+                                    child: ButtonMainWidget(
+                                  text: 'Cancel Order',
+                                  customwidget:
+                                      state is OrderDetailLoadingCancle
+                                          ? const CircularProgressIndicator()
+                                          : null,
+                                  callback: () {
+                                    cancelOrder(orderData!.id!);
+                                  },
+                                )),
+                              ],
+                            ),
+                          ),
+                        )
                       ],
                     );
                   }
                 },
               );
             }
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: Text('Empty'));
           },
         ),
       ),

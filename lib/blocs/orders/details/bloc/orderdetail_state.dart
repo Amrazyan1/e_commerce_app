@@ -13,8 +13,12 @@ class OrderDetailInitial extends OrderDetailState {}
 
 class OrderDetailLoading extends OrderDetailState {}
 
+class OrderDetailLoadingCancle extends OrderDetailLoaded {
+  OrderDetailLoadingCancle(super.orderDetail);
+}
+
 class OrderDetailLoaded extends OrderDetailState {
-  final ViewOrderResponse orderDetail;
+  final ViewOrderResponse? orderDetail;
 
   const OrderDetailLoaded(this.orderDetail);
 

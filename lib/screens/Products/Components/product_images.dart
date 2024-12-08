@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '/components/network_image_with_loader.dart';
-
+import 'package:widget_zoom/widget_zoom.dart';
 import '../../../constants.dart';
 
 class ProductImages extends StatefulWidget {
@@ -62,17 +62,20 @@ class _ProductImagesState extends State<ProductImages> {
                   borderRadius: const BorderRadius.all(
                     Radius.circular(defaultBorderRadius * 2),
                   ),
-                  child: InteractiveViewer(
-                    panEnabled: true,
-                    boundaryMargin: const EdgeInsets.all(20),
-                    minScale: 1.0,
-                    maxScale: 4.0,
-                    transformationController: _transformationController,
-                    onInteractionEnd: (details) {
-                      _resetZoom(); // Reset zoom after interaction ends
-                    },
-                    child: NetworkImageWithLoader(widget.images[index]),
-                  ),
+                  child: WidgetZoom(
+                      heroAnimationTag: 'productdetialimage',
+                      zoomWidget: NetworkImageWithLoader(widget.images[index])),
+                  // InteractiveViewer(
+                  //   panEnabled: true,
+                  //   boundaryMargin: const EdgeInsets.all(20),
+                  //   minScale: 1.0,
+                  //   maxScale: 4.0,
+                  //   transformationController: _transformationController,
+                  //   onInteractionEnd: (details) {
+                  //     _resetZoom(); // Reset zoom after interaction ends
+                  //   },
+                  //   child: NetworkImageWithLoader(widget.images[index]),
+                  // ),
                 ),
               ),
             ),

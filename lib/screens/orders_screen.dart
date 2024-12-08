@@ -31,6 +31,9 @@ class OrdersScreen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           } else if (state is OrdersLoaded) {
             final orders = state.ordersResponse.data ?? [];
+            if (orders.isEmpty) {
+              return const Center(child: Text("No orders available."));
+            }
             return ListView.builder(
               padding: const EdgeInsets.all(defaultPadding),
               itemCount: orders.length,

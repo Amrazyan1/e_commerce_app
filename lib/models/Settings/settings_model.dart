@@ -38,6 +38,7 @@ class Data {
   String? lastName;
   String? email;
   String? phone;
+  String? birthday;
   bool? isPartner;
   DiscountDetails? discountDetails;
 
@@ -47,6 +48,7 @@ class Data {
     this.lastName,
     this.email,
     this.phone,
+    this.birthday,
     this.isPartner,
     this.discountDetails,
   });
@@ -56,6 +58,7 @@ class Data {
     String? firstName,
     String? lastName,
     String? email,
+    String? birthday,
     String? phone,
     bool? isPartner,
     DiscountDetails? discountDetails,
@@ -66,6 +69,7 @@ class Data {
         lastName: lastName ?? this.lastName,
         email: email ?? this.email,
         phone: phone ?? this.phone,
+        birthday: birthday ?? this.birthday,
         isPartner: isPartner ?? this.isPartner,
         discountDetails: discountDetails ?? this.discountDetails,
       );
@@ -76,6 +80,7 @@ class Data {
         lastName: json["lastName"],
         email: json["email"],
         phone: json["phone"],
+        birthday: json["birthday"],
         isPartner: json["isPartner"],
         discountDetails: json["discountDetails"] == null
             ? null
@@ -88,6 +93,7 @@ class Data {
         "lastName": lastName,
         "email": email,
         "phone": phone,
+        "birthday": birthday,
         "isPartner": isPartner,
         "discountDetails": discountDetails?.toJson(),
       };

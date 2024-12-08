@@ -344,10 +344,10 @@ class ApiService {
     }
   }
 
-  Future<Response> deleteOrderById(String id) async {
+  Future<Response> cancelOrderById(String id) async {
     try {
-      return await _dioClient.dio.delete(
-        Endpoints.deleteOrderById.replaceFirst('{id}', id),
+      return await _dioClient.dio.patch(
+        Endpoints.cancelOrderById.replaceFirst('{id}', id),
       );
     } catch (e) {
       rethrow;

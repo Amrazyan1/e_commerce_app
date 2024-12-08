@@ -46,16 +46,14 @@ class _HomeScreenState extends State<HomeScreen> {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  'Orig Inn'.tr(), // Translated text
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelMedium!
-                      .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Image.asset("assets/images/logo.png"),
                 ),
               ],
             ),
             largeTitle: SuperLargeTitle(
+              enabled: false,
               largeTitle: 'Orig Inn'.tr(), // Translated text
               textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
                     fontWeight: FontWeight.w700,
