@@ -134,68 +134,84 @@ class _CartScreenState extends State<CartScreen> {
                 return Container();
               },
             ),
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SizedBox(
-                    height: 64,
-                    child: Material(
-                      color: kprimaryColor,
-                      clipBehavior: Clip.hardEdge,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(defaultBorderRadius),
-                        ),
-                      ),
-                      child: InkWell(
-                        onTap: gotoCheckout,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 4,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: defaultPadding),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    BlocBuilder<CartBloc, CartState>(
-                                      builder: (context, state) {
-                                        if (state
-                                            is CartPlaceOrderStateLoading) {
-                                          return const Center(
-                                            child: CircularProgressIndicator(),
-                                          );
-                                        }
-                                        if (state is CartLoaded ||
-                                            state is CartPlaceOrderState) {
-                                          state = state as CartLoaded;
-                                          return Text(
-                                            "Go To Checkout (${state.total})",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleSmall!
-                                                .copyWith(color: Colors.white),
-                                          );
-                                        }
-                                        return const Center(
-                                          child: CircularProgressIndicator(),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
+            BlocBuilder<CartBloc, CartState>(
+              builder: (context, state) {
+                if (state is CartLoaded) {
+                  if (state.cartItems.isEmpty) {
+                    return Container();
+                  }
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SizedBox(
+                          height: 64,
+                          child: Material(
+                            color: kprimaryColor,
+                            clipBehavior: Clip.hardEdge,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(defaultBorderRadius),
                               ),
                             ),
-                          ],
+                            child: InkWell(
+                              onTap: gotoCheckout,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 4,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: defaultPadding),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          BlocBuilder<CartBloc, CartState>(
+                                            builder: (context, state) {
+                                              if (state
+                                                  is CartPlaceOrderStateLoading) {
+                                                return const Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                );
+                                              }
+                                              if (state is CartLoaded ||
+                                                  state
+                                                      is CartPlaceOrderState) {
+                                                state = state as CartLoaded;
+                                                return Text(
+                                                  "Go To Checkout (${state.total})",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleSmall!
+                                                      .copyWith(
+                                                          color: Colors.white),
+                                                );
+                                              }
+                                              return const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-              ],
+                    ],
+                  );
+                }
+                return Container();
+              },
             )
           ],
         ),
@@ -209,7 +225,8 @@ class _CartScreenState extends State<CartScreen> {
           item.product!.name.toString()), // Ensure each item has a unique key
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
-        context.read<MainProvider>().removefromCart(item.product!);
+        context.read<CartBloc>().add(RemoveFromCart(id: item.product!.id));
+        // context.read<MainProvider>().removefromCart(item.product!);
       },
       background: Container(
         alignment: Alignment.centerRight,
@@ -256,7 +273,7 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '\$${item.product!.price}',
+                        '\$${item.product!.discountedPrice}',
                       ),
                     ],
                   ),
