@@ -17,20 +17,27 @@ class ProductImages extends StatefulWidget {
 
 class _ProductImagesState extends State<ProductImages> {
   late PageController _controller;
-
+  late TransformationController _transformationController;
   int _currentPage = 0;
 
   @override
   void initState() {
     _controller =
         PageController(viewportFraction: 0.9, initialPage: _currentPage);
+    _transformationController = TransformationController();
     super.initState();
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _transformationController.dispose();
     super.dispose();
+  }
+
+  void _resetZoom() {
+    // Reset the transformation to identity (no zoom or pan)
+    _transformationController.value = Matrix4.identity();
   }
 
   @override
@@ -46,6 +53,7 @@ class _ProductImagesState extends State<ProductImages> {
                 setState(() {
                   _currentPage = pageNum;
                 });
+                _resetZoom(); // Reset zoom when page changes
               },
               itemCount: widget.images.length,
               itemBuilder: (context, index) => Padding(
@@ -54,7 +62,17 @@ class _ProductImagesState extends State<ProductImages> {
                   borderRadius: const BorderRadius.all(
                     Radius.circular(defaultBorderRadius * 2),
                   ),
-                  child: NetworkImageWithLoader(widget.images[index]),
+                  child: InteractiveViewer(
+                    panEnabled: true,
+                    boundaryMargin: const EdgeInsets.all(20),
+                    minScale: 1.0,
+                    maxScale: 4.0,
+                    transformationController: _transformationController,
+                    onInteractionEnd: (details) {
+                      _resetZoom(); // Reset zoom after interaction ends
+                    },
+                    child: NetworkImageWithLoader(widget.images[index]),
+                  ),
                 ),
               ),
             ),
@@ -91,7 +109,7 @@ class _ProductImagesState extends State<ProductImages> {
                     ),
                   ),
                 ),
-              )
+              ),
           ],
         ),
       ),

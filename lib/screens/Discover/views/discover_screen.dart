@@ -94,11 +94,11 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                 true; // Ensure this is set only after initial load
           });
         }
-        if (state is CategoriesLoaded) {
-          if (state.products.isNotEmpty) {
-            AutoRouter.of(context).push(const DiscoverDetailsRoute());
-          }
-        }
+        // if (state is CategoriesLoaded) {
+        //   if (state.products.isNotEmpty) {
+        //     AutoRouter.of(context).push(const DiscoverDetailsRoute());
+        //   }
+        // }
       },
       child: SuperScaffold(
         key: const Key('discvoer'),
@@ -352,13 +352,13 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   }
 
   void _onCategoryTap(Category category) {
-    context.read<CategoryDetailBloc>().categoryId = category.id!;
-
     if ((category.subcategories ?? []).isNotEmpty) {
       setState(() {
         _categoryStack.add(category);
         _isInitialScreen = false; // Add the new category to the stack
       });
+      context.read<CategoryDetailBloc>().categoryId = category.id!;
+
       context.read<CategoriesBloc>().add(FetchSubcategories(category));
       context.read<CategoryDetailBloc>().cancelLoadProducts();
       if (category.productsCount! > 0) {

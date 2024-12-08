@@ -59,7 +59,7 @@ class _SplashViewScreenState extends State<SplashViewScreen> {
               Padding(
                 padding: EdgeInsets.all(defaultPadding),
                 child: Text(
-                  'Welcome to IMEXPRO',
+                  'Welcome to Orig Inn',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,

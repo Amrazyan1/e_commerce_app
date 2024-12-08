@@ -126,20 +126,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ?.main
                           ?.src ??
                       '',
-                  context
-                          .read<MainProvider>()
-                          .currentProductModel
-                          .images
-                          ?.main
-                          ?.src ??
-                      '',
-                  context
-                          .read<MainProvider>()
-                          .currentProductModel
-                          .images
-                          ?.main
-                          ?.src ??
-                      '',
+                  // context
+                  //         .read<MainProvider>()
+                  //         .currentProductModel
+                  //         .images
+                  //         ?.main
+                  //         ?.src ??
+                  //     '',
+                  // context
+                  //         .read<MainProvider>()
+                  //         .currentProductModel
+                  //         .images
+                  //         ?.main
+                  //         ?.src ??
+                  //     '',
                 ],
               ),
               SliverPadding(

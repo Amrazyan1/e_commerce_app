@@ -112,13 +112,13 @@ class ProfileScreen extends StatelessWidget {
                 AutoRouter.of(context).push(const DeliveryAddresseRoute());
               },
             ),
-            ProfileMenuListTile(
-              text: "payment_methods".tr(),
-              svgSrc: "assets/icons/payment.svg",
-              press: () {
-                AutoRouter.of(context).push(const PaymentmethodsRoute());
-              },
-            ),
+            // ProfileMenuListTile(
+            //   text: "payment_methods".tr(),
+            //   svgSrc: "assets/icons/payment.svg",
+            //   press: () {
+            //     AutoRouter.of(context).push(const PaymentmethodsRoute());
+            //   },
+            // ),
             ProfileMenuListTile(
               text: "promo_codes".tr(),
               svgSrc: "assets/icons/promo_code.svg",
