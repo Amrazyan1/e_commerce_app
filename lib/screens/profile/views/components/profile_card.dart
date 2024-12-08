@@ -79,7 +79,7 @@ class ProfileCard extends StatelessWidget {
       //             child: const Text('English'),
       //           ),
       //           PopupMenuItem(
-      //             value: const Locale('pr'),
+      //             value: const Locale('de'),
       //             child: const Text('العربية'),
       //           ),
       //         ],

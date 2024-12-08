@@ -47,7 +47,7 @@ class ProfileScreen extends StatelessWidget {
     }
 
     return Directionality(
-      textDirection: context.locale.languageCode == 'pr'
+      textDirection: context.locale.languageCode == 'de'
           ? ui.TextDirection.rtl
           : ui.TextDirection.ltr,
       child: Scaffold(
@@ -225,14 +225,14 @@ class ProfileScreen extends StatelessWidget {
                           ListTile(
                             title: Text('العربية'),
                             onTap: () {
-                              context.setLocale(const Locale('pr'));
+                              context.setLocale(const Locale('de'));
                               Navigator.of(context).pop();
                             },
                           ),
                           ListTile(
                             title: Text('Հայերեն'),
                             onTap: () {
-                              context.setLocale(const Locale('ar'));
+                              context.setLocale(const Locale('am'));
                               Navigator.of(context).pop();
                             },
                           ),

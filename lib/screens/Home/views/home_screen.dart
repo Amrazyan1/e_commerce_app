@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection: context.locale.languageCode == 'pr'
+      textDirection: context.locale.languageCode == 'de'
           ? ui.TextDirection.rtl
           : ui.TextDirection.ltr,
       child: Scaffold(

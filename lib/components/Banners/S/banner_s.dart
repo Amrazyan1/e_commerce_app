@@ -18,7 +18,7 @@ class BannerS extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection: context.locale.languageCode == 'pr'
+      textDirection: context.locale.languageCode == 'de'
           ? ui.TextDirection.rtl
           : ui.TextDirection.ltr,
       child: AspectRatio(

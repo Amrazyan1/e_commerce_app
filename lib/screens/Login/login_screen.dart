@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     return Directionality(
-      textDirection: context.locale.languageCode == 'pr'
+      textDirection: context.locale.languageCode == 'de'
           ? ui.TextDirection.rtl
           : ui.TextDirection.ltr,
       child: Scaffold(
@@ -85,16 +85,16 @@ class _LoginPageState extends State<LoginPage> {
                   child: Text('English'),
                 ),
                 const PopupMenuItem(
-                  value: Locale('pr'),
+                  value: Locale('de'),
                   child: Text('العربية'),
                 ),
                 const PopupMenuItem(
-                  value: Locale('ar'),
-                  child: Text('العربية'),
+                  value: Locale('am'),
+                  child: Text('Հայերեն'),
                 ),
                 const PopupMenuItem(
                   value: Locale('ru'),
-                  child: Text('العربية'),
+                  child: Text('Русский'),
                 ),
               ],
             ),
