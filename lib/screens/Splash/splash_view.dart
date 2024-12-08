@@ -54,12 +54,24 @@ class _SplashViewScreenState extends State<SplashViewScreen> {
             ),
           ),
           const Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Gap(80),
               Padding(
                 padding: EdgeInsets.all(defaultPadding),
                 child: Text(
-                  'Welcome to Orig Inn',
+                  'Welcome to',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 48,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(defaultPadding),
+                child: Text(
+                  'Orig Inn',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,

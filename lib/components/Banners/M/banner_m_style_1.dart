@@ -6,7 +6,7 @@ import '../../../constants.dart';
 class BannerMStyle1 extends StatelessWidget {
   const BannerMStyle1({
     super.key,
-    this.image = "https://i.imgur.com/UP7xhPG.png",
+    this.image = "",
     required this.text,
     required this.press,
   });
@@ -39,20 +39,13 @@ class BannerMStyle1 extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              const Text(
-                "Shop now",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(
-                width: 64,
-                child: Divider(
-                  color: Colors.white,
-                  thickness: 2,
-                ),
-              ),
+              // const SizedBox(
+              //   width: 64,
+              //   child: Divider(
+              //     color: Colors.white,
+              //     thickness: 2,
+              //   ),
+              // ),
               const Spacer(flex: 2),
             ],
           ),

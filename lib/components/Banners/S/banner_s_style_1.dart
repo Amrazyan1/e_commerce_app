@@ -1,31 +1,55 @@
 import 'package:e_commerce_app/components/Banners/M/banner_discount_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../../constants.dart';
+import '../../../models/banner_model.dart';
+import '../../../services/api_service.dart';
 import 'banner_s.dart';
 
-class BannerSStyle1 extends StatelessWidget {
-  const BannerSStyle1({
+class BannerSStyle1 extends StatefulWidget {
+  BannerSStyle1({
     super.key,
-    this.image =
-        "https://thumbs.dreamstime.com/b/teal-background-variety-fresh-groceries-shopping-cart-filled-319375033.jpg",
+    this.image = "",
     required this.title,
     required this.press,
     this.subtitle,
-    required this.discountParcent,
+    this.discountParcent,
   });
-  final String? image;
+  String? image;
   final String title;
   final String? subtitle;
-  final int discountParcent;
+  final int? discountParcent;
   final VoidCallback press;
+
+  @override
+  State<BannerSStyle1> createState() => _BannerSStyle1State();
+}
+
+class _BannerSStyle1State extends State<BannerSStyle1> {
+  @override
+  void initState() {
+    getOfferBanners();
+    super.initState();
+  }
+
+  void getOfferBanners() async {
+    final ApiService _apiService = GetIt.I<ApiService>();
+    final response = await _apiService.getContentsByKeys('secondBanner');
+    final data = bannerModelResponseFromJson(response.data);
+    if (data.data != null && data.data!.isNotEmpty) {
+      setState(() {
+        widget.image = data.data!.first.src;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return BannerS(
-      image: image!,
-      press: press,
+      image: widget.image!,
+      press: widget.press,
       children: [
         Padding(
           padding: const EdgeInsets.all(defaultPadding),
@@ -38,7 +62,7 @@ class BannerSStyle1 extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title.toUpperCase(),
+                      widget.title.toUpperCase(),
                       style: const TextStyle(
                         fontFamily: grandisExtendedFont,
                         fontSize: 28,
@@ -48,9 +72,9 @@ class BannerSStyle1 extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: defaultPadding / 4),
-                    if (subtitle != null)
+                    if (widget.subtitle != null)
                       Text(
-                        subtitle!.toUpperCase(),
+                        widget.subtitle!.toUpperCase(),
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -60,31 +84,17 @@ class BannerSStyle1 extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: defaultPadding),
-              SizedBox(
-                height: 48,
-                width: 48,
-                child: ElevatedButton(
-                  onPressed: press,
-                  style: ElevatedButton.styleFrom(
-                    shape: const CircleBorder(),
-                    backgroundColor: Colors.white,
-                  ),
-                  child: SvgPicture.asset(
-                    "assets/icons/Arrow - Right.svg",
-                    colorFilter:
-                        const ColorFilter.mode(Colors.black, BlendMode.srcIn),
-                  ),
-                ),
-              ),
             ],
           ),
         ),
-        Align(
-          alignment: Alignment.topCenter,
-          child: BannerDiscountTag(
-            percentage: discountParcent,
-            height: 56,
+        Visibility(
+          visible: widget.discountParcent != null,
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: BannerDiscountTag(
+              percentage: widget.discountParcent ?? 0,
+              height: 56,
+            ),
           ),
         ),
       ],

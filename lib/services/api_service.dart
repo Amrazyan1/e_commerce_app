@@ -314,7 +314,7 @@ class ApiService {
   Future<Response> getContentsByKeys(String keys) async {
     try {
       return await _dioClient.dio.get(
-        Endpoints.getContentsByKeys.replaceFirst('{keys}', keys),
+        Endpoints.getContentsByKey.replaceFirst('{key}', keys),
       );
     } catch (e) {
       rethrow;

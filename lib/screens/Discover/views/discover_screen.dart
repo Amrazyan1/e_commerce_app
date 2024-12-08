@@ -414,34 +414,37 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   }) {
     return GestureDetector(
       onTap: () => onTap(category),
-      child: Container(
-        width: 174.5,
-        height: 189,
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: ksecondaryColor.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: const Color(0xFFD2B7E5)),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildImage(category.image),
-            const SizedBox(height: 10),
-            Flexible(
-              child: Text(
-                category.name ?? 'Unknown',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10), // Apply radius to the child
+
+        child: Container(
+          decoration: BoxDecoration(
+            color: ksecondaryColor, //.withOpacity(0.2),
+            border: Border.all(color: const Color(0xFFD2B7E5)),
+          ),
+          child: Stack(
+            children: [
+              _buildImage(category.image),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Flexible(
+                  child: Text(
+                    category.name ?? 'Unknown',
+                    style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+
+                    textAlign: TextAlign.start,
+                    maxLines: 3, // Limit the number of lines
+                    overflow:
+                        TextOverflow.ellipsis, // Add ellipsis if text overflows
+                  ),
                 ),
-                textAlign: TextAlign.center,
-                maxLines: 3, // Limit the number of lines
-                overflow:
-                    TextOverflow.ellipsis, // Add ellipsis if text overflows
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -455,16 +458,12 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     if (imageUrl.endsWith('.svg')) {
       return SvgPicture.network(
         imageUrl,
-        width: 60,
-        height: 60,
         placeholderBuilder: (context) => const CircularProgressIndicator(),
       );
     } else {
       return Image.network(
         imageUrl,
-        width: 60,
-        height: 60,
-        fit: BoxFit.cover,
+        fit: BoxFit.fill,
         errorBuilder: (context, error, stackTrace) =>
             const Icon(Icons.error, size: 60),
         loadingBuilder: (context, child, loadingProgress) {

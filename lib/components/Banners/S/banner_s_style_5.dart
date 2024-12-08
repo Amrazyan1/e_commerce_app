@@ -1,26 +1,51 @@
+import 'package:e_commerce_app/models/banner_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get_it/get_it.dart';
 import 'dart:ui' as ui;
 
 import '../../../constants.dart';
+import '../../../services/api_service.dart';
 import 'banner_s.dart';
 
-class BannerSStyle5 extends StatelessWidget {
-  const BannerSStyle5({
+class BannerSStyle5 extends StatefulWidget {
+  BannerSStyle5({
     super.key,
-    this.image = "https://pngimg.com/d/strawberry_PNG89.png",
-    required this.title,
+    this.image = "",
+    this.title,
     required this.press,
     this.subtitle,
     this.bottomText,
   });
 
-  final String? image;
-  final String title;
+  String? image;
+  final String? title;
   final String? subtitle, bottomText;
 
   final VoidCallback press;
+
+  @override
+  State<BannerSStyle5> createState() => _BannerSStyle5State();
+}
+
+class _BannerSStyle5State extends State<BannerSStyle5> {
+  @override
+  void initState() {
+    getOfferBanners();
+    super.initState();
+  }
+
+  void getOfferBanners() async {
+    final ApiService _apiService = GetIt.I<ApiService>();
+    final response = await _apiService.getContentsByKeys('thirdBanner');
+    final data = bannerModelResponseFromJson(response.data);
+    if (data.data != null && data.data!.isNotEmpty) {
+      setState(() {
+        widget.image = data.data!.first.src;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +54,8 @@ class BannerSStyle5 extends StatelessWidget {
           ? ui.TextDirection.rtl
           : ui.TextDirection.ltr,
       child: BannerS(
-        image: image!,
-        press: press,
+        image: widget.image!,
+        press: widget.press,
         children: [
           Padding(
             padding: const EdgeInsets.all(defaultPadding),
@@ -43,25 +68,10 @@ class BannerSStyle5 extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (subtitle != null)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: defaultPadding / 2,
-                            vertical: defaultPadding / 8,
-                          ),
-                          color: Colors.white70,
-                          child: Text(
-                            subtitle!,
-                            style: const TextStyle(
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                      const SizedBox(height: defaultPadding / 2),
+                      if (widget.subtitle != null)
+                        const SizedBox(height: defaultPadding / 2),
                       Text(
-                        title.toUpperCase(),
+                        widget.title ?? ''.toUpperCase(),
                         style: const TextStyle(
                           fontFamily: grandisExtendedFont,
                           fontSize: 28,
@@ -70,9 +80,9 @@ class BannerSStyle5 extends StatelessWidget {
                           height: 1,
                         ),
                       ),
-                      if (bottomText != null)
+                      if (widget.bottomText != null)
                         Text(
-                          bottomText!,
+                          widget.bottomText!,
                           style: const TextStyle(
                             fontFamily: grandisExtendedFont,
                             color: Colors.white,
@@ -82,13 +92,6 @@ class BannerSStyle5 extends StatelessWidget {
                         ),
                     ],
                   ),
-                ),
-                const SizedBox(width: defaultPadding),
-                SvgPicture.asset(
-                  "assets/icons/Child.svg",
-                  height: 28,
-                  colorFilter:
-                      const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                 ),
               ],
             ),

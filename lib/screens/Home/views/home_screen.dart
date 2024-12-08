@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'current_location'.tr(), // Translated text
+                  'Orig Inn'.tr(), // Translated text
                   style: Theme.of(context)
                       .textTheme
                       .labelMedium!
@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             largeTitle: SuperLargeTitle(
-              largeTitle: 'current_location'.tr(), // Translated text
+              largeTitle: 'Orig Inn'.tr(), // Translated text
               textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
                     fontWeight: FontWeight.w700,
                     fontSize: 24,
@@ -146,12 +146,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     children: [
                       BannerSStyle1(
-                        title: "new_arrival".tr(), // Translated
-                        subtitle: "special_offer".tr(), // Translated
-                        discountParcent: 50,
-                        press: () {
-                          Navigator.pushNamed(context, 'onSaleScreenRoute');
-                        },
+                        title: '', // Translated
+                        subtitle: '', // Translated
+                        press: () {},
                       ),
                       const SizedBox(height: defaultPadding / 4),
                     ],
@@ -163,13 +160,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       const SizedBox(height: defaultPadding * 1.5),
                       BannerSStyle5(
-                        title: "black_friday".tr(), // Translated
-                        subtitle: "discount_offer".tr(), // Translated
-                        bottomText:
-                            "collection".tr().toUpperCase(), // Translated
-                        press: () {
-                          Navigator.pushNamed(context, 'onSaleScreenRoute');
-                        },
+                        title: '', // Translated
+                        subtitle: '', // Translated
+                        bottomText: '', // Translated
+                        press: () {},
                       ),
                       const SizedBox(height: defaultPadding / 4),
                     ],

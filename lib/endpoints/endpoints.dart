@@ -44,7 +44,7 @@ class Endpoints {
   static const String getProductsByCategoryWithQuery =
       '/categories/{id}/products';
   // Contents
-  static const String getContentsByKeys = '/contents?keys={keys}';
+  static const String getContentsByKey = '/contents?keys[]={key}';
 
   // Customer
   static const String subscribeCustomer = '/customers';
