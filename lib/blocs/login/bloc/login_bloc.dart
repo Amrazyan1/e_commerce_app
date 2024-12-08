@@ -13,8 +13,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginSubmitted>((event, emit) async {
       emit(LoginLoading());
       try {
-        final response =
-            await _apiService.loginUser(event.username, event.password);
+        final response = await _apiService.registeruser(event.username,
+            event.email, event.password, event.birthDate, event.phone);
         log(response.data);
         if (response.statusCode == 200) {
           emit(LoginSuccess());

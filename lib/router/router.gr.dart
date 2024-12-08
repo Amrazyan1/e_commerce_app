@@ -394,10 +394,13 @@ class HomeRoute extends _i25.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i17.LoginPage]
-class LoginRoute extends _i25.PageRouteInfo<void> {
-  const LoginRoute({List<_i25.PageRouteInfo>? children})
-      : super(
+class LoginRoute extends _i25.PageRouteInfo<LoginRouteArgs> {
+  LoginRoute({
+    required String phoneNumber,
+    List<_i25.PageRouteInfo>? children,
+  }) : super(
           LoginRoute.name,
+          args: LoginRouteArgs(phoneNumber: phoneNumber),
           initialChildren: children,
         );
 
@@ -406,9 +409,21 @@ class LoginRoute extends _i25.PageRouteInfo<void> {
   static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
-      return _i17.LoginPage();
+      final args = data.argsAs<LoginRouteArgs>();
+      return _i17.LoginPage(phoneNumber: args.phoneNumber);
     },
   );
+}
+
+class LoginRouteArgs {
+  const LoginRouteArgs({required this.phoneNumber});
+
+  final String phoneNumber;
+
+  @override
+  String toString() {
+    return 'LoginRouteArgs{phoneNumber: $phoneNumber}';
+  }
 }
 
 /// generated route for

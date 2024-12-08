@@ -23,12 +23,13 @@ class ApiService {
     }
   }
 
-  Future<void> verifyOtp(String phoneNumber, String otp) async {
+  Future<Response> verifyOtp(String phoneNumber, String otp) async {
     final response = await _dioClient.dio.post('/auth/verification/verify',
         data: {'phone': phoneNumber, 'code': otp});
     if (response.statusCode != 200) {
       throw Exception('OTP verification failed');
     }
+    return response;
   }
 
   Future<ReverseGeocodeResponse> reverseGeocode(double lat, double lon) async {
@@ -124,11 +125,17 @@ class ApiService {
   }
 
   // Authentication
-  Future<Response> loginUser(String email, String password) async {
+  Future<Response> registeruser(String fullname, String email, String password,
+      String birthDate, String phone) async {
     try {
       final response = await _dioClient.dio.post(
-        Endpoints.userLogin,
-        data: {'email': email, 'password': password},
+        Endpoints.userSignUp,
+        data: {
+          'fullName': fullname,
+          'email': email,
+          'birthday': birthDate,
+          'phone': phone
+        },
       );
       log(response.data);
       Map<String, dynamic> decodedJson = json.decode(response.data);

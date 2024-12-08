@@ -47,6 +47,11 @@ dependencies:
   easy_localization_loader: ^2.0.2
   flutter_cupertino_datetime_picker: ^3.0.0
 
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/icon.png"
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -15,6 +15,9 @@ import 'dart:ui' as ui;
 
 @RoutePage()
 class LoginPage extends StatefulWidget {
+  final String phoneNumber;
+
+  LoginPage({required this.phoneNumber});
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -30,9 +33,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    _usernameController.text = 'info@origins.am';
-    _passwordController.text = 'secret';
-    _emailController.text = 'example@gmail.com';
+    _usernameController.text = '';
+    _passwordController.text = 'password';
+    _emailController.text = '';
   }
 
   void _changeLanguage(Locale locale) {
@@ -41,6 +44,32 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    Future<DateTime?> showDialog(Widget child) async {
+      DateTime? picked = await showCupertinoModalPopup<DateTime>(
+        context: context,
+        builder: (BuildContext context) => Container(
+          height: 216,
+          padding: const EdgeInsets.only(top: 6.0),
+          // The Bottom margin is provided to align the popup above the system
+          // navigation bar.
+          margin: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          // Provide a background color for the popup.
+          color: CupertinoColors.systemBackground.resolveFrom(context),
+          // Use a SafeArea widget to avoid system overlaps.
+          child: SafeArea(
+            top: false,
+            child: child,
+          ),
+        ),
+      );
+      // This block is executed when the date picker is dismissed.
+      print('Date Picker closed. Selected Date: $picked');
+      // Return the selected date (or null if the picker was dismissed without a selection).
+      return picked;
+    }
+
     return Directionality(
       textDirection: context.locale.languageCode == 'ar'
           ? ui.TextDirection.rtl
@@ -127,7 +156,24 @@ class _LoginPageState extends State<LoginPage> {
                         const Gap(16),
                         GestureDetector(
                           onTap: () {
-                            // Add your date picker logic
+                            showDialog(
+                              CupertinoDatePicker(
+                                initialDateTime: DateTime.now(),
+
+                                mode: CupertinoDatePickerMode.date,
+                                use24hFormat: true,
+                                // This shows day of week alongside day of month
+                                showDayOfWeek: true,
+                                // This is called when the user changes the date.
+                                onDateTimeChanged: (DateTime newDate) {
+                                  log(newDate.toString());
+                                  String formattedDate =
+                                      DateFormat('yyyy-MM-dd').format(newDate);
+
+                                  _dateTimeController.text = formattedDate;
+                                },
+                              ),
+                            );
                           },
                           child: AbsorbPointer(
                             child: TextFormField(
@@ -142,6 +188,12 @@ class _LoginPageState extends State<LoginPage> {
                                   },
                                 ),
                               ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your birth date'.tr();
+                                }
+                                return null;
+                              },
                             ),
                           ),
                         ),
@@ -156,11 +208,16 @@ class _LoginPageState extends State<LoginPage> {
                                     if (_formKey.currentState!.validate()) {
                                       context.read<LoginBloc>().add(
                                             LoginSubmitted(
-                                              username: _usernameController.text
-                                                  .trim(),
-                                              password: _passwordController.text
-                                                  .trim(),
-                                            ),
+                                                username: _usernameController
+                                                    .text
+                                                    .trim(),
+                                                password: _passwordController
+                                                    .text
+                                                    .trim(),
+                                                birthDate:
+                                                    _dateTimeController.text,
+                                                email: _emailController.text,
+                                                phone: widget.phoneNumber),
                                           );
                                     }
                                   },

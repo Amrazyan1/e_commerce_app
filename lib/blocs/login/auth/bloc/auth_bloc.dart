@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
@@ -23,7 +25,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<VerifyOtpEvent>((event, emit) async {
       emit(AuthLoading());
       try {
-        await _apiService.verifyOtp(event.phoneNumber, event.otp);
+        final response =
+            await _apiService.verifyOtp(event.phoneNumber, event.otp);
+        log(response.data);
         emit(AuthVerified());
       } catch (e) {
         emit(AuthError('OTP verification failed'));
