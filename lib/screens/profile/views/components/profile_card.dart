@@ -70,21 +70,21 @@ class ProfileCard extends StatelessWidget {
         ],
       ),
       subtitle: Text(email),
-      trailing: isShowArrow
-          ? PopupMenuButton<Locale>(
-              onSelected: (locale) => _changeLanguage(locale),
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                  value: const Locale('en'),
-                  child: const Text('English'),
-                ),
-                PopupMenuItem(
-                  value: const Locale('ar'),
-                  child: const Text('العربية'),
-                ),
-              ],
-            )
-          : null,
+      // trailing: isShowArrow
+      //     ? PopupMenuButton<Locale>(
+      //         onSelected: (locale) => _changeLanguage(locale),
+      //         itemBuilder: (context) => [
+      //           PopupMenuItem(
+      //             value: const Locale('en'),
+      //             child: const Text('English'),
+      //           ),
+      //           PopupMenuItem(
+      //             value: const Locale('ar'),
+      //             child: const Text('العربية'),
+      //           ),
+      //         ],
+      //       )
+      //     : null,
     );
   }
 }

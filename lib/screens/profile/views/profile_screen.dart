@@ -207,9 +207,36 @@ class ProfileScreen extends StatelessWidget {
               text: "language".tr(),
               svgSrc: "assets/icons/help.svg",
               press: () {
-                // Navigator.pushNamed(context, 'selectLanguageScreenRoute');
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Change Language'.tr()),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            title: Text('English'),
+                            onTap: () {
+                              context.setLocale(const Locale('en'));
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          ListTile(
+                            title: Text('العربية'),
+                            onTap: () {
+                              context.setLocale(const Locale('ar'));
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
               },
             ),
+
             const SizedBox(height: defaultPadding),
 
             // Log Out
