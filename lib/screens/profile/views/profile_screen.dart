@@ -262,10 +262,38 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () async {
-                        final prefs = await SharedPreferences.getInstance();
-                        await prefs.remove('auth_token');
-                        AutoRouter.of(context)
-                            .replaceAll([const AuthorizationRoute()]);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Log out'.tr()),
+                              content: Text(
+                                  'Are you sure you want to log out?'.tr()),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    // Close the dialog
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Cancel'.tr()),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    final prefs =
+                                        await SharedPreferences.getInstance();
+                                    await prefs.remove('auth_token');
+                                    AutoRouter.of(context).replaceAll(
+                                        [const AuthorizationRoute()]);
+                                  },
+                                  child: Text(
+                                    'Log out'.tr(),
+                                    style: const TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       },
                       child: Text(
                         'log_out'.tr(),

@@ -30,13 +30,13 @@ class ProfileCard extends StatelessWidget {
 
     return ListTile(
       onTap: press,
-      leading: CircleAvatar(
-        radius: 28,
-        child: NetworkImageWithLoader(
-          imageSrc,
-          radius: 100,
-        ),
-      ),
+      // leading: CircleAvatar(
+      //   radius: 28,
+      //   child: NetworkImageWithLoader(
+      //     imageSrc,
+      //     radius: 100,
+      //   ),
+      // ),
       title: Row(
         children: [
           Text(
