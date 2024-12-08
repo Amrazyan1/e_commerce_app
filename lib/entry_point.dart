@@ -10,6 +10,7 @@ import 'package:e_commerce_app/blocs/settings/bloc/settings_bloc.dart';
 import 'package:e_commerce_app/blocs/settings/bloc/settings_event.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:e_commerce_app/constants.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -115,31 +116,31 @@ class _EntryPointState extends State<EntryPoint> {
                     icon: svgIcon("assets/icons/shop_my.svg"),
                     activeIcon: svgIcon("assets/icons/shop_my.svg",
                         color: kprimaryColor),
-                    label: "Shop",
+                    label: "shop".tr(),
                   ),
                   BottomNavigationBarItem(
                     icon: svgIcon("assets/icons/explore_my.svg"),
                     activeIcon: svgIcon("assets/icons/explore_my.svg",
                         color: kprimaryColor),
-                    label: "Discover",
+                    label: "discover".tr(),
                   ),
                   BottomNavigationBarItem(
                     icon: svgIcon("assets/icons/cart_my.svg"),
                     activeIcon: svgIcon("assets/icons/cart_my.svg",
                         color: kprimaryColor),
-                    label: "Cart",
+                    label: "cart".tr(),
                   ),
                   BottomNavigationBarItem(
                     icon: svgIcon("assets/icons/fav_my.svg"),
                     activeIcon: svgIcon("assets/icons/fav_my.svg",
                         color: kprimaryColor),
-                    label: "Favorites",
+                    label: "favorite".tr(),
                   ),
                   BottomNavigationBarItem(
                     icon: svgIcon("assets/icons/profile_my.svg"),
                     activeIcon: svgIcon("assets/icons/profile_my.svg",
                         color: kprimaryColor),
-                    label: "Profile",
+                    label: "profile".tr(),
                   ),
                 ],
               ),

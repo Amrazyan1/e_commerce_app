@@ -10,6 +10,7 @@ import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/models/cart_products_response.dart';
 import 'package:e_commerce_app/models/product_model.dart';
 import 'package:e_commerce_app/screens/Products/product_details_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -86,14 +87,14 @@ class _CartScreenState extends State<CartScreen> {
           backgroundColor:
               Theme.of(context).colorScheme.background.withOpacity(.5),
           title: Text(
-            'Your Cart',
+            'your_cart'.tr(),
             style: Theme.of(context)
                 .textTheme
                 .labelMedium!
                 .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
           ),
           largeTitle: SuperLargeTitle(
-            largeTitle: 'Your Cart',
+            largeTitle: 'your_cart'.tr(),
             textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
                   fontWeight: FontWeight.w700,
                   fontSize: 24,
@@ -114,9 +115,9 @@ class _CartScreenState extends State<CartScreen> {
                 }
                 if (state is CartLoaded) {
                   if (state.cartItems.isEmpty) {
-                    return const Expanded(
+                    return Expanded(
                       child: Center(
-                        child: Text('There is no cart items'),
+                        child: Text('no_cart'.tr()),
                       ),
                     );
                   }
@@ -183,7 +184,8 @@ class _CartScreenState extends State<CartScreen> {
                                                       is CartPlaceOrderState) {
                                                 state = state as CartLoaded;
                                                 return Text(
-                                                  "Go To Checkout (${state.total})",
+                                                  "go_check".tr() +
+                                                      "(${state.total})",
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .titleSmall!

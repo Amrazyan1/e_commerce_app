@@ -280,16 +280,15 @@ class ProfileScreen extends StatelessWidget {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text('Log out'.tr()),
-                              content: Text(
-                                  'Are you sure you want to log out?'.tr()),
+                              title: Text('log_out'.tr()),
+                              content: Text('log_sure'.tr()),
                               actions: [
                                 TextButton(
                                   onPressed: () {
                                     // Close the dialog
                                     Navigator.of(context).pop();
                                   },
-                                  child: Text('Cancel'.tr()),
+                                  child: Text('cancel'.tr()),
                                 ),
                                 TextButton(
                                   onPressed: () async {
@@ -300,7 +299,7 @@ class ProfileScreen extends StatelessWidget {
                                         [const AuthorizationRoute()]);
                                   },
                                   child: Text(
-                                    'Log out'.tr(),
+                                    'log_out'.tr(),
                                     style: const TextStyle(color: Colors.red),
                                   ),
                                 ),
@@ -344,22 +343,20 @@ class ProfileScreen extends StatelessWidget {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text('Confirm Deletion'.tr()),
-                              content: Text(
-                                  'Are you sure you want to delete your account?'
-                                      .tr()),
+                              title: Text('confirm_delete'.tr()),
+                              content: Text('delete_sure'.tr()),
                               actions: [
                                 TextButton(
                                   onPressed: () {
                                     // Close the dialog
                                     Navigator.of(context).pop();
                                   },
-                                  child: Text('Cancel'.tr()),
+                                  child: Text('cancel'.tr()),
                                 ),
                                 TextButton(
                                   onPressed: deleteAccount,
                                   child: Text(
-                                    'Delete'.tr(),
+                                    'delete'.tr(),
                                     style: const TextStyle(color: Colors.red),
                                   ),
                                 ),
@@ -369,7 +366,7 @@ class ProfileScreen extends StatelessWidget {
                         );
                       },
                       child: Text(
-                        'Delete account'.tr(),
+                        'delete_acc'.tr(),
                         style: const TextStyle(
                           color: Colors.red,
                           fontSize: 16,

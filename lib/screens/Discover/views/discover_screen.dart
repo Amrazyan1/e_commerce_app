@@ -10,6 +10,7 @@ import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/models/category_model_real.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:e_commerce_app/screens/Discover/views/filter_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -157,14 +158,14 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             backgroundColor:
                 Theme.of(context).colorScheme.background.withOpacity(.5),
             title: Text(
-              'Find products',
+              'find_prod'.tr(),
               style: Theme.of(context)
                   .textTheme
                   .labelMedium!
                   .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
             ),
             largeTitle: SuperLargeTitle(
-              largeTitle: 'Find products',
+              largeTitle: 'find_prod'.tr(),
               textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
                     fontWeight: FontWeight.w700,
                     fontSize: 24,

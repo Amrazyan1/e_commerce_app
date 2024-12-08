@@ -124,8 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   } else if (state is GlobalSearchError) {
                     return Center(child: Text(state.message));
                   } else {
-                    return Center(
-                        child: Text('search_prompt'.tr())); // Translated
+                    return Center(child: Text('search'.tr())); // Translated
                   }
                 },
               ),

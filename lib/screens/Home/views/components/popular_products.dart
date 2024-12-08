@@ -4,6 +4,7 @@ import 'package:e_commerce_app/screens/Products/Components/product_card.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/models/product_model.dart';
 import 'package:e_commerce_app/screens/Products/product_details_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -35,7 +36,7 @@ class PopularProducts extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(defaultPadding),
             child: Text(
-              "Popular products",
+              "popular".tr(),
               style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
