@@ -86,8 +86,9 @@ class MyDetailsScreen extends StatelessWidget {
                         showDialog(
                           CupertinoDatePicker(
                             initialDateTime: DateTime.now(),
-
+                            maximumDate: DateTime.now(),
                             mode: CupertinoDatePickerMode.date,
+
                             use24hFormat: true,
                             // This shows day of week alongside day of month
                             showDayOfWeek: true,
@@ -178,7 +179,8 @@ class MyDetailsScreen extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         TextField(
-          readOnly: readOnly,
+          // readOnly: readOnly,
+          enabled: !readOnly,
           controller: controller,
           keyboardType: keyboardType,
           style: const TextStyle(fontWeight: FontWeight.bold),

@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     return Directionality(
-      textDirection: context.locale.languageCode == 'ar'
+      textDirection: context.locale.languageCode == 'pr'
           ? ui.TextDirection.rtl
           : ui.TextDirection.ltr,
       child: Scaffold(
@@ -85,7 +85,15 @@ class _LoginPageState extends State<LoginPage> {
                   child: Text('English'),
                 ),
                 const PopupMenuItem(
+                  value: Locale('pr'),
+                  child: Text('العربية'),
+                ),
+                const PopupMenuItem(
                   value: Locale('ar'),
+                  child: Text('العربية'),
+                ),
+                const PopupMenuItem(
+                  value: Locale('ru'),
                   child: Text('العربية'),
                 ),
               ],
@@ -160,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                             showDialog(
                               CupertinoDatePicker(
                                 initialDateTime: DateTime.now(),
-
+                                maximumDate: DateTime.now(),
                                 mode: CupertinoDatePickerMode.date,
                                 use24hFormat: true,
                                 // This shows day of week alongside day of month

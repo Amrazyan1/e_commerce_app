@@ -45,9 +45,14 @@ void main() async {
 
   runApp(
     EasyLocalization(
-      supportedLocales: const [Locale('en'), Locale('ar')],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('ar'),
+        Locale('pr'),
+        Locale('ru')
+      ],
       path: 'assets/translations',
-      fallbackLocale: const Locale('ar'),
+      fallbackLocale: const Locale('en'),
       // assetLoader: SmartNetworkAssetLoader(
       //     // token: 'clcbI7yVPTF2ijzmK76oOEvQYr4IHOBi',
       //     assetsPath: 'assets/translations',

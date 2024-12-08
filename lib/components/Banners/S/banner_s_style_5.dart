@@ -50,7 +50,7 @@ class _BannerSStyle5State extends State<BannerSStyle5> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection: context.locale.languageCode == 'ar'
+      textDirection: context.locale.languageCode == 'pr'
           ? ui.TextDirection.rtl
           : ui.TextDirection.ltr,
       child: BannerS(
