@@ -1309,10 +1309,11 @@ packages:
   super_cupertino_navigation_bar:
     dependency: "direct main"
     description:
-      name: super_cupertino_navigation_bar
-      sha256: c725330bc7f135862ffe7c4e1f04772a35740d78f2f5d97a7200b910638f7668
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: b7e456a
+      resolved-ref: b7e456a1f653000888042bc96896209f712c9212
+      url: "https://github.com/kspo/super_cupertino_navigation_bar.git"
+    source: git
     version: "2.1.2"
   swipeable_page_route:
     dependency: "direct main"

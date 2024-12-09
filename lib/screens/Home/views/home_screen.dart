@@ -132,11 +132,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             return ProductCard(
                               product: product,
                               press: () {
-                                _searchFocusNode.requestFocus();
+                                // _searchFocusNode.requestFocus();
                                 Future.delayed(const Duration(milliseconds: 10),
                                     () {
-                                  _searchFocusNode.unfocus();
-                                  _searchTextController.clear();
+                                  // _searchFocusNode.unfocus();
+                                  // _searchTextController.clear();
 
                                   context
                                       .read<MainProvider>()

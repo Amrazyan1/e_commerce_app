@@ -33,7 +33,10 @@ dependencies:
   equatable: ^2.0.5
   get_it: ^8.0.2
   shimmer: ^3.0.0
-  super_cupertino_navigation_bar: ^2.1.2
+  super_cupertino_navigation_bar:
+    git:
+      url: https://github.com/kspo/super_cupertino_navigation_bar.git
+      ref: b7e456a
   auto_size_text: ^3.0.0
   permission_handler: ^11.3.1
   location: ^6.0.2

@@ -111,6 +111,9 @@ class _DeliveryAddresseScreenState extends State<DeliveryAddresseScreen> {
                             key: Key(address['id']
                                 .toString()), // Ensure each item has a unique key
                             direction: DismissDirection.endToStart,
+                            confirmDismiss: (direction) async {
+                              return !isSelected;
+                            },
                             onDismissed: (direction) {
                               setState(() {
                                 addresses.removeAt(index);
