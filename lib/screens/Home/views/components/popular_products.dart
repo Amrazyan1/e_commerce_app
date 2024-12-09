@@ -29,74 +29,85 @@ class PopularProducts extends StatelessWidget {
           );
         }
       },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: defaultPadding / 2),
-          Padding(
-            padding: const EdgeInsets.all(defaultPadding),
-            child: Text(
-              "popular".tr(),
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-          ),
-          BlocBuilder<TrendNewProductsBloc, TrendNewProductsState>(
-            builder: (context, state) {
-              if (state is TrendNewProductsLoading) {
-                return SizedBox(
-                  height: 220,
-                  child: ListView.builder(
-                      itemCount: 5,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return const ShimmerProductPortrait();
-                      }),
-                );
-              } else if (state is TrendNewProductsError) {
-                return SizedBox(
-                  height: 220,
-                  child: ListView.builder(
-                      itemCount: 5,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return const ShimmerProductPortrait();
-                      }),
-                );
-              } else if (state is TrendNewProductsLoaded) {
-                final products = state.products;
-
-                return SizedBox(
-                  height: 220,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: products.length,
-                    itemBuilder: (context, index) => Padding(
-                      padding: EdgeInsets.only(
-                        left: defaultPadding,
-                        right:
-                            index == products.length - 1 ? defaultPadding : 0,
-                      ),
-                      child: ProductCard(
-                        product: products[index],
-                        press: () {
-                          context.read<MainProvider>().currentProductModel =
-                              products[index];
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const ProductDetailsScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                );
-              }
+      child: BlocBuilder<TrendNewProductsBloc, TrendNewProductsState>(
+        builder: (context, state) {
+          if (state is TrendNewProductsLoaded) {
+            final products = state.products;
+            if (products.isEmpty) {
               return Container();
-            },
-          )
-        ],
+            }
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: defaultPadding / 2),
+              Padding(
+                padding: const EdgeInsets.all(defaultPadding),
+                child: Text(
+                  "popular".tr(),
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+              BlocBuilder<TrendNewProductsBloc, TrendNewProductsState>(
+                builder: (context, state) {
+                  if (state is TrendNewProductsLoading) {
+                    return SizedBox(
+                      height: 220,
+                      child: ListView.builder(
+                          itemCount: 5,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return const ShimmerProductPortrait();
+                          }),
+                    );
+                  } else if (state is TrendNewProductsError) {
+                    return SizedBox(
+                      height: 220,
+                      child: ListView.builder(
+                          itemCount: 5,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return const ShimmerProductPortrait();
+                          }),
+                    );
+                  } else if (state is TrendNewProductsLoaded) {
+                    final products = state.products;
+
+                    return SizedBox(
+                      height: 220,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: products.length,
+                        itemBuilder: (context, index) => Padding(
+                          padding: EdgeInsets.only(
+                            left: defaultPadding,
+                            right: index == products.length - 1
+                                ? defaultPadding
+                                : 0,
+                          ),
+                          child: ProductCard(
+                            product: products[index],
+                            press: () {
+                              context.read<MainProvider>().currentProductModel =
+                                  products[index];
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ProductDetailsScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return Container();
+                },
+              )
+            ],
+          );
+        },
       ),
     );
   }

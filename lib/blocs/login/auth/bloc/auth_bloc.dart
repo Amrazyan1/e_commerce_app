@@ -20,7 +20,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await _apiService.sendPhoneNumber(event.phoneNumber);
         emit(AuthPhoneSent(event.phoneNumber));
       } catch (e) {
-        emit(AuthError('Failed to send phone number'));
+        emit(AuthError(e.toString()));
       }
     });
 

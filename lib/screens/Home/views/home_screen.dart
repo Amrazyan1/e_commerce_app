@@ -15,6 +15,9 @@ import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.da
 import 'dart:ui' as ui;
 
 import '../../../Provider/main_provider.dart';
+import '../../../blocs/products/discounts/bloc/discounted_bloc.dart';
+import '../../../blocs/products/popular/bloc/popular_products_bloc.dart';
+import '../../../blocs/products/trending/bloc/trend_new_products_bloc.dart';
 import '../../../blocs/search/bloc/global_search_bloc.dart';
 import '../../Products/Components/product_card.dart';
 import '../../Products/product_details_screen.dart';
@@ -30,6 +33,29 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _searchFocusNode = FocusNode();
   final _searchTextController = TextEditingController();
+  Future<void> _refreshContent() async {
+    await Future.delayed(Duration(seconds: 2)); // Simulate network delay
+    setState(() {});
+  }
+
+  Locale? previousLocale;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Check if the locale has changed
+    if (previousLocale != context.locale) {
+      previousLocale = context.locale;
+      _onLocaleChanged();
+    }
+  }
+
+  Future<void> _onLocaleChanged() async {
+    context.read<TrendNewProductsBloc>().add(FetchTrendNewProductsEvent());
+    context.read<DiscountedBloc>().add(FetchDiscountedProductsEvent());
+    context.read<PopularProductsBloc>().add(FetchTrendPopularProductsEvent());
+    await Future.delayed(const Duration(seconds: 1));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,138 +63,146 @@ class _HomeScreenState extends State<HomeScreen> {
       textDirection: context.locale.languageCode == 'fa'
           ? ui.TextDirection.rtl
           : ui.TextDirection.ltr,
-      child: Scaffold(
-        body: SuperScaffold(
-          key: const Key('home'),
-          appBar: SuperAppBar(
-            backgroundColor:
-                Theme.of(context).colorScheme.background.withOpacity(.5),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Image.asset("assets/images/logo.png"),
-                ),
-              ],
-            ),
-            largeTitle: SuperLargeTitle(
-              enabled: false,
-              largeTitle: 'Orig Inn'.tr(), // Translated text
-              textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 24,
-                    letterSpacing: 0,
+      child: RefreshIndicator(
+        onRefresh: _onLocaleChanged,
+        child: Scaffold(
+          body: SuperScaffold(
+            key: const Key('home'),
+            appBar: SuperAppBar(
+              backgroundColor:
+                  Theme.of(context).colorScheme.background.withOpacity(.5),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Image.asset("assets/images/logo.png"),
                   ),
-            ),
-            searchBar: SuperSearchBar(
-              placeholderText: 'search'.tr(),
-              searchFocusNode: _searchFocusNode,
-              searchController: _searchTextController,
-              textStyle: Theme.of(context).textTheme.bodyLarge!,
-              onFocused: (value) {
-                if (!value) {
-                  setState(_searchTextController.clear);
-                }
-              },
-              cancelTextStyle: Theme.of(context).textTheme.bodyLarge!,
-              onSubmitted: (value) {
-                context.read<GlobalSearchBloc>().add(PerformGlobalSearch(
-                      keyword: value,
-                      perPage: 20,
-                    ));
-              },
-              searchResult: BlocBuilder<GlobalSearchBloc, GlobalSearchState>(
-                builder: (context, state) {
-                  if (state is GlobalSearchLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state is GlobalSearchLoaded) {
-                    return Padding(
-                      padding: const EdgeInsets.all(defaultPadding),
-                      child: GridView.builder(
-                        itemCount:
-                            state.results.data!.products!.data!.data!.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 8.0,
-                          crossAxisSpacing: 8.0,
-                          childAspectRatio: 140 / 220,
-                        ),
-                        itemBuilder: (context, index) {
-                          final product =
-                              state.results.data!.products!.data!.data![index];
-                          return ProductCard(
-                            product: product,
-                            press: () {
-                              _searchFocusNode.requestFocus();
-                              Future.delayed(const Duration(milliseconds: 10),
-                                  () {
-                                _searchFocusNode.unfocus();
-                                _searchTextController.clear();
-
-                                context
-                                    .read<MainProvider>()
-                                    .currentProductModel = product;
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ProductDetailsScreen(),
-                                  ),
-                                );
-                              });
-                            },
-                          );
-                        },
-                      ),
-                    );
-                  } else if (state is GlobalSearchError) {
-                    return Center(child: Text(state.message));
-                  } else {
-                    return Center(child: Text('search'.tr())); // Translated
+                ],
+              ),
+              largeTitle: SuperLargeTitle(
+                enabled: false,
+                largeTitle: 'Orig Inn'.tr(), // Translated text
+                textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 24,
+                      letterSpacing: 0,
+                    ),
+              ),
+              searchBar: SuperSearchBar(
+                placeholderText: 'search'.tr(),
+                searchFocusNode: _searchFocusNode,
+                searchController: _searchTextController,
+                textStyle: Theme.of(context).textTheme.bodyLarge!,
+                onFocused: (value) {
+                  if (!value) {
+                    setState(_searchTextController.clear);
                   }
                 },
+                cancelTextStyle: Theme.of(context).textTheme.bodyLarge!,
+                onSubmitted: (value) {
+                  if (value.isEmpty) {
+                    return;
+                  }
+                  context.read<GlobalSearchBloc>().add(PerformGlobalSearch(
+                        keyword: value,
+                        perPage: 20,
+                      ));
+                },
+                searchResult: BlocBuilder<GlobalSearchBloc, GlobalSearchState>(
+                  builder: (context, state) {
+                    if (state is GlobalSearchLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (state is GlobalSearchLoaded) {
+                      return Padding(
+                        padding: const EdgeInsets.all(defaultPadding),
+                        child: GridView.builder(
+                          itemCount:
+                              state.results.data!.products!.data!.data!.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 8.0,
+                            crossAxisSpacing: 8.0,
+                            childAspectRatio: 140 / 220,
+                          ),
+                          itemBuilder: (context, index) {
+                            final product = state
+                                .results.data!.products!.data!.data![index];
+                            return ProductCard(
+                              product: product,
+                              press: () {
+                                _searchFocusNode.requestFocus();
+                                Future.delayed(const Duration(milliseconds: 10),
+                                    () {
+                                  _searchFocusNode.unfocus();
+                                  _searchTextController.clear();
+
+                                  context
+                                      .read<MainProvider>()
+                                      .currentProductModel = product;
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ProductDetailsScreen(),
+                                    ),
+                                  );
+                                });
+                              },
+                            );
+                          },
+                        ),
+                      );
+                    } else if (state is GlobalSearchError) {
+                      return Center(child: Text(state.message));
+                    } else {
+                      return Center(child: Text('search'.tr())); // Translated
+                    }
+                  },
+                ),
               ),
             ),
-          ),
-          body: SafeArea(
-            child: CustomScrollView(
-              slivers: [
-                const SliverToBoxAdapter(child: OffersCarouselAndCategories()),
-                const SliverToBoxAdapter(child: PopularProducts()),
-                const SliverPadding(
-                  padding: EdgeInsets.symmetric(vertical: defaultPadding * 1.5),
-                  sliver: SliverToBoxAdapter(child: FlashSale()),
-                ),
-                SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      BannerSStyle1(
-                        title: '', // Translated
-                        subtitle: '', // Translated
-                        press: () {},
-                      ),
-                      const SizedBox(height: defaultPadding / 4),
-                    ],
+            body: SafeArea(
+              child: CustomScrollView(
+                slivers: [
+                  const SliverToBoxAdapter(
+                      child: OffersCarouselAndCategories()),
+                  const SliverToBoxAdapter(child: PopularProducts()),
+                  const SliverPadding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: defaultPadding * 1.5),
+                    sliver: SliverToBoxAdapter(child: FlashSale()),
                   ),
-                ),
-                const SliverToBoxAdapter(child: MostPopular()),
-                SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: defaultPadding * 1.5),
-                      BannerSStyle5(
-                        title: '', // Translated
-                        subtitle: '', // Translated
-                        bottomText: '', // Translated
-                        press: () {},
-                      ),
-                      const SizedBox(height: defaultPadding / 4),
-                    ],
+                  SliverToBoxAdapter(
+                    child: Column(
+                      children: [
+                        BannerSStyle1(
+                          title: '', // Translated
+                          subtitle: '', // Translated
+                          press: () {},
+                        ),
+                        const SizedBox(height: defaultPadding / 4),
+                      ],
+                    ),
                   ),
-                ),
-                const SliverToBoxAdapter(child: BestSellers()),
-              ],
+                  const SliverToBoxAdapter(child: MostPopular()),
+                  SliverToBoxAdapter(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: defaultPadding * 1.5),
+                        BannerSStyle5(
+                          title: '', // Translated
+                          subtitle: '', // Translated
+                          bottomText: '', // Translated
+                          press: () {},
+                        ),
+                        const SizedBox(height: defaultPadding / 4),
+                      ],
+                    ),
+                  ),
+                  const SliverToBoxAdapter(child: BestSellers()),
+                ],
+              ),
             ),
           ),
         ),

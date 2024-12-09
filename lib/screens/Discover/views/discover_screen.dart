@@ -119,8 +119,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         },
         child: SuperScaffold(
           key: const Key('discvoer'),
+          transitionBetweenRoutes: true,
           appBar: SuperAppBar(
             automaticallyImplyLeading: false,
+
             actions: !_isInitialScreen
                 ? Row(
                     mainAxisSize: MainAxisSize.min,

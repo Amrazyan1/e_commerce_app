@@ -23,86 +23,90 @@ class FlashSale extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<DiscountedBloc, DiscountedBlocState>(
       listener: (context, state) {
-        if (state is DiscountedBlocError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                duration: const Duration(seconds: 5),
-                content: Text(state.message)),
-          );
-        }
-        // TODO: implement listener
+        if (state is DiscountedBlocError) {}
       },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // const _barcodeItem(),
-          const SizedBox(height: defaultPadding / 2),
-          Padding(
-            padding: const EdgeInsets.all(defaultPadding),
-            child: Text(
-              "flash".tr(),
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-          ),
-
-          BlocBuilder<DiscountedBloc, DiscountedBlocState>(
-            builder: (context, state) {
-              if (state is DiscountedBlocLoading) {
-                return SizedBox(
-                  height: 220,
-                  child: ListView.builder(
-                      itemCount: 5,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return const ShimmerProductPortrait();
-                      }),
-                );
-              } else if (state is DiscountedBlocError) {
-                return SizedBox(
-                  height: 220,
-                  child: ListView.builder(
-                      itemCount: 5,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return const ShimmerProductPortrait();
-                      }),
-                );
-              } else if (state is DiscountedBlocLoaded) {
-                final products = state.discountedProducts;
-
-                return SizedBox(
-                  height: 220,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    // Find demoFlashSaleProducts on models/ProductModel.dart
-                    itemCount: products.length,
-                    itemBuilder: (context, index) => Padding(
-                      padding: EdgeInsets.only(
-                        left: defaultPadding,
-                        right:
-                            index == products.length - 1 ? defaultPadding : 0,
-                      ),
-                      child: ProductCard(
-                        product: products[index],
-                        press: () {
-                          context.read<MainProvider>().currentProductModel =
-                              products[index];
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const ProductDetailsScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                );
-              }
+      child: BlocBuilder<DiscountedBloc, DiscountedBlocState>(
+        builder: (context, state) {
+          if (state is DiscountedBlocLoaded) {
+            final products = state.discountedProducts;
+            if (products.isEmpty) {
               return Container();
-            },
-          ),
-        ],
+            }
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // const _barcodeItem(),
+              const SizedBox(height: defaultPadding / 2),
+              Padding(
+                padding: const EdgeInsets.all(defaultPadding),
+                child: Text(
+                  "flash".tr(),
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+
+              BlocBuilder<DiscountedBloc, DiscountedBlocState>(
+                builder: (context, state) {
+                  if (state is DiscountedBlocLoading) {
+                    return SizedBox(
+                      height: 220,
+                      child: ListView.builder(
+                          itemCount: 5,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return const ShimmerProductPortrait();
+                          }),
+                    );
+                  } else if (state is DiscountedBlocError) {
+                    return SizedBox(
+                      height: 220,
+                      child: ListView.builder(
+                          itemCount: 5,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return const ShimmerProductPortrait();
+                          }),
+                    );
+                  } else if (state is DiscountedBlocLoaded) {
+                    final products = state.discountedProducts;
+
+                    return SizedBox(
+                      height: 220,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        // Find demoFlashSaleProducts on models/ProductModel.dart
+                        itemCount: products.length,
+                        itemBuilder: (context, index) => Padding(
+                          padding: EdgeInsets.only(
+                            left: defaultPadding,
+                            right: index == products.length - 1
+                                ? defaultPadding
+                                : 0,
+                          ),
+                          child: ProductCard(
+                            product: products[index],
+                            press: () {
+                              context.read<MainProvider>().currentProductModel =
+                                  products[index];
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ProductDetailsScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return Container();
+                },
+              ),
+            ],
+          );
+        },
       ),
     );
   }

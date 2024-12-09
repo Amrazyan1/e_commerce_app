@@ -98,25 +98,11 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                       AutoRouter.of(context)
                           .push(OtpRoute(phoneNumber: state.phoneNumber));
                     } else if (state is AuthError) {
-                      // showModalBottomSheet(
-                      //   context: context,
-                      //   builder: (_) => WoltModalSheet(
-                      //     child: Padding(
-                      //       padding: const EdgeInsets.all(16.0),
-                      //       child: Column(
-                      //         mainAxisSize: MainAxisSize.min,
-                      //         children: [
-                      //           Text(
-                      //             "Error",
-                      //             style: Theme.of(context).textTheme.headline6,
-                      //           ),
-                      //           const Gap(8),
-                      //           Text(state.message),
-                      //         ],
-                      //       ),
-                      //     ),
-                      //   ),
-                      // );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            duration: const Duration(seconds: 5),
+                            content: Text(state.message)),
+                      );
                     }
                   },
                   child: Padding(

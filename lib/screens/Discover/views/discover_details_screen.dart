@@ -30,23 +30,40 @@ class _DiscoverDetailsScreenState extends State<DiscoverDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String _truncateText(String text, {required int maxLength}) {
+      if (text.length > maxLength) {
+        return text.substring(0, maxLength) + '...'; // Append ellipsis
+      }
+      return text; // No truncation needed
+    }
+
     return Scaffold(
       body: SuperScaffold(
         key: const Key('discvoerdetail'),
         transitionBetweenRoutes: true,
         appBar: SuperAppBar(
           automaticallyImplyLeading: false,
-          title: Text(
-            context.watch<MainProvider>().categoryName,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          title: Row(
+            children: [
+              Flexible(
+                child: Text(
+                  context.watch<MainProvider>().categoryName,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+              ),
+            ],
           ),
           largeTitle: SuperLargeTitle(
-            largeTitle: context.watch<MainProvider>().categoryName,
+            largeTitle: _truncateText(
+                context.watch<MainProvider>().categoryName,
+                maxLength: 18),
             textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 24,
-                  letterSpacing: 0,
-                ),
+                fontWeight: FontWeight.w700,
+                fontSize: 24,
+                letterSpacing: 0,
+                overflow: TextOverflow.ellipsis),
           ),
           actions: Row(
             mainAxisSize: MainAxisSize.min,
@@ -85,6 +102,9 @@ class _DiscoverDetailsScreenState extends State<DiscoverDetailsScreen> {
               if (!value) {}
             },
             onSubmitted: (value) {
+              if (value.isEmpty) {
+                return;
+              }
               context.read<GlobalSearchBloc>().add(PerformGlobalSearch(
                     keyword: value,
                     perPage: 20,

@@ -76,7 +76,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
         subCategories: [],
       ),
     );
-    widget.data.availableBonuses = '5500\$';
+    // widget.data.availableBonuses = '5500\$';
     if (widget.data.availableBonuses != null &&
         widget.data.availableBonuses!.isNotEmpty) {
       categories.add(

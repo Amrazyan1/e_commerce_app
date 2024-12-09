@@ -30,91 +30,102 @@ class MostPopular extends StatelessWidget {
           );
         }
       },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: defaultPadding / 2),
-          Padding(
-            padding: const EdgeInsets.all(defaultPadding),
-            child: Text(
-              "mostpopular".tr(),
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-          ),
-          // SeconderyProductsSkelton(),
-          BlocBuilder<PopularProductsBloc, PopularProductsState>(
-            builder: (context, state) {
-              if (state is PopularProductsLoading) {
-                return SizedBox(
-                  height: 114,
-                  child: ListView.builder(
-                      itemCount: 5,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return const ShimmerProductWidget();
-                      }),
-                );
-              } else if (state is PopularProductsError) {
-                return SizedBox(
-                  height: 114,
-                  child: ListView.builder(
-                      itemCount: 5,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return const ShimmerProductWidget();
-                      }),
-                );
-              } else if (state is PopularProductsLoaded) {
-                final products = state.products;
-                if (products.isEmpty) {
-                  return SizedBox(
-                    height: 114,
-                    child: ListView.builder(
-                        itemCount: 5,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return const ShimmerProductWidget();
-                        }),
-                  );
-                }
-                return SizedBox(
-                  height: 114,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: products.length,
-                    itemBuilder: (context, index) => Padding(
-                      padding: EdgeInsets.only(
-                        left: defaultPadding,
-                        right:
-                            index == products.length - 1 ? defaultPadding : 0,
-                      ),
-                      child: SecondaryProductCard(
-                        key: ValueKey(products[index].id),
-                        image: products[index].images!.main!.src!,
-                        brandName: products[index].name!,
-                        title: products[index].description!,
-                        price: products[index].price!,
-                        priceAfetDiscount: products[index].discountedPrice,
-                        dicountpercent: products[index].discount,
-                        press: () {
-                          context.read<MainProvider>().currentProductModel =
-                              products[index];
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const ProductDetailsScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                );
-              }
+      child: BlocBuilder<PopularProductsBloc, PopularProductsState>(
+        builder: (context, state) {
+          if (state is PopularProductsLoaded) {
+            final products = state.products;
+            if (products.isEmpty) {
               return Container();
-            },
-          )
-        ],
+            }
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: defaultPadding / 2),
+              Padding(
+                padding: const EdgeInsets.all(defaultPadding),
+                child: Text(
+                  "mostpopular".tr(),
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+              // SeconderyProductsSkelton(),
+              BlocBuilder<PopularProductsBloc, PopularProductsState>(
+                builder: (context, state) {
+                  if (state is PopularProductsLoading) {
+                    return SizedBox(
+                      height: 114,
+                      child: ListView.builder(
+                          itemCount: 5,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return const ShimmerProductWidget();
+                          }),
+                    );
+                  } else if (state is PopularProductsError) {
+                    return SizedBox(
+                      height: 114,
+                      child: ListView.builder(
+                          itemCount: 5,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return const ShimmerProductWidget();
+                          }),
+                    );
+                  } else if (state is PopularProductsLoaded) {
+                    final products = state.products;
+                    if (products.isEmpty) {
+                      return SizedBox(
+                        height: 114,
+                        child: ListView.builder(
+                            itemCount: 5,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              return const ShimmerProductWidget();
+                            }),
+                      );
+                    }
+                    return SizedBox(
+                      height: 114,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: products.length,
+                        itemBuilder: (context, index) => Padding(
+                          padding: EdgeInsets.only(
+                            left: defaultPadding,
+                            right: index == products.length - 1
+                                ? defaultPadding
+                                : 0,
+                          ),
+                          child: SecondaryProductCard(
+                            key: ValueKey(products[index].id),
+                            image: products[index].images!.main!.src ?? '',
+                            brandName: products[index].name!,
+                            title: products[index].description ?? '',
+                            price: products[index].price!,
+                            priceAfetDiscount: products[index].discountedPrice,
+                            dicountpercent: products[index].discount,
+                            press: () {
+                              context.read<MainProvider>().currentProductModel =
+                                  products[index];
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ProductDetailsScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return Container();
+                },
+              )
+            ],
+          );
+        },
       ),
     );
   }

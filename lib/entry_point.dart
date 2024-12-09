@@ -10,13 +10,11 @@ import 'package:e_commerce_app/blocs/settings/bloc/settings_bloc.dart';
 import 'package:e_commerce_app/blocs/settings/bloc/settings_event.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:e_commerce_app/constants.dart';
-import 'package:e_commerce_app/screens/order_accepted_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'blocs/products/discounts/bloc/discounted_bloc.dart';
 import 'blocs/products/popular/bloc/popular_products_bloc.dart';
@@ -37,25 +35,6 @@ class _EntryPointState extends State<EntryPoint> {
   @override
   void initState() {
     super.initState();
-    context.read<TrendNewProductsBloc>().add(FetchTrendNewProductsEvent());
-    context.read<DiscountedBloc>().add(FetchDiscountedProductsEvent());
-    context.read<PopularProductsBloc>().add(FetchTrendPopularProductsEvent());
-  }
-
-  Locale? previousLocale;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Check if the locale has changed
-    if (previousLocale != context.locale) {
-      previousLocale = context.locale;
-      _onLocaleChanged(context.locale);
-    }
-  }
-
-  void _onLocaleChanged(Locale newLocale) {
-    print('Locale changed to: $newLocale');
     context.read<TrendNewProductsBloc>().add(FetchTrendNewProductsEvent());
     context.read<DiscountedBloc>().add(FetchDiscountedProductsEvent());
     context.read<PopularProductsBloc>().add(FetchTrendPopularProductsEvent());
