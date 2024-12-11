@@ -4,6 +4,8 @@ class Endpoints {
 
   //coupons/
     static const String coupons= '/coupons';
+        static const String couponsActivate= '/coupons/activate';
+
 
   // User addresses
   static const String userAddresses = '/users/addresses';

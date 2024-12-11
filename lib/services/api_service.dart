@@ -112,6 +112,19 @@ class ApiService {
       rethrow;
     }
   }
+
+  Future<Response> addCoupon(String promocode) async {
+    try {
+      return await _dioClient.dio.patch(
+        Endpoints.couponsActivate,
+        data: {
+          'promoCode': promocode,
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
   // Articles
   Future<Response> getArticles(int perPage) async {
     try {

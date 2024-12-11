@@ -225,7 +225,7 @@ class ProfileScreen extends StatelessWidget {
                             },
                           ),
                           ListTile(
-                            title: Text('العربية'),
+                            title: Text('فارسی'),
                             onTap: () {
                               context.setLocale(const Locale('fa'));
                               Navigator.of(context).pop();

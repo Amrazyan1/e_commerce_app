@@ -1,25 +1,87 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:coupon_uikit/coupon_uikit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import '../../../blocs/coupons/bloc/coupons_bloc.dart';
+import '../../../components/checkout_modal.dart';
 
 @RoutePage()
-class CouponsScreen extends StatelessWidget {
+class CouponsScreen extends StatefulWidget {
   const CouponsScreen({super.key});
 
   @override
+  State<CouponsScreen> createState() => _CouponsScreenState();
+}
+
+class _CouponsScreenState extends State<CouponsScreen> {
+  void _showCouponPopup(BuildContext context) {
+    TextEditingController couponController = TextEditingController();
+
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoActionSheet(
+          title: Text('activate_coupon').tr(),
+          message: Column(
+            children: [
+              CupertinoTextField(
+                controller: couponController,
+                placeholder: 'enter_coupon_code'.tr(),
+                padding: EdgeInsets.all(16),
+              ),
+              SizedBox(height: 16),
+              CupertinoButton.filled(
+                child: Text('activate_coupon').tr(),
+                onPressed: () {
+                  String couponCode = couponController.text.trim();
+                  if (couponCode.isNotEmpty) {
+                    context.read<CouponsBloc>().add(AddCouponEvent(promoCode: couponCode));
+                    Navigator.of(context).pop(); // Close the popup
+                    // Handle coupon activation logic here
+                    print('Activating coupon: $couponCode');
+                  } else {
+                    // Show error or handle empty input
+                    print('Coupon code is empty');
+                  }
+                },
+              ),
+            ],
+          ),
+          cancelButton: CupertinoActionSheetAction(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('Cancel'),
+          ),
+        );
+      },
+    );
+  }
+  @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
           'Coupons'.tr(),
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(defaultPadding),
+        child: SizedBox(
+          height: 60,
+          width: double.infinity,
+          child: ButtonMainWidget(
+            text: 'add_coupon'.tr(),
+            callback: () {
+              _showCouponPopup(context);
+            },
+          ),
         ),
       ),
       body: BlocBuilder<CouponsBloc, CouponsState>(
