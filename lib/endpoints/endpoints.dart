@@ -1,6 +1,10 @@
 // endpoints.dart
 
 class Endpoints {
+
+  //coupons/
+    static const String coupons= '/coupons';
+
   // User addresses
   static const String userAddresses = '/users/addresses';
   static const String setDefaultAddress = '/users/addresses/{id}/set-default';

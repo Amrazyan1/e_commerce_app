@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/Provider/main_provider.dart';
+import 'package:e_commerce_app/blocs/coupons/bloc/coupons_bloc.dart';
 import 'package:e_commerce_app/blocs/orders/bloc/orders_bloc.dart';
 import 'package:e_commerce_app/blocs/orders/bloc/orders_event.dart';
 import 'package:e_commerce_app/blocs/settings/bloc/settings_bloc.dart';
@@ -123,6 +124,7 @@ class ProfileScreen extends StatelessWidget {
               text: "promo_codes".tr(),
               svgSrc: "assets/icons/promo_code.svg",
               press: () {
+                context.read<CouponsBloc>().add(FetchCoupons());
                 AutoRouter.of(context).push(const CouponsRoute());
               },
             ),

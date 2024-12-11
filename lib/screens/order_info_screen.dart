@@ -118,7 +118,7 @@ class OrderInfoScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                'x${product.product?.count}',
+                                'x${product.count}',
                                 style: const TextStyle(fontSize: 14),
                               ),
                               const SizedBox(width: 10),

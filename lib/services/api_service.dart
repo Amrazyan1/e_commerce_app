@@ -103,6 +103,15 @@ class ApiService {
     }
   }
 
+ Future<Response> getCoupons() async {
+    try {
+      return await _dioClient.dio.get(
+        Endpoints.coupons,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
   // Articles
   Future<Response> getArticles(int perPage) async {
     try {
