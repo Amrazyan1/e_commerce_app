@@ -54,11 +54,14 @@ class _CouponsScreenState extends State<CouponsScreen> {
                   ),
                   SizedBox(height: 16),
                   TextField(
+                    
                     controller: couponController,
                     decoration: InputDecoration(
                       labelText: 'Enter coupon code',
                       border: OutlineInputBorder(),
+                    
                     ),
+                    
                   ),
                   SizedBox(height: 16),
                   SizedBox(

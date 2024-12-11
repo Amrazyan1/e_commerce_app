@@ -192,13 +192,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ],
                       ),
                       const SizedBox(height: defaultPadding / 2),
-                      Text(
-                        '${context.read<MainProvider>().currentProductModel.name}',
-                        maxLines: 2,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleSmall!
-                            .copyWith(color: Colors.black.withOpacity(0.5)),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "unit".tr(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.w500),
+                          ),
+                          const SizedBox(height: defaultPadding),
+                          Text(
+                            '${context.read<MainProvider>().currentProductModel.unit?.value} ${context.read<MainProvider>().currentProductModel.unit?.name ?? ''}',
+                             
+                          ),
+                        ],
                       ),
                       const SizedBox(height: defaultPadding),
                       Row(
@@ -213,6 +222,33 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ),
                           const Spacer(),
                           const SizedBox(width: defaultPadding / 4),
+                          context.watch<MainProvider>().currentProductModel.discount != null && context.watch<MainProvider>().currentProductModel.discount != '0 %' ? Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${context.watch<MainProvider>().currentProductModel.discountedPrice}",
+                                    style: const TextStyle(
+                                      color: ksecondaryColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+
+                                   const SizedBox(width: defaultPadding / 2),
+                                  Text(
+                                    context.watch<MainProvider>().currentProductModel.price!,
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge!
+                                          .color,
+                                      fontSize: 16,
+                                      decoration: TextDecoration.lineThrough,
+                                    ),
+                                  ),
+                                ],
+                              ):
                           Text(
                             '${total.isNotEmpty ? total : context.watch<MainProvider>().currentProductModel.price}',
                             style: Theme.of(context)
@@ -231,6 +267,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 .description !=
                             null,
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               "product_info".tr(),
@@ -248,23 +285,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ],
                         ),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "unit".tr(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(fontWeight: FontWeight.w500),
-                          ),
-                          const SizedBox(height: defaultPadding / 2),
-                          Text(
-                            '${context.read<MainProvider>().currentProductModel.unit?.value} ${context.read<MainProvider>().currentProductModel.unit?.name ?? ''}',
-                            style: const TextStyle(height: 1.4),
-                          ),
-                        ],
-                      )
+                      
                     ],
                   ),
                 ),
