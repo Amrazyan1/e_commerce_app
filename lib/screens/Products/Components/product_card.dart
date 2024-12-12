@@ -2,6 +2,7 @@ import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/components/network_image_with_loader.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/Product/product_model.dart';
@@ -112,12 +113,12 @@ class _ProductCardState extends State<ProductCard> {
                   ),
                   const SizedBox(height: defaultPadding / 4),
                   Flexible(
-                    child: Text(
+                    child: HtmlWidget(
                       widget.product.description ?? '',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(fontSize: 10),
+                      // style: Theme.of(context)
+                      //     .textTheme
+                      //     .bodyMedium!
+                      //     .copyWith(fontSize: 10),
                     ),
                   ),
                   Row(

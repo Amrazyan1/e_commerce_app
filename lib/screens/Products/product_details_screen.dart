@@ -15,6 +15,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get_it/get_it.dart';
 import 'package:like_button/like_button.dart';
 import '../../blocs/favourites/bloc/favourites_bloc.dart';
@@ -195,17 +196,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // Text(
+                          //   "unit".tr(),
+                          //   style: Theme.of(context)
+                          //       .textTheme
+                          //       .titleMedium!
+                          //       .copyWith(fontWeight: FontWeight.w500),
+                          // ),
+                          // const SizedBox(height: defaultPadding),
                           Text(
-                            "unit".tr(),
-                            style: Theme.of(context)
+                            '${context.read<MainProvider>().currentProductModel.unit?.value} ${context.read<MainProvider>().currentProductModel.unit?.name ?? ''}',
+                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium!
                                 .copyWith(fontWeight: FontWeight.w500),
-                          ),
-                          const SizedBox(height: defaultPadding),
-                          Text(
-                            '${context.read<MainProvider>().currentProductModel.unit?.value} ${context.read<MainProvider>().currentProductModel.unit?.name ?? ''}',
-                             
                           ),
                         ],
                       ),
@@ -259,13 +263,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: defaultPadding),
                       Visibility(
                         visible: context
                                 .read<MainProvider>()
                                 .currentProductModel
                                 .description !=
-                            null,
+                            null && context
+                                .read<MainProvider>()
+                                .currentProductModel
+                                .description!.isNotEmpty,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -277,10 +283,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   .copyWith(fontWeight: FontWeight.w500),
                             ),
                             const SizedBox(height: defaultPadding / 2),
-                            Text(
-                              '${context.read<MainProvider>().currentProductModel.description}',
-                              style: const TextStyle(height: 1.4),
-                            ),
+                            HtmlWidget('${context.read<MainProvider>().currentProductModel.description}'),
+                            // Text(
+                            //   '${context.read<MainProvider>().currentProductModel.description}',
+                            //   // style: const TextStyle(height: 1.4),
+                            // ),
                             const SizedBox(height: defaultPadding / 2),
                           ],
                         ),

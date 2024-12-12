@@ -269,6 +269,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                             child: Center(child: CircularProgressIndicator()));
                       } else if (state is CategoriesLoaded) {
                         return SliverGrid(
+                          
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
                               final category = state.categories[index];

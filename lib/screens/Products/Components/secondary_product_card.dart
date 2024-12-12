@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 import '../../../constants.dart';
 import '../../../components/network_image_with_loader.dart';
@@ -89,14 +90,14 @@ class SecondaryProductCard extends StatelessWidget {
                   ),
                   const SizedBox(height: defaultPadding / 2),
                   Flexible(
-                    child: Text(
+                    child: HtmlWidget(
                       title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall!
-                          .copyWith(fontSize: 12),
+                      // maxLines: 2,
+                      // overflow: TextOverflow.ellipsis,
+                      // style: Theme.of(context)
+                      //     .textTheme
+                      //     .titleSmall!
+                      //     .copyWith(fontSize: 12),
                     ),
                   ),
                   const Spacer(),
@@ -112,15 +113,18 @@ class SecondaryProductCard extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(width: defaultPadding / 4),
-                            Text(
-                              "\$$price",
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .color,
-                                fontSize: 10,
-                                decoration: TextDecoration.lineThrough,
+                            Flexible(
+                              child: Text(
+                                "\$$price",
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .color,
+                                  fontSize: 10,
+                                  decoration: TextDecoration.lineThrough,
+                                  
+                                ),
                               ),
                             ),
                           ],
