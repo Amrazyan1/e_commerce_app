@@ -40,8 +40,9 @@ class _DiscoverDetailsScreenState extends State<DiscoverDetailsScreen> {
     return Scaffold(
       body: SuperScaffold(
         key: const Key('discvoerdetail'),
-        transitionBetweenRoutes: true,
+          transitionBetweenRoutes: false,
         appBar: SuperAppBar(
+          
           automaticallyImplyLeading: false,
           title: Row(
             children: [
@@ -94,6 +95,7 @@ class _DiscoverDetailsScreenState extends State<DiscoverDetailsScreen> {
             ),
           ),
           searchBar: SuperSearchBar(
+            
             placeholderText: 'search'.tr(),
             searchFocusNode: _searchFocusNode,
             searchController: _searchTextController,

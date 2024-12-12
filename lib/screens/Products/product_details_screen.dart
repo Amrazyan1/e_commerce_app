@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:e_commerce_app/Provider/main_provider.dart';
+import 'package:e_commerce_app/blocs/bloc/product_detail_bloc.dart';
 import 'package:e_commerce_app/components/added_to_cart_message_screen.dart';
 import 'package:e_commerce_app/components/custom_modal_bottom_sheet.dart';
+import 'package:e_commerce_app/components/network_image_with_loader.dart';
 import 'package:e_commerce_app/screens/Products/Components/product_card.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/screens/Products/Components/product_images.dart';
@@ -18,6 +20,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get_it/get_it.dart';
 import 'package:like_button/like_button.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../blocs/favourites/bloc/favourites_bloc.dart';
 import '../../blocs/products/trending/bloc/trend_new_products_bloc.dart';
 import '../../models/cart_products_response.dart';
@@ -78,6 +81,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    context.read<ProductDetailBloc>().add(FetchProductDetail(
+        context.read<MainProvider>().currentProductModel.id));
+  }
+
+  @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
@@ -121,179 +131,235 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 floating: true,
               ),
-              ProductImages(
-                images: [
-                  context
-                          .read<MainProvider>()
-                          .currentProductModel
-                          .images
-                          ?.main
-                          ?.src ??
-                      '',
-                  // context
-                  //         .read<MainProvider>()
-                  //         .currentProductModel
-                  //         .images
-                  //         ?.main
-                  //         ?.src ??
-                  //     '',
-                  // context
-                  //         .read<MainProvider>()
-                  //         .currentProductModel
-                  //         .images
-                  //         ?.main
-                  //         ?.src ??
-                  //     '',
-                ],
+              BlocBuilder<ProductDetailBloc, ProductDetailState>(
+                builder: (context, state) {
+                  if (state is ProductDetailLoaded) {
+                    return ProductImages(
+                      images: [
+                        state.product.images?.main?.src ?? '',
+                        ...(state.product.images?.additional ?? [])
+                            .map((image) => image.src ?? '')
+                            .toList(),
+                      ],
+                    );
+                  }
+                  return SliverToBoxAdapter(
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: Stack(
+                        children: [
+                          PageView.builder(
+                            itemCount: 1,
+                            itemBuilder: (context, index) => Padding(
+                              padding:
+                                  const EdgeInsets.only(right: defaultPadding),
+                              child: Shimmer.fromColors(
+                                baseColor: Colors.grey.shade200,
+                                highlightColor: Colors.grey.shade100,
+                                enabled: true,
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(defaultBorderRadius * 2),
+                                  ),
+                                  child: Container(
+                                    color: Colors.amber,
+                                  ),
+                                  // child: NetworkImageWithLoader(''),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
               SliverPadding(
                 padding: const EdgeInsets.all(defaultPadding),
                 sliver: SliverToBoxAdapter(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Text(
-                                context
-                                    .read<MainProvider>()
-                                    .currentProductModel
-                                    .name!
-                                    .toUpperCase(),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge!
-                                    .copyWith(fontWeight: FontWeight.bold)),
-                          ),
-                          Center(
-                            child: LikeButton(
-                              size: 30,
-                              onTap: (istapped) async {
-                                log('IS favorite true');
-                                context.read<FavouritesBloc>().add(
-                                    AddToFavouritesEvent(context
-                                        .read<MainProvider>()
-                                        .currentProductModel
-                                        .id));
-                                return !istapped;
-                              },
-                              likeBuilder: (isLiked) {
-                                return Icon(
-                                  Icons.favorite,
-                                  color: isLiked
-                                      ? kprimaryColor
-                                      : kprimaryColor.withOpacity(0.2),
-                                  size: 30,
-                                );
-                              },
+                  child: BlocBuilder<ProductDetailBloc, ProductDetailState>(
+                    builder: (context, state) {
+                      if (state is ProductDetailLoaded) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                  child: Text(state.product.name!.toUpperCase(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge!
+                                          .copyWith(
+                                              fontWeight: FontWeight.bold)),
+                                ),
+                                Center(
+                                  child: LikeButton(
+                                    size: 30,
+                                    onTap: (istapped) async {
+                                      log('IS favorite true');
+                                      context.read<FavouritesBloc>().add(
+                                          AddToFavouritesEvent(
+                                              state.product.id!));
+                                      return !istapped;
+                                    },
+                                    likeBuilder: (isLiked) {
+                                      return Icon(
+                                        Icons.favorite,
+                                        color: isLiked
+                                            ? kprimaryColor
+                                            : kprimaryColor.withOpacity(0.2),
+                                        size: 30,
+                                      );
+                                    },
+                                  ),
+                                )
+                              ],
                             ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: defaultPadding / 2),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Text(
-                          //   "unit".tr(),
-                          //   style: Theme.of(context)
-                          //       .textTheme
-                          //       .titleMedium!
-                          //       .copyWith(fontWeight: FontWeight.w500),
-                          // ),
-                          // const SizedBox(height: defaultPadding),
-                          Text(
-                            '${context.read<MainProvider>().currentProductModel.unit?.value} ${context.read<MainProvider>().currentProductModel.unit?.name ?? ''}',
-                             style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(fontWeight: FontWeight.w500),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: defaultPadding),
-                      Row(
-                        children: [
-                          // ProductAvailabilityTag(isAvailable: isAvailable),
-                          Visibility(
-                            visible: canShowquantity,
-                            child: QuantityWidget(
-                              initialCount: 1,
-                              callback: addToCart,
+                            const SizedBox(height: defaultPadding / 2),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Text(
+                                //   "unit".tr(),
+                                //   style: Theme.of(context)
+                                //       .textTheme
+                                //       .titleMedium!
+                                //       .copyWith(fontWeight: FontWeight.w500),
+                                // ),
+                                // const SizedBox(height: defaultPadding),
+                                Text(
+                                  '${context.read<MainProvider>().currentProductModel.unit?.value} ${context.read<MainProvider>().currentProductModel.unit?.name ?? ''}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium!
+                                      .copyWith(fontWeight: FontWeight.w500),
+                                ),
+                              ],
                             ),
-                          ),
-                          const Spacer(),
-                          const SizedBox(width: defaultPadding / 4),
-                          context.watch<MainProvider>().currentProductModel.discount != null && context.watch<MainProvider>().currentProductModel.discount != '0 %' ? Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                            const SizedBox(height: defaultPadding),
+                            Row(
+                              children: [
+                                // ProductAvailabilityTag(isAvailable: isAvailable),
+                                Visibility(
+                                  visible: canShowquantity,
+                                  child: QuantityWidget(
+                                    initialCount: 1,
+                                    callback: addToCart,
+                                  ),
+                                ),
+                                const Spacer(),
+                                const SizedBox(width: defaultPadding / 4),
+                                state.product.discount != null &&
+                                        state.product.discount != '0 %'
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "${state.product.discountedPrice}",
+                                            style: const TextStyle(
+                                              color: ksecondaryColor,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                              width: defaultPadding / 2),
+                                          Text(
+                                            state.product.price!,
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge!
+                                                  .color,
+                                              fontSize: 16,
+                                              decoration:
+                                                  TextDecoration.lineThrough,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : Text(
+                                        '${total.isNotEmpty ? total : state.product.price}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge!
+                                            .copyWith(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20),
+                                      ),
+                              ],
+                            ),
+                            Visibility(
+                              visible: state.product.description != null &&
+                                  state.product.description!.isNotEmpty,
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "${context.watch<MainProvider>().currentProductModel.discountedPrice}",
-                                    style: const TextStyle(
-                                      color: ksecondaryColor,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 18,
-                                    ),
+                                    "product_info".tr(),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(fontWeight: FontWeight.w500),
                                   ),
-
-                                   const SizedBox(width: defaultPadding / 2),
-                                  Text(
-                                    context.watch<MainProvider>().currentProductModel.price!,
-                                    style: TextStyle(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge!
-                                          .color,
-                                      fontSize: 16,
-                                      decoration: TextDecoration.lineThrough,
-                                    ),
-                                  ),
+                                  const SizedBox(height: defaultPadding / 2),
+                                  HtmlWidget('${state.product.description}'),
+                                  // Text(
+                                  //   '${context.read<MainProvider>().currentProductModel.description}',
+                                  //   // style: const TextStyle(height: 1.4),
+                                  // ),
+                                  const SizedBox(height: defaultPadding / 2),
                                 ],
-                              ):
-                          Text(
-                            '${total.isNotEmpty ? total : context.watch<MainProvider>().currentProductModel.price}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .copyWith(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-                        ],
-                      ),
-                      Visibility(
-                        visible: context
-                                .read<MainProvider>()
-                                .currentProductModel
-                                .description !=
-                            null && context
-                                .read<MainProvider>()
-                                .currentProductModel
-                                .description!.isNotEmpty,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "product_info".tr(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(fontWeight: FontWeight.w500),
+                              ),
                             ),
-                            const SizedBox(height: defaultPadding / 2),
-                            HtmlWidget('${context.read<MainProvider>().currentProductModel.description}'),
-                            // Text(
-                            //   '${context.read<MainProvider>().currentProductModel.description}',
-                            //   // style: const TextStyle(height: 1.4),
-                            // ),
-                            const SizedBox(height: defaultPadding / 2),
+                            Padding(
+  padding: const EdgeInsets.all(8.0),
+  child: state.product?.characteristics?.isNotEmpty ?? false
+      ? Column(
+          children: state.product!.characteristics!.map((characteristic) {
+            final name = characteristic['name'] ?? 'Unknown';
+            final value = characteristic['value'] ?? 'Unknown';
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    value,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        )
+      : Container(),
+)
+
                           ],
-                        ),
-                      ),
-                      
-                    ],
+                        );
+                      }
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    },
                   ),
                 ),
               ),

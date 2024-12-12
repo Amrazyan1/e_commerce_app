@@ -71,7 +71,7 @@ class Endpoints {
 
   // Products
 
-  static const String getProductById = '/products/{id}?perPage={perPage}';
+  static const String getProductById = '/products/{id}';
   static const String getProductRatings = '/products/{product:id}/ratings';
   static const String addProductRating = '/products/{product:id}/ratings';
   static const String getFavoriteProducts = '/products/favorites';

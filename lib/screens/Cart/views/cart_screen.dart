@@ -78,12 +78,11 @@ class _CartScreenState extends State<CartScreen> {
           });
         }
       },
-      child: SuperScaffold(
-        appBar: SuperAppBar(
+      child: Scaffold(
+
+        appBar: AppBar(
           automaticallyImplyLeading: false,
-          searchBar: SuperSearchBar(
-            enabled: false,
-          ),
+        
           backgroundColor:
               Theme.of(context).colorScheme.background.withOpacity(.5),
           title: Text(
@@ -93,14 +92,7 @@ class _CartScreenState extends State<CartScreen> {
                 .labelMedium!
                 .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
           ),
-          largeTitle: SuperLargeTitle(
-            largeTitle: 'your_cart'.tr(),
-            textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 24,
-                  letterSpacing: 0,
-                ),
-          ),
+         
         ),
         body: Column(
           children: [

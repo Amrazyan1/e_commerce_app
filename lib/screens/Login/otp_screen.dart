@@ -26,6 +26,8 @@ class OtpScreen extends StatelessWidget {
       create: (_) => AuthBloc(),
       child: Scaffold(
         body: SuperScaffold(
+                    transitionBetweenRoutes: false,
+
           appBar: SuperAppBar(
             automaticallyImplyLeading: false,
             title: Text(

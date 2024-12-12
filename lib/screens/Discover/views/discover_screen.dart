@@ -117,14 +117,14 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             return false;
           }
         },
-        child: SuperScaffold(
+        child: Scaffold(
+          
           key: const Key('discvoer'),
-          transitionBetweenRoutes: true,
-          appBar: SuperAppBar(
+          appBar:  AppBar(
+            
             automaticallyImplyLeading: false,
-
             actions: !_isInitialScreen
-                ? Row(
+                ? [Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
@@ -142,7 +142,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                                 Theme.of(context).textTheme.bodyLarge!.color),
                       ),
                     ],
-                  )
+                  )]
                 : null,
             leading: !_isInitialScreen
                 ? GestureDetector(
@@ -166,207 +166,133 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   .labelMedium!
                   .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
             ),
-            largeTitle: SuperLargeTitle(
-              largeTitle: 'find_prod'.tr(),
-              textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 24,
-                    letterSpacing: 0,
-                  ),
-            ),
-            searchBar: SuperSearchBar(
-              enabled: false,
-            ),
-            // searchBar: SuperSearchBar(
-            //   searchFocusNode: _searchFocusNode,
-            //   searchController: _searchTextController,
-            //   textStyle: Theme.of(context).textTheme.bodyLarge!,
-            //   onFocused: (value) {
-            //     if (!value) {}
-            //   },
-            //   onSubmitted: (value) {
-            //     context.read<GlobalSearchBloc>().add(PerformGlobalSearch(
-            //           keyword: value,
-            //           perPage: 20,
-            //         ));
-            //   },
-            //   cancelTextStyle: Theme.of(context).textTheme.bodyLarge!,
-            //   onChanged: (value) {},
-            //   searchResult: BlocBuilder<GlobalSearchBloc, GlobalSearchState>(
-            //     builder: (context, state) {
-            //       if (state is GlobalSearchLoading) {
-            //         return const Center(child: CircularProgressIndicator());
-            //       } else if (state is GlobalSearchLoaded) {
-            //         // Display results in a GridView
-            //         return Padding(
-            //           padding: const EdgeInsets.all(defaultPadding),
-            //           child: GridView.builder(
-            //             itemCount:
-            //                 state.results.data!.products!.data!.data!.length,
-            //             gridDelegate:
-            //                 const SliverGridDelegateWithFixedCrossAxisCount(
-            //               crossAxisCount: 2,
-            //               mainAxisSpacing: 8.0,
-            //               crossAxisSpacing: 8.0,
-            //               childAspectRatio: 140 / 220, // Match item dimensions
-            //             ),
-            //             itemBuilder: (context, index) {
-            //               final product =
-            //                   state.results.data!.products!.data!.data![index];
-            //               return ProductCard(
-            //                 product: product,
-            //                 press: () {
-            //                   _searchFocusNode.requestFocus();
-            //                   Future.delayed(const Duration(milliseconds: 10),
-            //                       () {
-            //                     _searchFocusNode.unfocus();
-            //                     _searchTextController.clear();
-
-            //                     context.read<MainProvider>().currentProductModel =
-            //                         product;
-            //                     Navigator.of(context).push(
-            //                       MaterialPageRoute(
-            //                         builder: (context) =>
-            //                             const ProductDetailsScreen(),
-            //                       ),
-            //                     );
-            //                   });
-            //                 },
-            //               );
-            //             },
-            //           ),
-            //         );
-            //       } else if (state is GlobalSearchError) {
-            //         return Center(child: Text(state.message));
-            //       } else {
-            //         // Initial state or no results
-            //         return const Center(child: Text('Start typing to search'));
-            //       }
-            //     },
-            //   ),
-            // ),
+           
+            
           ),
-          body: CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              // Categories Section
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                sliver: BlocListener<CategoriesBloc, CategoriesState>(
-                  listener: (context, state) {
-                    if (state is CategoriesError) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                            duration: const Duration(seconds: 5),
-                            content: Text(state.error)),
-                      );
-                    }
-                  },
-                  child: BlocBuilder<CategoriesBloc, CategoriesState>(
-                    builder: (context, state) {
-                      if (state is CategoriesLoading) {
-                        return const SliverToBoxAdapter(
-                            child: Center(child: CircularProgressIndicator()));
-                      } else if (state is CategoriesLoaded) {
-                        return SliverGrid(
-                          
-                          delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                              final category = state.categories[index];
-                              final products = state.products;
-                              return _categoryItem(
-                                  category: category,
-                                  productList: products,
-                                  onTap: _onCategoryTap);
-                            },
-                            childCount: state.categories.length,
-                          ),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 8.0,
-                            crossAxisSpacing: 8.0,
-                            childAspectRatio: 174 / 174,
-                          ),
+          body: Container(
+            child: CustomScrollView(
+              primary: false,
+              // controller: _scrollController,
+              slivers: [
+                // Categories Section
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  sliver: BlocListener<CategoriesBloc, CategoriesState>(
+                    listener: (context, state) {
+                      if (state is CategoriesError) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              duration: const Duration(seconds: 5),
+                              content: Text(state.error)),
                         );
                       }
-                      return const SliverToBoxAdapter(
-                          child: Center(child: Text('No Data')));
                     },
-                  ),
-                ),
-              ),
-              const SliverToBoxAdapter(child: SizedBox(height: 20)), // Spacer
-
-              // Category Details Section
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                sliver: BlocListener<CategoryDetailBloc, CategoryDetailState>(
-                  listener: (context, state) {
-                    if (state is CategoryDetailLoaded) {
-                      context.read<MainProvider>().isLoadingMore = false;
-                    }
-                    if (state is CategoryDetailError) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                            duration: const Duration(seconds: 5),
-                            content: Text(state.message)),
-                      );
-                    }
-                  },
-                  child: BlocBuilder<CategoryDetailBloc, CategoryDetailState>(
-                    builder: (context, state) {
-                      if (state is CategoryDetailLoaded) {
-                        final products = state.products;
-                        return SliverPadding(
-                          padding: const EdgeInsets.only(bottom: 20),
-                          sliver: SliverGrid(
+                    child: BlocBuilder<CategoriesBloc, CategoriesState>(
+                      builder: (context, state) {
+                        if (state is CategoriesLoading) {
+                          return const SliverToBoxAdapter(
+                              child: Center(child: CircularProgressIndicator()));
+                        } else if (state is CategoriesLoaded) {
+                          return SliverGrid(
+                            
                             delegate: SliverChildBuilderDelegate(
                               (context, index) {
-                                return ProductCard(
-                                  product: products[index],
-                                  press: () {
-                                    context
-                                        .read<MainProvider>()
-                                        .currentProductModel = products[index];
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ProductDetailsScreen(),
-                                      ),
-                                    );
-                                  },
-                                );
+                                final category = state.categories[index];
+                                final products = state.products;
+                                return _categoryItem(
+                                    category: category,
+                                    productList: products,
+                                    onTap: _onCategoryTap);
                               },
-                              childCount: state.products.length,
+                              childCount: state.categories.length,
                             ),
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               mainAxisSpacing: 8.0,
                               crossAxisSpacing: 8.0,
-                              childAspectRatio: 140 / 220,
+                              childAspectRatio: 174 / 174,
                             ),
-                          ),
-                        );
-                      } else if (state is CategoryDetailLoading) {
+                          );
+                        }
                         return const SliverToBoxAdapter(
-                          child: Center(child: CircularProgressIndicator()),
+                            child: Center(child: Text('No Data')));
+                      },
+                    ),
+                  ),
+                ),
+                const SliverToBoxAdapter(child: SizedBox(height: 20)), // Spacer
+            
+                // Category Details Section
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  sliver: BlocListener<CategoryDetailBloc, CategoryDetailState>(
+                    listener: (context, state) {
+                      if (state is CategoryDetailLoaded) {
+                        context.read<MainProvider>().isLoadingMore = false;
+                      }
+                      if (state is CategoryDetailError) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              duration: const Duration(seconds: 5),
+                              content: Text(state.message)),
                         );
                       }
-                      return const SliverToBoxAdapter(child: SizedBox.shrink());
                     },
+                    child: BlocBuilder<CategoryDetailBloc, CategoryDetailState>(
+                      builder: (context, state) {
+                        if (state is CategoryDetailLoaded) {
+                          final products = state.products;
+                          return SliverPadding(
+                            padding: const EdgeInsets.only(bottom: 20),
+                            sliver: SliverGrid(
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) {
+                                  return ProductCard(
+                                    product: products[index],
+                                    press: () {
+                                      context
+                                          .read<MainProvider>()
+                                          .currentProductModel = products[index];
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ProductDetailsScreen(),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                childCount: state.products.length,
+                              ),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 8.0,
+                                crossAxisSpacing: 8.0,
+                                childAspectRatio: 140 / 220,
+                              ),
+                            ),
+                          );
+                        } else if (state is CategoryDetailLoading) {
+                          return const SliverToBoxAdapter(
+                            child: Center(child: CircularProgressIndicator()),
+                          );
+                        }
+                        return const SliverToBoxAdapter(child: SizedBox.shrink());
+                      },
+                    ),
                   ),
                 ),
-              ),
-
-              if (context.watch<MainProvider>().isLoadingMore == true)
-                const SliverToBoxAdapter(
-                  child: Center(
-                    child: CircularProgressIndicator(),
+            
+                if (context.watch<MainProvider>().isLoadingMore == true)
+                  const SliverToBoxAdapter(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

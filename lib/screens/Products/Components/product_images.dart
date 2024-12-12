@@ -63,7 +63,7 @@ class _ProductImagesState extends State<ProductImages> {
                     Radius.circular(defaultBorderRadius * 2),
                   ),
                   child: WidgetZoom(
-                      heroAnimationTag: 'productdetialimage',
+                      heroAnimationTag: 'productdetialimage$index',
                       zoomWidget: NetworkImageWithLoader(widget.images[index])),
                   // InteractiveViewer(
                   //   panEnabled: true,

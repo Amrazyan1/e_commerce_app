@@ -6,6 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:coupon_uikit/coupon_uikit.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
@@ -61,7 +62,10 @@ class _CouponsScreenState extends State<CouponsScreen> {
                       border: OutlineInputBorder(),
                     
                     ),
-                    
+                    inputFormatters: [
+        FilteringTextInputFormatter.allow(RegExp(r'[A-Z0-9]')), // Only allows uppercase letters and numbers
+      ],
+      textCapitalization: TextCapitalization.characters,
                   ),
                   SizedBox(height: 16),
                   SizedBox(

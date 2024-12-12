@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:e_commerce_app/models/Product/product_model.dart';
@@ -32,6 +33,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         emit(CartLoaded(products ?? [], responseData.subtotal,
             responseData.discount, responseData.total, responseData.count));
       } catch (e) {
+        log(e.toString());
         emit(CartError(e.toString()));
       }
     });

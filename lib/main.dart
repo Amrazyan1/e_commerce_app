@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:e_commerce_app/Provider/main_provider.dart';
+import 'package:e_commerce_app/blocs/bloc/product_detail_bloc.dart';
 import 'package:e_commerce_app/blocs/categories/bloc/categories_bloc.dart';
 import 'package:e_commerce_app/blocs/categorydetails/bloc/copy/bloc/category_detail_copy_bloc.dart';
 import 'package:e_commerce_app/blocs/coupons/bloc/coupons_bloc.dart';
@@ -108,6 +109,9 @@ void main() async {
             ),
             BlocProvider(
               create: (_) => CouponsBloc(),
+            ),
+             BlocProvider(
+              create: (_) => ProductDetailBloc(),
             ),
           ],
           child: const MainApp(),

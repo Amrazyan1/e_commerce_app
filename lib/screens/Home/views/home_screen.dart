@@ -31,7 +31,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _searchFocusNode = FocusNode();
+  var _searchFocusNode = FocusNode();
   final _searchTextController = TextEditingController();
 
   Locale? previousLocale;
@@ -70,10 +70,12 @@ class _HomeScreenState extends State<HomeScreen> {
           : ui.TextDirection.ltr,
       child: RefreshIndicator(
         onRefresh: _onrefresh,
-        child: Scaffold(
-          body: SuperScaffold(
+        child: 
+         SuperScaffold(
             key: const Key('home'),
+            transitionBetweenRoutes: false,
             appBar: SuperAppBar(
+              
               backgroundColor:
                   Theme.of(context).colorScheme.background.withOpacity(.5),
               title: Row(
@@ -95,10 +97,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
               ),
               searchBar: SuperSearchBar(
+                
                 placeholderText: 'search'.tr(),
+
                 searchFocusNode: _searchFocusNode,
                 searchController: _searchTextController,
                 textStyle: Theme.of(context).textTheme.bodyLarge!,
+                
                 onFocused: (value) {
                   if (!value) {
                     setState(_searchTextController.clear);
@@ -106,6 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 cancelTextStyle: Theme.of(context).textTheme.bodyLarge!,
                 onSubmitted: (value) {
+         
                   if (value.isEmpty) {
                     return;
                   }
@@ -114,56 +120,58 @@ class _HomeScreenState extends State<HomeScreen> {
                         perPage: 20,
                       ));
                 },
-                searchResult: BlocBuilder<GlobalSearchBloc, GlobalSearchState>(
-                  builder: (context, state) {
-                    if (state is GlobalSearchLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (state is GlobalSearchLoaded) {
-                      return Padding(
-                        padding: const EdgeInsets.all(defaultPadding),
-                        child: GridView.builder(
-                          itemCount:
-                              state.results.data!.products!.data!.data!.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 8.0,
-                            crossAxisSpacing: 8.0,
-                            childAspectRatio: 140 / 220,
+                searchResult: Container(
+                  child: BlocBuilder<GlobalSearchBloc, GlobalSearchState>(
+                    builder: (buildercontext, state) {
+                      if (state is GlobalSearchLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (state is GlobalSearchLoaded) {
+                        return Padding(
+                          padding: const EdgeInsets.all(defaultPadding),
+                          child: GridView.builder(
+                            itemCount:
+                                state.results.data!.products!.data!.data!.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 8.0,
+                              crossAxisSpacing: 8.0,
+                              childAspectRatio: 140 / 220,
+                            ),
+                            itemBuilder: (context, index) {
+                              final product = state
+                                  .results.data!.products!.data!.data![index];
+                              return ProductCard(
+                                product: product,
+                                press: () {
+                                  // _searchFocusNode.requestFocus();
+                                  Future.delayed(const Duration(milliseconds: 0),
+                                      () {
+                                    // _searchFocusNode.unfocus();
+                                    // _searchTextController.clear();
+                  
+                                    context
+                                        .read<MainProvider>()
+                                        .currentProductModel = product;
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ProductDetailsScreen(),
+                                      ),
+                                    );
+                                  });
+                                },
+                              );
+                            },
                           ),
-                          itemBuilder: (context, index) {
-                            final product = state
-                                .results.data!.products!.data!.data![index];
-                            return ProductCard(
-                              product: product,
-                              press: () {
-                                // _searchFocusNode.requestFocus();
-                                Future.delayed(const Duration(milliseconds: 10),
-                                    () {
-                                  // _searchFocusNode.unfocus();
-                                  // _searchTextController.clear();
-
-                                  context
-                                      .read<MainProvider>()
-                                      .currentProductModel = product;
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const ProductDetailsScreen(),
-                                    ),
-                                  );
-                                });
-                              },
-                            );
-                          },
-                        ),
-                      );
-                    } else if (state is GlobalSearchError) {
-                      return Center(child: Text(state.message));
-                    } else {
-                      return Center(child: Text('search'.tr())); // Translated
-                    }
-                  },
+                        );
+                      } else if (state is GlobalSearchError) {
+                        return Center(child: Text(state.message));
+                      } else {
+                        return Center(child: Text('search'.tr())); // Translated
+                      }
+                    },
+                  ),
                 ),
               ),
             ),
@@ -211,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-      ),
+      
     );
   }
 }

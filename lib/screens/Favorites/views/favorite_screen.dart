@@ -16,11 +16,10 @@ class FavoriteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SuperScaffold(
-      appBar: SuperAppBar(
-        searchBar: SuperSearchBar(
-          enabled: false,
-        ),
+    return Scaffold(
+
+      appBar: AppBar(
+        
         automaticallyImplyLeading: false,
         backgroundColor:
             Theme.of(context).colorScheme.background.withOpacity(.5),
@@ -31,14 +30,7 @@ class FavoriteScreen extends StatelessWidget {
               .labelMedium!
               .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
         ),
-        largeTitle: SuperLargeTitle(
-          largeTitle: 'favorite'.tr(),
-          textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-                fontWeight: FontWeight.w700,
-                fontSize: 24,
-                letterSpacing: 0,
-              ),
-        ),
+        
       ),
       body: BlocBuilder<FavouritesBloc, FavouritesState>(
         builder: (context, state) {

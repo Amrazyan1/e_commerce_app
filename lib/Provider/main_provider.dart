@@ -68,7 +68,19 @@ class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
     _categoryName = value;
     notifyListeners();
   }
-  late Timer _timer;
+  late Timer _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
+          if (selectedIndex < offers.length - 1) {
+            selectedIndex++;
+          } else {
+            selectedIndex = 0;
+          }
+
+          pageController.animateToPage(
+            selectedIndex,
+            duration: const Duration(milliseconds: 350),
+            curve: Curves.easeOutCubic,
+          );
+        });
 
 bool _forceUpdatebanners = false;
 
@@ -77,7 +89,7 @@ bool _forceUpdatebanners = false;
   }
   set forceUpdatebanners(bool value) {
     _forceUpdatebanners = value;
-    offers = [];
+    offers.clear();
     bannerFiveImage = '';
     bannerOneImage= '';
 getOfferBanners('thirdBanner');
@@ -108,7 +120,14 @@ getOfferBannersCarousel();
     _offers = value;
     notifyListeners();
   }
-  int selectedIndex = 0;
+  int _selectedIndex = 0;
+
+  int get selectedIndex => _selectedIndex;
+
+  set selectedIndex(int value) {
+    _selectedIndex = value;
+    notifyListeners();
+  }
   late PageController pageController =PageController(initialPage: 0);
 
 void getOfferBannersCarousel() async {
@@ -116,6 +135,7 @@ void getOfferBannersCarousel() async {
     final response = await _apiService.getContentsByKeys('firstBanner');
     final data = bannerModelResponseFromJson(response.data);
     if (data.data != null && data.data!.isNotEmpty) {
+      offers.clear();
       for (var element in data.data!) {
           offers.add(BannerMStyle1(
             press: () {},
@@ -124,8 +144,8 @@ void getOfferBannersCarousel() async {
           ));
         }
         offers = offers; //fake call
-    }
-    _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
+        _timer.cancel();
+         _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
           if (selectedIndex < offers.length - 1) {
             selectedIndex++;
           } else {
@@ -138,6 +158,7 @@ void getOfferBannersCarousel() async {
             curve: Curves.easeOutCubic,
           );
         });
+    }    
   }
   String? _bannerFiveImage ='';
 

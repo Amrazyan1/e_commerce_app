@@ -43,6 +43,8 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                 : ui.TextDirection.ltr,
             child: Scaffold(
               body: SuperScaffold(
+                          transitionBetweenRoutes: false,
+
                 appBar: SuperAppBar(
                   automaticallyImplyLeading: false,
                   title: Text(

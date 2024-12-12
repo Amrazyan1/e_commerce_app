@@ -19,6 +19,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'blocs/products/discounts/bloc/discounted_bloc.dart';
 import 'blocs/products/popular/bloc/popular_products_bloc.dart';
 import 'blocs/products/trending/bloc/trend_new_products_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 final GlobalKey<AutoTabsRouterState> autoTabsRouterKey =
     GlobalKey<AutoTabsRouterState>();
@@ -32,14 +34,49 @@ class EntryPoint extends StatefulWidget {
 }
 
 class _EntryPointState extends State<EntryPoint> {
+   late Connectivity _connectivity;
+  late Stream<ConnectivityResult> _connectivityStream;
+    bool _isDialogOpen = false; // Flag to track if the dialog is open
+
   @override
   void initState() {
     super.initState();
+     _connectivity = Connectivity();
+    _connectivityStream = _connectivity.onConnectivityChanged.expand((results) => results);
+    _checkInitialConnection();
     context.read<TrendNewProductsBloc>().add(FetchTrendNewProductsEvent());
     context.read<DiscountedBloc>().add(FetchDiscountedProductsEvent());
     context.read<PopularProductsBloc>().add(FetchTrendPopularProductsEvent());
   }
 
+  Future<void> _checkInitialConnection() async {
+    final connectivityResult = await _connectivity.checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      _showNoConnectionDialog(context);
+    }
+  }
+   void _showNoConnectionDialog(BuildContext context) {
+    if (_isDialogOpen) return; // Prevent showing multiple dialogs
+
+    _isDialogOpen = true;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text("No Internet Connection"),
+        content: const Text("Please check your internet connection and try again."),
+        actions: [
+          TextButton(
+            onPressed: () {
+              _isDialogOpen = false; // Reset the flag when dialog is closed
+              Navigator.of(context).pop();
+            },
+            child: const Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
   DateTime timeBackPressed = DateTime.now();
   var tabsRouter;
   @override
@@ -58,102 +95,114 @@ class _EntryPointState extends State<EntryPoint> {
       );
     }
 
-    return WillPopScope(
-      onWillPop: () async {
-        log('WillPopScope');
-        if (tabsRouter.activeIndex == 0) {
-          final difference = DateTime.now().difference(timeBackPressed);
-          final isExitWarning = difference >= const Duration(seconds: 1);
-
-          timeBackPressed = DateTime.now();
-
-          if (isExitWarning) {
-            const toastMessage = "Press again to exit";
-            Fluttertoast.showToast(msg: toastMessage, fontSize: 18);
-            return false;
-          } else {
-            log('WillPopScope EXIT');
-
-            Fluttertoast.cancel();
-            return true; // Return false to block the back navigation
+     return StreamBuilder<ConnectivityResult>(
+      stream: _connectivityStream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final connectivityResult = snapshot.data;
+          if (connectivityResult == ConnectivityResult.none) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _showNoConnectionDialog(context);
+            });
           }
         }
-        return Future.value(tabsRouter.activeIndex != 0);
-      },
-      child: AutoTabsRouter(
-        key: autoTabsRouterKey,
-        routes: const [
-          EmptyHomeRouter(children: [
-            HomeRoute(), // Default child of home tab
-          ]),
-          DiscoverRoute(),
-          CartRoute(),
-          FavoriteRoute(),
-          ProfileRoute(),
-        ],
-        builder: (context, child) {
-          tabsRouter = AutoTabsRouter.of(context);
-
-          return Scaffold(
-            body: child,
-            bottomNavigationBar: Container(
-              padding: const EdgeInsets.only(top: defaultPadding / 2),
-              color: Theme.of(context).brightness == Brightness.light
-                  ? Colors.white
-                  : const Color(0xFF101015),
-              child: BottomNavigationBar(
-                currentIndex: tabsRouter.activeIndex,
-                onTap: (index) {
-                  _onPageChange(index, tabsRouter);
-                },
-                type: BottomNavigationBarType.fixed,
-                selectedFontSize: 14,
-                selectedItemColor: kprimaryColor,
-                unselectedItemColor: Colors.transparent,
-                items: [
-                  BottomNavigationBarItem(
-                    icon: svgIcon("assets/icons/shop_my.svg"),
-                    activeIcon: svgIcon("assets/icons/shop_my.svg",
-                        color: kprimaryColor),
-                    label: "shop".tr(),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: svgIcon("assets/icons/explore_my.svg"),
-                    activeIcon: svgIcon("assets/icons/explore_my.svg",
-                        color: kprimaryColor),
-                    label: "discover".tr(),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: svgIcon("assets/icons/cart_my.svg"),
-                    activeIcon: svgIcon("assets/icons/cart_my.svg",
-                        color: kprimaryColor),
-                    label: "cart".tr(),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: svgIcon("assets/icons/fav_my.svg"),
-                    activeIcon: svgIcon("assets/icons/fav_my.svg",
-                        color: kprimaryColor),
-                    label: "favorite".tr(),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: svgIcon("assets/icons/profile_my.svg"),
-                    activeIcon: svgIcon("assets/icons/profile_my.svg",
-                        color: kprimaryColor),
-                    label: "profile".tr(),
-                  ),
-                ],
-              ),
-            ),
-          );
+      return WillPopScope(
+        onWillPop: () async {
+          log('WillPopScope');
+          if (tabsRouter.activeIndex == 0) {
+            final difference = DateTime.now().difference(timeBackPressed);
+            final isExitWarning = difference >= const Duration(seconds: 1);
+      
+            timeBackPressed = DateTime.now();
+      
+            if (isExitWarning) {
+              const toastMessage = "Press again to exit";
+              Fluttertoast.showToast(msg: toastMessage, fontSize: 18);
+              return false;
+            } else {
+              log('WillPopScope EXIT');
+      
+              Fluttertoast.cancel();
+              return true; // Return false to block the back navigation
+            }
+          }
+          return Future.value(tabsRouter.activeIndex != 0);
         },
-      ),
+        child: AutoTabsRouter(
+          key: autoTabsRouterKey,
+          routes: const [
+            EmptyHomeRouter(children: [
+              HomeRoute(), // Default child of home tab
+            ]),
+            DiscoverRoute(),
+            CartRoute(),
+            FavoriteRoute(),
+            ProfileRoute(),
+          ],
+          builder: (context, child) {
+            tabsRouter = AutoTabsRouter.of(context);
+      
+            return Scaffold(
+              body: child,
+              bottomNavigationBar: Container(
+                padding: const EdgeInsets.only(top: defaultPadding / 2),
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Colors.white
+                    : const Color(0xFF101015),
+                child: BottomNavigationBar(
+                  currentIndex: tabsRouter.activeIndex,
+                  onTap: (index) {
+                    _onPageChange(index, tabsRouter);
+                  },
+                  type: BottomNavigationBarType.fixed,
+                  selectedFontSize: 14,
+                  selectedItemColor: kprimaryColor,
+                  unselectedItemColor: Colors.transparent,
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: svgIcon("assets/icons/shop_my.svg"),
+                      activeIcon: svgIcon("assets/icons/shop_my.svg",
+                          color: kprimaryColor),
+                      label: "shop".tr(),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: svgIcon("assets/icons/explore_my.svg"),
+                      activeIcon: svgIcon("assets/icons/explore_my.svg",
+                          color: kprimaryColor),
+                      label: "discover".tr(),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: svgIcon("assets/icons/cart_my.svg"),
+                      activeIcon: svgIcon("assets/icons/cart_my.svg",
+                          color: kprimaryColor),
+                      label: "cart".tr(),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: svgIcon("assets/icons/fav_my.svg"),
+                      activeIcon: svgIcon("assets/icons/fav_my.svg",
+                          color: kprimaryColor),
+                      label: "favorite".tr(),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: svgIcon("assets/icons/profile_my.svg"),
+                      activeIcon: svgIcon("assets/icons/profile_my.svg",
+                          color: kprimaryColor),
+                      label: "profile".tr(),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      );}
     );
   }
 
   void _onPageChange(int index, TabsRouter tabsRouter) async {
     if (index != tabsRouter.activeIndex) {
       tabsRouter.setActiveIndex(index);
-
+FocusScope.of(context).unfocus();
       switch (index) {
         case 0:
           // context

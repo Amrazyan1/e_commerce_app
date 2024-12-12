@@ -493,12 +493,12 @@ class ApiService {
     }
   }
 
-  Future<Response> getProductById(String id, int perPage) async {
+  Future<Response> getProductById(String id) async {
     try {
       return await _dioClient.dio.get(
         Endpoints.getProductById
             .replaceFirst('{id}', id)
-            .replaceFirst('{perPage}', perPage.toString()),
+            ,
       );
     } catch (e) {
       rethrow;

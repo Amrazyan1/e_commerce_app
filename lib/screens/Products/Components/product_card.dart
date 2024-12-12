@@ -113,14 +113,17 @@ class _ProductCardState extends State<ProductCard> {
                   ),
                   const SizedBox(height: defaultPadding / 4),
                   Flexible(
-                    child: HtmlWidget(
-                      widget.product.description ?? '',
-                      // style: Theme.of(context)
-                      //     .textTheme
-                      //     .bodyMedium!
-                      //     .copyWith(fontSize: 10),
-                    ),
-                  ),
+  child: SingleChildScrollView(
+    child: HtmlWidget(
+      
+      widget.product.description ?? '',
+      textStyle: TextStyle(
+        overflow: TextOverflow.visible,
+      ),
+    ),
+  ),
+),
+
                   Row(
                     children: [
                       Expanded(
