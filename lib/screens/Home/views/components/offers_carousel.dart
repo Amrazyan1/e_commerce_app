@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/models/banner_model.dart';
 import 'package:flutter/material.dart';
 import 'package:e_commerce_app/components/Banners/M/banner_m_style_1.dart';
@@ -7,6 +8,7 @@ import 'package:e_commerce_app/components/Banners/M/banner_m_style_3.dart';
 import 'package:e_commerce_app/components/Banners/M/banner_m_style_4.dart';
 import 'package:e_commerce_app/components/dot_indicators.dart';
 import 'package:e_commerce_app/constants.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../../services/api_service.dart';
@@ -21,9 +23,6 @@ class OffersCarousel extends StatefulWidget {
 }
 
 class _OffersCarouselState extends State<OffersCarousel> {
-  int _selectedIndex = 0;
-  late PageController _pageController;
-  late Timer _timer;
 
   // Offers List
   // List offers = [
@@ -49,53 +48,12 @@ class _OffersCarouselState extends State<OffersCarousel> {
   //     press: () {},
   //   ),
   // ];
-  List offers = [];
-  @override
-  void initState() {
-    _pageController = PageController(initialPage: 0);
-    getOfferBanners();
-    super.initState();
-  }
-
-  void getOfferBanners() async {
-    final ApiService _apiService = GetIt.I<ApiService>();
-    final response = await _apiService.getContentsByKeys('firstBanner');
-    final data = bannerModelResponseFromJson(response.data);
-    if (data.data != null && data.data!.isNotEmpty) {
-      setState(() {
-        for (var element in data.data!) {
-          offers.add(BannerMStyle1(
-            press: () {},
-            text: element.description ?? '',
-            image: element.src,
-          ));
-        }
-        _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
-          if (_selectedIndex < offers.length - 1) {
-            _selectedIndex++;
-          } else {
-            _selectedIndex = 0;
-          }
-
-          _pageController.animateToPage(
-            _selectedIndex,
-            duration: const Duration(milliseconds: 350),
-            curve: Curves.easeOutCubic,
-          );
-        });
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    _timer.cancel();
-    super.dispose();
-  }
+ 
+ 
 
   @override
   Widget build(BuildContext context) {
+    
     return Center(
       child: ClipRRect(
         borderRadius:
@@ -107,14 +65,13 @@ class _OffersCarouselState extends State<OffersCarousel> {
             alignment: Alignment.bottomRight,
             children: [
               PageView.builder(
-                controller: _pageController,
-                itemCount: offers.length,
+                controller: context.watch<MainProvider>().pageController,
+                itemCount: context.watch<MainProvider>().offers.length,
                 onPageChanged: (int index) {
-                  setState(() {
-                    _selectedIndex = index;
-                  });
+                  context.read<MainProvider>().selectedIndex = index;
+             
                 },
-                itemBuilder: (context, index) => offers[index],
+                itemBuilder: (context, index) => context.watch<MainProvider>().offers[index],
               ),
               FittedBox(
                 child: Padding(
@@ -123,13 +80,13 @@ class _OffersCarouselState extends State<OffersCarousel> {
                     height: 16,
                     child: Row(
                       children: List.generate(
-                        offers.length,
+                        context.watch<MainProvider>().offers.length,
                         (index) {
                           return Padding(
                             padding:
                                 const EdgeInsets.only(left: defaultPadding / 4),
                             child: DotIndicator(
-                              isActive: index == _selectedIndex,
+                              isActive: index == context.read<MainProvider>().selectedIndex,
                               activeColor: Colors.white70,
                               inActiveColor: Colors.white54,
                             ),

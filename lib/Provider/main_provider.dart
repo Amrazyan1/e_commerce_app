@@ -1,10 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:e_commerce_app/models/banner_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../components/Banners/M/banner_m_style_1.dart';
 import '../models/Product/product_model.dart';
 import '../models/cart_products_response.dart';
 import '../services/api_service.dart';
@@ -64,6 +67,96 @@ class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
   set categoryName(String value) {
     _categoryName = value;
     notifyListeners();
+  }
+  late Timer _timer;
+
+bool _forceUpdatebanners = false;
+
+  bool get forceUpdatebanners {
+    return _forceUpdatebanners;
+  }
+  set forceUpdatebanners(bool value) {
+    _forceUpdatebanners = value;
+    offers = [];
+    bannerFiveImage = '';
+    bannerOneImage= '';
+getOfferBanners('thirdBanner');
+getOfferBannerss('secondBanner');
+getOfferBannersCarousel();
+  }
+  void getOfferBanners(String bannername) async {
+    final ApiService _apiService = GetIt.I<ApiService>();
+    final response = await _apiService.getContentsByKeys(bannername);
+    final data = bannerModelResponseFromJson(response.data);
+    if (data.data != null && data.data!.isNotEmpty) {
+        bannerFiveImage = data.data!.first.src;
+    }
+  }
+  void getOfferBannerss(String bannername) async {
+    final ApiService _apiService = GetIt.I<ApiService>();
+    final response = await _apiService.getContentsByKeys(bannername);
+    final data = bannerModelResponseFromJson(response.data);
+    if (data.data != null && data.data!.isNotEmpty) {
+        bannerOneImage = data.data!.first.src;
+    }
+  }
+  List _offers = [];
+
+  List get offers => _offers;
+
+  set offers(List value) {
+    _offers = value;
+    notifyListeners();
+  }
+  int selectedIndex = 0;
+  late PageController pageController =PageController(initialPage: 0);
+
+void getOfferBannersCarousel() async {
+    final ApiService _apiService = GetIt.I<ApiService>();
+    final response = await _apiService.getContentsByKeys('firstBanner');
+    final data = bannerModelResponseFromJson(response.data);
+    if (data.data != null && data.data!.isNotEmpty) {
+      for (var element in data.data!) {
+          offers.add(BannerMStyle1(
+            press: () {},
+            text: element.description ?? '',
+            image: element.src,
+          ));
+        }
+        offers = offers; //fake call
+    }
+    _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
+          if (selectedIndex < offers.length - 1) {
+            selectedIndex++;
+          } else {
+            selectedIndex = 0;
+          }
+
+          pageController.animateToPage(
+            selectedIndex,
+            duration: const Duration(milliseconds: 350),
+            curve: Curves.easeOutCubic,
+          );
+        });
+  }
+  String? _bannerFiveImage ='';
+
+  String? get bannerFiveImage => _bannerFiveImage;
+
+  set bannerFiveImage(String? value) {
+    _bannerFiveImage = value;
+    notifyListeners();
+
+  }
+
+  String? _bannerOneImage ='';
+
+  String? get bannerOneImage => _bannerOneImage;
+
+  set bannerOneImage(String? value) {
+    _bannerOneImage = value;
+    notifyListeners();
+
   }
 
   void addToFavourites(Product? model) {

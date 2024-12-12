@@ -33,10 +33,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _searchFocusNode = FocusNode();
   final _searchTextController = TextEditingController();
-  Future<void> _refreshContent() async {
-    await Future.delayed(Duration(seconds: 2)); // Simulate network delay
-    setState(() {});
-  }
 
   Locale? previousLocale;
 
@@ -50,10 +46,19 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+
   Future<void> _onLocaleChanged() async {
+     WidgetsBinding.instance.addPostFrameCallback((_) {
     context.read<TrendNewProductsBloc>().add(FetchTrendNewProductsEvent());
     context.read<DiscountedBloc>().add(FetchDiscountedProductsEvent());
     context.read<PopularProductsBloc>().add(FetchTrendPopularProductsEvent());
+    context.read<MainProvider>().forceUpdatebanners = true;
+        });
+
+  }
+  Future<void> _onrefresh() async {
+    context.read<MainProvider>().forceUpdatebanners = true;
+    _onLocaleChanged();
     await Future.delayed(const Duration(seconds: 1));
   }
 
@@ -64,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ? ui.TextDirection.rtl
           : ui.TextDirection.ltr,
       child: RefreshIndicator(
-        onRefresh: _onLocaleChanged,
+        onRefresh: _onrefresh,
         child: Scaffold(
           body: SuperScaffold(
             key: const Key('home'),

@@ -1,8 +1,10 @@
+import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/models/banner_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'dart:ui' as ui;
 
 import '../../../constants.dart';
@@ -28,24 +30,13 @@ class BannerSStyle5 extends StatefulWidget {
 }
 
 class _BannerSStyle5State extends State<BannerSStyle5> {
-  String? image = '';
 
   @override
   void initState() {
-    getOfferBanners();
     super.initState();
   }
 
-  void getOfferBanners() async {
-    final ApiService _apiService = GetIt.I<ApiService>();
-    final response = await _apiService.getContentsByKeys('thirdBanner');
-    final data = bannerModelResponseFromJson(response.data);
-    if (data.data != null && data.data!.isNotEmpty) {
-      setState(() {
-        image = data.data!.first.src;
-      });
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +45,7 @@ class _BannerSStyle5State extends State<BannerSStyle5> {
           ? ui.TextDirection.rtl
           : ui.TextDirection.ltr,
       child: BannerS(
-        image: image!,
+        image: context.watch<MainProvider>().bannerFiveImage ?? '',
         press: widget.press,
         children: [
           Padding(
