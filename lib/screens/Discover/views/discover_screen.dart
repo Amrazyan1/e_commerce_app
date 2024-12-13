@@ -123,27 +123,27 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           appBar:  AppBar(
             
             automaticallyImplyLeading: false,
-            actions: !_isInitialScreen
-                ? [Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => FilterScreen(
-                                isFirst: true,
-                              ),
-                            ),
-                          );
-                        },
-                        icon: SvgPicture.asset("assets/icons/filter.svg",
-                            color:
-                                Theme.of(context).textTheme.bodyLarge!.color),
-                      ),
-                    ],
-                  )]
-                : null,
+            // actions: !_isInitialScreen
+            //     ? [Row(
+            //         mainAxisSize: MainAxisSize.min,
+            //         children: [
+            //           IconButton(
+            //             onPressed: () {
+            //               Navigator.of(context).push(
+            //                 MaterialPageRoute(
+            //                   builder: (context) => FilterScreen(
+            //                     isFirst: true,
+            //                   ),
+            //                 ),
+            //               );
+            //             },
+            //             icon: SvgPicture.asset("assets/icons/filter.svg",
+            //                 color:
+            //                     Theme.of(context).textTheme.bodyLarge!.color),
+            //           ),
+            //         ],
+            //       )]
+            //     : null,
             leading: !_isInitialScreen
                 ? GestureDetector(
                     onTap: () {

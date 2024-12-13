@@ -131,7 +131,9 @@ class _CartScreenState extends State<CartScreen> {
               builder: (context, state) {
                 if (state is CartLoaded) {
                   if (state.cartItems.isEmpty) {
-                    return Container();
+                     return Center(
+                child: Text('empty_cart'.tr()),
+              );
                   }
                   return Column(
                     children: [

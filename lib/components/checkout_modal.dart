@@ -77,16 +77,16 @@ class _CheckoutModalState extends State<CheckoutModal> {
       ),
     );
     // widget.data.availableBonuses = '5500\$';
-    if (widget.data.availableBonuses != null &&
-        widget.data.availableBonuses!.isNotEmpty) {
-      categories.add(
-        CategoryModel(
-            title: "use_bonus".tr(),
-            info: '${widget.data.availableBonuses}',
-            subCategories: [],
-            isCheckbox: true),
-      );
-    }
+    // if (widget.data.availableBonuses != null &&
+    //     widget.data.availableBonuses!.isNotEmpty) {
+    //   categories.add(
+    //     CategoryModel(
+    //         title: "use_bonus".tr(),
+    //         info: '${widget.data.availableBonuses}',
+    //         subCategories: [],
+    //         isCheckbox: true),
+    //   );
+    // }
   }
 
   void processOrder() async {

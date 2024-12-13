@@ -116,6 +116,15 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: SizedBox(height: 50, child: Image.asset("assets/images/logo.png")),
+                  ),
+                ],
+              ),Text('welcome',textAlign: TextAlign.center,).tr(),
+                        Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             DropdownButton<String>(

@@ -59,7 +59,7 @@ class ProfileScreen extends StatelessWidget {
                 if (state is SettingsLoaded) {
                   return ProfileCard(
                     name: state.settings.data!.fullName!,
-                    email: state.settings.data!.email!,
+                    email: state.settings.data!.phone!,
                     imageSrc:
                         "https://cdn-icons-png.flaticon.com/512/219/219988.png",
                     isPro: state.settings.data!.isPartner!,

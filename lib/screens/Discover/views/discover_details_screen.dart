@@ -66,24 +66,24 @@ class _DiscoverDetailsScreenState extends State<DiscoverDetailsScreen> {
                 letterSpacing: 0,
                 overflow: TextOverflow.ellipsis),
           ),
-          actions: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => FilterScreen(
-                        isFirst: false,
-                      ),
-                    ),
-                  );
-                },
-                icon: SvgPicture.asset("assets/icons/filter.svg",
-                    color: Theme.of(context).textTheme.bodyLarge!.color),
-              ),
-            ],
-          ),
+          // actions: Row(
+          //   mainAxisSize: MainAxisSize.min,
+          //   children: [
+          //     IconButton(
+          //       onPressed: () {
+          //         Navigator.of(context).push(
+          //           MaterialPageRoute(
+          //             builder: (context) => FilterScreen(
+          //               isFirst: false,
+          //             ),
+          //           ),
+          //         );
+          //       },
+          //       icon: SvgPicture.asset("assets/icons/filter.svg",
+          //           color: Theme.of(context).textTheme.bodyLarge!.color),
+          //     ),
+          //   ],
+          // ),
           leading: GestureDetector(
             onTap: () {
               context.router.maybePop();
