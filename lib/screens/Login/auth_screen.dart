@@ -36,23 +36,16 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
 
     return BlocProvider(
       create: (_) => AuthBloc(),
-      child: KeyboardVisibilityBuilder(
-        builder: (context, isKeyboardVisible) {
-          return Directionality(
+      child:
+           Directionality(
             textDirection: context.locale.languageCode == 'fa'
                 ? ui.TextDirection.rtl
                 : ui.TextDirection.ltr,
             child: Scaffold(
-              body: SuperScaffold(
-                transitionBetweenRoutes: false,
-                appBar: SuperAppBar(
-                  automaticallyImplyLeading: false,
-                  title: Text(
-                    'Authorization'.tr(),
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                  actions: Row(
+              body: Scaffold(
+                appBar: AppBar(
+
+                  actions: [Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       PopupMenuButton<Locale>(
@@ -78,21 +71,8 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                         ],
                       ),
                     ],
-                  ),
-                  searchBar: SuperSearchBar(
-                    enabled: false,
-                    scrollBehavior: SearchBarScrollBehavior.pinned,
-                    resultBehavior: SearchBarResultBehavior.neverVisible,
-                  ),
-                  largeTitle: SuperLargeTitle(
-                    largeTitle: 'Authorization'.tr(),
-                    textStyle:
-                        Theme.of(context).textTheme.labelMedium!.copyWith(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 24,
-                              letterSpacing: 0,
-                            ),
-                  ),
+                  ),]
+             
                 ),
                 body: BlocListener<AuthBloc, AuthState>(
                   listener: (context, state) {
@@ -107,152 +87,178 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                       );
                     }
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      mainAxisAlignment: isKeyboardVisible
-                          ? MainAxisAlignment.start
-                          : MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: SizedBox(
-                                  height: 90,
-                                  width: 300,
-                                  child: SvgPicture.asset(
-                                      "assets/images/Logo.svg")),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          'welcome',
-                          textAlign: TextAlign.center,
-                        ).tr(),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            DropdownButton<String>(
-                              value: dropdownvalue,
-                              onChanged: (val) {
-                                log(val!);
-                                setState(() {
-                                  dropdownvalue = val;
-                                  log(dropdownvalue);
-                                });
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(0),
+                                child: SizedBox(
+                                    height: 50,
+                                    width: 300,
+                                    child: SvgPicture.asset(
+                                        "assets/images/Logo.svg")),
+                              ),
+                            ],
+                          ),
+                                            Gap(50),
+                    
+                          Text(
+                      'Authorization'.tr(),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 24),
+                    ),
+                    Gap(90),
+                          
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                            'welcome',
+                            textAlign: TextAlign.left,
+                            style:
+                          Theme.of(context).textTheme.labelMedium!.copyWith(
+                                fontSize: 16,
+                              ),
+                          ).tr(),
+                          Gap(20),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  DropdownButton<String>(
+                                    value: dropdownvalue,
+                                    onChanged: (val) {
+                                      log(val!);
+                                      setState(() {
+                                        dropdownvalue = val;
+                                        log(dropdownvalue);
+                                      });
+                                    },
+                                    underline: const SizedBox(),
+                                    items: ['+374'].map((code) {
+                                      return DropdownMenuItem(
+                                        value: code,
+                                        child: Text(code),
+                                      );
+                                    }).toList(),
+                                  ),
+                                  const SizedBox(
+                                      width:
+                                          10), // Space between Dropdown and TextField
+                                  Expanded(
+                                    child: TextField(
+                                      controller: _phoneController,
+                                      keyboardType: TextInputType.phone,
+                                      decoration: InputDecoration(
+                                        labelText: 'Phone Number'.tr(),
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(10.0),
+                                          borderSide:
+                                              const BorderSide(color: kprimaryColor),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Gap(200),
+                          Align(
+                              alignment: Alignment.bottomCenter,
+                            child: BlocBuilder<AuthBloc, AuthState>(
+                              builder: (context, state) {
+                                if (state is AuthLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                                return SizedBox(
+                                    height: 50,
+                                    child: ButtonMainWidget(
+                                      text: 'Next'.tr(),
+                                      callback: () {
+                                       
+                                        final phoneNumber = _phoneController.text;
+                                        if (phoneNumber.isNotEmpty) {
+                                          BlocProvider.of<AuthBloc>(context).add(
+                                              SendPhoneEvent(
+                                                  '$dropdownvalue$phoneNumber'));
+                                        }
+                                      },
+                                    ));
                               },
-                              underline: const SizedBox(),
-                              items: ['+374'].map((code) {
-                                return DropdownMenuItem(
-                                  value: code,
-                                  child: Text(code),
-                                );
-                              }).toList(),
                             ),
-                            const SizedBox(
-                                width:
-                                    10), // Space between Dropdown and TextField
-                            Expanded(
-                              child: TextField(
-                                controller: _phoneController,
-                                keyboardType: TextInputType.phone,
-                                decoration: InputDecoration(
-                                  labelText: 'Phone Number'.tr(),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide:
-                                        const BorderSide(color: kprimaryColor),
+                          ),
+                          Gap(20),
+                          Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Center(
+                                  child: Text.rich(
+                                    TextSpan(
+                                      text: '',
+                                      style: TextStyle(fontSize: 12),
+                                      children: [
+                                        TextSpan(
+                                          text: 'about'.tr(),
+                                          style: const TextStyle(
+                                            color: kprimaryColor,
+                                            decoration: TextDecoration.underline,
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              AutoRouter.of(context)
+                                                  .push(const AboutUsRoute());
+                                            },
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Gap(30),
-                        BlocBuilder<AuthBloc, AuthState>(
-                          builder: (context, state) {
-                            if (state is AuthLoading) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                            return SizedBox(
-                                height: 50,
-                                child: ButtonMainWidget(
-                                  text: 'Next'.tr(),
-                                  callback: () {
-                                   
-                                    final phoneNumber = _phoneController.text;
-                                    if (phoneNumber.isNotEmpty) {
-                                      BlocProvider.of<AuthBloc>(context).add(
-                                          SendPhoneEvent(
-                                              '$dropdownvalue$phoneNumber'));
-                                    }
-                                  },
-                                ));
-                          },
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Center(
-                              child: Text.rich(
-                                TextSpan(
-                                  text: '',
-                                  style: TextStyle(fontSize: 12),
-                                  children: [
+                                Center(
+                                  child: Text.rich(
                                     TextSpan(
-                                      text: 'about'.tr(),
-                                      style: const TextStyle(
-                                        color: kprimaryColor,
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          AutoRouter.of(context)
-                                              .push(const AboutUsRoute());
-                                        },
+                                      text: '',
+                                      style: TextStyle(fontSize: 12),
+                                      children: [
+                                        TextSpan(
+                                          text: 'help'.tr(),
+                                          style: const TextStyle(
+                                            color: kprimaryColor,
+                                            decoration: TextDecoration.underline,
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              AutoRouter.of(context).push(
+                                                  FakeProifleRoute(pageName: ''));
+                                            },
+                                        ),
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                            Center(
-                              child: Text.rich(
-                                TextSpan(
-                                  text: '',
-                                  style: TextStyle(fontSize: 12),
-                                  children: [
-                                    TextSpan(
-                                      text: 'help'.tr(),
-                                      style: const TextStyle(
-                                        color: kprimaryColor,
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          AutoRouter.of(context).push(
-                                              FakeProifleRoute(pageName: ''));
-                                        },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          );
-        },
-      ),
-    );
+          ),
+        
+      );
+    
   }
 }
