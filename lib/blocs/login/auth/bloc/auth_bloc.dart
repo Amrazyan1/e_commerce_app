@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,7 +21,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await _apiService.sendPhoneNumber(event.phoneNumber);
         emit(AuthPhoneSent(event.phoneNumber));
       } catch (e) {
-        emit(AuthError(e.toString()));
+         if (e is DioException && e.response?.statusCode == 422) {
+      // Show a specific error message for 422
+      emit(AuthError("Invalid phone number format."));
+    } else {
+      emit(AuthError(e.toString()));
+    }
       }
     });
 

@@ -185,8 +185,12 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                                       text: 'Next'.tr(),
                                       callback: () {
                                        
-                                        final phoneNumber = _phoneController.text;
-                                        if (phoneNumber.isNotEmpty) {
+                                      final phoneNumber = _phoneController.text;
+                                      final formattedPhoneNumber = phoneNumber.startsWith('0') 
+                                          ? phoneNumber.substring(1) 
+                                          : phoneNumber;
+                                          
+                                        if (formattedPhoneNumber.isNotEmpty) {
                                           BlocProvider.of<AuthBloc>(context).add(
                                               SendPhoneEvent(
                                                   '$dropdownvalue$phoneNumber'));

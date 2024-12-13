@@ -140,7 +140,7 @@ class _CartScreenState extends State<CartScreen> {
             BlocBuilder<CartBloc, CartState>(
               builder: (context, state) {
                 if (state is CartLoaded) {
-                  
+                  if (state.cartItems.isEmpty){return Container();}
                   return Column(
                     children: [
                       Padding(
