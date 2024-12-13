@@ -46,6 +46,8 @@
 "find_prod":"Find products",
 "your_cart" : "Your Cart",
 "no_cart" : "There is no cart items",
+"no_fav" : "Favourites is empty",
+
 "go_check" : "Go To Checkout",
 "empty_fav" : "Favourites is empty",
 "empty_cart" : "Cart is empty",

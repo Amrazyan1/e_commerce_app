@@ -40,9 +40,18 @@ class FavoriteScreen extends StatelessWidget {
             );
           } else if (state is FavouritesLoaded) {
             if (state.favouriteProducts.isEmpty) {
-              return Center(
-                child: Text('empty_fav'.tr()),
-              );
+              return Expanded(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('no_fav'.tr(),textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.w600,),),
+                                                        Text('empty_fav'.tr(),textAlign: TextAlign.center,),
+
+                          ],
+                        ),
+                      ),
+                    );
             }
 
             return ListView.builder(

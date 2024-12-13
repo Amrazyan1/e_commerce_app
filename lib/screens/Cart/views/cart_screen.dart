@@ -105,11 +105,21 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                   );
                 }
+                if (state is CartError) {
+                  
+                }
                 if (state is CartLoaded) {
                   if (state.cartItems.isEmpty) {
                     return Expanded(
                       child: Center(
-                        child: Text('no_cart'.tr()),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('empty_cart'.tr(),textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.w600,),),
+                                                        Text('no_cart'.tr(),textAlign: TextAlign.center,),
+
+                          ],
+                        ),
                       ),
                     );
                   }
@@ -130,11 +140,7 @@ class _CartScreenState extends State<CartScreen> {
             BlocBuilder<CartBloc, CartState>(
               builder: (context, state) {
                 if (state is CartLoaded) {
-                  if (state.cartItems.isEmpty) {
-                     return Center(
-                child: Text('empty_cart'.tr()),
-              );
-                  }
+                  
                   return Column(
                     children: [
                       Padding(
