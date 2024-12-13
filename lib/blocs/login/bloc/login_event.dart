@@ -11,13 +11,16 @@ class LoginSubmitted extends LoginEvent {
   final String phone;
   final String password;
   final String birthDate;
+    final String gender;
+
 
   LoginSubmitted(
       {required this.username,
       required this.email,
       required this.phone,
       required this.password,
-      required this.birthDate});
+      required this.birthDate,
+      required this.gender});
 
   @override
   List<Object?> get props => [username, password];

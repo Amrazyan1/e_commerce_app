@@ -148,7 +148,7 @@ class ApiService {
 
   // Authentication
   Future<Response> registeruser(String fullname, String email, String password,
-      String birthDate, String phone) async {
+      String birthDate, String phone,String gender) async {
     try {
       final response = await _dioClient.dio.post(
         Endpoints.userSignUp,
@@ -156,7 +156,8 @@ class ApiService {
           'fullName': fullname,
           'email': email,
           'birthday': birthDate,
-          'phone': phone
+          'phone': phone,
+          'gender' : gender,
         },
       );
       log(response.data);

@@ -6,6 +6,7 @@ import 'package:e_commerce_app/components/checkout_modal.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -112,7 +113,7 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                     child: Column(
                       mainAxisAlignment: isKeyboardVisible
                           ? MainAxisAlignment.start
-                          : MainAxisAlignment.center,
+                          : MainAxisAlignment.spaceAround,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Row(
@@ -120,7 +121,7 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(15),
-                    child: SizedBox(height: 50, child: Image.asset("assets/images/logo.png")),
+                    child: SizedBox(height: 90,width: 300, child: SvgPicture.asset("assets/images/Logo.svg")),
                   ),
                 ],
               ),Text('welcome',textAlign: TextAlign.center,).tr(),
@@ -186,6 +187,56 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                                 ));
                           },
                         ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Center(
+                                    child: Text.rich(
+                                      TextSpan(
+                                        text: '',
+                                        style: TextStyle(fontSize: 12),
+                                        children: [
+                                          TextSpan(
+                                            text: 'about'.tr(),
+                                            style: const TextStyle(
+                                              color: kprimaryColor,
+                                              decoration: TextDecoration.underline,
+                                            ),
+                                            recognizer: TapGestureRecognizer()
+                                              ..onTap = () {
+                                                            AutoRouter.of(context).push(const AboutUsRoute());
+                            
+                                              },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Text.rich(
+                                      TextSpan(
+                                        text: '',
+                                        style: TextStyle(fontSize: 12),
+                                        children: [
+                                          TextSpan(
+                                            text: 'help'.tr(),
+                                            style: const TextStyle(
+                                              color: kprimaryColor,
+                                              decoration: TextDecoration.underline,
+                                            ),
+                                            recognizer: TapGestureRecognizer()
+                                              ..onTap = () {
+                                                            AutoRouter.of(context).push( FakeProifleRoute(pageName: ''));
+                            
+                                              },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                          ],
+                        ),
+    
                       ],
                     ),
                   ),

@@ -52,6 +52,8 @@ class AppRouter extends RootStackRouter {
           ]),
         ]),
         AutoRoute(page: DiscoverDetailsRoute.page, path: '/discoverdetail'),
+                AutoRoute(page: AboutUsRoute.page, path: '/abhgs'),
+
         AutoRoute(
             page: DeliveryAddressNew.page,
             path: '/deliveryAddressNewRouteFromLogin'),

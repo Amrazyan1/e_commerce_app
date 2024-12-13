@@ -21,12 +21,12 @@ class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
-
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _dateTimeController = TextEditingController();
+  String? _selectedGender;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -50,23 +50,17 @@ class _LoginPageState extends State<LoginPage> {
         builder: (BuildContext context) => Container(
           height: 216,
           padding: const EdgeInsets.only(top: 6.0),
-          // The Bottom margin is provided to align the popup above the system
-          // navigation bar.
           margin: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          // Provide a background color for the popup.
           color: CupertinoColors.systemBackground.resolveFrom(context),
-          // Use a SafeArea widget to avoid system overlaps.
           child: SafeArea(
             top: false,
             child: child,
           ),
         ),
       );
-      // This block is executed when the date picker is dismissed.
       print('Date Picker closed. Selected Date: $picked');
-      // Return the selected date (or null if the picker was dismissed without a selection).
       return picked;
     }
 
@@ -175,14 +169,11 @@ class _LoginPageState extends State<LoginPage> {
                                 maximumDate: DateTime.now(),
                                 mode: CupertinoDatePickerMode.date,
                                 use24hFormat: true,
-                                // This shows day of week alongside day of month
                                 showDayOfWeek: true,
-                                // This is called when the user changes the date.
                                 onDateTimeChanged: (DateTime newDate) {
                                   log(newDate.toString());
                                   String formattedDate =
                                       DateFormat('yyyy-MM-dd').format(newDate);
-
                                   _dateTimeController.text = formattedDate;
                                 },
                               ),
@@ -196,9 +187,7 @@ class _LoginPageState extends State<LoginPage> {
                                 labelText: 'Birth date'.tr(),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.calendar_month),
-                                  onPressed: () {
-                                    // Handle calendar icon action
-                                  },
+                                  onPressed: () {},
                                 ),
                               ),
                               validator: (value) {
@@ -211,6 +200,38 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const Gap(16),
+                        DropdownButtonFormField<String>(
+                          value: _selectedGender,
+                          decoration: InputDecoration(
+                            labelText: 'Gender'.tr(),
+                          ),
+                          items: [
+                            DropdownMenuItem(
+                              value: 'male',
+                              child: Text('Male'.tr()),
+                            ),
+                            DropdownMenuItem(
+                              value: 'female',
+                              child: Text('Female'.tr()),
+                            ),
+                            DropdownMenuItem(
+                              value: 'other',
+                              child: Text('Other'.tr()),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedGender = value;
+                            });
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please select your gender'.tr();
+                            }
+                            return null;
+                          },
+                        ),
+                        const Gap(16),
                         state is LoginLoading
                             ? const Center(child: CircularProgressIndicator())
                             : SizedBox(
@@ -221,16 +242,18 @@ class _LoginPageState extends State<LoginPage> {
                                     if (_formKey.currentState!.validate()) {
                                       context.read<LoginBloc>().add(
                                             LoginSubmitted(
-                                                username: _usernameController
-                                                    .text
-                                                    .trim(),
-                                                password: _passwordController
-                                                    .text
-                                                    .trim(),
-                                                birthDate:
-                                                    _dateTimeController.text,
-                                                email: _emailController.text,
-                                                phone: widget.phoneNumber),
+                                              username: _usernameController
+                                                  .text
+                                                  .trim(),
+                                              password: _passwordController
+                                                  .text
+                                                  .trim(),
+                                              birthDate:
+                                                  _dateTimeController.text,
+                                              email: _emailController.text,
+                                              phone: widget.phoneNumber,
+                                              gender: _selectedGender!,
+                                            ),
                                           );
                                     }
                                   },

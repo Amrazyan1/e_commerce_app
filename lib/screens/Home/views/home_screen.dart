@@ -11,6 +11,7 @@ import 'package:e_commerce_app/constants.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 import 'dart:ui' as ui;
 
@@ -83,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(15),
-                    child: Image.asset("assets/images/logo.png"),
+                    child: SizedBox(width: 120,  child: SvgPicture.asset("assets/images/Logo.svg")),
                   ),
                 ],
               ),

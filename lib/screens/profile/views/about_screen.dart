@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 @RoutePage()
 class AboutUsScreen extends StatelessWidget {
@@ -12,8 +13,8 @@ class AboutUsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          'About',
+        title:  Text(
+          'about'.tr(),
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
       ),
@@ -27,7 +28,7 @@ class AboutUsScreen extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(15),
-                    child: SizedBox(height: 50, child: Image.asset("assets/images/logo.png")),
+                    child: SizedBox(height: 50,width: 200, child: SvgPicture.asset("assets/images/Logo.svg")),
                   ),
                 ],
               ),
