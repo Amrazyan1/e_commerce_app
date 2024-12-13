@@ -44,8 +44,7 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                 : ui.TextDirection.ltr,
             child: Scaffold(
               body: SuperScaffold(
-                          transitionBetweenRoutes: false,
-
+                transitionBetweenRoutes: false,
                 appBar: SuperAppBar(
                   automaticallyImplyLeading: false,
                   title: Text(
@@ -117,14 +116,22 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: SizedBox(height: 90,width: 300, child: SvgPicture.asset("assets/images/Logo.svg")),
-                  ),
-                ],
-              ),Text('welcome',textAlign: TextAlign.center,).tr(),
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(15),
+                              child: SizedBox(
+                                  height: 90,
+                                  width: 300,
+                                  child: SvgPicture.asset(
+                                      "assets/images/Logo.svg")),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          'welcome',
+                          textAlign: TextAlign.center,
+                        ).tr(),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -177,6 +184,7 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                                 child: ButtonMainWidget(
                                   text: 'Next'.tr(),
                                   callback: () {
+                                   
                                     final phoneNumber = _phoneController.text;
                                     if (phoneNumber.isNotEmpty) {
                                       BlocProvider.of<AuthBloc>(context).add(
@@ -191,52 +199,51 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Center(
-                                    child: Text.rich(
-                                      TextSpan(
-                                        text: '',
-                                        style: TextStyle(fontSize: 12),
-                                        children: [
-                                          TextSpan(
-                                            text: 'about'.tr(),
-                                            style: const TextStyle(
-                                              color: kprimaryColor,
-                                              decoration: TextDecoration.underline,
-                                            ),
-                                            recognizer: TapGestureRecognizer()
-                                              ..onTap = () {
-                                                            AutoRouter.of(context).push(const AboutUsRoute());
-                            
-                                              },
-                                          ),
-                                        ],
+                              child: Text.rich(
+                                TextSpan(
+                                  text: '',
+                                  style: TextStyle(fontSize: 12),
+                                  children: [
+                                    TextSpan(
+                                      text: 'about'.tr(),
+                                      style: const TextStyle(
+                                        color: kprimaryColor,
+                                        decoration: TextDecoration.underline,
                                       ),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          AutoRouter.of(context)
+                                              .push(const AboutUsRoute());
+                                        },
                                     ),
-                                  ),
-                                  Center(
-                                    child: Text.rich(
-                                      TextSpan(
-                                        text: '',
-                                        style: TextStyle(fontSize: 12),
-                                        children: [
-                                          TextSpan(
-                                            text: 'help'.tr(),
-                                            style: const TextStyle(
-                                              color: kprimaryColor,
-                                              decoration: TextDecoration.underline,
-                                            ),
-                                            recognizer: TapGestureRecognizer()
-                                              ..onTap = () {
-                                                            AutoRouter.of(context).push( FakeProifleRoute(pageName: ''));
-                            
-                                              },
-                                          ),
-                                        ],
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Center(
+                              child: Text.rich(
+                                TextSpan(
+                                  text: '',
+                                  style: TextStyle(fontSize: 12),
+                                  children: [
+                                    TextSpan(
+                                      text: 'help'.tr(),
+                                      style: const TextStyle(
+                                        color: kprimaryColor,
+                                        decoration: TextDecoration.underline,
                                       ),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          AutoRouter.of(context).push(
+                                              FakeProifleRoute(pageName: ''));
+                                        },
                                     ),
-                                  ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ],
                         ),
-    
                       ],
                     ),
                   ),

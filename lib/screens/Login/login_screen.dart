@@ -203,21 +203,18 @@ class _LoginPageState extends State<LoginPage> {
                         DropdownButtonFormField<String>(
                           value: _selectedGender,
                           decoration: InputDecoration(
-                            labelText: 'Gender'.tr(),
+                            labelText: 'gender'.tr(),
                           ),
                           items: [
                             DropdownMenuItem(
                               value: 'male',
-                              child: Text('Male'.tr()),
+                              child: Text('male'.tr()),
                             ),
                             DropdownMenuItem(
                               value: 'female',
-                              child: Text('Female'.tr()),
+                              child: Text('female'.tr()),
                             ),
-                            DropdownMenuItem(
-                              value: 'other',
-                              child: Text('Other'.tr()),
-                            ),
+                          
                           ],
                           onChanged: (value) {
                             setState(() {

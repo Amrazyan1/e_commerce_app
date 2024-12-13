@@ -157,7 +157,7 @@ class ApiService {
           'email': email,
           'birthday': birthDate,
           'phone': phone,
-          'gender' : gender,
+          'sex' : gender,
         },
       );
       log(response.data);
