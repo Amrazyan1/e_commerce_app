@@ -497,9 +497,9 @@ class ApiService {
 
   Future<Response> getProductById(String id) async {
     try {
-      String fakeId = '9db8e261-1f69-4898-ade4-40e2e5220881';
+      // id = '9db8e261-1f69-4898-ade4-40e2e5220881';
       return await _dioClient.dio.get(
-        Endpoints.getProductById.replaceFirst('{id}', fakeId),
+        Endpoints.getProductById.replaceFirst('{id}', id),
       );
     } catch (e) {
       rethrow;

@@ -114,13 +114,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 .currentProductModel
                                 .unit!
                                 .minCount ??
-                            0,
+                            1,
                         maxCount: context
-                                .read<MainProvider>()
-                                .currentProductModel
-                                .unit!
-                                .maxCount ??
-                            0,
+                            .read<MainProvider>()
+                            .currentProductModel
+                            .unit!
+                            .maxCount,
                         callback: productCounter,
                         alternative: context
                             .watch<MainProvider>()
