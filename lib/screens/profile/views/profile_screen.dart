@@ -297,6 +297,8 @@ class ProfileScreen extends StatelessWidget {
                                     final prefs =
                                         await SharedPreferences.getInstance();
                                     await prefs.remove('auth_token');
+                                    context.read<MainProvider>().clear();
+
                                     AutoRouter.of(context).replaceAll(
                                         [const AuthorizationRoute()]);
                                   },

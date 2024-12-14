@@ -47,16 +47,15 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-
   Future<void> _onLocaleChanged() async {
-     WidgetsBinding.instance.addPostFrameCallback((_) {
-    context.read<TrendNewProductsBloc>().add(FetchTrendNewProductsEvent());
-    context.read<DiscountedBloc>().add(FetchDiscountedProductsEvent());
-    context.read<PopularProductsBloc>().add(FetchTrendPopularProductsEvent());
-    context.read<MainProvider>().forceUpdatebanners = true;
-        });
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<TrendNewProductsBloc>().add(FetchTrendNewProductsEvent());
+      context.read<DiscountedBloc>().add(FetchDiscountedProductsEvent());
+      context.read<PopularProductsBloc>().add(FetchTrendPopularProductsEvent());
+      context.read<MainProvider>().forceUpdatebanners = true;
+    });
   }
+
   Future<void> _onrefresh() async {
     context.read<MainProvider>().forceUpdatebanners = true;
     _onLocaleChanged();
@@ -71,156 +70,149 @@ class _HomeScreenState extends State<HomeScreen> {
           : ui.TextDirection.ltr,
       child: RefreshIndicator(
         onRefresh: _onrefresh,
-        child: 
-         SuperScaffold(
-            key: const Key('home'),
-            transitionBetweenRoutes: false,
-            appBar: SuperAppBar(
-              
-              backgroundColor:
-                  Theme.of(context).colorScheme.background.withOpacity(.5),
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: SizedBox(width: 120,  child: SvgPicture.asset("assets/images/Logo.svg")),
+        child: SuperScaffold(
+          key: const Key('home'),
+          transitionBetweenRoutes: false,
+          appBar: SuperAppBar(
+            backgroundColor:
+                Theme.of(context).colorScheme.background.withOpacity(.5),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: SizedBox(
+                      width: 120,
+                      child: SvgPicture.asset("assets/images/Logo.svg")),
+                ),
+              ],
+            ),
+            largeTitle: SuperLargeTitle(
+              enabled: false,
+              largeTitle: 'Orig Inn'.tr(), // Translated text
+              textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 24,
+                    letterSpacing: 0,
                   ),
-                ],
-              ),
-              largeTitle: SuperLargeTitle(
-                enabled: false,
-                largeTitle: 'Orig Inn'.tr(), // Translated text
-                textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 24,
-                      letterSpacing: 0,
-                    ),
-              ),
-              searchBar: SuperSearchBar(
-                
-                placeholderText: 'search'.tr(),
-
-                searchFocusNode: _searchFocusNode,
-                searchController: _searchTextController,
-                textStyle: Theme.of(context).textTheme.bodyLarge!,
-                
-                onFocused: (value) {
-                  if (!value) {
-                    setState(_searchTextController.clear);
-                  }
-                },
-                cancelTextStyle: Theme.of(context).textTheme.bodyLarge!,
-                onSubmitted: (value) {
-         
-                  if (value.isEmpty) {
-                    return;
-                  }
-                  context.read<GlobalSearchBloc>().add(PerformGlobalSearch(
-                        keyword: value,
-                        perPage: 20,
-                      ));
-                },
-                searchResult: Container(
-                  child: BlocBuilder<GlobalSearchBloc, GlobalSearchState>(
-                    builder: (buildercontext, state) {
-                      if (state is GlobalSearchLoading) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (state is GlobalSearchLoaded) {
-                        return Padding(
-                          padding: const EdgeInsets.all(defaultPadding),
-                          child: GridView.builder(
-                            itemCount:
-                                state.results.data!.products!.data!.data!.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 8.0,
-                              crossAxisSpacing: 8.0,
-                              childAspectRatio: 140 / 220,
-                            ),
-                            itemBuilder: (context, index) {
-                              final product = state
-                                  .results.data!.products!.data!.data![index];
-                              return ProductCard(
-                                product: product,
-                                press: () {
-                                  // _searchFocusNode.requestFocus();
-                                  Future.delayed(const Duration(milliseconds: 0),
-                                      () {
-                                    // _searchFocusNode.unfocus();
-                                    // _searchTextController.clear();
-                  
-                                    context
-                                        .read<MainProvider>()
-                                        .currentProductModel = product;
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ProductDetailsScreen(),
-                                      ),
-                                    );
-                                  });
-                                },
-                              );
-                            },
+            ),
+            searchBar: SuperSearchBar(
+              placeholderText: 'search'.tr(),
+              searchFocusNode: _searchFocusNode,
+              searchController: _searchTextController,
+              textStyle: Theme.of(context).textTheme.bodyLarge!,
+              onFocused: (value) {
+                if (!value) {
+                  setState(_searchTextController.clear);
+                }
+              },
+              cancelTextStyle: Theme.of(context).textTheme.bodyLarge!,
+              onSubmitted: (value) {
+                if (value.isEmpty) {
+                  return;
+                }
+                context.read<GlobalSearchBloc>().add(PerformGlobalSearch(
+                      keyword: value,
+                      perPage: 20,
+                    ));
+              },
+              searchResult: Container(
+                child: BlocBuilder<GlobalSearchBloc, GlobalSearchState>(
+                  builder: (buildercontext, state) {
+                    if (state is GlobalSearchLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (state is GlobalSearchLoaded) {
+                      return Padding(
+                        padding: const EdgeInsets.all(defaultPadding),
+                        child: GridView.builder(
+                          itemCount:
+                              state.results.data!.products!.data!.data!.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 8.0,
+                            crossAxisSpacing: 8.0,
+                            childAspectRatio: 140 / 220,
                           ),
-                        );
-                      } else if (state is GlobalSearchError) {
-                        return Center(child: Text(state.message));
-                      } else {
-                        return Center(child: Text('search'.tr())); // Translated
-                      }
-                    },
-                  ),
+                          itemBuilder: (context, index) {
+                            final product = state
+                                .results.data!.products!.data!.data![index];
+                            return ProductCard(
+                              product: product,
+                              press: () {
+                                // _searchFocusNode.requestFocus();
+                                Future.delayed(const Duration(milliseconds: 0),
+                                    () {
+                                  // _searchFocusNode.unfocus();
+                                  _searchTextController.clear();
+
+                                  context
+                                      .read<MainProvider>()
+                                      .currentProductModel = product;
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ProductDetailsScreen(),
+                                    ),
+                                  );
+                                });
+                              },
+                            );
+                          },
+                        ),
+                      );
+                    } else if (state is GlobalSearchError) {
+                      return Center(child: Text(state.message));
+                    } else {
+                      return Center(child: Text('search'.tr())); // Translated
+                    }
+                  },
                 ),
               ),
             ),
-            body: SafeArea(
-              child: CustomScrollView(
-                slivers: [
-                  const SliverToBoxAdapter(
-                      child: OffersCarouselAndCategories()),
-                  const SliverToBoxAdapter(child: PopularProducts()),
-                  const SliverPadding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: defaultPadding * 1.5),
-                    sliver: SliverToBoxAdapter(child: FlashSale()),
+          ),
+          body: SafeArea(
+            child: CustomScrollView(
+              slivers: [
+                const SliverToBoxAdapter(child: OffersCarouselAndCategories()),
+                const SliverToBoxAdapter(child: PopularProducts()),
+                const SliverPadding(
+                  padding: EdgeInsets.symmetric(vertical: defaultPadding * 1.5),
+                  sliver: SliverToBoxAdapter(child: FlashSale()),
+                ),
+                SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      BannerSStyle1(
+                        title: '', // Translated
+                        subtitle: '', // Translated
+                        press: () {},
+                      ),
+                      const SizedBox(height: defaultPadding / 4),
+                    ],
                   ),
-                  SliverToBoxAdapter(
-                    child: Column(
-                      children: [
-                        BannerSStyle1(
-                          title: '', // Translated
-                          subtitle: '', // Translated
-                          press: () {},
-                        ),
-                        const SizedBox(height: defaultPadding / 4),
-                      ],
-                    ),
+                ),
+                const SliverToBoxAdapter(child: MostPopular()),
+                SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: defaultPadding * 1.5),
+                      BannerSStyle5(
+                        title: '', // Translated
+                        subtitle: '', // Translated
+                        bottomText: '', // Translated
+                        press: () {},
+                      ),
+                      const SizedBox(height: defaultPadding / 4),
+                    ],
                   ),
-                  const SliverToBoxAdapter(child: MostPopular()),
-                  SliverToBoxAdapter(
-                    child: Column(
-                      children: [
-                        const SizedBox(height: defaultPadding * 1.5),
-                        BannerSStyle5(
-                          title: '', // Translated
-                          subtitle: '', // Translated
-                          bottomText: '', // Translated
-                          press: () {},
-                        ),
-                        const SizedBox(height: defaultPadding / 4),
-                      ],
-                    ),
-                  ),
-                  const SliverToBoxAdapter(child: BestSellers()),
-                ],
-              ),
+                ),
+                const SliverToBoxAdapter(child: BestSellers()),
+              ],
             ),
           ),
         ),
-      
+      ),
     );
   }
 }

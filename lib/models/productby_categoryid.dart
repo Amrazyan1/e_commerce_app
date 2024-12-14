@@ -246,35 +246,6 @@ class Unit {
       };
 }
 
-class Alternative {
-  String? name;
-  String? value;
-
-  Alternative({
-    this.name,
-    this.value,
-  });
-
-  Alternative copyWith({
-    String? name,
-    String? value,
-  }) =>
-      Alternative(
-        name: name ?? this.name,
-        value: value ?? this.value,
-      );
-
-  factory Alternative.fromJson(Map<String, dynamic> json) => Alternative(
-        name: json["name"],
-        value: json["value"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "value": value,
-      };
-}
-
 class Links {
   String? first;
   String? last;

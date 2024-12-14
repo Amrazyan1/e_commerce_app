@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:e_commerce_app/models/Product/product_model.dart';
+
 ViewOrderResponse viewOrderResponseFromJson(String str) =>
     ViewOrderResponse.fromJson(json.decode(str));
 
@@ -531,35 +533,6 @@ class Unit {
         "type": type,
         "alternative": alternative?.toJson(),
         "step": step,
-      };
-}
-
-class Alternative {
-  dynamic name;
-  dynamic value;
-
-  Alternative({
-    this.name,
-    this.value,
-  });
-
-  Alternative copyWith({
-    dynamic name,
-    dynamic value,
-  }) =>
-      Alternative(
-        name: name ?? this.name,
-        value: value ?? this.value,
-      );
-
-  factory Alternative.fromJson(Map<String, dynamic> json) => Alternative(
-        name: json["name"],
-        value: json["value"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "value": value,
       };
 }
 

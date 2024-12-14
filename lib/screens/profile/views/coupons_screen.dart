@@ -55,17 +55,16 @@ class _CouponsScreenState extends State<CouponsScreen> {
                   ),
                   SizedBox(height: 16),
                   TextField(
-                    
                     controller: couponController,
                     decoration: InputDecoration(
                       labelText: 'Enter coupon code',
                       border: OutlineInputBorder(),
-                    
                     ),
                     inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r'[A-Z0-9]')), // Only allows uppercase letters and numbers
-      ],
-      textCapitalization: TextCapitalization.characters,
+                      FilteringTextInputFormatter.allow(RegExp(
+                          r'[A-Z0-9]')), // Only allows uppercase letters and numbers
+                    ],
+                    textCapitalization: TextCapitalization.characters,
                   ),
                   SizedBox(height: 16),
                   SizedBox(
@@ -137,8 +136,10 @@ class _CouponsScreenState extends State<CouponsScreen> {
               return const Center(child: CircularProgressIndicator());
             }
             if (state is CouponsLoaded || state is CouponsError) {
-              final coupons = (state as CouponsLoaded)
-                  .coupons; // Assuming this is a list of coupon data
+              final coupons = (state as CouponsLoaded).coupons;
+              if (coupons.isEmpty) {
+                return Center(child: Text('empty_coupons'.tr()));
+              }
               return SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Padding(
@@ -155,34 +156,42 @@ class _CouponsScreenState extends State<CouponsScreen> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 10), // Add spacing between items
                         child: CouponCard(
-                          height: 200,
-                          backgroundColor: Colors.orangeAccent,
+                          height: 150,
+                          backgroundColor: ksecondaryColor,
                           curveAxis: Axis.vertical,
                           curvePosition: 125,
                           borderRadius: 20,
                           firstChild: Container(
                             padding: const EdgeInsets.all(20),
                             alignment: Alignment.centerLeft,
-                            color: Colors.orange,
+                            color: kprimaryColor,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  coupon.name ??
-                                      '', // Assuming the coupon has a 'title' field
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
+                                Row(
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        coupon.expiresIn ??
+                                            'sf', // Assuming the coupon has a 'title' field
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                            overflow: TextOverflow.ellipsis),
+                                        maxLines: 2,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 const SizedBox(height: 10),
                                 Text(
                                   coupon.discount ??
                                       '', // Assuming the coupon has a 'description' field
                                   style: const TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white70,
+                                    fontSize: 25,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
@@ -195,20 +204,21 @@ class _CouponsScreenState extends State<CouponsScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Valid until ${coupon.validTill ?? ''}", // Assuming the coupon has an 'expirationDate' field
+                                  coupon.name ??
+                                      '', // Assuming the coupon has an 'expirationDate' field
                                   style: const TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 19,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black54,
+                                    color: Colors.white,
                                   ),
                                 ),
                                 const SizedBox(height: 10),
                                 Text(
-                                  "${coupon.discount}", // Assuming the coupon has a 'discount' field
+                                  "${coupon.description}", // Assuming the coupon has a 'discount' field
                                   style: const TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ],

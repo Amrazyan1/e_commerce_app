@@ -79,10 +79,8 @@ class _CartScreenState extends State<CartScreen> {
         }
       },
       child: Scaffold(
-
         appBar: AppBar(
           automaticallyImplyLeading: false,
-        
           backgroundColor:
               Theme.of(context).colorScheme.background.withOpacity(.5),
           title: Text(
@@ -92,7 +90,6 @@ class _CartScreenState extends State<CartScreen> {
                 .labelMedium!
                 .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
           ),
-         
         ),
         body: Column(
           children: [
@@ -105,9 +102,7 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                   );
                 }
-                if (state is CartError) {
-                  
-                }
+                if (state is CartError) {}
                 if (state is CartLoaded) {
                   if (state.cartItems.isEmpty) {
                     return Expanded(
@@ -115,9 +110,17 @@ class _CartScreenState extends State<CartScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('empty_cart'.tr(),textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.w600,),),
-                                                        Text('no_cart'.tr(),textAlign: TextAlign.center,),
-
+                            Text(
+                              'empty_cart'.tr(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              'no_cart'.tr(),
+                              textAlign: TextAlign.center,
+                            ),
                           ],
                         ),
                       ),
@@ -140,7 +143,9 @@ class _CartScreenState extends State<CartScreen> {
             BlocBuilder<CartBloc, CartState>(
               builder: (context, state) {
                 if (state is CartLoaded) {
-                  if (state.cartItems.isEmpty){return Container();}
+                  if (state.cartItems.isEmpty) {
+                    return Container();
+                  }
                   return Column(
                     children: [
                       Padding(
@@ -261,7 +266,7 @@ class _CartScreenState extends State<CartScreen> {
                   width: 50,
                   height: 50,
                   child: NetworkImageWithLoader(
-                    item.product!.images?.main?.src ?? '',
+                    item.product!.image!.src ?? '',
                     radius: 0,
                   ),
                 ),
@@ -275,7 +280,7 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '${item.product!.discount != '0 %' ? item.product!.discountedPrice : item.product!.price}',
+                        '${item.total}', //${item.product!.discount != '0 %' ? item.product!.discountedPrice : item.product!.price}
                       ),
                     ],
                   ),
