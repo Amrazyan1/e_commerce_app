@@ -29,7 +29,7 @@ class _CouponsScreenState extends State<CouponsScreen> {
       context: context,
       isScrollControlled:
           true, // Allows the modal to adjust when the keyboard appears
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (BuildContext context) {
@@ -47,8 +47,8 @@ class _CouponsScreenState extends State<CouponsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Activate Coupon',
-                    style: TextStyle(
+                    'add_coupon'.tr(),
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -57,8 +57,8 @@ class _CouponsScreenState extends State<CouponsScreen> {
                   TextField(
                     controller: couponController,
                     decoration: InputDecoration(
-                      labelText: 'Enter coupon code',
-                      border: OutlineInputBorder(),
+                      labelText: 'enter_coupon'.tr(),
+                      border: const OutlineInputBorder(),
                     ),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(
@@ -66,12 +66,12 @@ class _CouponsScreenState extends State<CouponsScreen> {
                     ],
                     textCapitalization: TextCapitalization.characters,
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   SizedBox(
                       height: 50,
                       width: double.infinity,
                       child: ButtonMainWidget(
-                        text: 'activate',
+                        text: 'add_coupon'.tr(),
                         callback: () {
                           String couponCode = couponController.text.trim();
                           if (couponCode.isNotEmpty) {
@@ -81,14 +81,12 @@ class _CouponsScreenState extends State<CouponsScreen> {
                             Navigator.of(context).pop(); // Close the modal
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content:
-                                      Text('Please enter a valid coupon code')),
+                              SnackBar(content: Text('enter_valid'.tr())),
                             );
                           }
                         },
                       )),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                 ],
               ),
             ],

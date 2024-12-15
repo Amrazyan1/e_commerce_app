@@ -28,20 +28,18 @@ class _ProductCardState extends State<ProductCard> {
   void addToCart() async {
     CartProductItem? cardProdItem =
         await context.read<MainProvider>().addToCartById(widget.product.id);
-    if (cardProdItem != null) {
-      setState(() {
-        isAddedToCart = true;
-      });
+    setState(() {
+      isAddedToCart = true;
+    });
 
-      // Revert back to the initial state after a delay
-      Future.delayed(const Duration(seconds: 2), () {
-        if (mounted) {
-          setState(() {
-            isAddedToCart = false;
-          });
-        }
-      });
-    }
+    // Revert back to the initial state after a delay
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        setState(() {
+          isAddedToCart = false;
+        });
+      }
+    });
   }
 
   @override
@@ -113,17 +111,15 @@ class _ProductCardState extends State<ProductCard> {
                   ),
                   const SizedBox(height: defaultPadding / 4),
                   Flexible(
-  child: SingleChildScrollView(
-    child: HtmlWidget(
-      
-      widget.product.description ?? '',
-      textStyle: TextStyle(
-        overflow: TextOverflow.visible,
-      ),
-    ),
-  ),
-),
-
+                    child: SingleChildScrollView(
+                      child: HtmlWidget(
+                        widget.product.description ?? '',
+                        textStyle: TextStyle(
+                          overflow: TextOverflow.visible,
+                        ),
+                      ),
+                    ),
+                  ),
                   Row(
                     children: [
                       Expanded(
