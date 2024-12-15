@@ -204,9 +204,6 @@ class _EntryPointState extends State<EntryPoint> {
   }
 
   void _onPageChange(int index, TabsRouter tabsRouter) async {
-    if (index == 4) {
-      context.router.navigate(const ProfileRoute());
-    }
     if (index != tabsRouter.activeIndex) {
       log('$index');
 
@@ -244,6 +241,9 @@ class _EntryPointState extends State<EntryPoint> {
 
         default:
       }
+    }
+    if (index == 4) {
+      context.router.navigate(const ProfileRoute());
     }
   }
 }

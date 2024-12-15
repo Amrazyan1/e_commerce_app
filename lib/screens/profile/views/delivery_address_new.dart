@@ -4,16 +4,19 @@ import 'dart:io';
 
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:e_commerce_app/blocs/settings/bloc/settings_bloc.dart';
+import 'package:e_commerce_app/blocs/settings/bloc/settings_event.dart';
 import 'package:e_commerce_app/components/checkout_modal.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
 import '../../../services/api_service.dart';
-import '../../Products/Components/cart_button.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
 class DeliveryAddressNew extends StatefulWidget {
@@ -116,14 +119,33 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
     setState(() {
       loading = true;
     });
+    if (context.read<SettingsBloc>().settingsmodel == null) {
+      context.read<SettingsBloc>().add(FetchUserSettingsEvent());
 
+      // Wait until the settingsmodel is fetched
+      while (context.read<SettingsBloc>().settingsmodel == null) {
+        await Future.delayed(const Duration(milliseconds: 100));
+      }
+    }
+    final lat =
+        context.read<SettingsBloc>().settingsmodel!.data!.storeAddress!.lat;
+    final long =
+        context.read<SettingsBloc>().settingsmodel!.data!.storeAddress!.long;
+    double distanceInMeters = Geolocator.distanceBetween(
+      double.parse(lat!),
+      double.parse(long!),
+      _selectedLocation!.latitude,
+      _selectedLocation!.longitude,
+    );
+    log('$distanceInMeters');
     try {
       final addressDetails = {
         'name': _nameController.text,
         'address': _address,
         'details': _address,
         'latitude': _selectedLocation!.latitude,
-        'longitude': _selectedLocation!.longitude
+        'longitude': _selectedLocation!.longitude,
+        'distance': (distanceInMeters / 100).toStringAsFixed(2),
       };
 
       final response = await widget.apiService.addAddress(addressDetails);

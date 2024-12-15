@@ -9,7 +9,7 @@ import 'package:get_it/get_it.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final ApiService _apiService = GetIt.I<ApiService>();
-
+  SettingsModel? settingsmodel;
   SettingsBloc() : super(SettingsInitial()) {
     on<FetchUserSettingsEvent>((event, emit) async {
       emit(SettingsLoading());
@@ -20,6 +20,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         // log('${json.encode(response.data['data'])}');
         if (response.statusCode == 200) {
           final settings = settingsModelFromJson(response.data);
+          settingsmodel = settings;
           emit(SettingsLoaded(settings));
         } else {
           emit(SettingsError('Failed to fetch settings'));

@@ -36,107 +36,100 @@ class Data {
   String? fullName;
   String? firstName;
   String? lastName;
+  String? birthday;
+  String? sex;
   String? email;
   String? phone;
-  String? birthday;
   bool? isPartner;
-  DiscountDetails? discountDetails;
+  StoreAddress? storeAddress;
 
   Data({
     this.fullName,
     this.firstName,
     this.lastName,
+    this.birthday,
+    this.sex,
     this.email,
     this.phone,
-    this.birthday,
     this.isPartner,
-    this.discountDetails,
+    this.storeAddress,
   });
 
   Data copyWith({
     String? fullName,
     String? firstName,
     String? lastName,
-    String? email,
     String? birthday,
+    String? sex,
+    String? email,
     String? phone,
     bool? isPartner,
-    DiscountDetails? discountDetails,
+    StoreAddress? storeAddress,
   }) =>
       Data(
         fullName: fullName ?? this.fullName,
         firstName: firstName ?? this.firstName,
         lastName: lastName ?? this.lastName,
+        birthday: birthday ?? this.birthday,
+        sex: sex ?? this.sex,
         email: email ?? this.email,
         phone: phone ?? this.phone,
-        birthday: birthday ?? this.birthday,
         isPartner: isPartner ?? this.isPartner,
-        discountDetails: discountDetails ?? this.discountDetails,
+        storeAddress: storeAddress ?? this.storeAddress,
       );
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         fullName: json["fullName"],
         firstName: json["firstName"],
         lastName: json["lastName"],
+        birthday: json["birthday"],
+        sex: json["sex"],
         email: json["email"],
         phone: json["phone"],
-        birthday: json["birthday"],
         isPartner: json["isPartner"],
-        discountDetails: json["discountDetails"] == null
+        storeAddress: json["storeAddress"] == null
             ? null
-            : DiscountDetails.fromJson(json["discountDetails"]),
+            : StoreAddress.fromJson(json["storeAddress"]),
       );
 
   Map<String, dynamic> toJson() => {
         "fullName": fullName,
         "firstName": firstName,
         "lastName": lastName,
+        "birthday": birthday,
+        "sex": sex,
         "email": email,
         "phone": phone,
-        "birthday": birthday,
         "isPartner": isPartner,
-        "discountDetails": discountDetails?.toJson(),
+        "storeAddress": storeAddress?.toJson(),
       };
 }
 
-class DiscountDetails {
-  int? level;
-  int? discountPercent;
-  bool? isFreeDelivery;
-  bool? isFreeWorkerService;
+class StoreAddress {
+  String? lat;
+  String? long;
 
-  DiscountDetails({
-    this.level,
-    this.discountPercent,
-    this.isFreeDelivery,
-    this.isFreeWorkerService,
+  StoreAddress({
+    this.lat,
+    this.long,
   });
 
-  DiscountDetails copyWith({
-    int? level,
-    int? discountPercent,
-    bool? isFreeDelivery,
-    bool? isFreeWorkerService,
+  StoreAddress copyWith({
+    String? lat,
+    String? long,
   }) =>
-      DiscountDetails(
-        level: level ?? this.level,
-        discountPercent: discountPercent ?? this.discountPercent,
-        isFreeDelivery: isFreeDelivery ?? this.isFreeDelivery,
-        isFreeWorkerService: isFreeWorkerService ?? this.isFreeWorkerService,
+      StoreAddress(
+        lat: lat ?? this.lat,
+        long: long ?? this.long,
       );
 
-  factory DiscountDetails.fromJson(Map<String, dynamic> json) =>
-      DiscountDetails(
-        level: json["level"],
-        discountPercent: json["discountPercent"],
-        isFreeDelivery: json["isFreeDelivery"],
-        isFreeWorkerService: json["isFreeWorkerService"],
+  factory StoreAddress.fromJson(Map<String, dynamic> json) => StoreAddress(
+        lat: json["lat"],
+        long: json["long"],
       );
 
   Map<String, dynamic> toJson() => {
-        "level": level,
-        "discountPercent": discountPercent,
-        "isFreeDelivery": isFreeDelivery,
-        "isFreeWorkerService": isFreeWorkerService,
+        "lat": lat,
+        "long": long,
       };
 }
