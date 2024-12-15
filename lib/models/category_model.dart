@@ -9,6 +9,8 @@ class CategoryModel {
   final bool? isSelected;
   final bool? ignoreExpansion;
   final bool isCheckbox;
+  final String couponId;
+
   CategoryModel(
       {required this.title,
       required this.info,
@@ -18,6 +20,7 @@ class CategoryModel {
       this.paytipe,
       this.address,
       this.isSelected,
+      this.couponId = '',
       this.isCheckbox = false,
       this.ignoreExpansion});
 }

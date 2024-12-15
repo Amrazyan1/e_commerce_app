@@ -34,22 +34,37 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
   bool expanded = false;
   CategoryModel? selectedCategory;
   bool checked = false;
+  TextEditingController _controller = TextEditingController();
+  FocusNode _focusNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        _controller.selection = TextSelection(
+          baseOffset: 0,
+          extentOffset: _controller.text.length,
+        );
+      }
+    });
     if (widget.subCategory.isNotEmpty) {
       var selectedCategory =
           widget.subCategory.where((x) => x.isSelected == true).isNotEmpty
               ? widget.subCategory.where((x) => x.isSelected == true).first
               : null; // Handle this default case appropriately
 
-      selectedInfo = selectedCategory!.info;
+      selectedInfo = selectedCategory?.info ?? '';
 
       if (widget.onCategorySelected != null && selectedCategory != null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           widget.onCategorySelected!(selectedCategory!);
         });
       }
+    }
+    if (widget.isCheckbox) {
+      _controller.text = widget.info;
+      log(widget.info);
     }
   }
 
@@ -131,40 +146,74 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
             ),
           )
         : widget.isCheckbox
-            ? CheckboxListTile(
-                title: Text(widget.title + ' ' + widget.info),
-                activeColor: ksecondaryColor,
-                value: checked,
-                onChanged: (isChecked) {
-                  setState(() {
-                    checked = isChecked!;
-                    selectedInfo = widget.info;
-                    expanded = false;
+            ? Row(
+                children: [
+                  Text('${widget.title} ${widget.info} '),
+                  Flexible(
+                    // width: 40,
+                    child: TextFormField(
+                      controller: _controller,
+                      focusNode: _focusNode,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                            borderSide: BorderSide(color: Colors.white)),
+                        isDense: true,
+                        contentPadding: EdgeInsets.only(
+                            left: 0, right: 0, top: 10, bottom: 10),
+                      ),
+                      keyboardType: TextInputType.number,
+                      onChanged: (value) {
+                        num? newValue = num.tryParse(value);
+                        num? maxCount = num.tryParse(widget.info);
 
-                    if (widget.onCategorySelected != null) {
-                      widget.onCategorySelected!(CategoryModel(
-                          title: 'checkbox',
-                          info: '$isChecked',
-                          isCheckbox: true));
-                    }
-                  });
-                },
-                controlAffinity: ListTileControlAffinity.leading,
+                        if (newValue != null && maxCount != null) {
+                          if (newValue > maxCount) {
+                            // Trim the value to maxCount if it exceeds
+                            _controller.text = '$maxCount';
+
+                            // Move cursor to the end of the text
+                            _controller.selection = TextSelection.fromPosition(
+                              TextPosition(offset: _controller.text.length),
+                            );
+                          } else {
+                            if (widget.onCategorySelected != null) {
+                              widget.onCategorySelected!(CategoryModel(
+                                title: '$newValue',
+                                info: '',
+                                isCheckbox: true,
+                              ));
+                            }
+                          }
+                        }
+                      },
+                    ),
+                  ),
+                ],
               )
-            // Checkbox(
-
-            //     value: subCategory.isChecked ?? false,
-            //     onChanged: (value) {
+            // CheckboxListTile(
+            //     title: Text(widget.title + ' ' + widget.info),
+            //     activeColor: ksecondaryColor,
+            //     value: checked,
+            //     onChanged: (isChecked) {
             //       setState(() {
+            //         checked = isChecked!;
             //         selectedInfo = widget.info;
             //         expanded = false;
 
             //         if (widget.onCategorySelected != null) {
-            //           widget.onCategorySelected!(
-            //               CategoryModel(title: 'checkbox', info: '$value'));
+            //           widget.onCategorySelected!(CategoryModel(
+            //               title: 'checkbox',
+            //               info: '$isChecked',
+            //               isCheckbox: true));
             //         }
             //       });
             //     },
+            //     controlAffinity: ListTileControlAffinity.leading,
             //   )
             : ListTile(
                 title: Text(

@@ -48,6 +48,7 @@ class Product {
   String? discount;
   String? discountedPrice;
   Images? images;
+  Main? image;
   int? bonusPercent;
   dynamic bonus;
 
@@ -63,6 +64,7 @@ class Product {
     this.discount,
     this.discountedPrice,
     this.images,
+    this.image,
     this.bonusPercent,
     this.bonus,
   });
@@ -110,6 +112,7 @@ class Product {
         discount: json["discount"],
         discountedPrice: json["discountedPrice"],
         images: json["images"] == null ? null : Images.fromJson(json["images"]),
+        image: json["image"] == null ? null : Main.fromJson(json["image"]),
         bonusPercent: json["bonusPercent"],
         bonus: json["bonus"],
       );
@@ -188,12 +191,15 @@ class Unit {
   String? value;
   Type? type;
   Alternative? alternative;
-
+  int? minCount;
+  int? maxCount;
   Unit({
     this.name,
     this.value,
     this.type,
     this.alternative,
+    this.minCount,
+    this.maxCount,
   });
 
   Unit copyWith({
@@ -212,6 +218,8 @@ class Unit {
   factory Unit.fromJson(Map<String, dynamic> json) => Unit(
         name: json["name"],
         value: json["value"],
+        minCount: json["minCount"],
+        maxCount: json["maxCount"],
         type: typeValues.map[json["type"]]!,
         alternative: json["alternative"] == null
             ? null

@@ -87,6 +87,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
               currenstate.count,
               viewOrderData.data!));
         } catch (e) {
+          log('$e');
           emit(CartLoaded(
             currenstate.cartItems,
             currenstate.subtotal,

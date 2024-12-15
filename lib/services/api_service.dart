@@ -103,7 +103,7 @@ class ApiService {
     }
   }
 
- Future<Response> getCoupons() async {
+  Future<Response> getCoupons() async {
     try {
       return await _dioClient.dio.get(
         Endpoints.coupons,
@@ -125,6 +125,7 @@ class ApiService {
       rethrow;
     }
   }
+
   // Articles
   Future<Response> getArticles(int perPage) async {
     try {
@@ -148,7 +149,7 @@ class ApiService {
 
   // Authentication
   Future<Response> registeruser(String fullname, String email, String password,
-      String birthDate, String phone,String gender) async {
+      String birthDate, String phone, String gender) async {
     try {
       final response = await _dioClient.dio.post(
         Endpoints.userSignUp,
@@ -157,7 +158,7 @@ class ApiService {
           'email': email,
           'birthday': birthDate,
           'phone': phone,
-          'sex' : gender,
+          'sex': gender,
         },
       );
       log(response.data);
@@ -496,10 +497,9 @@ class ApiService {
 
   Future<Response> getProductById(String id) async {
     try {
+      // id = '9db8e261-1f69-4898-ade4-40e2e5220881';
       return await _dioClient.dio.get(
-        Endpoints.getProductById
-            .replaceFirst('{id}', id)
-            ,
+        Endpoints.getProductById.replaceFirst('{id}', id),
       );
     } catch (e) {
       rethrow;

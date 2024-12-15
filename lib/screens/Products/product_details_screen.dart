@@ -3,20 +3,14 @@ import 'dart:developer';
 
 import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/blocs/bloc/product_detail_bloc.dart';
-import 'package:e_commerce_app/components/added_to_cart_message_screen.dart';
-import 'package:e_commerce_app/components/custom_modal_bottom_sheet.dart';
-import 'package:e_commerce_app/components/network_image_with_loader.dart';
 import 'package:e_commerce_app/screens/Products/Components/product_card.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/screens/Products/Components/product_images.dart';
-import 'package:e_commerce_app/screens/Products/Components/product_info.dart';
-import 'package:e_commerce_app/screens/Products/Components/review_card.dart';
 import 'package:e_commerce_app/screens/Products/Components/cart_button.dart';
 import 'package:e_commerce_app/services/api_service.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get_it/get_it.dart';
 import 'package:like_button/like_button.dart';
@@ -38,11 +32,15 @@ class ProductDetailsScreen extends StatefulWidget {
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final ApiService _apiService = GetIt.I<ApiService>();
 
-  bool canShowquantity = false;
   bool isLoading = false;
 
   String countOfItem = '';
   String total = '';
+  int prodCount = 1;
+  void productCounter(int count) {
+    prodCount = count;
+  }
+
   void addToCart(int count) async {
     setState(() {
       isLoading = true;
@@ -51,7 +49,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     //     .read<MainProvider>()
     //     .changeCountCartByProductId(
     //        , count);
-    var response = await _apiService.changeCart({
+    var response = await _apiService.addToCart({
       "id": context.read<MainProvider>().currentProductModel.id,
       "count": count
     });
@@ -63,7 +61,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
     if (cardProdItem != null) {
       setState(() {
-        canShowquantity = true;
         countOfItem = cardProdItem.count.toString();
         total = cardProdItem.total.toString();
         isLoading = false;
@@ -88,12 +85,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocListener<TrendNewProductsBloc, TrendNewProductsState>(
       listener: (context, state) {
@@ -107,22 +98,50 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       },
       child: Scaffold(
         bottomNavigationBar: CartButton(
-          press: (isLoading || countOfItem.isNotEmpty)
-              ? () {}
-              : () => {addToCart(1)},
+          press: (isLoading) ? () {} : () => {addToCart(prodCount)},
           infoWidget: isLoading
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
-              : Text(
-                  countOfItem.isNotEmpty
-                      ? '$countOfItem ' + 'items_added'.tr()
-                      : 'add_basket'.tr(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall!
-                      .copyWith(color: Colors.white),
-                ).tr(),
+              : Row(
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: QuantityWidget(
+                        initialCount: prodCount,
+                        minCount: context
+                                .read<MainProvider>()
+                                .currentProductModel
+                                .unit!
+                                .minCount ??
+                            1,
+                        maxCount: context
+                            .read<MainProvider>()
+                            .currentProductModel
+                            .unit!
+                            .maxCount,
+                        callback: productCounter,
+                        alternative: context
+                            .watch<MainProvider>()
+                            .currentProductModel
+                            .unit!
+                            .alternative!,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 5,
+                      child: Text(
+                        countOfItem.isNotEmpty
+                            ? '$countOfItem ' + 'items_added'.tr()
+                            : 'add_basket'.tr(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleSmall!
+                            .copyWith(color: Colors.white),
+                      ).tr(),
+                    ),
+                  ],
+                ),
         ),
         body: SafeArea(
           child: CustomScrollView(
@@ -181,6 +200,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   child: BlocBuilder<ProductDetailBloc, ProductDetailState>(
                     builder: (context, state) {
                       if (state is ProductDetailLoaded) {
+                        context.read<MainProvider>().currentProductModel.unit =
+                            state.product.unit;
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -222,14 +243,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Text(
-                                //   "unit".tr(),
-                                //   style: Theme.of(context)
-                                //       .textTheme
-                                //       .titleMedium!
-                                //       .copyWith(fontWeight: FontWeight.w500),
-                                // ),
-                                // const SizedBox(height: defaultPadding),
                                 Text(
                                   '${context.read<MainProvider>().currentProductModel.unit?.value} ${context.read<MainProvider>().currentProductModel.unit?.name ?? ''}',
                                   style: Theme.of(context)
@@ -243,13 +256,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             Row(
                               children: [
                                 // ProductAvailabilityTag(isAvailable: isAvailable),
-                                Visibility(
-                                  visible: canShowquantity,
-                                  child: QuantityWidget(
-                                    initialCount: 1,
-                                    callback: addToCart,
-                                  ),
-                                ),
+
                                 const Spacer(),
                                 const SizedBox(width: defaultPadding / 4),
                                 state.product.discount != null &&
@@ -310,49 +317,51 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   ),
                                   const SizedBox(height: defaultPadding / 2),
                                   HtmlWidget('${state.product.description}'),
-                                  // Text(
-                                  //   '${context.read<MainProvider>().currentProductModel.description}',
-                                  //   // style: const TextStyle(height: 1.4),
-                                  // ),
                                   const SizedBox(height: defaultPadding / 2),
                                 ],
                               ),
                             ),
                             Padding(
-  padding: const EdgeInsets.all(8.0),
-  child: state.product?.characteristics?.isNotEmpty ?? false
-      ? Column(
-          children: state.product!.characteristics!.map((characteristic) {
-            final name = characteristic['name'] ?? 'Unknown';
-            final value = characteristic['value'] ?? 'Unknown';
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    value,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[700],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }).toList(),
-        )
-      : Container(),
-)
-
+                              padding: const EdgeInsets.all(8.0),
+                              child: state.product?.characteristics
+                                          ?.isNotEmpty ??
+                                      false
+                                  ? Column(
+                                      children: state.product!.characteristics!
+                                          .map((characteristic) {
+                                        final name =
+                                            characteristic['name'] ?? 'Unknown';
+                                        final value = characteristic['value'] ??
+                                            'Unknown';
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 4.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                name,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Text(
+                                                value,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.grey[700],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }).toList(),
+                                    )
+                                  : Container(),
+                            )
                           ],
                         );
                       }

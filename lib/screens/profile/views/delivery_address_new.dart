@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:e_commerce_app/components/checkout_modal.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -146,17 +147,14 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
       appBar: AppBar(
         title: Text("delivery_address".tr()),
       ),
-      bottomNavigationBar: CartButton(
-        press: _addNewAddress,
-        infoWidget: loading
-            ? const CircularProgressIndicator(color: Colors.white)
-            : Text(
-                'add_address'.tr(),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleSmall!
-                    .copyWith(color: Colors.white),
-              ),
+      bottomNavigationBar: SizedBox(
+        height: 50,
+        child: ButtonMainWidget(
+            callback: _addNewAddress,
+            text: 'add_address'.tr(),
+            customwidget: loading
+                ? const CircularProgressIndicator(color: Colors.white)
+                : null),
       ),
       body: SingleChildScrollView(
         child: Column(
