@@ -139,45 +139,45 @@ class ProfileScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleSmall,
               ),
             ),
-            Column(
-              children: [
-                ListTile(
-                  onTap: () {
-                    context.read<MainProvider>().isAvailable =
-                        !context.read<MainProvider>().isAvailable;
-                  },
-                  minLeadingWidth: 24,
-                  leading: SvgPicture.asset(
-                    "assets/icons/Notification.svg",
-                    height: 24,
-                    width: 24,
-                    colorFilter: ColorFilter.mode(
-                        Theme.of(context).iconTheme.color!, BlendMode.srcIn),
-                  ),
-                  title: Text(
-                    'notification'.tr(),
-                    style: const TextStyle(fontSize: 14, height: 1),
-                  ),
-                  trailing: SizedBox(
-                    width: 50,
-                    child: Row(
-                      children: [
-                        const Spacer(),
-                        CupertinoSwitch(
-                          activeColor: const Color.fromARGB(255, 123, 193, 125),
-                          thumbColor: Colors.white,
-                          value: context.watch<MainProvider>().isAvailable,
-                          onChanged: (value) {
-                            context.read<MainProvider>().isAvailable = value;
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Divider(),
+            // Column(
+            //   children: [
+            //     ListTile(
+            //       onTap: () {
+            //         context.read<MainProvider>().isAvailable =
+            //             !context.read<MainProvider>().isAvailable;
+            //       },
+            //       minLeadingWidth: 24,
+            //       leading: SvgPicture.asset(
+            //         "assets/icons/Notification.svg",
+            //         height: 24,
+            //         width: 24,
+            //         colorFilter: ColorFilter.mode(
+            //             Theme.of(context).iconTheme.color!, BlendMode.srcIn),
+            //       ),
+            //       title: Text(
+            //         'notification'.tr(),
+            //         style: const TextStyle(fontSize: 14, height: 1),
+            //       ),
+            //       trailing: SizedBox(
+            //         width: 50,
+            //         child: Row(
+            //           children: [
+            //             const Spacer(),
+            //             CupertinoSwitch(
+            //               activeColor: const Color.fromARGB(255, 123, 193, 125),
+            //               thumbColor: Colors.white,
+            //               value: context.watch<MainProvider>().isAvailable,
+            //               onChanged: (value) {
+            //                 context.read<MainProvider>().isAvailable = value;
+            //               },
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            // Divider(),
             ProfileMenuListTile(
               text: "help".tr(),
               svgSrc: "assets/icons/help.svg",

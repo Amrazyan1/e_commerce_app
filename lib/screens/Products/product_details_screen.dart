@@ -342,12 +342,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                             children: [
                                               Text(
                                                 name,
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16,
                                                 ),
                                               ),
-                                              SizedBox(height: 4),
+                                              const SizedBox(height: 4),
                                               Text(
                                                 value,
                                                 style: TextStyle(

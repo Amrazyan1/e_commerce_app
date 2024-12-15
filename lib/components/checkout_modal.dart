@@ -29,12 +29,32 @@ class _CheckoutModalState extends State<CheckoutModal> {
   final ApiService _apiService = GetIt.I<ApiService>();
   String payType = 'cash';
   String address = 'address';
-  String useBonus = 'false';
+  String useBonus = '0';
+  String couponId = '';
 
   List<CategoryModel> categories = [];
   @override
   void initState() {
     super.initState();
+
+    // if (widget.data.addresses != null) {
+    //   categories.add(
+    //     CategoryModel(
+    //       title: "coupon".tr(),
+    //       info: "sel_coupon".tr(),
+    //       subCategories: (widget.data.addresses!)
+    //           .map((coupon) => CategoryModel(
+    //                 title: coupon.name ?? 'coupon',
+    //                 info: coupon.details ?? 'coupon',
+    //                 subCategories: [],
+    //                 isSelected: false,
+    //               ))
+    //           .toList(),
+    //     ),
+    //   );
+    // }
+
+    // return;
     if (widget.data.addresses != null) {
       categories.add(
         CategoryModel(
@@ -69,6 +89,22 @@ class _CheckoutModalState extends State<CheckoutModal> {
         ),
       );
     }
+    if (widget.data.availableCoupons != null) {
+      categories.add(
+        CategoryModel(
+          title: "coupon".tr(),
+          info: "sel_coupon".tr(),
+          subCategories: (widget.data.availableCoupons!)
+              .map((coup) => CategoryModel(
+                  title: coup.name ?? 'name',
+                  info: coup.discount ?? 'details',
+                  subCategories: [],
+                  couponId: '${coup.id}',
+                  isSelected: false))
+              .toList(),
+        ),
+      );
+    }
     categories.add(
       CategoryModel(
         title: "tot_cost".tr(),
@@ -76,17 +112,18 @@ class _CheckoutModalState extends State<CheckoutModal> {
         subCategories: [],
       ),
     );
+
     // widget.data.availableBonuses = '5500\$';
-    // if (widget.data.availableBonuses != null &&
-    //     widget.data.availableBonuses!.isNotEmpty) {
-    //   categories.add(
-    //     CategoryModel(
-    //         title: "use_bonus".tr(),
-    //         info: '${widget.data.availableBonuses}',
-    //         subCategories: [],
-    //         isCheckbox: true),
-    //   );
-    // }
+    if (widget.data.availableBonuses != null &&
+        widget.data.availableBonuses!.isNotEmpty) {
+      categories.add(
+        CategoryModel(
+            title: "use_bonus".tr(),
+            info: '${widget.data.availableBonuses}',
+            subCategories: [],
+            isCheckbox: true),
+      );
+    }
   }
 
   void processOrder() async {
@@ -95,15 +132,24 @@ class _CheckoutModalState extends State<CheckoutModal> {
       String formattedDate = DateFormat('yyyy-MM-dd').format(now);
       print(formattedDate);
       context.read<MainProvider>().isProcessOrder = true;
-      final response = await _apiService.processOrder(widget.data.id!, {
+
+      final dataObject = {
         'address': address,
         'addressName': address,
         'additional': 'info',
         'date': formattedDate,
-        'usingBonus': useBonus,
         'start': '${widget.data.start}',
-        'end': '${widget.data.end}'
-      });
+        'end': '${widget.data.end}',
+      };
+
+      if (couponId != null && couponId.isNotEmpty) {
+        dataObject['couponId'] = couponId;
+      } else if (useBonus != null && useBonus.isNotEmpty) {
+        dataObject['usingBonus'] = useBonus;
+      }
+
+      final response =
+          await _apiService.processOrder(widget.data.id!, dataObject);
 
       String responseId = jsonDecode(response.data)['data']['id'];
       final resp = await _apiService.payOrder(
@@ -168,8 +214,12 @@ class _CheckoutModalState extends State<CheckoutModal> {
                         payType = selectedCategory.paytipe!;
                       }
                       if (selectedCategory.isCheckbox) {
-                        useBonus = selectedCategory.info;
-                        log('$useBonus ${selectedCategory.info}');
+                        useBonus = selectedCategory.title;
+                        log('$useBonus ${selectedCategory.title}');
+                      }
+                      if (selectedCategory.couponId.isNotEmpty) {
+                        couponId = selectedCategory.couponId;
+                        log('$couponId ${selectedCategory.info}');
                       }
                       if (selectedCategory.address != null) {
                         address = selectedCategory.address!;

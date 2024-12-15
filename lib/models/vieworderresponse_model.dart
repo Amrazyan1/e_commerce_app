@@ -53,6 +53,8 @@ class ViewOrderData {
   String? total;
   String? deliveryPrice;
   String? availableBonuses;
+  List<AvailableCoupon>? availableCoupons;
+
   String? totalWithDelivery;
   List<PaymentMethod>? paymentMethods;
   dynamic customer;
@@ -74,6 +76,7 @@ class ViewOrderData {
     this.discount,
     this.total,
     this.availableBonuses,
+    this.availableCoupons,
     this.deliveryPrice,
     this.totalWithDelivery,
     this.paymentMethods,
@@ -97,6 +100,7 @@ class ViewOrderData {
     String? discount,
     String? total,
     String? availabelBonuses,
+    List<AvailableCoupon>? availableCoupons,
     String? deliveryPrice,
     String? totalWithDelivery,
     List<PaymentMethod>? paymentMethods,
@@ -119,6 +123,7 @@ class ViewOrderData {
         discount: discount ?? this.discount,
         total: total ?? this.total,
         availableBonuses: availableBonuses ?? this.availableBonuses,
+        availableCoupons: availableCoupons ?? this.availableCoupons,
         deliveryPrice: deliveryPrice ?? this.deliveryPrice,
         totalWithDelivery: totalWithDelivery ?? this.totalWithDelivery,
         paymentMethods: paymentMethods ?? this.paymentMethods,
@@ -144,6 +149,10 @@ class ViewOrderData {
         deliveryPrice: json["deliveryPrice"],
         availableBonuses: json["availableBonuses"],
         totalWithDelivery: json["totalWithDelivery"],
+        availableCoupons: json["availableCoupons"] == null
+            ? []
+            : List<AvailableCoupon>.from(json["availableCoupons"]!
+                .map((x) => AvailableCoupon.fromJson(x))),
         paymentMethods: json["paymentMethods"] == null
             ? []
             : List<PaymentMethod>.from(
@@ -174,6 +183,9 @@ class ViewOrderData {
         "total": total,
         "deliveryPrice": deliveryPrice,
         "totalWithDelivery": totalWithDelivery,
+        "availableCoupons": availableCoupons == null
+            ? []
+            : List<dynamic>.from(availableCoupons!.map((x) => x.toJson())),
         "paymentMethods": paymentMethods == null
             ? []
             : List<dynamic>.from(paymentMethods!.map((x) => x.toJson())),
@@ -184,6 +196,60 @@ class ViewOrderData {
         "addresses": addresses == null
             ? []
             : List<dynamic>.from(addresses!.map((x) => x.toJson())),
+      };
+}
+
+class AvailableCoupon {
+  int? id;
+  String? name;
+  String? discount;
+  String? description;
+  String? expiresIn;
+  bool? isUsed;
+
+  AvailableCoupon({
+    this.id,
+    this.name,
+    this.discount,
+    this.description,
+    this.expiresIn,
+    this.isUsed,
+  });
+
+  AvailableCoupon copyWith({
+    int? id,
+    String? name,
+    String? discount,
+    String? description,
+    String? expiresIn,
+    bool? isUsed,
+  }) =>
+      AvailableCoupon(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        discount: discount ?? this.discount,
+        description: description ?? this.description,
+        expiresIn: expiresIn ?? this.expiresIn,
+        isUsed: isUsed ?? this.isUsed,
+      );
+
+  factory AvailableCoupon.fromJson(Map<String, dynamic> json) =>
+      AvailableCoupon(
+        id: json["id"],
+        name: json["name"],
+        discount: json["discount"],
+        description: json["description"],
+        expiresIn: json["expires_in"],
+        isUsed: json["is_used"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "discount": discount,
+        "description": description,
+        "expires_in": expiresIn,
+        "is_used": isUsed,
       };
 }
 
