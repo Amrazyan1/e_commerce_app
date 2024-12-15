@@ -122,6 +122,8 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
         'name': _nameController.text,
         'address': _address,
         'details': _address,
+        'latitude': _selectedLocation!.latitude,
+        'longitude': _selectedLocation!.longitude
       };
 
       final response = await widget.apiService.addAddress(addressDetails);
@@ -147,14 +149,17 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
       appBar: AppBar(
         title: Text("delivery_address".tr()),
       ),
-      bottomNavigationBar: SizedBox(
-        height: 50,
-        child: ButtonMainWidget(
-            callback: _addNewAddress,
-            text: 'add_address'.tr(),
-            customwidget: loading
-                ? const CircularProgressIndicator(color: Colors.white)
-                : null),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(defaultPadding),
+        child: SizedBox(
+          height: 50,
+          child: ButtonMainWidget(
+              callback: _addNewAddress,
+              text: 'add_address'.tr(),
+              customwidget: loading
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : null),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
