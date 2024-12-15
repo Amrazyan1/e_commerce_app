@@ -89,7 +89,8 @@ class _CheckoutModalState extends State<CheckoutModal> {
         ),
       );
     }
-    if (widget.data.availableCoupons != null) {
+    if (widget.data.availableCoupons != null &&
+        widget.data.availableCoupons!.isNotEmpty) {
       categories.add(
         CategoryModel(
           title: "coupon".tr(),
@@ -116,13 +117,15 @@ class _CheckoutModalState extends State<CheckoutModal> {
     // widget.data.availableBonuses = '5500\$';
     if (widget.data.availableBonuses != null &&
         widget.data.availableBonuses!.isNotEmpty) {
-      categories.add(
-        CategoryModel(
-            title: "use_bonus".tr(),
-            info: '${widget.data.availableBonuses}',
-            subCategories: [],
-            isCheckbox: true),
-      );
+      if (num.tryParse(widget.data.availableBonuses!) != 0) {
+        categories.add(
+          CategoryModel(
+              title: "use_bonus".tr(),
+              info: '${widget.data.availableBonuses}',
+              subCategories: [],
+              isCheckbox: true),
+        );
+      }
     }
   }
 
