@@ -54,7 +54,7 @@ class ProductDetail {
   DataImages? images;
   List<dynamic>? characteristics;
   List<dynamic>? relates;
-  List<Similar>? similars;
+  List<Product>? similars;
   List<Breadcrumb>? breadcrumb;
   int? rating;
   List<dynamic>? feedbacks;
@@ -99,7 +99,7 @@ class ProductDetail {
     DataImages? images,
     List<dynamic>? characteristics,
     List<dynamic>? relates,
-    List<Similar>? similars,
+    List<Product>? similars,
     List<Breadcrumb>? breadcrumb,
     int? rating,
     List<dynamic>? feedbacks,
@@ -153,8 +153,8 @@ class ProductDetail {
             : List<dynamic>.from(json["relates"]!.map((x) => x)),
         similars: json["similars"] == null
             ? []
-            : List<Similar>.from(
-                json["similars"]!.map((x) => Similar.fromJson(x))),
+            : List<Product>.from(
+                json["similars"]!.map((x) => Product.fromJson(x))),
         breadcrumb: json["breadcrumb"] == null
             ? []
             : List<Breadcrumb>.from(
@@ -185,9 +185,6 @@ class ProductDetail {
             : List<dynamic>.from(characteristics!.map((x) => x)),
         "relates":
             relates == null ? [] : List<dynamic>.from(relates!.map((x) => x)),
-        "similars": similars == null
-            ? []
-            : List<dynamic>.from(similars!.map((x) => x.toJson())),
         "breadcrumb": breadcrumb == null
             ? []
             : List<dynamic>.from(breadcrumb!.map((x) => x.toJson())),
@@ -333,142 +330,5 @@ class Main {
   Map<String, dynamic> toJson() => {
         "src": src,
         "isMain": isMain,
-      };
-}
-
-class Similar {
-  String? id;
-  String? name;
-  String? description;
-  String? count;
-  dynamic code;
-  int? isNew;
-  int? isPopular;
-  dynamic brand;
-  Unit? unit;
-  String? price;
-  String? discount;
-  String? discountedPrice;
-  SimilarImages? images;
-  List<Breadcrumb>? breadcrumb;
-  int? rating;
-
-  Similar({
-    this.id,
-    this.name,
-    this.description,
-    this.count,
-    this.code,
-    this.isNew,
-    this.isPopular,
-    this.brand,
-    this.unit,
-    this.price,
-    this.discount,
-    this.discountedPrice,
-    this.images,
-    this.breadcrumb,
-    this.rating,
-  });
-
-  Similar copyWith({
-    String? id,
-    String? name,
-    String? description,
-    String? count,
-    dynamic code,
-    int? isNew,
-    int? isPopular,
-    dynamic brand,
-    Unit? unit,
-    String? price,
-    String? discount,
-    String? discountedPrice,
-    SimilarImages? images,
-    List<Breadcrumb>? breadcrumb,
-    int? rating,
-  }) =>
-      Similar(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        description: description ?? this.description,
-        count: count ?? this.count,
-        code: code ?? this.code,
-        isNew: isNew ?? this.isNew,
-        isPopular: isPopular ?? this.isPopular,
-        brand: brand ?? this.brand,
-        unit: unit ?? this.unit,
-        price: price ?? this.price,
-        discount: discount ?? this.discount,
-        discountedPrice: discountedPrice ?? this.discountedPrice,
-        images: images ?? this.images,
-        breadcrumb: breadcrumb ?? this.breadcrumb,
-        rating: rating ?? this.rating,
-      );
-
-  factory Similar.fromJson(Map<String, dynamic> json) => Similar(
-        id: json["id"],
-        name: json["name"],
-        description: json["description"],
-        count: json["count"],
-        code: json["code"],
-        isNew: json["isNew"],
-        isPopular: json["isPopular"],
-        brand: json["brand"],
-        unit: json["unit"] == null ? null : Unit.fromJson(json["unit"]),
-        price: json["price"],
-        discount: json["discount"],
-        discountedPrice: json["discountedPrice"],
-        images: json["images"] == null
-            ? null
-            : SimilarImages.fromJson(json["images"]),
-        breadcrumb: json["breadcrumb"] == null
-            ? []
-            : List<Breadcrumb>.from(
-                json["breadcrumb"]!.map((x) => Breadcrumb.fromJson(x))),
-        rating: json["rating"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "description": description,
-        "count": count,
-        "code": code,
-        "isNew": isNew,
-        "isPopular": isPopular,
-        "brand": brand,
-        "unit": unit?.toJson(),
-        "price": price,
-        "discount": discount,
-        "discountedPrice": discountedPrice,
-        "images": images?.toJson(),
-        "breadcrumb": breadcrumb == null
-            ? []
-            : List<dynamic>.from(breadcrumb!.map((x) => x.toJson())),
-        "rating": rating,
-      };
-}
-
-class SimilarImages {
-  Main? main;
-
-  SimilarImages({
-    this.main,
-  });
-
-  SimilarImages copyWith({
-    Main? main,
-  }) =>
-      SimilarImages(
-        main: main ?? this.main,
-      );
-
-  factory SimilarImages.fromJson(Map<String, dynamic> json) => SimilarImages(
-        main: json["main"] == null ? null : Main.fromJson(json["main"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "main": main?.toJson(),
       };
 }

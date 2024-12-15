@@ -123,14 +123,13 @@ class SecondaryProductCard extends StatelessWidget {
                                       .color,
                                   fontSize: 10,
                                   decoration: TextDecoration.lineThrough,
-                                  
                                 ),
                               ),
                             ),
                           ],
                         )
                       : Text(
-                          "\$$price",
+                          price,
                           style: const TextStyle(
                             color: Color(0xFF31B0D8),
                             fontWeight: FontWeight.w500,

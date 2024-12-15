@@ -196,25 +196,28 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ),
               SliverPadding(
                 padding: const EdgeInsets.all(defaultPadding),
-                sliver: SliverToBoxAdapter(
-                  child: BlocBuilder<ProductDetailBloc, ProductDetailState>(
-                    builder: (context, state) {
-                      if (state is ProductDetailLoaded) {
-                        context.read<MainProvider>().currentProductModel.unit =
-                            state.product.unit;
-                        return Column(
+                sliver: BlocBuilder<ProductDetailBloc, ProductDetailState>(
+                  builder: (context, state) {
+                    if (state is ProductDetailLoaded) {
+                      context.read<MainProvider>().currentProductModel.unit =
+                          state.product.unit;
+                      return SliverToBoxAdapter(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Flexible(
-                                  child: Text(state.product.name!.toUpperCase(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge!
-                                          .copyWith(
-                                              fontWeight: FontWeight.bold)),
+                                  child: Text(
+                                    state.product.name!.toUpperCase(),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge!
+                                        .copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
                                 ),
                                 Center(
                                   child: LikeButton(
@@ -236,7 +239,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       );
                                     },
                                   ),
-                                )
+                                ),
                               ],
                             ),
                             const SizedBox(height: defaultPadding / 2),
@@ -248,7 +251,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleMedium!
-                                      .copyWith(fontWeight: FontWeight.w500),
+                                      .copyWith(
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                 ),
                               ],
                             ),
@@ -297,15 +302,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                             .textTheme
                                             .bodyLarge!
                                             .copyWith(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20,
+                                            ),
                                       ),
                               ],
                             ),
-                            Visibility(
-                              visible: state.product.description != null &&
-                                  state.product.description!.isNotEmpty,
-                              child: Column(
+                            if (state.product.description != null &&
+                                state.product.description!.isNotEmpty)
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
@@ -313,14 +318,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     style: Theme.of(context)
                                         .textTheme
                                         .titleMedium!
-                                        .copyWith(fontWeight: FontWeight.w500),
+                                        .copyWith(
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                   ),
                                   const SizedBox(height: defaultPadding / 2),
                                   HtmlWidget('${state.product.description}'),
                                   const SizedBox(height: defaultPadding / 2),
                                 ],
                               ),
-                            ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: state.product?.characteristics
@@ -361,17 +367,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       }).toList(),
                                     )
                                   : Container(),
-                            )
+                            ),
                           ],
-                        );
-                      }
-                      return const Center(
-                        child: CircularProgressIndicator(),
+                        ),
                       );
-                    },
-                  ),
+                    }
+                    return const SliverToBoxAdapter(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  },
                 ),
               ),
+
               // ProductInfo(
               //   productId: '',
               //   brand: '',
@@ -430,30 +439,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   ),
                 ),
               ),
-              BlocBuilder<TrendNewProductsBloc, TrendNewProductsState>(
+              BlocBuilder<ProductDetailBloc, ProductDetailState>(
                 builder: (context, state) {
-                  if (state is TrendNewProductsLoading) {
+                  if (state is ProductDetailLoading) {
                     return const SliverToBoxAdapter(
                         child: Center(child: CircularProgressIndicator()));
-                  } else if (state is TrendNewProductsError) {
-                    // ScaffoldMessenger.of(context).showSnackBar(
-                    //   SnackBar(
-                    //       duration: const Duration(seconds: 15),
-                    //       content: Text(state.message)),
-                    // );
-                  } else if (state is TrendNewProductsLoaded) {
-                    final products = state.products;
-
+                  } else if (state is ProductDetailLoaded) {
+                    final products = state.product.similars;
+                    if (products == null || products.isEmpty) {
+                      return SliverToBoxAdapter(child: Container());
+                    }
                     return SliverToBoxAdapter(
                       child: SizedBox(
                         height: 220,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: products.length,
+                          itemCount: products?.length ?? 0,
                           itemBuilder: (context, index) => Padding(
                             padding: EdgeInsets.only(
                               left: defaultPadding,
-                              right: index == products.length - 1
+                              right: index == products!.length - 1
                                   ? defaultPadding
                                   : 0,
                             ),
@@ -476,7 +481,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                     );
                   }
-                  return Container();
+                  return SliverToBoxAdapter(child: Container());
                 },
               ),
               const SliverToBoxAdapter(

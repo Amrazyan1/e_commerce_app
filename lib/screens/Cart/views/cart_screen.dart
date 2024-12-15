@@ -113,7 +113,7 @@ class _CartScreenState extends State<CartScreen> {
                             Text(
                               'empty_cart'.tr(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -127,13 +127,45 @@ class _CartScreenState extends State<CartScreen> {
                     );
                   }
                   return Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: false,
-                      itemCount: state.cartItems.length,
-                      itemBuilder: (context, index) {
-                        final item = state.cartItems[index];
-                        return _cartItem(item, context, index);
-                      },
+                    child: Column(
+                      children: [
+                        // Add the row with "Clear All" text
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  context.read<CartBloc>().add(ClearCart());
+                                },
+                                child: Text(
+                                  'clear_all'.tr(),
+                                  style: const TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    decorationColor:
+                                        Colors.red, // Adds the underscore
+                                    color: Colors
+                                        .red, // Optional, for better visibility
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Add the ListView.builder below the row
+                        Expanded(
+                          child: ListView.builder(
+                            shrinkWrap: false,
+                            itemCount: state.cartItems.length,
+                            itemBuilder: (context, index) {
+                              final item = state.cartItems[index];
+                              return _cartItem(item, context, index);
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 }
