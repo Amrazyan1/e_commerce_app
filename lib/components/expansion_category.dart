@@ -215,15 +215,37 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
             //     },
             //     controlAffinity: ListTileControlAffinity.leading,
             //   )
-            : ListTile(
-                title: Text(
-                  widget.title,
-                  style: const TextStyle(fontSize: 14),
-                ),
-                subtitle: Text(
-                  widget.info,
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
-                ),
-              );
+            : SizedBox(
+              width: 100,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                          widget.title,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                  ),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          widget.info,
+                          style: const TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
+                      ),
+                  // ListTile(
+                  //     title: Text(
+                  //       widget.title,
+                  //       style: const TextStyle(fontSize: 14),
+                  //     ),
+                  //     subtitle: Text(
+                  //       widget.info,
+                  //       style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  //     ),
+                  //   ),
+                ],
+              ),
+            );
   }
 }

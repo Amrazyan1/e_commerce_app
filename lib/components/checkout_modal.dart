@@ -108,6 +108,27 @@ class _CheckoutModalState extends State<CheckoutModal> {
     }
     categories.add(
       CategoryModel(
+        title: "subtotal".tr(),
+        info: '${widget.data.subtotal}',
+        subCategories: [],
+      ),
+    );
+    categories.add(
+      CategoryModel(
+        title: "deliver".tr(),
+        info: '${widget.data.deliveryPrice}',
+        subCategories: [],
+      ),
+    );
+    categories.add(
+      CategoryModel(
+        title: "coupon".tr(),
+        info: '${widget.data.discount}',
+        subCategories: [],
+      ),
+    );
+    categories.add(
+      CategoryModel(
         title: "tot_cost".tr(),
         info: '${widget.data.total}',
         subCategories: [],
