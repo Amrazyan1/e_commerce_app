@@ -331,8 +331,8 @@ class _CartScreenState extends State<CartScreen> {
                       onPressed: () =>
                           _decreaseQuantity(item.product!.id!, item.count!),
                     ),
-                    Text('${item.count}'),
-                    IconButton(
+                    Text(_getDisplayCount(item),),
+                     IconButton(
                       icon: const Icon(Icons.add, color: kprimaryColor),
                       onPressed: () => _increaseQuantity(item.product!.id!),
                     ),
@@ -345,4 +345,19 @@ class _CartScreenState extends State<CartScreen> {
       ),
     );
   }
+  String _getDisplayCount(CartProductItem item) {
+  final alternativeUnitName = item.product?.unit?.alternative?.name;
+  final alternativeUnitValue = item.product?.unit?.alternative?.value;
+  final itemCount = item.count;
+
+  if (alternativeUnitName != null && alternativeUnitValue != null) {
+    final parsedValue = num.tryParse(alternativeUnitValue);
+    if (parsedValue != null) {
+      return (parsedValue * itemCount!).toString() + alternativeUnitName;
+    }
+  }
+
+  return itemCount.toString();
+}
+
 }
