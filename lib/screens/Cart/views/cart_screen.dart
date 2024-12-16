@@ -77,6 +77,13 @@ class _CartScreenState extends State<CartScreen> {
             _isModalShown = false;
           });
         }
+        if (state is CartError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                duration: const Duration(seconds: 5),
+                content: Text(state.message)),
+          );
+        }
       },
       child: Scaffold(
         appBar: AppBar(
@@ -102,7 +109,6 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                   );
                 }
-                if (state is CartError) {}
                 if (state is CartLoaded) {
                   if (state.cartItems.isEmpty) {
                     return Expanded(

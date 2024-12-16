@@ -118,10 +118,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           }
         },
         child: Scaffold(
-          
           key: const Key('discvoer'),
-          appBar:  AppBar(
-            
+          appBar: AppBar(
             automaticallyImplyLeading: false,
             // actions: !_isInitialScreen
             //     ? [Row(
@@ -166,13 +164,11 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   .labelMedium!
                   .copyWith(fontWeight: FontWeight.w700, fontSize: 16),
             ),
-           
-            
           ),
           body: Container(
             child: CustomScrollView(
               primary: false,
-              // controller: _scrollController,
+              controller: _scrollController,
               slivers: [
                 // Categories Section
                 SliverPadding(
@@ -191,10 +187,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                       builder: (context, state) {
                         if (state is CategoriesLoading) {
                           return const SliverToBoxAdapter(
-                              child: Center(child: CircularProgressIndicator()));
+                              child:
+                                  Center(child: CircularProgressIndicator()));
                         } else if (state is CategoriesLoaded) {
                           return SliverGrid(
-                            
                             delegate: SliverChildBuilderDelegate(
                               (context, index) {
                                 final category = state.categories[index];
@@ -222,7 +218,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   ),
                 ),
                 const SliverToBoxAdapter(child: SizedBox(height: 20)), // Spacer
-            
+
                 // Category Details Section
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -252,8 +248,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                                     product: products[index],
                                     press: () {
                                       context
-                                          .read<MainProvider>()
-                                          .currentProductModel = products[index];
+                                              .read<MainProvider>()
+                                              .currentProductModel =
+                                          products[index];
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (context) =>
@@ -279,12 +276,13 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                             child: Center(child: CircularProgressIndicator()),
                           );
                         }
-                        return const SliverToBoxAdapter(child: SizedBox.shrink());
+                        return const SliverToBoxAdapter(
+                            child: SizedBox.shrink());
                       },
                     ),
                   ),
                 ),
-            
+
                 if (context.watch<MainProvider>().isLoadingMore == true)
                   const SliverToBoxAdapter(
                     child: Center(

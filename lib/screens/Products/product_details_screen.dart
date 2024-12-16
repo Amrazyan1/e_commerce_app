@@ -447,8 +447,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               BlocBuilder<ProductDetailBloc, ProductDetailState>(
                 builder: (context, state) {
                   if (state is ProductDetailLoading) {
-                    return const SliverToBoxAdapter(
-                        child: Center(child: CircularProgressIndicator()));
+                    return SliverToBoxAdapter(child: Container());
                   } else if (state is ProductDetailLoaded) {
                     final products = state.product.similars;
                     if (products == null || products.isEmpty) {

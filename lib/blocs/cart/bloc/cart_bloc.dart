@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:e_commerce_app/models/Product/product_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get_it/get_it.dart';
@@ -32,9 +33,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         _productsService.cartProducts = products ?? [];
         emit(CartLoaded(products ?? [], responseData.subtotal,
             responseData.discount, responseData.total, responseData.count));
-      } catch (e) {
-        log(e.toString());
-        emit(CartError(e.toString()));
+      } on DioException catch (e) {
+        String errmsg = e.response?.data["message"].toString() ?? e.message!;
+        log(errmsg);
+        emit(CartError(errmsg));
       }
     });
 

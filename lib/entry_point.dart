@@ -253,5 +253,8 @@ class _EntryPointState extends State<EntryPoint> {
     if (index == 4) {
       context.router.navigate(const ProfileRoute());
     }
+    if (index == 1) {
+      context.router.navigate(const DiscoverRoute());
+    }
   }
 }

@@ -67,7 +67,7 @@ class ApiService {
       return await _dioClient.dio.put(
         Endpoints.setDefaultAddress.replaceFirst('{id}', id),
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -78,7 +78,7 @@ class ApiService {
         Endpoints.addAddress,
         data: addressData,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -88,7 +88,7 @@ class ApiService {
       return await _dioClient.dio.put(
         Endpoints.updateAddressById.replaceFirst('{id}', id),
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -98,7 +98,7 @@ class ApiService {
       return await _dioClient.dio.delete(
         Endpoints.deleteAddressById.replaceFirst('{id}', id),
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -108,7 +108,7 @@ class ApiService {
       return await _dioClient.dio.get(
         Endpoints.coupons,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -121,7 +121,7 @@ class ApiService {
           'promoCode': promocode,
         },
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -132,7 +132,7 @@ class ApiService {
       return await _dioClient.dio.get(
         Endpoints.articles.replaceFirst('{perPage}', perPage.toString()),
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -142,7 +142,7 @@ class ApiService {
       return await _dioClient.dio.get(
         Endpoints.articleById.replaceFirst('{id}', id),
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -173,7 +173,7 @@ class ApiService {
         await prefs.setString('auth_token', token); // Store token securely
       }
       return response;
-    } catch (e) {
+    } on DioException catch (e) {
       log('error $e');
       rethrow;
     }
@@ -185,7 +185,7 @@ class ApiService {
         Endpoints.userSignUp,
         data: userData,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -196,7 +196,7 @@ class ApiService {
         Endpoints.subscription,
         data: subscriptionData,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -206,7 +206,7 @@ class ApiService {
       return await _dioClient.dio.delete(
         Endpoints.subscriptionById.replaceFirst('{id}', id),
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -217,7 +217,7 @@ class ApiService {
         Endpoints.verifyUser,
         data: verificationData,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -226,7 +226,7 @@ class ApiService {
   Future<Response> getBranches() async {
     try {
       return await _dioClient.dio.get(Endpoints.branches);
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -236,7 +236,7 @@ class ApiService {
       return await _dioClient.dio.get(
         Endpoints.branchDevices.replaceFirst('{id}', branchId),
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -245,7 +245,7 @@ class ApiService {
   Future<Response> getBrands() async {
     try {
       return await _dioClient.dio.get(Endpoints.brands);
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -254,7 +254,7 @@ class ApiService {
   Future<Response> getCarts() async {
     try {
       return await _dioClient.dio.get(Endpoints.carts);
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -262,7 +262,7 @@ class ApiService {
   Future<Response> deleteCarts() async {
     try {
       return await _dioClient.dio.delete(Endpoints.carts);
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -273,7 +273,7 @@ class ApiService {
         Endpoints.addCart,
         data: cartData,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -284,7 +284,7 @@ class ApiService {
         Endpoints.reduceCart,
         data: cartData,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       log('Error reduceCart ${e.toString()}');
       rethrow;
     }
@@ -296,7 +296,7 @@ class ApiService {
         Endpoints.changeCart,
         data: cartData,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -306,7 +306,7 @@ class ApiService {
       return await _dioClient.dio.delete(
         Endpoints.cartById.replaceFirst('{id}', id),
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -317,7 +317,7 @@ class ApiService {
       return await _dioClient.dio.get(
         Endpoints.getCategories.replaceFirst('{perPage}', perPage.toString()),
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -329,7 +329,7 @@ class ApiService {
             .replaceFirst('{id}', id)
             .replaceFirst('{perPage}', perPage.toString()),
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -340,7 +340,7 @@ class ApiService {
       return await _dioClient.dio.get(
         Endpoints.getContentsByKey.replaceFirst('{key}', keys),
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -352,7 +352,7 @@ class ApiService {
         Endpoints.subscribeCustomer,
         data: data,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -363,7 +363,7 @@ class ApiService {
       return await _dioClient.dio.get(
         Endpoints.getOrderById.replaceFirst('{id}', id),
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -373,7 +373,7 @@ class ApiService {
       return await _dioClient.dio.patch(
         Endpoints.cancelOrderById.replaceFirst('{id}', id),
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -384,7 +384,7 @@ class ApiService {
         Endpoints.createOrder,
         data: data,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -395,7 +395,7 @@ class ApiService {
         Endpoints.processOrder.replaceFirst('{id}', id),
         data: data,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -410,7 +410,7 @@ class ApiService {
             .replaceFirst('{id}', id)
             .replaceFirst('{method}', method),
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -421,7 +421,7 @@ class ApiService {
         Endpoints.notifyOrder.replaceFirst('{id}', id),
         data: data,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -430,7 +430,7 @@ class ApiService {
   Future<Response> getPartnersUsers() async {
     try {
       return await _dioClient.dio.get(Endpoints.getPartnersUsers);
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -441,7 +441,7 @@ class ApiService {
         Endpoints.createPartnerForUser,
         data: data,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -452,7 +452,7 @@ class ApiService {
         Endpoints.createPartner,
         data: data,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -463,7 +463,7 @@ class ApiService {
         Endpoints.certificatePartner,
         data: data,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -478,7 +478,7 @@ class ApiService {
               .replaceFirst('{perPage}', 20.toString())
               .replaceFirst('{page}', perPage.toString()),
           cancelToken: cancelToken);
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -490,7 +490,7 @@ class ApiService {
           Endpoints.getProductsByCategoryWithQuery.replaceFirst('{id}', id),
           queryParameters: queryParams,
           cancelToken: cancelToken);
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -501,7 +501,7 @@ class ApiService {
       return await _dioClient.dio.get(
         Endpoints.getProductById.replaceFirst('{id}', id),
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -511,7 +511,7 @@ class ApiService {
       return await _dioClient.dio.get(
         Endpoints.getProductRatings.replaceFirst('{product:id}', productId),
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -523,7 +523,7 @@ class ApiService {
         Endpoints.addProductRating.replaceFirst('{product:id}', productId),
         data: data,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -531,7 +531,7 @@ class ApiService {
   Future<Response> getFavoriteProducts() async {
     try {
       return await _dioClient.dio.get(Endpoints.getFavoriteProducts);
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -542,7 +542,7 @@ class ApiService {
         Endpoints.addProductToFavorites,
         data: data,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -552,7 +552,7 @@ class ApiService {
       return await _dioClient.dio.delete(
         Endpoints.removeProductFromFavorites.replaceFirst('{id}', id),
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -564,7 +564,7 @@ class ApiService {
             .replaceFirst('{trend}', trend)
             .replaceFirst('{perPage}', perPage.toString()),
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -574,7 +574,7 @@ class ApiService {
       return await _dioClient.dio.get(
         Endpoints.getTrendNewestProduct,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -584,7 +584,7 @@ class ApiService {
       return await _dioClient.dio.get(
         Endpoints.getTrendPopularProduct,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -594,7 +594,7 @@ class ApiService {
       return await _dioClient.dio.get(
         Endpoints.getTrendDiscountProduct,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -603,7 +603,7 @@ class ApiService {
   Future<Response> getProfessions() async {
     try {
       return await _dioClient.dio.get(Endpoints.getProfessions);
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -614,7 +614,7 @@ class ApiService {
       return await _dioClient.dio.get(
         Endpoints.getRegions.replaceFirst('{perPage}', perPage.toString()),
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -627,7 +627,7 @@ class ApiService {
             .replaceFirst('{keyword}', keyword)
             .replaceFirst('{perPage}', perPage.toString()),
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -636,7 +636,7 @@ class ApiService {
   Future<Response> clearSession() async {
     try {
       return await _dioClient.dio.post(Endpoints.clearSession);
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -645,7 +645,7 @@ class ApiService {
   Future<Response> getSpheres() async {
     try {
       return await _dioClient.dio.get(Endpoints.getSpheres);
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -656,7 +656,7 @@ class ApiService {
       return await _dioClient.dio.get(
         Endpoints.getUserOrders,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -667,7 +667,7 @@ class ApiService {
       return await _dioClient.dio.get(
         Endpoints.getUserSettings,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -675,7 +675,7 @@ class ApiService {
   Future<Response> deleteUser() async {
     try {
       return await _dioClient.dio.delete(Endpoints.deleteUser);
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -686,7 +686,7 @@ class ApiService {
         Endpoints.updateUserSettings,
         data: data,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
@@ -697,7 +697,7 @@ class ApiService {
         Endpoints.updateUserPassword,
         data: data,
       );
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
     }
   }
