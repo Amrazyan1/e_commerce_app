@@ -1,6 +1,7 @@
 import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/components/network_image_with_loader.dart';
 import 'package:e_commerce_app/constants.dart';
+import 'package:e_commerce_app/screens/auth_required.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +27,10 @@ class _ProductCardState extends State<ProductCard> {
   bool isAddedToCart = false;
 
   void addToCart() async {
+    bool authorized = await showAuthorizationPopup(context);
+    if (!authorized) {
+      return;
+    }
     CartProductItem? cardProdItem =
         await context.read<MainProvider>().addToCartById(widget.product.id);
     setState(() {

@@ -29,10 +29,17 @@ class AppRouter extends RootStackRouter {
 
         AutoRoute(page: EntryPoint.page, path: '/entry', children: [
           AutoRoute(page: EmptyHomeRouter.page, path: 'home', children: [
-            AutoRoute(page: HomeRoute.page, path: ''),
+            AutoRoute(page: HomeRoute.page, initial: true, path: ''),
             AutoRoute(page: BonusCarRoute.page, path: 'bonuscard'),
           ]),
-          AutoRoute(page: DiscoverRoute.page, path: 'discover'),
+          AutoRoute(
+              page: EmptyDiscoverRouter.page,
+              path: 'discover',
+              children: [
+                AutoRoute(page: DiscoverRoute.page, initial: true, path: ''),
+                AutoRoute(
+                    page: DiscoverDetailsRoute.page, path: 'discoverdetail'),
+              ]),
           AutoRoute(page: FavoriteRoute.page, path: 'favorites'),
           AutoRoute(page: CartRoute.page, path: 'cart'),
           AutoRoute(page: EmptyRouter.page, path: 'profile', children: [
@@ -51,9 +58,8 @@ class AppRouter extends RootStackRouter {
             AutoRoute(page: DeliveryAddressInfoRoute.page, path: 'addressinfo'),
           ]),
         ]),
-        AutoRoute(page: DiscoverDetailsRoute.page, path: '/discoverdetail'),
-                AutoRoute(page: AboutUsRoute.page, path: '/abhgs'),
-
+        AutoRoute(page: AboutUsRoute.page, path: '/abhgs'),
+        AutoRoute(page: ProductDetailsRoute.page, path: '/productdetailspage'),
         AutoRoute(
             page: DeliveryAddressNew.page,
             path: '/deliveryAddressNewRouteFromLogin'),

@@ -22,6 +22,8 @@ import 'blocs/products/trending/bloc/trend_new_products_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
+import 'screens/auth_required.dart';
+
 final GlobalKey<AutoTabsRouterState> autoTabsRouterKey =
     GlobalKey<AutoTabsRouterState>();
 
@@ -138,7 +140,7 @@ class _EntryPointState extends State<EntryPoint> {
                 EmptyHomeRouter(children: [
                   HomeRoute(), // Default child of home tab
                 ]),
-                DiscoverRoute(),
+                EmptyDiscoverRouter(children: [DiscoverRoute()]),
                 CartRoute(),
                 FavoriteRoute(),
                 ProfileRoute(),
@@ -206,6 +208,12 @@ class _EntryPointState extends State<EntryPoint> {
   void _onPageChange(int index, TabsRouter tabsRouter) async {
     if (index != tabsRouter.activeIndex) {
       log('$index');
+      if (index == 2 || index == 3 || index == 4) {
+        bool authorized = await showAuthorizationPopup(context);
+        if (!authorized) {
+          return;
+        }
+      }
 
       tabsRouter.setActiveIndex(index);
       FocusScope.of(context).unfocus();
