@@ -43,7 +43,8 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
-	
+	<key>NSUserTrackingUsageDescription</key>
+	<string>This identifier will be used to deliver personalized goods to you.</string>
 	<!-- Added purpose strings -->
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app requires microphone access for recording audio to enhance user interaction.</string>

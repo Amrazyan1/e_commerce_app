@@ -5,6 +5,7 @@ import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 
 @RoutePage()
 class SplashViewScreen extends StatefulWidget {
@@ -22,6 +23,7 @@ class _SplashViewScreenState extends State<SplashViewScreen> {
   }
 
   void checkAutoLogin() async {
+    final status = await AppTrackingTransparency.requestTrackingAuthorization();
     final prefs = await SharedPreferences.getInstance();
     String? authToken = prefs.getString('auth_token');
     await Future.delayed(const Duration(seconds: 1));
