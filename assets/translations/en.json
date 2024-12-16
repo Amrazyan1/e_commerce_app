@@ -104,6 +104,10 @@
 "enter_valid" : "Please enter a valid coupon code",
 "empty_coupons" : "There is no active coupons",
 "clear_all" : "Clear all",
+"skip" : "Skip",
+"auth_req" : "Authorization Required",
+"you_need" : "You need to authorize to access this feature.",
+"authorize" : "Authorize",
 "about_us" : "Welcome, dear customer! We are delighted to welcome you to our app. ImexPro specializes in the import and wholesale/retail distribution of over 700 premium Iranian products in Armenia. The company is the official representative in Armenia for several renowned Iranian brands, including LOVEY, MOJTABA, ROYA, GOLDEN MAX, and more. Despite its short period of operation, the company has successfully collaborated with over 2,000 wholesale clients, including the largest and most prominent supermarket chains in Armenia. ImexPro also operates its own specialized store, Origin Market, located at 12 Papazyan Street, where our complete range is presented, including food products, household items, and goods for home and garden use. The company's primary goal and mission are to offer high-quality Iranian products in the Armenian market that are unique not only in quality and packaging but also competitively priced. Over time, the company has earned the trust of thousands of customers. As a result, the decision was made to develop an online application to make the shopping process even more convenient for our customers. Additionally, regular promotions and special offers will be a pleasant surprise for our customers. We wish you delicious and advantageous shopping!"
 
 }

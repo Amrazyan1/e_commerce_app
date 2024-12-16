@@ -1,3 +1,6 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:e_commerce_app/router/router.gr.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -7,26 +10,26 @@ class AuthorizationRequiredPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text(
-        'Authorization Required',
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      title: Text(
+        'auth_req'.tr(),
+        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
-      content: const Text(
-        'You need to authorize to access this feature.',
-        style: TextStyle(fontSize: 16),
+      content: Text(
+        'you_need'.tr(),
+        style: const TextStyle(fontSize: 16),
       ),
       actions: [
         TextButton(
           onPressed: () {
             Navigator.of(context).pop(false); // User canceled
           },
-          child: const Text('Cancel'),
+          child: Text('cancel'.tr()),
         ),
         ElevatedButton(
           onPressed: () {
-            Navigator.of(context).pop(true); // User authorized
+            AutoRouter.of(context).replaceAll([const AuthorizationRoute()]);
           },
-          child: const Text('Authorize'),
+          child: Text('authorize'.tr()),
         ),
       ],
     );
