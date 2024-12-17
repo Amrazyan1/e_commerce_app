@@ -68,12 +68,14 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
     }
   }
 
+  ExpansionTileController _expcontroller = ExpansionTileController();
   @override
   Widget build(BuildContext context) {
     return widget.subCategory.isNotEmpty
         ? IgnorePointer(
             ignoring: widget.ignoreExpansion!,
             child: ExpansionTile(
+              controller: _expcontroller,
               iconColor: Theme.of(context).textTheme.bodyLarge!.color,
               collapsedIconColor: Theme.of(context).textTheme.bodyMedium!.color,
               title: Row(
@@ -110,9 +112,9 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
                   children: [
                     ListTile(
                       onTap: () {
+                        _expcontroller.collapse();
                         setState(() {
                           selectedInfo = widget.subCategory[index].info;
-                          expanded = false;
 
                           if (widget.onCategorySelected != null) {
                             widget.onCategorySelected!(
@@ -195,57 +197,38 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
                   ),
                 ],
               )
-            // CheckboxListTile(
-            //     title: Text(widget.title + ' ' + widget.info),
-            //     activeColor: ksecondaryColor,
-            //     value: checked,
-            //     onChanged: (isChecked) {
-            //       setState(() {
-            //         checked = isChecked!;
-            //         selectedInfo = widget.info;
-            //         expanded = false;
-
-            //         if (widget.onCategorySelected != null) {
-            //           widget.onCategorySelected!(CategoryModel(
-            //               title: 'checkbox',
-            //               info: '$isChecked',
-            //               isCheckbox: true));
-            //         }
-            //       });
-            //     },
-            //     controlAffinity: ListTileControlAffinity.leading,
-            //   )
-            : SizedBox(
-              width: 100,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                          widget.title,
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                  ),
-                      Expanded(
-                        flex: 3,
-                        child: Text(
-                          widget.info,
-                          style: const TextStyle(fontSize: 12, color: Colors.grey),
-                        ),
+            : Padding(
+                padding: const EdgeInsets.all(5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        widget.title,
+                        style: const TextStyle(fontSize: 14),
                       ),
-                  // ListTile(
-                  //     title: Text(
-                  //       widget.title,
-                  //       style: const TextStyle(fontSize: 14),
-                  //     ),
-                  //     subtitle: Text(
-                  //       widget.info,
-                  //       style: const TextStyle(fontSize: 12, color: Colors.grey),
-                  //     ),
-                  //   ),
-                ],
-              ),
-            );
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Text(
+                        widget.info,
+                        style:
+                            const TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                    ),
+                    // ListTile(
+                    //     title: Text(
+                    //       widget.title,
+                    //       style: const TextStyle(fontSize: 14),
+                    //     ),
+                    //     subtitle: Text(
+                    //       widget.info,
+                    //       style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    //     ),
+                    //   ),
+                  ],
+                ),
+              );
   }
 }

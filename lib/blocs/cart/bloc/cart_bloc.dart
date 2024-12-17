@@ -31,8 +31,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
             cartProductsResponseFromJson(response.data).data!;
         products = responseData.list;
         _productsService.cartProducts = products ?? [];
-        emit(CartLoaded(products ?? [], responseData.subtotal,
-            responseData.discount, responseData.total, responseData.count));
+        emit(CartLoaded(
+            products ?? [],
+            responseData.subtotal,
+            responseData.discount,
+            responseData.total,
+            responseData.count,
+            responseData.orderAble!));
       } on DioException catch (e) {
         String errmsg = e.response?.data["message"].toString() ?? e.message!;
         log(errmsg);
@@ -67,6 +72,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           currenstate.discount,
           currenstate.total,
           currenstate.count,
+          currenstate.orderable,
         ));
         try {
           final response = await _apiService.createOrder({
@@ -82,12 +88,14 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           final responseOrder = await _apiService.getOrderById(orderId);
           final viewOrderData = viewOrderResponseFromJson(responseOrder.data);
           emit(CartPlaceOrderState(
-              currenstate.cartItems,
-              currenstate.subtotal,
-              currenstate.discount,
-              currenstate.total,
-              currenstate.count,
-              viewOrderData.data!));
+            currenstate.cartItems,
+            currenstate.subtotal,
+            currenstate.discount,
+            currenstate.total,
+            currenstate.count,
+            currenstate.orderable,
+            viewOrderData.data!,
+          ));
         } catch (e) {
           log('$e');
           emit(CartLoaded(
@@ -96,6 +104,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
             currenstate.discount,
             currenstate.total,
             currenstate.count,
+            currenstate.orderable,
           ));
         }
       },
@@ -129,8 +138,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
             cartProductsResponseFromJson(response.data).data!;
         products = responseData.list;
         _productsService.cartProducts = products ?? [];
-        emit(CartLoaded(products ?? [], responseData.subtotal,
-            responseData.discount, responseData.total, responseData.count));
+        emit(CartLoaded(
+            products ?? [],
+            responseData.subtotal,
+            responseData.discount,
+            responseData.total,
+            responseData.count,
+            responseData.orderAble!));
       } catch (e) {
         emit(CartError(e.toString()));
       }

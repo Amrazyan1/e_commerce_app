@@ -186,12 +186,17 @@ class _CartScreenState extends State<CartScreen> {
                   }
                   return Column(
                     children: [
+                      Visibility(
+                          visible: !state.orderable.orderAbleIs!,
+                          child: Text('${state.orderable.description}')),
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: SizedBox(
                           height: 64,
                           child: Material(
-                            color: kprimaryColor,
+                            color: state.orderable.orderAbleIs!
+                                ? kprimaryColor
+                                : kprimaryColor.withOpacity(0.7),
                             clipBehavior: Clip.hardEdge,
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(
@@ -199,7 +204,9 @@ class _CartScreenState extends State<CartScreen> {
                               ),
                             ),
                             child: InkWell(
-                              onTap: gotoCheckout,
+                              onTap: state.orderable.orderAbleIs!
+                                  ? gotoCheckout
+                                  : null,
                               child: Row(
                                 children: [
                                   Expanded(
@@ -331,8 +338,10 @@ class _CartScreenState extends State<CartScreen> {
                       onPressed: () =>
                           _decreaseQuantity(item.product!.id!, item.count!),
                     ),
-                    Text(_getDisplayCount(item),),
-                     IconButton(
+                    Text(
+                      _getDisplayCount(item),
+                    ),
+                    IconButton(
                       icon: const Icon(Icons.add, color: kprimaryColor),
                       onPressed: () => _increaseQuantity(item.product!.id!),
                     ),
@@ -345,19 +354,19 @@ class _CartScreenState extends State<CartScreen> {
       ),
     );
   }
+
   String _getDisplayCount(CartProductItem item) {
-  final alternativeUnitName = item.product?.unit?.alternative?.name;
-  final alternativeUnitValue = item.product?.unit?.alternative?.value;
-  final itemCount = item.count;
+    final alternativeUnitName = item.product?.unit?.alternative?.name;
+    final alternativeUnitValue = item.product?.unit?.alternative?.value;
+    final itemCount = item.count;
 
-  if (alternativeUnitName != null && alternativeUnitValue != null) {
-    final parsedValue = num.tryParse(alternativeUnitValue);
-    if (parsedValue != null) {
-      return (parsedValue * itemCount!).toString() + alternativeUnitName;
+    if (alternativeUnitName != null && alternativeUnitValue != null) {
+      final parsedValue = num.tryParse(alternativeUnitValue);
+      if (parsedValue != null) {
+        return (parsedValue * itemCount!).toString() + alternativeUnitName;
+      }
     }
+
+    return itemCount.toString();
   }
-
-  return itemCount.toString();
-}
-
 }

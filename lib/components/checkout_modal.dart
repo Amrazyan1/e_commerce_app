@@ -7,6 +7,7 @@ import 'package:e_commerce_app/blocs/categories/bloc/categories_bloc.dart';
 import 'package:e_commerce_app/components/expansion_category.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/models/category_model.dart';
+import 'package:e_commerce_app/models/process_order_response.dart';
 import 'package:e_commerce_app/screens/order_accepted_screen.dart';
 import 'package:e_commerce_app/services/api_service.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -28,7 +29,7 @@ class CheckoutModal extends StatefulWidget {
 class _CheckoutModalState extends State<CheckoutModal> {
   final ApiService _apiService = GetIt.I<ApiService>();
   String payType = 'cash';
-  String address = 'address';
+  String addressid = 'address';
   String useBonus = '0';
   String couponId = '';
 
@@ -37,24 +38,6 @@ class _CheckoutModalState extends State<CheckoutModal> {
   void initState() {
     super.initState();
 
-    // if (widget.data.addresses != null) {
-    //   categories.add(
-    //     CategoryModel(
-    //       title: "coupon".tr(),
-    //       info: "sel_coupon".tr(),
-    //       subCategories: (widget.data.addresses!)
-    //           .map((coupon) => CategoryModel(
-    //                 title: coupon.name ?? 'coupon',
-    //                 info: coupon.details ?? 'coupon',
-    //                 subCategories: [],
-    //                 isSelected: false,
-    //               ))
-    //           .toList(),
-    //     ),
-    //   );
-    // }
-
-    // return;
     if (widget.data.addresses != null) {
       categories.add(
         CategoryModel(
@@ -65,7 +48,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
                   title: address.name ?? 'name',
                   info: address.details ?? 'details',
                   subCategories: [],
-                  address: '${address.name},${address.details}',
+                  address: '${address.id}',
                   isSelected: address.isDefault))
               .toList(),
         ),
@@ -106,34 +89,6 @@ class _CheckoutModalState extends State<CheckoutModal> {
         ),
       );
     }
-    categories.add(
-      CategoryModel(
-        title: "subtotal".tr(),
-        info: '${widget.data.subtotal}',
-        subCategories: [],
-      ),
-    );
-    categories.add(
-      CategoryModel(
-        title: "deliver".tr(),
-        info: '${widget.data.deliveryPrice}',
-        subCategories: [],
-      ),
-    );
-    categories.add(
-      CategoryModel(
-        title: "coupon".tr(),
-        info: '${widget.data.discount}',
-        subCategories: [],
-      ),
-    );
-    categories.add(
-      CategoryModel(
-        title: "tot_cost".tr(),
-        info: '${widget.data.total}',
-        subCategories: [],
-      ),
-    );
 
     // widget.data.availableBonuses = '5500\$';
     if (widget.data.availableBonuses != null &&
@@ -150,6 +105,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
     }
   }
 
+  String responseId = '';
   void processOrder() async {
     try {
       DateTime now = DateTime.now();
@@ -158,8 +114,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
       context.read<MainProvider>().isProcessOrder = true;
 
       final dataObject = {
-        'address': address,
-        'addressName': address,
+        'addressId': addressid,
         'additional': 'info',
         'date': formattedDate,
         'start': '${widget.data.start}',
@@ -174,25 +129,91 @@ class _CheckoutModalState extends State<CheckoutModal> {
 
       final response =
           await _apiService.processOrder(widget.data.id!, dataObject);
+      final repsData = processOrderResponseFromJson(response.data);
+      // String responseId = jsonDecode(response.data)['data']['id'];
+      log(response.data);
+      responseId = repsData.data!.id!;
+      // categories.add(
+      //   CategoryModel(
+      //     title: "price".tr(),
+      //     info: '${repsData.data!.subtotal}',
+      //     subCategories: [],
+      //   ),
+      // );
 
-      String responseId = jsonDecode(response.data)['data']['id'];
-      final resp = await _apiService.payOrder(
-        responseId,
-        payType,
-      );
+      addOrUpdateCategory(
+          categories, "price".tr(), 'price', '${repsData.data!.subtotal}');
+      addOrUpdateCategory(categories, "delivery".tr(), 'delivery',
+          '${repsData.data!.deliveryPrice}');
+      addOrUpdateCategory(
+          categories, "coupon".tr(), 'coupon', '${repsData.data!.discount}');
+      addOrUpdateCategory(
+          categories, "tot_cost".tr(), 'tot_cost', '${repsData.data!.total}');
+      // categories.add(
+      //   CategoryModel(
+      //     title: "delivery".tr(),
+      //     info: '${repsData.data!.deliveryPrice}',
+      //     subCategories: [],
+      //   ),
+      // );
+      // categories.add(
+      //   CategoryModel(
+      //     title: "coupon".tr(),
+      //     info: '${repsData.data!.discount}',
+      //     subCategories: [],
+      //   ),
+      // );
+      // categories.add(
+      //   CategoryModel(
+      //     title: "tot_cost".tr(),
+      //     info: '${repsData.data!.total}',
+      //     subCategories: [],
+      //   ),
+      // );
       context.read<MainProvider>().isProcessOrder = false;
-      context.read<CartBloc>().add(ClearCart());
-      Navigator.of(context).pop();
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => OrderAcceptedScreen(),
-        ),
-      );
     } catch (e) {
       log('order creation failed ${e.toString()}');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString())),
       );
+    }
+  }
+
+  void payOrder() async {
+    final resp = await _apiService.payOrder(
+      responseId,
+      payType,
+    );
+    context.read<MainProvider>().isProcessOrder = false;
+    context.read<CartBloc>().add(ClearCart());
+    Navigator.of(context).pop();
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => OrderAcceptedScreen(),
+      ),
+    );
+  }
+
+  void addOrUpdateCategory(
+      List<CategoryModel> categories, String id, String title, String info) {
+    final existingCategoryIndex = categories.indexWhere((cat) => cat.id == id);
+
+    if (existingCategoryIndex != -1) {
+      // Update the existing category
+      categories[existingCategoryIndex] = CategoryModel(
+        id: id,
+        title: title,
+        info: info,
+        subCategories: [],
+      );
+    } else {
+      // Add a new category
+      categories.add(CategoryModel(
+        id: id,
+        title: title,
+        info: info,
+        subCategories: [],
+      ));
     }
   }
 
@@ -246,8 +267,10 @@ class _CheckoutModalState extends State<CheckoutModal> {
                         log('$couponId ${selectedCategory.info}');
                       }
                       if (selectedCategory.address != null) {
-                        address = selectedCategory.address!;
+                        addressid = selectedCategory.address!;
                       }
+
+                      processOrder();
                     },
                   ),
                 ),
@@ -262,7 +285,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
                           context.watch<MainProvider>().isProcessOrder == true
                               ? const CircularProgressIndicator()
                               : null,
-                      callback: processOrder,
+                      callback: payOrder,
                     )),
               ),
             ],

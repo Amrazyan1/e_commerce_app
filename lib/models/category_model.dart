@@ -1,4 +1,5 @@
 class CategoryModel {
+  final String id;
   final String title;
   final String info;
 
@@ -14,6 +15,7 @@ class CategoryModel {
   CategoryModel(
       {required this.title,
       required this.info,
+      this.id = '',
       this.image,
       this.svgSrc,
       this.subCategories,
