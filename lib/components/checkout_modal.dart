@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/blocs/cart/bloc/cart_bloc.dart';
 import 'package:e_commerce_app/blocs/categories/bloc/categories_bloc.dart';
@@ -110,7 +111,6 @@ class _CheckoutModalState extends State<CheckoutModal> {
     try {
       DateTime now = DateTime.now();
       String formattedDate = DateFormat('yyyy-MM-dd').format(now);
-      print(formattedDate);
       context.read<MainProvider>().isProcessOrder = true;
 
       final dataObject = {
@@ -130,16 +130,8 @@ class _CheckoutModalState extends State<CheckoutModal> {
       final response =
           await _apiService.processOrder(widget.data.id!, dataObject);
       final repsData = processOrderResponseFromJson(response.data);
-      // String responseId = jsonDecode(response.data)['data']['id'];
       log(response.data);
       responseId = repsData.data!.id!;
-      // categories.add(
-      //   CategoryModel(
-      //     title: "price".tr(),
-      //     info: '${repsData.data!.subtotal}',
-      //     subCategories: [],
-      //   ),
-      // );
 
       addOrUpdateCategory(
           categories, "price".tr(), 'price', '${repsData.data!.subtotal}');
@@ -149,32 +141,13 @@ class _CheckoutModalState extends State<CheckoutModal> {
           categories, "coupon".tr(), 'coupon', '${repsData.data!.discount}');
       addOrUpdateCategory(
           categories, "tot_cost".tr(), 'tot_cost', '${repsData.data!.total}');
-      // categories.add(
-      //   CategoryModel(
-      //     title: "delivery".tr(),
-      //     info: '${repsData.data!.deliveryPrice}',
-      //     subCategories: [],
-      //   ),
-      // );
-      // categories.add(
-      //   CategoryModel(
-      //     title: "coupon".tr(),
-      //     info: '${repsData.data!.discount}',
-      //     subCategories: [],
-      //   ),
-      // );
-      // categories.add(
-      //   CategoryModel(
-      //     title: "tot_cost".tr(),
-      //     info: '${repsData.data!.total}',
-      //     subCategories: [],
-      //   ),
-      // );
+
       context.read<MainProvider>().isProcessOrder = false;
-    } catch (e) {
-      log('order creation failed ${e.toString()}');
+    } on DioException catch (e) {
+      String errmsg = e.response?.data["message"].toString() ?? e.message!;
+
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
+        SnackBar(content: Text(errmsg)),
       );
     }
   }

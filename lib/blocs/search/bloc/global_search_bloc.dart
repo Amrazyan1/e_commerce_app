@@ -36,5 +36,8 @@ class GlobalSearchBloc extends Bloc<GlobalSearchEvent, GlobalSearchState> {
         emit(GlobalSearchError(message: e.toString()));
       }
     });
+    on<SetSearchInitialEvent>((event, emit) async {
+      emit(GlobalSearchInitial());
+    });
   }
 }

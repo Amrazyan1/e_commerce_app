@@ -104,6 +104,8 @@ class _HomeScreenState extends State<HomeScreen> {
               onFocused: (value) {
                 if (!value) {
                   setState(_searchTextController.clear);
+                } else {
+                  context.read<GlobalSearchBloc>().add(SetSearchInitialEvent());
                 }
               },
               cancelTextStyle: Theme.of(context).textTheme.bodyLarge!,

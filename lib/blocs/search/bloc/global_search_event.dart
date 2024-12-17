@@ -14,3 +14,5 @@ class PerformGlobalSearch extends GlobalSearchEvent {
   @override
   List<Object?> get props => [keyword, perPage];
 }
+
+class SetSearchInitialEvent extends GlobalSearchEvent {}

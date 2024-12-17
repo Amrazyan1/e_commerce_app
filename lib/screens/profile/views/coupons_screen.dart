@@ -211,12 +211,16 @@ class _CouponsScreenState extends State<CouponsScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 10),
-                                Text(
-                                  "${coupon.description}", // Assuming the coupon has a 'discount' field
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white,
+                                Flexible(
+                                  child: Text(
+                                    "${coupon.description}", // Assuming the coupon has a 'discount' field
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white,
+                                    ),
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ],
