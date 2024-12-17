@@ -130,7 +130,7 @@ class OrdersScreen extends StatelessWidget {
                               ),
                               Text(
                                 order.totalWithDelivery != null
-                                    ? '\$${order.totalWithDelivery}'
+                                    ? '${order.totalWithDelivery}'
                                     : 'No Total',
                                 style: const TextStyle(
                                   fontSize: 14,
