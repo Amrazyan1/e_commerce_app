@@ -91,7 +91,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
       );
     }
 
-    widget.data.availableBonuses = '5500\$';
+    // widget.data.availableBonuses = '5500\$';
     if (widget.data.availableBonuses != null &&
         widget.data.availableBonuses!.isNotEmpty) {
       if (num.tryParse(widget.data.availableBonuses!) != 0) {
@@ -145,6 +145,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
       context.read<MainProvider>().isProcessOrder = false;
     } on DioException catch (e) {
       String errmsg = e.response?.data["message"].toString() ?? e.message!;
+      context.read<MainProvider>().isProcessOrder = false;
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(errmsg)),
@@ -153,18 +154,29 @@ class _CheckoutModalState extends State<CheckoutModal> {
   }
 
   void payOrder() async {
-    final resp = await _apiService.payOrder(
-      responseId,
-      payType,
-    );
-    context.read<MainProvider>().isProcessOrder = false;
-    context.read<CartBloc>().add(ClearCart());
-    Navigator.of(context).pop();
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => OrderAcceptedScreen(),
-      ),
-    );
+    context.read<MainProvider>().isProcessOrder = true;
+
+    try {
+      final resp = await _apiService.payOrder(
+        responseId,
+        payType,
+      );
+      context.read<CartBloc>().add(ClearCart());
+      Navigator.of(context).pop();
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => OrderAcceptedScreen(),
+        ),
+      );
+    } on DioException catch (e) {
+      String errmsg = e.response?.data["message"].toString() ?? e.message!;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errmsg)),
+      );
+    } finally {
+      context.read<MainProvider>().isProcessOrder = false;
+    }
   }
 
   void addOrUpdateCategory(
@@ -232,12 +244,20 @@ class _CheckoutModalState extends State<CheckoutModal> {
                         payType = selectedCategory.paytipe!;
                       }
                       if (selectedCategory.isCheckbox) {
+                        couponId = '';
                         useBonus = selectedCategory.title;
                         log('$useBonus ${selectedCategory.title}');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('using_b'.tr())),
+                        );
                       }
                       if (selectedCategory.couponId.isNotEmpty) {
+                        useBonus = '';
                         couponId = selectedCategory.couponId;
                         log('$couponId ${selectedCategory.info}');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('using_c'.tr())),
+                        );
                       }
                       if (selectedCategory.address != null) {
                         addressid = selectedCategory.address!;

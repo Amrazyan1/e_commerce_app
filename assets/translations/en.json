@@ -16,6 +16,9 @@
   "discount_offer": "Discount Offer",
   "discount" : "Discount",
   "price" : "Price",
+  "use_b" : "Use",
+  "using_b" : "Using bonus",
+  "using_c" : "Using coupon",
 
   "collection": "Collection",
   "account": "Account",

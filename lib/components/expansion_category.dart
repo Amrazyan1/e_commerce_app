@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:e_commerce_app/components/checkout_modal.dart';
 import 'package:e_commerce_app/models/category_model.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -63,7 +65,7 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
       }
     }
     if (widget.isCheckbox) {
-      _controller.text = widget.info;
+      _controller.text = '0';
       log(widget.info);
     }
   }
@@ -150,9 +152,15 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
         : widget.isCheckbox
             ? Row(
                 children: [
-                  Text('${widget.title} ${widget.info} '),
                   Flexible(
-                    // width: 40,
+                      flex: 2,
+                      child: Text(
+                        '${widget.title} ${widget.info} ',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      )),
+                  Flexible(
+                    flex: 1,
                     child: TextFormField(
                       controller: _controller,
                       focusNode: _focusNode,
@@ -182,19 +190,31 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
                             _controller.selection = TextSelection.fromPosition(
                               TextPosition(offset: _controller.text.length),
                             );
-                          } else {
-                            if (widget.onCategorySelected != null) {
-                              widget.onCategorySelected!(CategoryModel(
-                                title: '$newValue',
-                                info: '',
-                                isCheckbox: true,
-                              ));
-                            }
-                          }
+                          } else {}
                         }
                       },
                     ),
                   ),
+                  Flexible(
+                      flex: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        child: SizedBox(
+                            height: 45,
+                            child: ButtonMainWidget(
+                              text: 'use_b'.tr(),
+                              callback: () {
+                                if (widget.onCategorySelected != null) {
+                                  widget.onCategorySelected!(CategoryModel(
+                                    title: _controller.text,
+                                    info: '',
+                                    isCheckbox: true,
+                                  ));
+                                }
+                              },
+                            )),
+                      ))
                 ],
               )
             : Padding(
