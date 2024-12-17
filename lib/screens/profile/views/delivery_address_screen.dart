@@ -87,7 +87,11 @@ class _DeliveryAddresseScreenState extends State<DeliveryAddresseScreen> {
           child: ButtonMainWidget(
             text: 'add_new_address'.tr(),
             callback: () {
-              AutoRouter.of(context).push(DeliveryAddressNew());
+              AutoRouter.of(context).push(DeliveryAddressNew()).then((_) {
+                // Call your method here when Page B pops
+                _loadAddresses();
+              });
+              // AutoRouter.of(context).push(DeliveryAddressNew());
             },
           ),
         ),

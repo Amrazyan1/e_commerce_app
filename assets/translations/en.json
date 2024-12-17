@@ -14,6 +14,9 @@
   "special_offer": "Special Offer",
   "black_friday": "Black Friday",
   "discount_offer": "Discount Offer",
+  "discount" : "Discount",
+  "price" : "Price",
+
   "collection": "Collection",
   "account": "Account",
   "orders": "Orders",

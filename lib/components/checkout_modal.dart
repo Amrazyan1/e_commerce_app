@@ -91,7 +91,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
       );
     }
 
-    // widget.data.availableBonuses = '5500\$';
+    widget.data.availableBonuses = '5500\$';
     if (widget.data.availableBonuses != null &&
         widget.data.availableBonuses!.isNotEmpty) {
       if (num.tryParse(widget.data.availableBonuses!) != 0) {
@@ -134,13 +134,13 @@ class _CheckoutModalState extends State<CheckoutModal> {
       responseId = repsData.data!.id!;
 
       addOrUpdateCategory(
-          categories, "price".tr(), 'price', '${repsData.data!.subtotal}');
-      addOrUpdateCategory(categories, "delivery".tr(), 'delivery',
+          categories, "price", 'price', '${repsData.data!.subtotal}');
+      addOrUpdateCategory(categories, "delivery", 'delivery',
           '${repsData.data!.deliveryPrice}');
       addOrUpdateCategory(
-          categories, "coupon".tr(), 'coupon', '${repsData.data!.discount}');
+          categories, "coupon", 'discount', '-${repsData.data!.discount}');
       addOrUpdateCategory(
-          categories, "tot_cost".tr(), 'tot_cost', '${repsData.data!.total}');
+          categories, "tot_cost", 'tot_cost', '${repsData.data!.total}');
 
       context.read<MainProvider>().isProcessOrder = false;
     } on DioException catch (e) {
@@ -175,7 +175,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
       // Update the existing category
       categories[existingCategoryIndex] = CategoryModel(
         id: id,
-        title: title,
+        title: title.tr(),
         info: info,
         subCategories: [],
       );
@@ -183,7 +183,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
       // Add a new category
       categories.add(CategoryModel(
         id: id,
-        title: title,
+        title: title.tr(),
         info: info,
         subCategories: [],
       ));
