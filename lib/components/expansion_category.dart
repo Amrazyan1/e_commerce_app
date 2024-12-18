@@ -17,12 +17,14 @@ class ExpansionCategory extends StatefulWidget {
       required this.subCategory,
       this.onCategorySelected,
       this.ignoreExpansion = false,
+      this.controller,
       this.isCheckbox = false});
   final bool? ignoreExpansion; // svgSrc;
   final bool isCheckbox; // svgSrc;
 
   final String title; // svgSrc;
   final String info; // svgSrc;
+  final TextEditingController? controller;// = TextEditingController();
 
   final List<CategoryModel> subCategory;
   final ValueChanged<CategoryModel>?
@@ -36,20 +38,22 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
   bool expanded = false;
   CategoryModel? selectedCategory;
   bool checked = false;
-  TextEditingController _controller = TextEditingController();
   FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    _focusNode.addListener(() {
+    if (widget.controller != null) {
+       _focusNode.addListener(() {
       if (_focusNode.hasFocus) {
-        _controller.selection = TextSelection(
+        widget.controller?.selection = TextSelection(
           baseOffset: 0,
-          extentOffset: _controller.text.length,
+          extentOffset: widget.controller!.text.length,
         );
       }
     });
+    }
+   
     if (widget.subCategory.isNotEmpty) {
       var selectedCategory =
           widget.subCategory.where((x) => x.isSelected == true).isNotEmpty
@@ -65,7 +69,7 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
       }
     }
     if (widget.isCheckbox) {
-      _controller.text = '0';
+      widget.controller!.text = '0';
       log(widget.info);
     }
   }
@@ -162,7 +166,7 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
                   Flexible(
                     flex: 1,
                     child: TextFormField(
-                      controller: _controller,
+                      controller: widget.controller!,
                       focusNode: _focusNode,
                       textAlign: TextAlign.center,
                       style: const TextStyle(color: Colors.black),
@@ -184,11 +188,11 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
                         if (newValue != null && maxCount != null) {
                           if (newValue > maxCount) {
                             // Trim the value to maxCount if it exceeds
-                            _controller.text = '$maxCount';
+                            widget.controller!.text = '$maxCount';
 
                             // Move cursor to the end of the text
-                            _controller.selection = TextSelection.fromPosition(
-                              TextPosition(offset: _controller.text.length),
+                            widget.controller!.selection = TextSelection.fromPosition(
+                              TextPosition(offset: widget.controller!.text.length),
                             );
                           } else {}
                         }
@@ -207,7 +211,7 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
                               callback: () {
                                 if (widget.onCategorySelected != null) {
                                   widget.onCategorySelected!(CategoryModel(
-                                    title: _controller.text,
+                                    title: widget.controller!.text,
                                     info: '',
                                     isCheckbox: true,
                                   ));
@@ -237,16 +241,7 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
                             const TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ),
-                    // ListTile(
-                    //     title: Text(
-                    //       widget.title,
-                    //       style: const TextStyle(fontSize: 14),
-                    //     ),
-                    //     subtitle: Text(
-                    //       widget.info,
-                    //       style: const TextStyle(fontSize: 12, color: Colors.grey),
-                    //     ),
-                    //   ),
+                   
                   ],
                 ),
               );

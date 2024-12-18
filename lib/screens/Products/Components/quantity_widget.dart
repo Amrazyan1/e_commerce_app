@@ -37,7 +37,7 @@ class _QuantityWidgetState extends State<QuantityWidget> {
   void initState() {
     super.initState();
     _count = widget.initialCount;
-    _controller.text = widget.alternative.name != null
+    _controller.text = widget.alternative.value != null
         ? '${(num.tryParse(widget.alternative.value!)! * _count)} ${widget.alternative.name}'
         : _count.toString();
   }

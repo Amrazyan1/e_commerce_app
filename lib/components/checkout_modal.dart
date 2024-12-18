@@ -33,7 +33,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
   String addressid = 'address';
   String useBonus = '0';
   String couponId = '';
-
+TextEditingController inputController = TextEditingController();
   List<CategoryModel> categories = [];
   @override
   void initState() {
@@ -85,6 +85,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
                   info: coup.discount ?? 'details',
                   subCategories: [],
                   couponId: '${coup.id}',
+                  
                   isSelected: false))
               .toList(),
         ),
@@ -94,6 +95,8 @@ class _CheckoutModalState extends State<CheckoutModal> {
     // widget.data.availableBonuses = '5500\$';
     if (widget.data.availableBonuses != null &&
         widget.data.availableBonuses!.isNotEmpty) {
+          inputController.text = '';
+
       if (num.tryParse(widget.data.availableBonuses!) != 0) {
         categories.add(
           CategoryModel(
@@ -134,13 +137,13 @@ class _CheckoutModalState extends State<CheckoutModal> {
       responseId = repsData.data!.id!;
 
       addOrUpdateCategory(
-          categories, "price", 'price', '${repsData.data!.subtotal}');
+          categories, "price", 'price', '${repsData.data!.total}');
       addOrUpdateCategory(categories, "delivery", 'delivery',
           '${repsData.data!.deliveryPrice}');
       addOrUpdateCategory(
           categories, "coupon", 'discount', '-${repsData.data!.discount}');
       addOrUpdateCategory(
-          categories, "tot_cost", 'tot_cost', '${repsData.data!.total}');
+          categories, "tot_cost", 'tot_cost', '${repsData.data!.subtotal}');
 
       context.read<MainProvider>().isProcessOrder = false;
     } on DioException catch (e) {
@@ -233,39 +236,30 @@ class _CheckoutModalState extends State<CheckoutModal> {
               Expanded(
                 child: ListView.builder(
                   itemCount: categories.length,
-                  itemBuilder: (context, index) => ExpansionCategory(
-                    title: categories[index].title,
-                    info: categories[index].info,
-                    ignoreExpansion: categories[index].ignoreExpansion ?? false,
-                    subCategory: categories[index].subCategories!,
-                    isCheckbox: categories[index].isCheckbox,
-                    onCategorySelected: (selectedCategory) {
-                      if (selectedCategory.paytipe != null) {
-                        payType = selectedCategory.paytipe!;
-                      }
-                      if (selectedCategory.isCheckbox) {
-                        couponId = '';
-                        useBonus = selectedCategory.title;
-                        log('$useBonus ${selectedCategory.title}');
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('using_b'.tr())),
-                        );
-                      }
-                      if (selectedCategory.couponId.isNotEmpty) {
-                        useBonus = '';
-                        couponId = selectedCategory.couponId;
-                        log('$couponId ${selectedCategory.info}');
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('using_c'.tr())),
-                        );
-                      }
-                      if (selectedCategory.address != null) {
-                        addressid = selectedCategory.address!;
-                      }
-
-                      processOrder();
-                    },
-                  ),
+                  itemBuilder: (context, index) {
+                    if (categories[index].id.contains('price')) {
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: 100,
+                          ),
+                          _expCategoryItem(index, context),
+                        ],
+                      );
+                    }
+                    if (categories[index].id.contains('tot_cost')) {
+                      return Column(
+                        children: [
+                          Divider(),
+                          _expCategoryItem(index, context),
+                          SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      );
+                    }
+                    return _expCategoryItem(index, context);
+                  },
                 ),
               ),
               Padding(
@@ -285,6 +279,44 @@ class _CheckoutModalState extends State<CheckoutModal> {
           ),
         ),
       ),
+    );
+  }
+
+  ExpansionCategory _expCategoryItem(int index, BuildContext context) {
+    return ExpansionCategory(
+      title: categories[index].title,
+      info: categories[index].info,
+      ignoreExpansion: categories[index].ignoreExpansion ?? false,
+      subCategory: categories[index].subCategories!,
+      isCheckbox: categories[index].isCheckbox,
+      controller: inputController,
+      onCategorySelected: (selectedCategory) {
+        if (selectedCategory.paytipe != null) {
+          payType = selectedCategory.paytipe!;
+        }
+        if (selectedCategory.isCheckbox) {
+          couponId = '';
+          useBonus = selectedCategory.title;
+          log('$useBonus ${selectedCategory.title}');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('using_b'.tr())),
+          );
+        }
+        if (selectedCategory.couponId.isNotEmpty) {
+          useBonus = '';
+          inputController.text = '0';
+          couponId = selectedCategory.couponId;
+          log('$couponId ${selectedCategory.info}');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('using_c'.tr())),
+          );
+        }
+        if (selectedCategory.address != null) {
+          addressid = selectedCategory.address!;
+        }
+
+        processOrder();
+      },
     );
   }
 }

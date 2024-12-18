@@ -145,7 +145,7 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
         'details': _address,
         'latitude': _selectedLocation!.latitude,
         'longitude': _selectedLocation!.longitude,
-        'distance': (distanceInMeters / 100).toStringAsFixed(2),
+        'distance': (distanceInMeters / 1000).toStringAsFixed(2),
       };
 
       final response = await widget.apiService.addAddress(addressDetails);

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/Provider/main_provider.dart';
@@ -23,10 +25,52 @@ class DiscoverDetailsScreen extends StatefulWidget {
   State<DiscoverDetailsScreen> createState() => _DiscoverDetailsScreenState();
 }
 
+
+
 class _DiscoverDetailsScreenState extends State<DiscoverDetailsScreen> {
   final _searchFocusNode = FocusNode();
 
   final _searchTextController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+
+
+  @override
+  void initState() {
+    super.initState();
+    // // Fetch categories on first navigation
+    // final categoriesState = context.read<CategoryDetailCopyBloc>().state;
+    // if (categoriesState is! CategoryDetailCopyLoaded) {
+    //   context.read<CategoryDetailCopyBloc>().add(FetchCategoryProductsEventCopy());
+    // } else {
+       
+    // }
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 100) {
+      // Close to the end of the scroll
+      log('onscroll +++++ ${context.read<MainProvider>().isLoadingMore}');
+      if (!context.read<MainProvider>().isLoadingMore) {
+        if (context.read<CategoryDetailCopyBloc>().categoryId.isEmpty) {
+          return;
+        }
+        log('onscroll +++++');
+
+        context.read<MainProvider>().isLoadingMore = true;
+
+        context.read<CategoryDetailCopyBloc>().add(FetchCategoryProductsEventCopy(
+            id: context.read<CategoryDetailCopyBloc>().categoryId, page: 1));
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +145,11 @@ class _DiscoverDetailsScreenState extends State<DiscoverDetailsScreen> {
             searchController: _searchTextController,
             textStyle: Theme.of(context).textTheme.bodyLarge!,
             onFocused: (value) {
-              if (!value) {}
+             if (!value) {
+                  setState(_searchTextController.clear);
+                } else {
+                  context.read<GlobalSearchBloc>().add(SetSearchInitialEvent());
+                }
             },
             onSubmitted: (value) {
               if (value.isEmpty) {
