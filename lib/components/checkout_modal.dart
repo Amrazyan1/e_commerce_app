@@ -33,7 +33,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
   String addressid = 'address';
   String useBonus = '0';
   String couponId = '';
-TextEditingController inputController = TextEditingController();
+  TextEditingController inputController = TextEditingController();
   List<CategoryModel> categories = [];
   @override
   void initState() {
@@ -85,7 +85,6 @@ TextEditingController inputController = TextEditingController();
                   info: coup.discount ?? 'details',
                   subCategories: [],
                   couponId: '${coup.id}',
-                  
                   isSelected: false))
               .toList(),
         ),
@@ -95,7 +94,7 @@ TextEditingController inputController = TextEditingController();
     // widget.data.availableBonuses = '5500\$';
     if (widget.data.availableBonuses != null &&
         widget.data.availableBonuses!.isNotEmpty) {
-          inputController.text = '';
+      inputController.text = '';
 
       if (num.tryParse(widget.data.availableBonuses!) != 0) {
         categories.add(
@@ -142,8 +141,8 @@ TextEditingController inputController = TextEditingController();
           '${repsData.data!.deliveryPrice}');
       addOrUpdateCategory(
           categories, "coupon", 'discount', '-${repsData.data!.discount}');
-      addOrUpdateCategory(
-          categories, "tot_cost", 'tot_cost', '${repsData.data!.subtotal}');
+      addOrUpdateCategory(categories, "tot_cost", 'tot_cost',
+          '${repsData.data!.totalWithDelivery}');
 
       context.read<MainProvider>().isProcessOrder = false;
     } on DioException catch (e) {
