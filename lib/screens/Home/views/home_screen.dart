@@ -1,5 +1,7 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/components/search_bar_input_field.dart';
+import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:e_commerce_app/screens/Home/views/components/best_sellers.dart';
 import 'package:e_commerce_app/screens/Home/views/components/flash_sale.dart';
 import 'package:e_commerce_app/screens/Home/views/components/most_popular.dart';
@@ -151,12 +153,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   context
                                       .read<MainProvider>()
                                       .currentProductModel = product;
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const ProductDetailsScreen(),
-                                    ),
-                                  );
+                                  AutoRouter.of(context)
+                                      .push(ProductDetailsRoute());
+                                  // Navigator.of(context).push(
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) =>
+                                  //         const ProductDetailsScreen(),
+                                  //   ),
+                                  // );
                                 });
                               },
                             );

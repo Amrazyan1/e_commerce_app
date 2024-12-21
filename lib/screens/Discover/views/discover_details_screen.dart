@@ -6,6 +6,7 @@ import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/blocs/categorydetails/bloc/copy/bloc/category_detail_copy_bloc.dart';
 import 'package:e_commerce_app/blocs/search/bloc/global_search_bloc.dart';
 import 'package:e_commerce_app/constants.dart';
+import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:e_commerce_app/screens/Discover/views/filter_screen.dart';
 import 'package:e_commerce_app/screens/Products/Components/product_card.dart';
 import 'package:e_commerce_app/screens/Products/product_details_screen.dart';
@@ -159,7 +160,7 @@ class _DiscoverDetailsScreenState extends State<DiscoverDetailsScreen> {
                         crossAxisSpacing: 8.0,
                         childAspectRatio: 140 / 220, // Match item dimensions
                       ),
-                      itemBuilder: (context, index) {
+                      itemBuilder: (contextlocal, index) {
                         final product =
                             state.results.data!.products!.data!.data![index];
                         return ProductCard(

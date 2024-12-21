@@ -11,7 +11,7 @@ class AppRouter extends RootStackRouter {
         AutoRoute(
           page: SplashViewRoute.page,
           path: '/',
-          initial: true,
+          // initial: true,
         ),
         AutoRoute(
           page: AuthorizationRoute.page,
@@ -27,39 +27,55 @@ class AppRouter extends RootStackRouter {
           path: '/login',
         ),
 
-        AutoRoute(page: EntryPoint.page, path: '/entry', children: [
-          AutoRoute(page: EmptyHomeRouter.page, path: 'home', children: [
-            AutoRoute(page: HomeRoute.page, initial: true, path: ''),
-            AutoRoute(page: BonusCarRoute.page, path: 'bonuscard'),
-          ]),
-          AutoRoute(
-              page: EmptyDiscoverRouter.page,
-              path: 'discover',
-              children: [
-                AutoRoute(page: DiscoverRoute.page, initial: true, path: ''),
+        AutoRoute(
+            page: EntryPoint.page,
+            initial: true,
+            path: '/entry',
+            children: [
+              AutoRoute(page: EmptyHomeRouter.page, path: 'home', children: [
+                AutoRoute(page: HomeRoute.page, path: ''),
+                AutoRoute(page: BonusCarRoute.page, path: 'bonuscard'),
                 AutoRoute(
-                    page: DiscoverDetailsRoute.page, path: 'discoverdetail'),
+                    page: ProductDetailsRoute.page, path: 'productdetailspage'),
               ]),
-          AutoRoute(page: FavoriteRoute.page, path: 'favorites'),
-          AutoRoute(page: CartRoute.page, path: 'cart'),
-          AutoRoute(page: EmptyRouter.page, path: 'profile', children: [
-            AutoRoute(page: ProfileRoute.page, path: ''),
-            AutoRoute(page: AboutUsRoute.page, path: 'about-us'),
-            AutoRoute(page: CouponsRoute.page, path: 'couponsRoute'),
-            AutoRoute(
-                page: DeliveryAddresseRoute.page, path: 'deliveryAddressRoute'),
-            AutoRoute(
-                page: DeliveryAddressNew.page, path: 'deliveryAddressNewRoute'),
-            AutoRoute(
-                page: PaymentmethodsRoute.page, path: 'paymentmethodsRoute'),
-            AutoRoute(page: OrdersRoute.page, path: 'ordersRoute'),
-            AutoRoute(page: OrderInfoRoute.page, path: 'ordersInfoRoute'),
-            AutoRoute(page: MyDetailsRoute.page, path: 'mydetailsRoute'),
-            AutoRoute(page: DeliveryAddressInfoRoute.page, path: 'addressinfo'),
-          ]),
-        ]),
+              AutoRoute(
+                  page: EmptyDiscoverRouter.page,
+                  path: 'discover',
+                  children: [
+                    AutoRoute(
+                        page: DiscoverRoute.page, initial: true, path: ''),
+                    AutoRoute(
+                        page: DiscoverDetailsRoute.page,
+                        path: 'discoverdetail'),
+                  ]),
+              AutoRoute(page: FavoriteRoute.page, path: 'favorites'),
+              AutoRoute(page: CartRoute.page, path: 'cart', children: [
+                // AutoRoute(
+                //     page: ProductDetailsRoute.page,
+                //     path: 'productdetailspagediscover'),
+              ]),
+              AutoRoute(page: EmptyRouter.page, path: 'profile', children: [
+                AutoRoute(page: ProfileRoute.page, path: ''),
+                AutoRoute(page: AboutUsRoute.page, path: 'about-us'),
+                AutoRoute(page: CouponsRoute.page, path: 'couponsRoute'),
+                AutoRoute(
+                    page: DeliveryAddresseRoute.page,
+                    path: 'deliveryAddressRoute'),
+                AutoRoute(
+                    page: DeliveryAddressNew.page,
+                    path: 'deliveryAddressNewRoute'),
+                AutoRoute(
+                    page: PaymentmethodsRoute.page,
+                    path: 'paymentmethodsRoute'),
+                AutoRoute(page: OrdersRoute.page, path: 'ordersRoute'),
+                AutoRoute(page: OrderInfoRoute.page, path: 'ordersInfoRoute'),
+                AutoRoute(page: MyDetailsRoute.page, path: 'mydetailsRoute'),
+                AutoRoute(
+                    page: DeliveryAddressInfoRoute.page, path: 'addressinfo'),
+                AutoRoute(page: FakeProifleRoute.page, path: 'helproute'),
+              ]),
+            ]),
         AutoRoute(page: AboutUsRoute.page, path: '/abhgs'),
-        AutoRoute(page: ProductDetailsRoute.page, path: '/productdetailspage'),
         AutoRoute(
             page: DeliveryAddressNew.page,
             path: '/deliveryAddressNewRouteFromLogin'),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/blocs/bloc/product_detail_bloc.dart';
 import 'package:e_commerce_app/screens/Products/Components/product_card.dart';
@@ -102,6 +103,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         }
       },
       child: Scaffold(
+        // key: UniqueKey(),
+
         bottomNavigationBar: CartButton(
           press: (isLoading) ? () {} : () => {addToCart(prodCount)},
           infoWidget: isLoading
@@ -154,6 +157,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               SliverAppBar(
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 floating: true,
+                automaticallyImplyLeading: true,
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back), // Custom back button
+                  onPressed: () {
+                    AutoRouter.of(context).maybePop();
+                  },
+                ),
               ),
               BlocBuilder<ProductDetailBloc, ProductDetailState>(
                 builder: (context, state) {

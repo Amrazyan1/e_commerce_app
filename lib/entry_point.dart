@@ -24,8 +24,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 
 import 'screens/auth_required.dart';
 
-final GlobalKey<AutoTabsRouterState> autoTabsRouterKey =
-    GlobalKey<AutoTabsRouterState>();
+// final GlobalKey<AutoTabsRouterState> autoTabsRouterKey =
+//     GlobalKey<AutoTabsRouterState>();
 
 @RoutePage()
 class EntryPoint extends StatefulWidget {
@@ -133,9 +133,10 @@ class _EntryPointState extends State<EntryPoint> {
                 }
               }
               return Future.value(tabsRouter.activeIndex != 0);
+              return true;
             },
             child: AutoTabsRouter(
-              key: autoTabsRouterKey,
+              // key: autoTabsRouterKey,
               routes: const [
                 EmptyHomeRouter(children: [
                   HomeRoute(), // Default child of home tab
@@ -255,6 +256,9 @@ class _EntryPointState extends State<EntryPoint> {
     }
     if (index == 1) {
       context.router.navigate(const DiscoverRoute());
+    }
+    if (index == 0) {
+      context.router.root.maybePopTop();
     }
   }
 }

@@ -90,17 +90,21 @@ class _CheckoutModalState extends State<CheckoutModal> {
         ),
       );
     }
+    // widget.data.availableBonuses = '5500';
 
-    widget.data.availableBonuses = '5500\$';
+    log(widget.data.total!);
+    // num withDelvieryPrice = num.parse(widget.data.totalWithDelivery!);
+    num avalBonus = num.parse(widget.data.availableBonuses!);
+
     if (widget.data.availableBonuses != null &&
         widget.data.availableBonuses!.isNotEmpty) {
       inputController.text = '';
 
-      if (num.tryParse(widget.data.availableBonuses!) != 0) {
+      if (avalBonus != 0) {
         categories.add(
           CategoryModel(
               title: "use_bonus".tr(),
-              info: '${widget.data.availableBonuses}',
+              info: '$avalBonus',
               subCategories: [],
               isCheckbox: true),
         );
