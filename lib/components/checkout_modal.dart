@@ -91,7 +91,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
       );
     }
 
-    // widget.data.availableBonuses = '5500\$';
+    widget.data.availableBonuses = '5500\$';
     if (widget.data.availableBonuses != null &&
         widget.data.availableBonuses!.isNotEmpty) {
       inputController.text = '';

@@ -316,7 +316,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       context.read<MainProvider>().categoryName = category.name ?? 'Unknown';
       context
           .read<CategoryDetailCopyBloc>()
-          .add(FetchCategoryProductsEventCopy(id: category.id!, page: 0));
+          .add(FetchCategoryProductsEventCopy(id: category.id!, page: 1));
       context.router.push(const DiscoverDetailsRoute());
     } else {
       {

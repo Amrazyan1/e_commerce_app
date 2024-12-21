@@ -37,7 +37,7 @@ class CategoryDetailBloc
             return;
           }
           final response = await _apiService.getProductsByCategory(
-              event.id!, pagination, _cancelToken!);
+              event.id, pagination, _cancelToken!);
 
           if (response.statusCode == 200) {
             pagination++;

@@ -1,10 +1,7 @@
 part of 'category_detail_copy_bloc.dart';
 
-sealed class CategoryDetailCopyState extends Equatable {
+sealed class CategoryDetailCopyState {
   const CategoryDetailCopyState();
-
-  @override
-  List<Object> get props => [];
 }
 
 final class CategoryDetailCopyInitial extends CategoryDetailCopyState {}

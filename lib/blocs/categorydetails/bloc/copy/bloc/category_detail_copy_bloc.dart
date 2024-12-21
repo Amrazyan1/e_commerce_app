@@ -25,15 +25,26 @@ class CategoryDetailCopyBloc
   CategoryDetailCopyBloc() : super(CategoryDetailCopyInitial()) {
     on<FetchCategoryProductsEventCopy>((event, emit) async {
       log('Start loadddd FetchCategoryProductsEvent');
-      emit(CategoryDetailCopyLoading());
+
       try {
         {
+          var page = event.page;
+          if (categoryId.isNotEmpty && categoryId != event.id) {
+            page = 0;
+          }
           categoryId = event.id;
           cancelLoadProducts();
-          if (event.page == 0) {
+          if (page == 0) {
             pagination = 1;
             allProducts.clear();
-            // emit(CategoryDetailCopyLoaded(products: allProducts));
+            emit(CategoryDetailCopyLoaded(products: allProducts));
+            // return;
+          }
+          if (event.id.isEmpty) {
+            return;
+          }
+          if (pagination == 1) {
+            emit(CategoryDetailCopyLoading());
           }
           Map<String, dynamic> queryParameters = {
             'perPage': 20.toString(),
@@ -54,7 +65,7 @@ class CategoryDetailCopyBloc
           }
 
           final response = await _apiService.getProductsByCategoryWithQuery(
-              event.id!, queryParameters, _cancelToken!);
+              event.id, queryParameters, _cancelToken!);
 
           if (response.statusCode == 200) {
             pagination++;

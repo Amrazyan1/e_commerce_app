@@ -25,14 +25,11 @@ class DiscoverDetailsScreen extends StatefulWidget {
   State<DiscoverDetailsScreen> createState() => _DiscoverDetailsScreenState();
 }
 
-
-
 class _DiscoverDetailsScreenState extends State<DiscoverDetailsScreen> {
   final _searchFocusNode = FocusNode();
 
   final _searchTextController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-
 
   @override
   void initState() {
@@ -42,7 +39,7 @@ class _DiscoverDetailsScreenState extends State<DiscoverDetailsScreen> {
     // if (categoriesState is! CategoryDetailCopyLoaded) {
     //   context.read<CategoryDetailCopyBloc>().add(FetchCategoryProductsEventCopy());
     // } else {
-       
+
     // }
     _scrollController.addListener(_onScroll);
   }
@@ -60,8 +57,10 @@ class _DiscoverDetailsScreenState extends State<DiscoverDetailsScreen> {
 
         context.read<MainProvider>().isLoadingMore = true;
 
-        context.read<CategoryDetailCopyBloc>().add(FetchCategoryProductsEventCopy(
-            id: context.read<CategoryDetailCopyBloc>().categoryId, page: 1));
+        context.read<CategoryDetailCopyBloc>().add(
+            FetchCategoryProductsEventCopy(
+                id: context.read<CategoryDetailCopyBloc>().categoryId,
+                page: 1));
       }
     }
   }
@@ -84,9 +83,8 @@ class _DiscoverDetailsScreenState extends State<DiscoverDetailsScreen> {
     return Scaffold(
       body: SuperScaffold(
         key: const Key('discvoerdetail'),
-          transitionBetweenRoutes: false,
+        transitionBetweenRoutes: false,
         appBar: SuperAppBar(
-          
           automaticallyImplyLeading: false,
           title: Row(
             children: [
@@ -110,24 +108,6 @@ class _DiscoverDetailsScreenState extends State<DiscoverDetailsScreen> {
                 letterSpacing: 0,
                 overflow: TextOverflow.ellipsis),
           ),
-          // actions: Row(
-          //   mainAxisSize: MainAxisSize.min,
-          //   children: [
-          //     IconButton(
-          //       onPressed: () {
-          //         Navigator.of(context).push(
-          //           MaterialPageRoute(
-          //             builder: (context) => FilterScreen(
-          //               isFirst: false,
-          //             ),
-          //           ),
-          //         );
-          //       },
-          //       icon: SvgPicture.asset("assets/icons/filter.svg",
-          //           color: Theme.of(context).textTheme.bodyLarge!.color),
-          //     ),
-          //   ],
-          // ),
           leading: GestureDetector(
             onTap: () {
               context.router.maybePop();
@@ -139,17 +119,16 @@ class _DiscoverDetailsScreenState extends State<DiscoverDetailsScreen> {
             ),
           ),
           searchBar: SuperSearchBar(
-            
             placeholderText: 'search'.tr(),
             searchFocusNode: _searchFocusNode,
             searchController: _searchTextController,
             textStyle: Theme.of(context).textTheme.bodyLarge!,
             onFocused: (value) {
-             if (!value) {
-                  setState(_searchTextController.clear);
-                } else {
-                  context.read<GlobalSearchBloc>().add(SetSearchInitialEvent());
-                }
+              if (!value) {
+                setState(_searchTextController.clear);
+              } else {
+                context.read<GlobalSearchBloc>().add(SetSearchInitialEvent());
+              }
             },
             onSubmitted: (value) {
               if (value.isEmpty) {
@@ -216,17 +195,25 @@ class _DiscoverDetailsScreenState extends State<DiscoverDetailsScreen> {
             ),
           ),
         ),
-        body: BlocBuilder<CategoryDetailCopyBloc, CategoryDetailCopyState>(
-          builder: (context, state) {
-            if (state is CategoryDetailCopyLoaded) {
-              final products = state.products;
-              return Column(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: GridView.builder(
-                        physics: const BouncingScrollPhysics(),
+        body: CustomScrollView(
+          primary: false,
+          controller: _scrollController,
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              sliver:
+                  BlocListener<CategoryDetailCopyBloc, CategoryDetailCopyState>(
+                listener: (context, state) {
+                  if (state is CategoryDetailCopyLoaded) {
+                    context.read<MainProvider>().isLoadingMore = false;
+                  }
+                },
+                child: BlocBuilder<CategoryDetailCopyBloc,
+                    CategoryDetailCopyState>(
+                  builder: (context, state) {
+                    if (state is CategoryDetailCopyLoaded) {
+                      final products = state.products;
+                      return SliverGrid(
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
@@ -234,38 +221,53 @@ class _DiscoverDetailsScreenState extends State<DiscoverDetailsScreen> {
                           crossAxisSpacing: 8.0,
                           childAspectRatio: 140 / 220, // Match item dimensions
                         ),
-                        itemCount: state.products.length,
-                        itemBuilder: (context, index) {
-                          return ProductCard(
-                            product: products[index],
-                            press: () {
-                              context.read<MainProvider>().currentProductModel =
-                                  products[index];
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ProductDetailsScreen(),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            } else if (state is CategoryDetailCopyLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is CategoryDetailCopyError) {
-              return Center(
-                child: Text(state.message),
-              );
-            }
-            return Container();
-          },
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            return ProductCard(
+                              product: products[index],
+                              press: () {
+                                context
+                                    .read<MainProvider>()
+                                    .currentProductModel = products[index];
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ProductDetailsScreen(),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          childCount: products.length,
+                        ),
+                      );
+                    } else if (state is CategoryDetailCopyLoading) {
+                      return const SliverToBoxAdapter(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    } else if (state is CategoryDetailCopyError) {
+                      return SliverToBoxAdapter(
+                        child: Center(
+                          child: Text(state.message),
+                        ),
+                      );
+                    }
+                    return const SliverToBoxAdapter(
+                      child: SizedBox.shrink(),
+                    );
+                  },
+                ),
+              ),
+            ),
+            if (context.watch<MainProvider>().isLoadingMore == true)
+              const SliverToBoxAdapter(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+          ],
         ),
       ),
     );
