@@ -25,121 +25,133 @@ class OtpScreen extends StatelessWidget {
     return BlocProvider(
       create: (_) => AuthBloc(),
       child: Scaffold(
-        body: SuperScaffold(
-                    transitionBetweenRoutes: false,
+        //SuperScaffold
 
-          appBar: SuperAppBar(
-            automaticallyImplyLeading: false,
-            title: Text(
-              'otp_verify'.tr(),
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-            searchBar: SuperSearchBar(
-              enabled: false,
-              scrollBehavior: SearchBarScrollBehavior.pinned,
-              resultBehavior: SearchBarResultBehavior.neverVisible,
-            ),
-            largeTitle: SuperLargeTitle(
-              largeTitle: 'otp_verify'.tr(),
-              textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 24,
-                    letterSpacing: 0,
-                  ),
-            ),
-            leading: GestureDetector(
-              onTap: () {
-                context.router.maybePop();
-              },
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-                child: SvgPicture.asset("assets/icons/arrow_back.svg",
-                    color: Theme.of(context).textTheme.bodyLarge!.color),
-              ),
-            ),
-          ),
-          body: BlocListener<AuthBloc, AuthState>(
-            listener: (context, state) {
-              if (state is AuthApproved) {
-                AutoRouter.of(context).replaceAll([const EntryPoint()]);
-              } else if (state is AuthVerified) {
-                AutoRouter.of(context)
-                    .replaceAll([LoginRoute(phoneNumber: phoneNumber)]);
-              } else if (state is AuthError) {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text(state.message)));
-              }
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 60,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 50),
-                        child: PinFieldAutoFill(
-                          codeLength: 4,
-                          autoFocus: true,
-                          enableInteractiveSelection: false,
-                          keyboardType: TextInputType.number,
-                          decoration: BoxLooseDecoration(
-                            gapSpace: 10,
-                            strokeWidth: 2,
-                            textStyle: const TextStyle(
-                                color: Color(0xFF512DA8),
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400),
-                            strokeColorBuilder: PinListenColorBuilder(
-                                const Color(0xFFF4F5F7),
-                                const Color(0xFFF4F5F7)),
-                            bgColorBuilder: PinListenColorBuilder(
-                                kprimaryColor.withOpacity(0.2),
-                                kprimaryColor.withOpacity(0.1)),
-                            radius: const Radius.circular(15),
+        //transitionBetweenRoutes: false,
+        appBar: AppBar(
+          automaticallyImplyLeading: true,
+        ),
+        // appBar: SuperAppBar(
+        //   automaticallyImplyLeading: false,
+        //   title: Text(
+        //     'otp_verify'.tr(),
+        //     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        //   ),
+        //   searchBar: SuperSearchBar(
+        //     enabled: false,
+        //     scrollBehavior: SearchBarScrollBehavior.pinned,
+        //     resultBehavior: SearchBarResultBehavior.neverVisible,
+        //   ),
+        //   largeTitle: SuperLargeTitle(
+        //     largeTitle: 'otp_verify'.tr(),
+        //     textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+        //           fontWeight: FontWeight.w700,
+        //           fontSize: 24,
+        //           letterSpacing: 0,
+        //         ),
+        //   ),
+        //   leading: GestureDetector(
+        //     onTap: () {
+        //       context.router.maybePop();
+        //     },
+        //     child: Padding(
+        //       padding:
+        //           const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+        //       child: SvgPicture.asset("assets/icons/arrow_back.svg",
+        //           color: Theme.of(context).textTheme.bodyLarge!.color),
+        //     ),
+        //   ),
+        // ),
+        body: BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is AuthApproved) {
+              AutoRouter.of(context).replaceAll([const EntryPoint()]);
+            } else if (state is AuthVerified) {
+              AutoRouter.of(context)
+                  .replaceAll([LoginRoute(phoneNumber: phoneNumber)]);
+            } else if (state is AuthError) {
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(state.message)));
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Stack(
+              children: [
+                Text(
+                  'otp_verify'.tr(),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 25),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Gap(50),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 0),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 60,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 50),
+                          child: PinFieldAutoFill(
+                            codeLength: 4,
+                            autoFocus: true,
+                            enableInteractiveSelection: false,
+                            keyboardType: TextInputType.number,
+                            decoration: BoxLooseDecoration(
+                              gapSpace: 10,
+                              strokeWidth: 2,
+                              textStyle: const TextStyle(
+                                  color: Color(0xFF512DA8),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400),
+                              strokeColorBuilder: PinListenColorBuilder(
+                                  const Color(0xFFF4F5F7),
+                                  const Color(0xFFF4F5F7)),
+                              bgColorBuilder: PinListenColorBuilder(
+                                  kprimaryColor.withOpacity(0.2),
+                                  kprimaryColor.withOpacity(0.1)),
+                              radius: const Radius.circular(15),
+                            ),
+                            enabled: true,
+                            onCodeSubmitted: (String verificationCode) {
+                              _otpController.text = verificationCode;
+                              // Handle submission or further actions
+                            },
+                            onCodeChanged: (p0) {
+                              _otpController.text = p0 ?? '';
+                              if (_otpController.text.length == 4) {
+                                // Code is fully entered, close keyboard
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              }
+                              log(_otpController.text);
+                            },
                           ),
-                          enabled: true,
-                          onCodeSubmitted: (String verificationCode) {
-                            _otpController.text = verificationCode;
-                            // Handle submission or further actions
-                          },
-                          onCodeChanged: (p0) {
-                            _otpController.text = p0 ?? '';
-                            if (_otpController.text.length == 4) {
-                              // Code is fully entered, close keyboard
-                              FocusManager.instance.primaryFocus?.unfocus();
-                            }
-                            log(_otpController.text);
-                          },
                         ),
                       ),
                     ),
-                  ),
-                  const Gap(20),
-                  BlocBuilder<AuthBloc, AuthState>(
-                    builder: (context, state) {
-                      if (state is AuthLoading) {
-                        return const CircularProgressIndicator();
-                      }
-                      return SizedBox(
-                          height: 50,
-                          child: ButtonMainWidget(
-                            text: 'verify'.tr(),
-                            callback: () {
-                              final otp = _otpController.text;
-                              BlocProvider.of<AuthBloc>(context)
-                                  .add(VerifyOtpEvent(phoneNumber, otp));
-                            },
-                          ));
-                    },
-                  ),
-                ],
-              ),
+                    const Gap(20),
+                    BlocBuilder<AuthBloc, AuthState>(
+                      builder: (context, state) {
+                        if (state is AuthLoading) {
+                          return const CircularProgressIndicator();
+                        }
+                        return SizedBox(
+                            height: 50,
+                            child: ButtonMainWidget(
+                              text: 'verify'.tr(),
+                              callback: () {
+                                final otp = _otpController.text;
+                                BlocProvider.of<AuthBloc>(context)
+                                    .add(VerifyOtpEvent(phoneNumber, otp));
+                              },
+                            ));
+                      },
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),

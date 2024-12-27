@@ -37,7 +37,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
             responseData.discount,
             responseData.total,
             responseData.count,
-            responseData.orderAble!));
+            responseData.orderAble!,
+            responseData.deliveryDetails!));
       } on DioException catch (e) {
         String errmsg = e.response?.data["message"].toString() ?? e.message!;
         log(errmsg);
@@ -67,13 +68,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       (event, emit) async {
         final currenstate = state as CartLoaded;
         emit(CartPlaceOrderStateLoading(
-          currenstate.cartItems,
-          currenstate.subtotal,
-          currenstate.discount,
-          currenstate.total,
-          currenstate.count,
-          currenstate.orderable,
-        ));
+            currenstate.cartItems,
+            currenstate.subtotal,
+            currenstate.discount,
+            currenstate.total,
+            currenstate.count,
+            currenstate.orderable,
+            currenstate.deliveryDetails!));
         try {
           final response = await _apiService.createOrder({
             'items': products!
@@ -94,6 +95,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
             currenstate.total,
             currenstate.count,
             currenstate.orderable,
+            currenstate.deliveryDetails,
             viewOrderData.data!,
           ));
         } catch (e) {
@@ -105,6 +107,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
             currenstate.total,
             currenstate.count,
             currenstate.orderable,
+            currenstate.deliveryDetails,
           ));
         }
       },
@@ -144,7 +147,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
             responseData.discount,
             responseData.total,
             responseData.count,
-            responseData.orderAble!));
+            responseData.orderAble!,
+            responseData.deliveryDetails!));
       } catch (e) {
         emit(CartError(e.toString()));
       }

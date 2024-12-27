@@ -137,7 +137,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                     ),
                     Expanded(
-                      flex: 5,
+                      flex: 3,
                       child: Text(
                         countOfItem.isNotEmpty
                             ? '$countOfItem ' + 'items_added'.tr()

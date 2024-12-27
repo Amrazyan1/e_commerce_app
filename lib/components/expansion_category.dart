@@ -9,6 +9,8 @@ import 'package:gap/gap.dart';
 
 import '../../../../constants.dart';
 
+final GlobalKey _expansionTileKey = GlobalKey();
+
 class ExpansionCategory extends StatefulWidget {
   const ExpansionCategory(
       {super.key,
@@ -17,6 +19,7 @@ class ExpansionCategory extends StatefulWidget {
       required this.subCategory,
       this.onCategorySelected,
       this.ignoreExpansion = false,
+      this.deselectNotifier = null,
       this.controller,
       this.isCheckbox = false});
   final bool? ignoreExpansion; // svgSrc;
@@ -24,17 +27,18 @@ class ExpansionCategory extends StatefulWidget {
 
   final String title; // svgSrc;
   final String info; // svgSrc;
-  final TextEditingController? controller;// = TextEditingController();
+  final TextEditingController? controller; // = TextEditingController();
 
   final List<CategoryModel> subCategory;
-  final ValueChanged<CategoryModel>?
-      onCategorySelected; // Callback for selection
+  final ValueChanged<CategoryModel?>? onCategorySelected;
+  final ValueNotifier<bool>? deselectNotifier;
   @override
   State<ExpansionCategory> createState() => _ExpansionCategoryState();
 }
 
 class _ExpansionCategoryState extends State<ExpansionCategory> {
   String selectedInfo = '';
+  int? selectedIndex; // Track the currently selected index
   bool expanded = false;
   CategoryModel? selectedCategory;
   bool checked = false;
@@ -44,16 +48,16 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
   void initState() {
     super.initState();
     if (widget.controller != null) {
-       _focusNode.addListener(() {
-      if (_focusNode.hasFocus) {
-        widget.controller?.selection = TextSelection(
-          baseOffset: 0,
-          extentOffset: widget.controller!.text.length,
-        );
-      }
-    });
+      _focusNode.addListener(() {
+        if (_focusNode.hasFocus) {
+          widget.controller?.selection = TextSelection(
+            baseOffset: 0,
+            extentOffset: widget.controller!.text.length,
+          );
+        }
+      });
     }
-   
+
     if (widget.subCategory.isNotEmpty) {
       var selectedCategory =
           widget.subCategory.where((x) => x.isSelected == true).isNotEmpty
@@ -74,7 +78,24 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
     }
   }
 
+  void _handleDeselect() {
+    setState(() {
+      // if (selectedCategory != null && selectedCategory!.couponId.isNotEmpty)
+      {
+        selectedIndex = null;
+        selectedInfo = '';
+      }
+    });
+  }
+
   ExpansionTileController _expcontroller = ExpansionTileController();
+  @override
+  void dispose() {
+    // Remove the listener to avoid memory leaks
+    widget.deselectNotifier?.removeListener(_handleDeselect);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return widget.subCategory.isNotEmpty
@@ -120,12 +141,30 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
                       onTap: () {
                         _expcontroller.collapse();
                         setState(() {
-                          selectedInfo = widget.subCategory[index].info;
+                          if (selectedIndex == index) {
+                            // Deselect the item if it's already selected
+                            selectedIndex = null;
+                            selectedInfo = '';
+                            if (widget.onCategorySelected != null) {
+                              widget.onCategorySelected!(null);
+                            }
+                          } else {
+                            // Select the new item
+                            selectedIndex = index;
+                            selectedInfo = widget.subCategory[index].info;
 
-                          if (widget.onCategorySelected != null) {
-                            widget.onCategorySelected!(
-                                widget.subCategory[index]!);
+                            if (widget.onCategorySelected != null) {
+                              widget.onCategorySelected!(
+                                  widget.subCategory[index]);
+                            }
                           }
+
+                          // selectedInfo = widget.subCategory[index].info;
+
+                          // if (widget.onCategorySelected != null) {
+                          //   widget.onCategorySelected!(
+                          //       widget.subCategory[index]!);
+                          // }
                         });
                       },
                       title: Row(
@@ -191,8 +230,10 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
                             widget.controller!.text = '$maxCount';
 
                             // Move cursor to the end of the text
-                            widget.controller!.selection = TextSelection.fromPosition(
-                              TextPosition(offset: widget.controller!.text.length),
+                            widget.controller!.selection =
+                                TextSelection.fromPosition(
+                              TextPosition(
+                                  offset: widget.controller!.text.length),
                             );
                           } else {}
                         }
@@ -241,7 +282,6 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
                             const TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ),
-                   
                   ],
                 ),
               );

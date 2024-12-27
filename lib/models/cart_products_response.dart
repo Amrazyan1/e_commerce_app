@@ -44,6 +44,7 @@ class CartResponseData {
   String? total;
   int? count;
   OrderAble? orderAble;
+  DeliveryDetails? deliveryDetails;
   List<CartProductItem>? list;
 
   CartResponseData({
@@ -52,6 +53,7 @@ class CartResponseData {
     this.total,
     this.count,
     this.orderAble,
+    this.deliveryDetails,
     this.list,
   });
 
@@ -79,6 +81,9 @@ class CartResponseData {
         orderAble: json["orderAble"] == null
             ? null
             : OrderAble.fromJson(json["orderAble"]),
+        deliveryDetails: json["deliveryDetails"] == null
+            ? null
+            : DeliveryDetails.fromJson(json["deliveryDetails"]),
         list: json["list"] == null
             ? []
             : List<CartProductItem>.from(
@@ -114,6 +119,27 @@ class OrderAble {
   Map<String, dynamic> toJson() => {
         "is": orderAbleIs,
         "description": description,
+      };
+}
+
+class DeliveryDetails {
+  bool? deliveryDetailIs;
+  String? limit;
+
+  DeliveryDetails({
+    this.deliveryDetailIs,
+    this.limit,
+  });
+
+  factory DeliveryDetails.fromJson(Map<String, dynamic> json) =>
+      DeliveryDetails(
+        deliveryDetailIs: json["is"],
+        limit: json["limit"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "is": deliveryDetailIs,
+        "limit": limit,
       };
 }
 

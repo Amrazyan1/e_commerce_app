@@ -35,6 +35,14 @@ class _CheckoutModalState extends State<CheckoutModal> {
   String couponId = '';
   TextEditingController inputController = TextEditingController();
   List<CategoryModel> categories = [];
+
+  final ValueNotifier<bool> deselectNotifier = ValueNotifier(false);
+
+  void sendDeselectCommand() {
+    deselectNotifier.value = true;
+    //  Future.microtask(() => deselectNotifier.value = false);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -160,6 +168,8 @@ class _CheckoutModalState extends State<CheckoutModal> {
   }
 
   void payOrder() async {
+    // sendDeselectCommand();
+    // return;
     context.read<MainProvider>().isProcessOrder = true;
 
     try {
@@ -293,7 +303,12 @@ class _CheckoutModalState extends State<CheckoutModal> {
       subCategory: categories[index].subCategories!,
       isCheckbox: categories[index].isCheckbox,
       controller: inputController,
+      deselectNotifier: deselectNotifier,
       onCategorySelected: (selectedCategory) {
+        if (selectedCategory == null) {
+          couponId = '';
+          return;
+        }
         if (selectedCategory.paytipe != null) {
           payType = selectedCategory.paytipe!;
         }
@@ -301,18 +316,19 @@ class _CheckoutModalState extends State<CheckoutModal> {
           couponId = '';
           useBonus = selectedCategory.title;
           log('$useBonus ${selectedCategory.title}');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('using_b'.tr())),
-          );
+          sendDeselectCommand();
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(content: Text('using_b'.tr())),
+          // );
         }
         if (selectedCategory.couponId.isNotEmpty) {
           useBonus = '';
           inputController.text = '0';
           couponId = selectedCategory.couponId;
           log('$couponId ${selectedCategory.info}');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('using_c'.tr())),
-          );
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(content: Text('using_c'.tr())),
+          // );
         }
         if (selectedCategory.address != null) {
           addressid = selectedCategory.address!;

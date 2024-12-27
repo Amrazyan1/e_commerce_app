@@ -34,6 +34,29 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
       context.setLocale(locale);
     }
 
+    String? _validateAndFormatPhoneNumber(String? value) {
+      if (value == null || value.isEmpty) {
+        return 'please_enter'.tr();
+      }
+
+      // Regular expression to match valid Armenian numbers
+      final phoneRegex = RegExp(r'^[1-9]\d{7}$');
+
+      // Remove the leading "0" if it exists
+      if (value.startsWith('0')) {
+        value = value.substring(1);
+      }
+
+      // Validate the number against the regex
+      if (!phoneRegex.hasMatch(value)) {
+        return 'please_enter_valid'.tr();
+      }
+
+      // If valid, format and return null (no error)
+      _phoneController.text = value; // Update controller with valid number
+      return null;
+    }
+
     return BlocProvider(
       create: (_) => AuthBloc(),
       child: Directionality(
@@ -148,28 +171,31 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              DropdownButton<String>(
-                                value: dropdownvalue,
-                                onChanged: (val) {
-                                  log(val!);
-                                  setState(() {
-                                    dropdownvalue = val;
-                                    log(dropdownvalue);
-                                  });
-                                },
-                                underline: const SizedBox(),
-                                items: ['+374'].map((code) {
-                                  return DropdownMenuItem(
-                                    value: code,
-                                    child: Text(code),
-                                  );
-                                }).toList(),
-                              ),
+                              SizedBox(
+                                  height: 90,
+                                  child: Center(child: Text('+374'))),
+                              // DropdownButton<String>(
+                              //   value: dropdownvalue,
+                              //   onChanged: (val) {
+                              //     log(val!);
+                              //     setState(() {
+                              //       dropdownvalue = val;
+                              //       log(dropdownvalue);
+                              //     });
+                              //   },
+                              //   underline: const SizedBox(),
+                              //   items: ['+374'].map((code) {
+                              //     return DropdownMenuItem(
+                              //       value: code,
+                              //       child: Text(code),
+                              //     );
+                              //   }).toList(),
+                              // ),
                               const SizedBox(
                                   width:
                                       10), // Space between Dropdown and TextField
                               Expanded(
-                                child: TextField(
+                                child: TextFormField(
                                   controller: _phoneController,
                                   keyboardType: TextInputType.phone,
                                   decoration: InputDecoration(
@@ -179,7 +205,20 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                                       borderSide: const BorderSide(
                                           color: kprimaryColor),
                                     ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      borderSide:
+                                          const BorderSide(color: Colors.red),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      borderSide:
+                                          const BorderSide(color: Colors.red),
+                                    ),
                                   ),
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
+                                  validator: _validateAndFormatPhoneNumber,
                                 ),
                               ),
                             ],

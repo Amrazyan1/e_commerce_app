@@ -199,6 +199,16 @@ class _CartScreenState extends State<CartScreen> {
                         Visibility(
                             visible: !state.orderable.orderAbleIs!,
                             child: Text('${state.orderable.description}')),
+                        Visibility(
+                          visible: state.orderable.orderAbleIs! == true &&
+                              !state.deliveryDetails.deliveryDetailIs!,
+                          child: Text(
+                            tr('free_delivery',
+                                args: ['${state.deliveryDetails.limit}']),
+                            style: TextStyle(),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: SizedBox(

@@ -14,8 +14,8 @@ class DioClient {
       : _dio = Dio(
           BaseOptions(
             baseUrl: 'http://imexpro.am/v1',
-            connectTimeout: Duration(milliseconds: 60 * 1000),
-            receiveTimeout: Duration(milliseconds: 60 * 1000),
+            connectTimeout: Duration(milliseconds: 60 * 2000),
+            receiveTimeout: Duration(milliseconds: 60 * 2000),
             headers: {
               'Content-Type': 'application/json; charset=UTF-8',
               'Accept-Language':

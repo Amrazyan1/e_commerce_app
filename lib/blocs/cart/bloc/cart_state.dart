@@ -17,21 +17,29 @@ class CartLoaded extends CartState {
   final String? total;
   final int? count;
   final OrderAble orderable;
+  final DeliveryDetails deliveryDetails;
   final List<CartProductItem> cartItems;
 
   CartLoaded(this.cartItems, this.subtotal, this.discount, this.total,
-      this.count, this.orderable);
+      this.count, this.orderable, this.deliveryDetails);
 }
 
 class CartPlaceOrderStateLoading extends CartLoaded {
   CartPlaceOrderStateLoading(super.cartItems, super.subtotal, super.discount,
-      super.total, super.count, super.orderable);
+      super.total, super.count, super.orderable, super.deliveryDetails);
 }
 
 class CartPlaceOrderState extends CartLoaded {
   final ViewOrderData vieworder;
-  CartPlaceOrderState(super.cartItems, super.subtotal, super.discount,
-      super.total, super.count, super.orderable, this.vieworder);
+  CartPlaceOrderState(
+      super.cartItems,
+      super.subtotal,
+      super.discount,
+      super.total,
+      super.count,
+      super.orderable,
+      super.deliveryDetails,
+      this.vieworder);
 }
 
 class CartError extends CartState {
