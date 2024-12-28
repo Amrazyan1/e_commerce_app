@@ -89,12 +89,13 @@ class FlashSale extends StatelessWidget {
                             press: () {
                               context.read<MainProvider>().currentProductModel =
                                   products[index];
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ProductDetailsScreen(),
-                                ),
-                              );
+                              // Navigator.of(context).push(
+                              //   MaterialPageRoute(
+                              //     builder: (context) =>
+                              //         const ProductDetailsScreen(),
+                              //   ),
+                              // );
+                              context.router.root.push(ProductDetailsRoute());
                             },
                           ),
                         ),

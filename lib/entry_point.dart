@@ -258,7 +258,9 @@ class _EntryPointState extends State<EntryPoint> {
       context.router.navigate(const DiscoverRoute());
     }
     if (index == 0) {
-      context.router.root.maybePopTop();
+      log('Current stack: ${context.router.stack}');
+
+      context.router.navigate(HomeRoute());
     }
   }
 }

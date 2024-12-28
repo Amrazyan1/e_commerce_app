@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/Provider/main_provider.dart';
+import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:e_commerce_app/screens/Products/Components/secondary_product_card.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/models/product_model.dart';
@@ -108,12 +110,15 @@ class MostPopular extends StatelessWidget {
                             press: () {
                               context.read<MainProvider>().currentProductModel =
                                   products[index];
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ProductDetailsScreen(),
-                                ),
-                              );
+                              context.router.root.push(ProductDetailsRoute());
+// AutoRouter.of(context.router.root).push(const ProductDetailsRoute());
+
+                              // Navigator.of(context).push(
+                              //   MaterialPageRoute(
+                              //     builder: (context) =>
+                              //         const ProductDetailsScreen(),
+                              //   ),
+                              // );
                             },
                           ),
                         ),
