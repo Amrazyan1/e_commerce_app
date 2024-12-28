@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/blocs/cart/bloc/cart_bloc.dart';
+import 'package:e_commerce_app/components/always_notify.dart';
 import 'package:e_commerce_app/components/expansion_category.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/models/category_model.dart';
@@ -34,12 +35,8 @@ class _CheckoutModalState extends State<CheckoutModal> {
   TextEditingController inputController = TextEditingController();
   List<CategoryModel> categories = [];
 
-  final ValueNotifier<bool> deselectNotifier = ValueNotifier(false);
-
-  void sendDeselectCommand() {
-    deselectNotifier.value = true;
-    Future.microtask(() => deselectNotifier.value = false);
-  }
+  final AlwaysNotifyValueNotifier<bool> deselectNotifier =
+      AlwaysNotifyValueNotifier(false);
 
   @override
   void initState() {
@@ -98,6 +95,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
         ),
       );
     }
+    // widget.data.availableBonuses = '50000';
     if (widget.data.availableBonuses != null &&
         widget.data.availableBonuses!.isNotEmpty) {
       inputController.text = '';
@@ -164,10 +162,10 @@ class _CheckoutModalState extends State<CheckoutModal> {
       addOrUpdateCategory(categories, "tot_cost", 'tot_cost',
           '${repsData.data!.totalWithDelivery}');
 
-      num withDelvieryPrice = filtertogetNum(repsData.data!.totalWithDelivery!);
+      num totalPrice = filtertogetNum(repsData.data!.total!);
 
       context.read<MainProvider>().isProcessOrder = false;
-      context.read<MainProvider>().totwithdelivery = withDelvieryPrice;
+      context.read<MainProvider>().checkoutTotal = totalPrice;
     } on DioException catch (e) {
       String errmsg = e.response?.data["message"].toString() ?? e.message!;
       context.read<MainProvider>().isProcessOrder = false;
@@ -332,7 +330,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
                 (item) => item.isCoupon == true,
               )
               .deselectNotifier
-              ?.value = true; // Or false, depending on your logic
+              ?.value = false; // Or false, depending on your logic
 
           couponId = '';
           useBonus = selectedCategory.title;

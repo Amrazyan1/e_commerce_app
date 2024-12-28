@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:e_commerce_app/Provider/main_provider.dart';
+import 'package:e_commerce_app/components/always_notify.dart';
 import 'package:e_commerce_app/components/checkout_modal.dart';
 import 'package:e_commerce_app/models/category_model.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -34,7 +35,7 @@ class ExpansionCategory extends StatefulWidget {
 
   final List<CategoryModel> subCategory;
   final ValueChanged<CategoryModel?>? onCategorySelected;
-  final ValueNotifier<bool>? deselectNotifier;
+  final AlwaysNotifyValueNotifier<bool>? deselectNotifier;
   @override
   State<ExpansionCategory> createState() => _ExpansionCategoryState();
 }
@@ -230,13 +231,10 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
                         num? newValue = num.tryParse(value);
                         num? maxCount = num.tryParse(widget.info);
 
-                        // num withDelvieryPrice = filtertogetNum(widget.data.totalWithDelivery!);
-                        // num canUseBonus =
-                        //     avalBonus > withDelvieryPrice ? withDelvieryPrice : avalBonus;
                         if (newValue != null && maxCount != null) {
                           maxCount = maxCount >
-                                  context.read<MainProvider>().totwithdelivery
-                              ? context.read<MainProvider>().totwithdelivery
+                                  context.read<MainProvider>().checkoutTotal
+                              ? context.read<MainProvider>().checkoutTotal
                               : maxCount;
                           if (newValue > maxCount) {
                             // Trim the value to maxCount if it exceeds

@@ -147,6 +147,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             .textTheme
                             .titleSmall!
                             .copyWith(color: Colors.white),
+                        textAlign: TextAlign.center,
                       ).tr(),
                     ),
                   ],

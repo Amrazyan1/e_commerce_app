@@ -50,8 +50,8 @@ class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   num _totwithdelivery = 0;
-  num get totwithdelivery => _totwithdelivery;
-  set totwithdelivery(num value) {
+  num get checkoutTotal => _totwithdelivery;
+  set checkoutTotal(num value) {
     _totwithdelivery = value;
     log('totwithdelivery $_totwithdelivery');
     notifyListeners();

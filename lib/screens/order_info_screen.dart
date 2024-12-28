@@ -140,8 +140,8 @@ class OrderInfoScreen extends StatelessWidget {
                         _buildInfoRow(
                             'delivery', '${orderData?.addresses?[0].name}'),
                         _buildInfoRow('payment'.tr(), '${orderData?.method}'),
-                        _buildInfoRow(
-                            'total_cost', '${orderData?.total ?? 'Total'}'),
+                        _buildInfoRow('total_cost',
+                            '${orderData?.totalWithDelivery ?? 'Total'}'),
                         _buildInfoRow('date', '${orderData?.date ?? 'Date'}'),
                         _buildInfoRow(
                             'status', '${orderData?.status ?? 'Status'}'),
