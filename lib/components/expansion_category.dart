@@ -1,9 +1,11 @@
 import 'dart:developer';
 
+import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/components/checkout_modal.dart';
 import 'package:e_commerce_app/models/category_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 
@@ -21,13 +23,14 @@ class ExpansionCategory extends StatefulWidget {
       this.ignoreExpansion = false,
       this.deselectNotifier = null,
       this.controller,
+      this.isCoupon = false,
       this.isCheckbox = false});
-  final bool? ignoreExpansion; // svgSrc;
-  final bool isCheckbox; // svgSrc;
-
-  final String title; // svgSrc;
-  final String info; // svgSrc;
-  final TextEditingController? controller; // = TextEditingController();
+  final bool? ignoreExpansion;
+  final bool isCheckbox;
+  final bool isCoupon;
+  final String title;
+  final String info;
+  final TextEditingController? controller;
 
   final List<CategoryModel> subCategory;
   final ValueChanged<CategoryModel?>? onCategorySelected;
@@ -75,6 +78,9 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
     if (widget.isCheckbox) {
       widget.controller!.text = '0';
       log(widget.info);
+    }
+    if (widget.isCoupon) {
+      widget.deselectNotifier?.addListener(_handleDeselect);
     }
   }
 
@@ -224,7 +230,14 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
                         num? newValue = num.tryParse(value);
                         num? maxCount = num.tryParse(widget.info);
 
+                        // num withDelvieryPrice = filtertogetNum(widget.data.totalWithDelivery!);
+                        // num canUseBonus =
+                        //     avalBonus > withDelvieryPrice ? withDelvieryPrice : avalBonus;
                         if (newValue != null && maxCount != null) {
+                          maxCount = maxCount >
+                                  context.read<MainProvider>().totwithdelivery
+                              ? context.read<MainProvider>().totwithdelivery
+                              : maxCount;
                           if (newValue > maxCount) {
                             // Trim the value to maxCount if it exceeds
                             widget.controller!.text = '$maxCount';

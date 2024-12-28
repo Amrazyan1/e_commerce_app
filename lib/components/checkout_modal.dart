@@ -1,10 +1,8 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/blocs/cart/bloc/cart_bloc.dart';
-import 'package:e_commerce_app/blocs/categories/bloc/categories_bloc.dart';
 import 'package:e_commerce_app/components/expansion_category.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/models/category_model.dart';
@@ -40,7 +38,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
 
   void sendDeselectCommand() {
     deselectNotifier.value = true;
-    //  Future.microtask(() => deselectNotifier.value = false);
+    Future.microtask(() => deselectNotifier.value = false);
   }
 
   @override
@@ -87,26 +85,24 @@ class _CheckoutModalState extends State<CheckoutModal> {
         CategoryModel(
           title: "coupon".tr(),
           info: "sel_coupon".tr(),
+          isCoupon: true,
           subCategories: (widget.data.availableCoupons!)
               .map((coup) => CategoryModel(
                   title: coup.name ?? 'name',
                   info: coup.discount ?? 'details',
                   subCategories: [],
+                  isCoupon: true,
                   couponId: '${coup.id}',
                   isSelected: false))
               .toList(),
         ),
       );
     }
-    // widget.data.availableBonuses = '5500';
-
-    log(widget.data.total!);
-    // num withDelvieryPrice = num.parse(widget.data.totalWithDelivery!);
-    num avalBonus = num.parse(widget.data.availableBonuses!);
-
     if (widget.data.availableBonuses != null &&
         widget.data.availableBonuses!.isNotEmpty) {
       inputController.text = '';
+
+      num avalBonus = filtertogetNum(widget.data.availableBonuses!);
 
       if (avalBonus != 0) {
         categories.add(
@@ -118,6 +114,18 @@ class _CheckoutModalState extends State<CheckoutModal> {
         );
       }
     }
+  }
+
+  num filtertogetNum(String text) {
+    String sanitizedString = text.replaceAll(RegExp(r'[^\d,]'), '');
+
+    sanitizedString = sanitizedString.replaceAll(',', '.');
+
+    sanitizedString = sanitizedString.replaceAll(' ', '');
+    num avalBonus = num.parse(sanitizedString);
+
+    log(avalBonus.toString());
+    return avalBonus;
   }
 
   String responseId = '';
@@ -139,7 +147,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
         dataObject['couponId'] = couponId;
       } else if (useBonus != null && useBonus.isNotEmpty) {
         dataObject['usingBonus'] = useBonus;
-      }
+      } else {}
 
       final response =
           await _apiService.processOrder(widget.data.id!, dataObject);
@@ -156,7 +164,10 @@ class _CheckoutModalState extends State<CheckoutModal> {
       addOrUpdateCategory(categories, "tot_cost", 'tot_cost',
           '${repsData.data!.totalWithDelivery}');
 
+      num withDelvieryPrice = filtertogetNum(repsData.data!.totalWithDelivery!);
+
       context.read<MainProvider>().isProcessOrder = false;
+      context.read<MainProvider>().totwithdelivery = withDelvieryPrice;
     } on DioException catch (e) {
       String errmsg = e.response?.data["message"].toString() ?? e.message!;
       context.read<MainProvider>().isProcessOrder = false;
@@ -168,8 +179,6 @@ class _CheckoutModalState extends State<CheckoutModal> {
   }
 
   void payOrder() async {
-    // sendDeselectCommand();
-    // return;
     context.read<MainProvider>().isProcessOrder = true;
 
     try {
@@ -295,40 +304,45 @@ class _CheckoutModalState extends State<CheckoutModal> {
     );
   }
 
+  List<ExpansionCategory> expansionCategoryList = [];
+
   ExpansionCategory _expCategoryItem(int index, BuildContext context) {
-    return ExpansionCategory(
+    // Create the ExpansionCategory instance
+    ExpansionCategory expansionCategory = ExpansionCategory(
       title: categories[index].title,
       info: categories[index].info,
       ignoreExpansion: categories[index].ignoreExpansion ?? false,
       subCategory: categories[index].subCategories!,
       isCheckbox: categories[index].isCheckbox,
+      isCoupon: categories[index].isCoupon,
       controller: inputController,
       deselectNotifier: deselectNotifier,
       onCategorySelected: (selectedCategory) {
         if (selectedCategory == null) {
           couponId = '';
+          processOrder();
           return;
         }
         if (selectedCategory.paytipe != null) {
           payType = selectedCategory.paytipe!;
         }
         if (selectedCategory.isCheckbox) {
+          expansionCategoryList
+              .firstWhere(
+                (item) => item.isCoupon == true,
+              )
+              .deselectNotifier
+              ?.value = true; // Or false, depending on your logic
+
           couponId = '';
           useBonus = selectedCategory.title;
           log('$useBonus ${selectedCategory.title}');
-          sendDeselectCommand();
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   SnackBar(content: Text('using_b'.tr())),
-          // );
         }
-        if (selectedCategory.couponId.isNotEmpty) {
+        if (selectedCategory.isCoupon) {
           useBonus = '';
           inputController.text = '0';
           couponId = selectedCategory.couponId;
           log('$couponId ${selectedCategory.info}');
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   SnackBar(content: Text('using_c'.tr())),
-          // );
         }
         if (selectedCategory.address != null) {
           addressid = selectedCategory.address!;
@@ -337,6 +351,12 @@ class _CheckoutModalState extends State<CheckoutModal> {
         processOrder();
       },
     );
+
+    // Add to the list
+    expansionCategoryList.add(expansionCategory);
+
+    // Return the created instance
+    return expansionCategory;
   }
 }
 

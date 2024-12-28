@@ -49,6 +49,14 @@ class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
+  num _totwithdelivery = 0;
+  num get totwithdelivery => _totwithdelivery;
+  set totwithdelivery(num value) {
+    _totwithdelivery = value;
+    log('totwithdelivery $_totwithdelivery');
+    notifyListeners();
+  }
+
   bool _isAvailable = false;
 
   bool get isAvailable {
