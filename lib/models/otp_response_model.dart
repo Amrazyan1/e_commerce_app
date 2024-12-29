@@ -193,6 +193,7 @@ class User {
   String? email;
   DateTime? birthday;
   String? phone;
+  String? bonus_code;
   dynamic emailVerifiedAt;
   dynamic deletedAt;
   DateTime? createdAt;
@@ -206,6 +207,7 @@ class User {
     this.email,
     this.birthday,
     this.phone,
+    this.bonus_code,
     this.emailVerifiedAt,
     this.deletedAt,
     this.createdAt,
@@ -220,6 +222,7 @@ class User {
     String? email,
     DateTime? birthday,
     String? phone,
+    String? bonus_code,
     dynamic emailVerifiedAt,
     dynamic deletedAt,
     DateTime? createdAt,
@@ -233,6 +236,7 @@ class User {
         email: email ?? this.email,
         birthday: birthday ?? this.birthday,
         phone: phone ?? this.phone,
+        bonus_code: bonus_code ?? this.bonus_code,
         emailVerifiedAt: emailVerifiedAt ?? this.emailVerifiedAt,
         deletedAt: deletedAt ?? this.deletedAt,
         createdAt: createdAt ?? this.createdAt,
@@ -248,6 +252,7 @@ class User {
         birthday:
             json["birthday"] == null ? null : DateTime.parse(json["birthday"]),
         phone: json["phone"],
+        bonus_code: json["bonus_code"],
         emailVerifiedAt: json["email_verified_at"],
         deletedAt: json["deleted_at"],
         createdAt: json["created_at"] == null

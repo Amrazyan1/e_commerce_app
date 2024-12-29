@@ -314,13 +314,10 @@ class _CartScreenState extends State<CartScreen> {
       child: GestureDetector(
         onTap: () {
           context.read<MainProvider>().currentProductModel = item.product!;
+          // context.router.push(const ProductDetailsRoute());
+          // AutoRouter.of(context).navigateNamed('cart/cart-product-details');
 
           AutoRouter.of(context).push(ProductDetailsRoute());
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (context) => const ProductDetailsScreen(),
-          //   ),
-          // );
         },
         child: Card(
           margin: const EdgeInsets.all(8.0),

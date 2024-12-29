@@ -23,6 +23,7 @@ import '../../blocs/products/trending/bloc/trend_new_products_bloc.dart';
 import '../../models/cart_products_response.dart';
 import 'Components/quantity_widget.dart';
 
+@RoutePage()
 class ProductDetailsScreen extends StatefulWidget {
   const ProductDetailsScreen({
     super.key,

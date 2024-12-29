@@ -36,7 +36,6 @@ class FlashSale extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // const _barcodeItem(),
               const SizedBox(height: defaultPadding / 2),
               Padding(
                 padding: const EdgeInsets.all(defaultPadding),
@@ -45,7 +44,6 @@ class FlashSale extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
-
               BlocBuilder<DiscountedBloc, DiscountedBlocState>(
                 builder: (context, state) {
                   if (state is DiscountedBlocLoading) {
@@ -108,64 +106,6 @@ class FlashSale extends StatelessWidget {
             ],
           );
         },
-      ),
-    );
-  }
-}
-
-class _barcodeItem extends StatelessWidget {
-  const _barcodeItem({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        AutoRouter.of(context).push(BonusCarRoute());
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white, // Background color of the container
-          borderRadius: BorderRadius.circular(16), // Adjust as needed
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black26,
-              blurRadius: 4,
-              offset: Offset(0, 2), // Slight shadow for a better look
-            ),
-          ],
-        ),
-        padding: EdgeInsets.all(16), // Padding inside the container
-        child: Column(
-          children: [
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  'Bonus Card',
-                  style: TextStyle(color: kprimaryColor),
-                ),
-              ],
-            ),
-            BarcodeWidget(
-              data: '123456789012', // Replace with dynamic barcode data
-              barcode: Barcode.code128(),
-              width: double.infinity,
-              height: 120,
-              drawText: false,
-            ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  'Show Bonus Points > ',
-                  style: TextStyle(color: kprimaryColor),
-                ),
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }

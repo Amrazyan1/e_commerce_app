@@ -142,8 +142,12 @@ class _EntryPointState extends State<EntryPoint> {
                   HomeRoute(), // Default child of home tab
                 ]),
                 EmptyDiscoverRouter(children: [DiscoverRoute()]),
-                CartRoute(),
-                FavoriteRoute(),
+                EmptyCartRouterPage(children: [
+                  CartRoute(),
+                ]),
+                EmptyFavRouterPage(children: [
+                  FavoriteRoute(),
+                ]),
                 ProfileRoute(),
               ],
               builder: (context, child) {
@@ -259,8 +263,13 @@ class _EntryPointState extends State<EntryPoint> {
     }
     if (index == 0) {
       log('Current stack: ${context.router.stack}');
+      // context.router.popUntilRoot();
+      AutoRouter.of(context).navigateNamed('home');
 
-      context.router.navigate(HomeRoute());
+      // context.router
+      //     .popUntil((route) => route.settings.name == EmptyHomeRouter.name);
+
+      // context.router.navigate(HomeRoute());
     }
   }
 }

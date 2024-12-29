@@ -1,5 +1,6 @@
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:barcode_widget/barcode_widget.dart';
 import 'package:e_commerce_app/components/search_bar_input_field.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:e_commerce_app/screens/Home/views/components/best_sellers.dart';
@@ -14,6 +15,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 import 'dart:ui' as ui;
 
@@ -182,6 +184,9 @@ class _HomeScreenState extends State<HomeScreen> {
               slivers: [
                 const SliverToBoxAdapter(child: OffersCarouselAndCategories()),
                 const SliverToBoxAdapter(child: PopularProducts()),
+                const SliverToBoxAdapter(
+                  child: _barcodeItem(),
+                ),
                 const SliverPadding(
                   padding: EdgeInsets.symmetric(vertical: defaultPadding * 1.5),
                   sliver: SliverToBoxAdapter(child: FlashSale()),
@@ -220,5 +225,91 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+}
+
+class _barcodeItem extends StatefulWidget {
+  const _barcodeItem({
+    super.key,
+  });
+
+  @override
+  State<_barcodeItem> createState() => _barcodeItemState();
+}
+
+class _barcodeItemState extends State<_barcodeItem> {
+  String code = '';
+  @override
+  void initState() {
+    super.initState();
+    getCode();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Visibility(
+      visible: code.isNotEmpty,
+      child: GestureDetector(
+        onTap: () {
+          // AutoRouter.of(context).push(BonusCarRoute());
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white, // Background color of the container
+              borderRadius: BorderRadius.circular(16), // Adjust as needed
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 4,
+                  offset: Offset(0, 2), // Slight shadow for a better look
+                ),
+              ],
+            ),
+            padding: EdgeInsets.all(16), // Padding inside the container
+            child: Column(
+              children: [
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Bonus Card',
+                      style: TextStyle(color: kprimaryColor),
+                    ),
+                  ],
+                ),
+                BarcodeWidget(
+                  data: code ?? '', // Replace with dynamic barcode data
+                  barcode: Barcode.code128(),
+                  width: double.infinity,
+                  height: 120,
+                  drawText: false,
+                ),
+                // const Row(
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   children: [
+                //     Text(
+                //       'Show Bonus Points > ',
+                //       style: TextStyle(color: kprimaryColor),
+                //     ),
+                //   ],
+                // ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> getCode() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final aa = await prefs.getString('bonus_code');
+
+    setState(() {
+      code = aa ?? '';
+    });
   }
 }

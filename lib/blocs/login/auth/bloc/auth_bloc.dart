@@ -21,12 +21,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await _apiService.sendPhoneNumber(event.phoneNumber);
         emit(AuthPhoneSent(event.phoneNumber));
       } catch (e) {
-         if (e is DioException && e.response?.statusCode == 422) {
-      // Show a specific error message for 422
-      emit(AuthError("Invalid phone number format."));
-    } else {
-      emit(AuthError(e.toString()));
-    }
+        if (e is DioException && e.response?.statusCode == 422) {
+          // Show a specific error message for 422
+          emit(AuthError("Invalid phone number format."));
+        } else {
+          emit(AuthError(e.toString()));
+        }
       }
     });
 
@@ -38,8 +38,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final respData = otpModelResponseFromJson(response.data);
         if (respData.data?.user != null) {
           final prefs = await SharedPreferences.getInstance();
-          await prefs.setString('auth_token',
-              respData.data!.token!.plainTextToken!); // Store token securely
+          await prefs.setString(
+              'auth_token', respData.data!.token!.plainTextToken!);
+          await prefs.setString(
+              'bonus_code', respData.data!.user?.bonus_code ?? '');
           emit(AuthApproved());
         } else {
           emit(AuthVerified());

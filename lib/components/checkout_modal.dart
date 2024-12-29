@@ -157,8 +157,11 @@ class _CheckoutModalState extends State<CheckoutModal> {
           categories, "price", 'price', '${repsData.data!.total}');
       addOrUpdateCategory(categories, "delivery", 'delivery',
           '${repsData.data!.deliveryPrice}');
-      addOrUpdateCategory(
-          categories, "coupon", 'discount', '-${repsData.data!.discount}');
+      num discount = filtertogetNum(repsData.data!.discount!);
+      if (discount > 0) {
+        addOrUpdateCategory(
+            categories, "coupon", 'discount', '-${repsData.data!.discount}');
+      }
       addOrUpdateCategory(categories, "tot_cost", 'tot_cost',
           '${repsData.data!.totalWithDelivery}');
 
