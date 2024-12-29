@@ -95,7 +95,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
         ),
       );
     }
-    // widget.data.availableBonuses = '50000';
+    // widget.data.availableBonuses = '50,000.00 amd';
     if (widget.data.availableBonuses != null &&
         widget.data.availableBonuses!.isNotEmpty) {
       inputController.text = '';
@@ -115,11 +115,16 @@ class _CheckoutModalState extends State<CheckoutModal> {
   }
 
   num filtertogetNum(String text) {
-    String sanitizedString = text.replaceAll(RegExp(r'[^\d,]'), '');
+    // Remove all characters except digits, commas, and periods
+    String sanitizedString = text.replaceAll(RegExp(r'[^\d.,]'), '');
 
-    sanitizedString = sanitizedString.replaceAll(',', '.');
+    // Remove grouping commas (commas not followed by 3 digits)
+    sanitizedString = sanitizedString.replaceAll(RegExp(r',(?!\d{3})'), '');
 
-    sanitizedString = sanitizedString.replaceAll(' ', '');
+    // Replace commas used as thousand separators with empty strings
+    sanitizedString = sanitizedString.replaceAll(',', '');
+
+    // Parse the final sanitized string into a number
     num avalBonus = num.parse(sanitizedString);
 
     log(avalBonus.toString());
