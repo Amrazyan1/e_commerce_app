@@ -155,12 +155,15 @@ class _CheckoutModalState extends State<CheckoutModal> {
 
       addOrUpdateCategory(
           categories, "price", 'price', '${repsData.data!.total}');
+      num delivery = filtertogetNum(repsData.data!.deliveryPrice!);
       addOrUpdateCategory(categories, "delivery", 'delivery',
-          '${repsData.data!.deliveryPrice}');
+          '${delivery == 0 ? 'Free' : repsData.data!.deliveryPrice}');
       num discount = filtertogetNum(repsData.data!.discount!);
       if (discount > 0) {
         addOrUpdateCategory(
             categories, "coupon", 'discount', '-${repsData.data!.discount}');
+      } else {
+        categories.removeWhere((cat) => cat.id == 'coupon');
       }
       addOrUpdateCategory(categories, "tot_cost", 'tot_cost',
           '${repsData.data!.totalWithDelivery}');
@@ -226,6 +229,15 @@ class _CheckoutModalState extends State<CheckoutModal> {
         subCategories: [],
       ));
     }
+    moveTotCostToEnd(categories);
+  }
+
+  void moveTotCostToEnd(List<CategoryModel> categories) {
+    categories.sort((a, b) {
+      if (a.id == 'tot_cost') return 1; // Move `tot_cost` to the end
+      if (b.id == 'tot_cost') return -1;
+      return 0; // Keep other items in their relative positions
+    });
   }
 
   @override

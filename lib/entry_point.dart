@@ -255,12 +255,7 @@ class _EntryPointState extends State<EntryPoint> {
         default:
       }
     }
-    if (index == 4) {
-      context.router.navigate(const ProfileRoute());
-    }
-    if (index == 1) {
-      context.router.navigate(const DiscoverRoute());
-    }
+
     if (index == 0) {
       log('Current stack: ${context.router.stack}');
       // context.router.popUntilRoot();
@@ -270,6 +265,18 @@ class _EntryPointState extends State<EntryPoint> {
       //     .popUntil((route) => route.settings.name == EmptyHomeRouter.name);
 
       // context.router.navigate(HomeRoute());
+    }
+    if (index == 1) {
+      context.router.navigate(const DiscoverRoute());
+    }
+    if (index == 2) {
+      context.router.navigate(const CartRoute());
+    }
+    if (index == 3) {
+      context.router.navigate(const FavoriteRoute());
+    }
+    if (index == 4) {
+      context.router.navigate(const ProfileRoute());
     }
   }
 }
