@@ -232,6 +232,7 @@ class _ExpansionCategoryState extends State<ExpansionCategory> {
                         num? maxCount = num.tryParse(widget.info);
 
                         if (newValue != null && maxCount != null) {
+                          log('${context.read<MainProvider>().checkoutTotal}');
                           maxCount = maxCount >
                                   context.read<MainProvider>().checkoutTotal
                               ? context.read<MainProvider>().checkoutTotal

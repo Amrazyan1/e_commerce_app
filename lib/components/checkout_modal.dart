@@ -95,12 +95,12 @@ class _CheckoutModalState extends State<CheckoutModal> {
         ),
       );
     }
-    // widget.data.availableBonuses = '50,000.00 amd';
+    // widget.data.availableBonuses = '50 000,00 amd';
     if (widget.data.availableBonuses != null &&
         widget.data.availableBonuses!.isNotEmpty) {
       inputController.text = '';
 
-      num avalBonus = filtertogetNum(widget.data.availableBonuses!);
+      num avalBonus = filterToGetNum(widget.data.availableBonuses!);
 
       if (avalBonus != 0) {
         categories.add(
@@ -114,15 +114,15 @@ class _CheckoutModalState extends State<CheckoutModal> {
     }
   }
 
-  num filtertogetNum(String text) {
-    // Remove all characters except digits, commas, and periods
-    String sanitizedString = text.replaceAll(RegExp(r'[^\d.,]'), '');
+  num filterToGetNum(String text) {
+    // Remove all non-numeric characters except digits, commas, and periods
+    String sanitizedString = text.replaceAll(RegExp(r'[^\d,]'), '');
 
-    // Remove grouping commas (commas not followed by 3 digits)
-    sanitizedString = sanitizedString.replaceAll(RegExp(r',(?!\d{3})'), '');
+    // Replace the last comma with a period to handle the decimal part
+    sanitizedString = sanitizedString.replaceFirst(RegExp(r',(?=\d{2}$)'), '.');
 
-    // Replace commas used as thousand separators with empty strings
-    sanitizedString = sanitizedString.replaceAll(',', '');
+    // Remove any remaining commas used as thousand separators
+    sanitizedString = sanitizedString.replaceAll(RegExp(r','), '');
 
     // Parse the final sanitized string into a number
     num avalBonus = num.parse(sanitizedString);
@@ -160,10 +160,10 @@ class _CheckoutModalState extends State<CheckoutModal> {
 
       addOrUpdateCategory(
           categories, "price", 'price', '${repsData.data!.total}');
-      num delivery = filtertogetNum(repsData.data!.deliveryPrice!);
+      num delivery = filterToGetNum(repsData.data!.deliveryPrice!);
       addOrUpdateCategory(categories, "delivery", 'delivery',
           '${delivery == 0 ? 'Free' : repsData.data!.deliveryPrice}');
-      num discount = filtertogetNum(repsData.data!.discount!);
+      num discount = filterToGetNum(repsData.data!.discount!);
       if (discount > 0) {
         addOrUpdateCategory(
             categories, "coupon", 'discount', '-${repsData.data!.discount}');
@@ -173,7 +173,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
       addOrUpdateCategory(categories, "tot_cost", 'tot_cost',
           '${repsData.data!.totalWithDelivery}');
 
-      num totalPrice = filtertogetNum(repsData.data!.total!);
+      num totalPrice = filterToGetNum(repsData.data!.total!);
 
       context.read<MainProvider>().isProcessOrder = false;
       context.read<MainProvider>().checkoutTotal = totalPrice;
