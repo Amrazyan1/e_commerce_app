@@ -17,6 +17,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
 import '../../../services/api_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:maps_toolkit/maps_toolkit.dart' as mapToolkit;
 
 @RoutePage()
 class DeliveryAddressNew extends StatefulWidget {
@@ -32,7 +33,7 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
   late GoogleMapController mapController;
   final CameraPosition _initialPosition = const CameraPosition(
     target: LatLng(40.13558, 44.49223), // Default location
-    zoom: 15.0,
+    zoom: 15,
   );
   bool loading = false;
 
@@ -49,6 +50,13 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
   }
 
   void getCurrentLocation() async {
+    // mapController.animateCamera(
+    //   CameraUpdate.newLatLng(
+    //     LatLng(yerevanCenter.latitude!, yerevanCenter.longitude!),
+    //   ),
+    // );
+    // _onMapTap(LatLng(yerevanCenter.latitude!, yerevanCenter.longitude!));
+    // return;
     loc.Location location = loc.Location();
     bool serviceEnabled;
     loc.PermissionStatus permissionGranted;
@@ -79,7 +87,29 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
     }
   }
 
+  double get circleRadius => 8000;
+
+  bool isMarkerInsideCircle(mapToolkit.LatLng markerPosition,
+      mapToolkit.LatLng circleCenter, double circleRadius) {
+    num distanceBetween = mapToolkit.SphericalUtil.computeDistanceBetween(
+        circleCenter, markerPosition);
+    return distanceBetween <= circleRadius;
+  }
+
+  bool isInsede = false;
+  mapToolkit.LatLng yerevanCenter =
+      mapToolkit.LatLng(40.18206417925203, 44.51468563638671);
   void _onMapTap(LatLng position) async {
+    isInsede = isMarkerInsideCircle(
+        mapToolkit.LatLng(position.latitude, position.longitude),
+        yerevanCenter,
+        circleRadius);
+    setState(() {
+      isInsede = isInsede;
+    });
+    if (!isInsede) {
+      return;
+    }
     setState(() {
       _selectedLocation = position;
     });
@@ -176,8 +206,8 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
         child: SizedBox(
           height: 50,
           child: ButtonMainWidget(
-              callback: _addNewAddress,
-              text: 'add_address'.tr(),
+              callback: isInsede ? _addNewAddress : null,
+              text: isInsede ? 'add_address'.tr() : 'out_bounds'.tr(),
               customwidget: loading
                   ? const CircularProgressIndicator(color: Colors.white)
                   : null),
@@ -201,6 +231,15 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
                     onMapCreated: (GoogleMapController controller) {
                       mapController = controller;
                     },
+                    circles: {
+                      Circle(
+                          circleId: CircleId('1'),
+                          center: LatLng(
+                              yerevanCenter.latitude, yerevanCenter.longitude),
+                          radius: circleRadius,
+                          strokeWidth: 2,
+                          strokeColor: Colors.red.withOpacity(0.2))
+                    },
                     onTap: _onMapTap,
                     markers: _selectedLocation != null
                         ? {
@@ -210,7 +249,7 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
                             ),
                           }
                         : {},
-                    myLocationEnabled: true,
+                    myLocationEnabled: false,
                     zoomControlsEnabled: false,
                   ),
                   Positioned(
