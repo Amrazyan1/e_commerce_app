@@ -18,6 +18,7 @@ import 'package:location/location.dart' as loc;
 import '../../../services/api_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:maps_toolkit/maps_toolkit.dart' as mapToolkit;
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 @RoutePage()
 class DeliveryAddressNew extends StatefulWidget {
@@ -99,6 +100,7 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
   bool isInsede = false;
   mapToolkit.LatLng yerevanCenter =
       mapToolkit.LatLng(40.18206417925203, 44.51468563638671);
+
   void _onMapTap(LatLng position) async {
     isInsede = isMarkerInsideCircle(
         mapToolkit.LatLng(position.latitude, position.longitude),
@@ -136,6 +138,7 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
         _addressController.text = _address;
       });
     }
+    getPolyPoints();
   }
 
   void _addNewAddress() async {
@@ -161,13 +164,15 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
         context.read<SettingsBloc>().settingsmodel!.data!.storeAddress!.lat;
     final long =
         context.read<SettingsBloc>().settingsmodel!.data!.storeAddress!.long;
-    double distanceInMeters = Geolocator.distanceBetween(
-      double.parse(lat!),
-      double.parse(long!),
-      _selectedLocation!.latitude,
-      _selectedLocation!.longitude,
-    );
+    int distanceInMeters = await getPolyPoints();
+    // Geolocator.distanceBetween(
+    //   double.parse(lat!),
+    //   double.parse(long!),
+    //   _selectedLocation!.latitude,
+    //   _selectedLocation!.longitude,
+    // );
     log('$distanceInMeters');
+
     try {
       final addressDetails = {
         'name': _nameController.text,
@@ -193,6 +198,33 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
         loading = false;
       });
     }
+  }
+
+  Future<int> getPolyPoints() async {
+    final lat =
+        context.read<SettingsBloc>().settingsmodel!.data!.storeAddress!.lat;
+    final long =
+        context.read<SettingsBloc>().settingsmodel!.data!.storeAddress!.long;
+    PolylinePoints polylinePoints = PolylinePoints();
+
+    log('$lat  $long');
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      googleApiKey: 'AIzaSyAYXgkuGsBPlVLThEP4crxBFZYarrRlDxg',
+      request: PolylineRequest(
+        origin: PointLatLng(
+          double.parse(lat!),
+          double.parse(long!),
+        ),
+        destination: PointLatLng(
+          _selectedLocation!.latitude,
+          _selectedLocation!.longitude,
+        ),
+        mode: TravelMode.driving,
+      ),
+    );
+    log('NEWQ DISTANCEEE ${result.totalDistanceValue}');
+
+    return result.totalDistanceValue ?? 1000;
   }
 
   @override
