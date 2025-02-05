@@ -305,7 +305,7 @@ class _barcodeItemState extends State<_barcodeItem> {
 
   Future<void> getCode() async {
     final prefs = await SharedPreferences.getInstance();
-
+    // await prefs.setString('bonus_code', 'bonus');
     final aa = await prefs.getString('bonus_code');
 
     setState(() {
