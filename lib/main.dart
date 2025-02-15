@@ -110,7 +110,7 @@ void main() async {
             BlocProvider(
               create: (_) => CouponsBloc(),
             ),
-             BlocProvider(
+            BlocProvider(
               create: (_) => ProductDetailBloc(),
             ),
           ],
@@ -171,7 +171,7 @@ class MainApp extends StatelessWidget {
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
           locale: context.locale,
-          title: 'Shop Template by The Flutter Way',
+          title: 'Orig Inn',
           themeMode: ThemeMode.light,
           routerDelegate: appRouter.delegate(),
           routeInformationParser: appRouter.defaultRouteParser(),
