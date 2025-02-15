@@ -185,7 +185,30 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     );
                   }
-                  return Container();
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            context.read<CartBloc>().add(ClearCart());
+                          },
+                          child: Text(
+                            'clear_all'.tr(),
+                            style: const TextStyle(
+                              decoration: TextDecoration.underline,
+                              decorationColor:
+                                  Colors.red, // Adds the underscore
+                              color:
+                                  Colors.red, // Optional, for better visibility
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
                 },
               ),
               BlocBuilder<CartBloc, CartState>(

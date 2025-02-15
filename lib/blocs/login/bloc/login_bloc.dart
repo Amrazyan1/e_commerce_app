@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:e_commerce_app/services/api_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -13,17 +14,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginSubmitted>((event, emit) async {
       emit(LoginLoading());
       try {
-        final response = await _apiService.registeruser(event.username,
-            event.email, event.password, event.birthDate, event.phone,event.gender);
+        final response = await _apiService.registeruser(
+            event.username,
+            event.email,
+            event.password,
+            event.birthDate,
+            event.phone,
+            event.gender);
         log(response.data);
         if (response.statusCode == 200) {
           emit(LoginSuccess());
         } else {
           emit(LoginFailure(error: 'Invalid credentials'));
         }
-      } catch (e) {
+      } on DioException catch (e) {
         print(e);
-        emit(LoginFailure(error: e.toString()));
+        emit(LoginFailure(error: e.error.toString()));
       }
     });
   }

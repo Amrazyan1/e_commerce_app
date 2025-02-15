@@ -174,7 +174,7 @@ class ApiService {
       }
       return response;
     } on DioException catch (e) {
-      log('error $e');
+      log('error ${e.error}');
       rethrow;
     }
   }

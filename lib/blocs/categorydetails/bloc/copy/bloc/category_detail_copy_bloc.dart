@@ -84,6 +84,12 @@ class CategoryDetailCopyBloc
         }
       } catch (e) {
         log(e.toString());
+
+        if (e is DioException && e.type == DioExceptionType.cancel) {
+          log("Request canceled: ${e.message}");
+          return; // Ignore and do not emit an error state
+        }
+
         emit(CategoryDetailCopyError(e.toString()));
       }
     });

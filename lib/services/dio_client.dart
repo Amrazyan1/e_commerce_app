@@ -62,7 +62,23 @@ class DioClient {
         return handler.next(response);
       },
       onError: (DioException e, handler) {
-        return handler.next(e);
+        if (e.response != null && e.response!.data is Map<String, dynamic>) {
+          final message = e.response!.data['message'];
+
+          // Modify the error before passing it to the next handler
+          handler.next(
+            DioException(
+              requestOptions: e.requestOptions,
+              response: e.response,
+              type: e.type,
+              error:
+                  message ?? e.error, // Replace the error message if available
+            ),
+          );
+        } else {
+          // Pass the error as it is
+          handler.next(e);
+        }
       },
     ));
   }
