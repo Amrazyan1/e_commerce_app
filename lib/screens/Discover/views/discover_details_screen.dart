@@ -61,7 +61,7 @@ class _DiscoverDetailsScreenState extends State<DiscoverDetailsScreen> {
         context.read<CategoryDetailCopyBloc>().add(
             FetchCategoryProductsEventCopy(
                 id: context.read<CategoryDetailCopyBloc>().categoryId,
-                page: 1));
+                page: 2));
       }
     }
   }

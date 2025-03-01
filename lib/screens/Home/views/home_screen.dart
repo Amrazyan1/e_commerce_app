@@ -26,6 +26,7 @@ import '../../../blocs/products/trending/bloc/trend_new_products_bloc.dart';
 import '../../../blocs/search/bloc/global_search_bloc.dart';
 import '../../Products/Components/product_card.dart';
 import '../../Products/product_details_screen.dart';
+import '../../searchfocusnode.dart';
 
 @RoutePage()
 class HomeScreen extends StatefulWidget {
@@ -36,7 +37,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  var _searchFocusNode = FocusNode();
   final _searchTextController = TextEditingController();
 
   Locale? previousLocale;
@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: RefreshIndicator(
         onRefresh: _onrefresh,
         child: SuperScaffold(
-          key: const Key('home'),
+          key: superScaffoldKey,
           transitionBetweenRoutes: false,
           appBar: SuperAppBar(
             backgroundColor:
@@ -102,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             searchBar: SuperSearchBar(
               placeholderText: 'search'.tr(),
-              searchFocusNode: _searchFocusNode,
+              searchFocusNode: searchFocusService.searchFocusNode,
               searchController: _searchTextController,
               textStyle: Theme.of(context).textTheme.bodyLarge!,
               onFocused: (value) {

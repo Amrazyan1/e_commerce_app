@@ -34,7 +34,7 @@ class CategoryDetailCopyBloc
           }
           categoryId = event.id;
           cancelLoadProducts();
-          if (page == 0) {
+          if (page == 0 || page == 1) {
             pagination = 1;
             allProducts.clear();
             emit(CategoryDetailCopyLoaded(products: allProducts));

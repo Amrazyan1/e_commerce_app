@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 
 import 'blocs/products/discounts/bloc/discounted_bloc.dart';
 import 'blocs/products/popular/bloc/popular_products_bloc.dart';
@@ -23,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 import 'screens/auth_required.dart';
+import 'screens/searchfocusnode.dart';
 
 // final GlobalKey<AutoTabsRouterState> autoTabsRouterKey =
 //     GlobalKey<AutoTabsRouterState>();
@@ -120,6 +122,7 @@ class _EntryPointState extends State<EntryPoint> {
                 final isExitWarning = difference >= const Duration(seconds: 1);
 
                 timeBackPressed = DateTime.now();
+                superScaffoldKey.currentState?.cancelClick();
 
                 if (isExitWarning) {
                   const toastMessage = "Press again to exit";
@@ -211,6 +214,8 @@ class _EntryPointState extends State<EntryPoint> {
   }
 
   void _onPageChange(int index, TabsRouter tabsRouter) async {
+    superScaffoldKey.currentState?.cancelClick();
+
     if (index != tabsRouter.activeIndex) {
       log('$index');
       if (index == 2 || index == 3 || index == 4) {
@@ -222,6 +227,8 @@ class _EntryPointState extends State<EntryPoint> {
 
       tabsRouter.setActiveIndex(index);
       FocusScope.of(context).unfocus();
+      searchFocusService.searchFocusNode.unfocus();
+
       switch (index) {
         case 0:
           // context
