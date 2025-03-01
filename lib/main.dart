@@ -110,9 +110,9 @@ void main() async {
             BlocProvider(
               create: (_) => CouponsBloc(),
             ),
-            BlocProvider(
-              create: (_) => ProductDetailBloc(),
-            ),
+            // BlocProvider(
+            //   create: (_) => ProductDetailBloc(),
+            // ),
           ],
           child: const MainApp(),
         ),

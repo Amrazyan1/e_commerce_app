@@ -48,6 +48,9 @@ class AppRouter extends RootStackRouter {
                     AutoRoute(
                         page: DiscoverDetailsRoute.page,
                         path: 'discoverdetail'),
+                    AutoRoute(
+                        page: ProductDetailsRoute.page,
+                        path: 'cart-product-details'),
                   ]),
               AutoRoute(
                   page: EmptyFavRouterPage.page,
