@@ -1502,9 +1502,9 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: b7e456a
-      resolved-ref: b7e456a1f653000888042bc96896209f712c9212
-      url: "https://github.com/kspo/super_cupertino_navigation_bar.git"
+      ref: c03ead0
+      resolved-ref: c03ead069cf198eb221e711aaa6b5b778f51e50e
+      url: "https://github.com/Amrazyan/super_cupertino_navigation_bar"
     source: git
     version: "2.1.2"
   swipeable_page_route:

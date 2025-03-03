@@ -35,8 +35,8 @@ dependencies:
   shimmer: ^3.0.0
   super_cupertino_navigation_bar:
     git:
-      url: https://github.com/kspo/super_cupertino_navigation_bar.git
-      ref: b7e456a
+      url: https://github.com/Amrazyan/super_cupertino_navigation_bar
+      ref: c03ead0
   auto_size_text: ^3.0.0
   permission_handler: ^11.3.1
   location: ^6.0.2
