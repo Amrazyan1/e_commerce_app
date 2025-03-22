@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
 
 import 'package:e_commerce_app/Provider/main_provider.dart';
 import 'package:e_commerce_app/blocs/bloc/product_detail_bloc.dart';
@@ -13,14 +15,17 @@ import 'package:e_commerce_app/injector.dart';
 import 'package:e_commerce_app/router/router.dart';
 import 'package:e_commerce_app/services/api_service.dart';
 import 'package:e_commerce_app/services/dio_client.dart';
+import 'package:e_commerce_app/services/push_notifications.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_localization_loader/easy_localization_loader.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'blocs/cart/bloc/cart_bloc.dart';
 import 'blocs/categorydetails/bloc/category_detail_bloc.dart';
 import 'blocs/favourites/bloc/favourites_bloc.dart';
@@ -33,6 +38,11 @@ import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platf
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 final appRouter = AppRouter(); // Initialize the AppRouter
+
+Future _firebaseBackgroundMessage(RemoteMessage message) async {
+  if (message.notification != null) {}
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
@@ -44,7 +54,24 @@ void main() async {
     initializeMapRenderer();
   }
   EasyLocalization.logger.enableLevels = [EasyLocalization.logger.defaultLevel];
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
+  PushNotifications.init();
+  PushNotifications.localNotiInit();
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundMessage);
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    String payloadData = jsonEncode(message.data);
+    log("Got a message in foreground");
+    if (message.notification != null) {
+      PushNotifications.showSimpleNotification(
+          title: message.notification!.title!,
+          body: message.notification!.body!,
+          payload: payloadData);
+    }
+  });
   runApp(
     EasyLocalization(
       supportedLocales: const [
