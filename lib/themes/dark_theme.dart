@@ -54,7 +54,7 @@ final darkTheme = base.copyWith(
     onSurface: AppColors.onSurfaceDark,
     onError: AppColors.onErrorDark,
   ),
-  cardTheme: CardTheme(
+  cardTheme: CardThemeData(
     color: base.dialogBackgroundColor,
     elevation: 0,
     shape: RoundedRectangleBorder(
@@ -62,7 +62,7 @@ final darkTheme = base.copyWith(
     ),
     clipBehavior: Clip.none,
   ),
-  tabBarTheme: TabBarTheme(
+  tabBarTheme: TabBarThemeData(
     unselectedLabelStyle: base.primaryTextTheme.labelLarge!.copyWith(
       color: AppColors.primaryDark,
     ),
@@ -102,8 +102,7 @@ final darkTheme = base.copyWith(
     endIndent: 0,
     color: AppColors.dividerColor,
   ),
-  primaryIconTheme:
-      base.primaryIconTheme.copyWith(color: AppColors.primaryDark),
+  primaryIconTheme: base.primaryIconTheme.copyWith(color: AppColors.primaryDark),
   iconTheme: base.iconTheme.copyWith(color: AppColors.iconDark),
   appBarTheme: base.appBarTheme.copyWith(
     centerTitle: false,
@@ -269,9 +268,7 @@ final darkTheme = base.copyWith(
           return RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
             side: BorderSide(
-              color: states.contains(WidgetState.disabled)
-                  ? AppColors.onSurfaceDark
-                  : AppColors.primaryDark,
+              color: states.contains(WidgetState.disabled) ? AppColors.onSurfaceDark : AppColors.primaryDark,
             ),
           );
         },
@@ -279,9 +276,7 @@ final darkTheme = base.copyWith(
       foregroundColor: const WidgetStatePropertyAll(AppColors.white),
       backgroundColor: WidgetStateProperty.resolveWith(
         (states) {
-          return states.contains(WidgetState.disabled)
-              ? AppColors.onSurfaceDark
-              : Colors.transparent;
+          return states.contains(WidgetState.disabled) ? AppColors.onSurfaceDark : Colors.transparent;
         },
       ),
     ),
@@ -298,9 +293,7 @@ final darkTheme = base.copyWith(
           return RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
             side: BorderSide(
-              color: states.contains(WidgetState.disabled)
-                  ? AppColors.onSurfaceDark
-                  : AppColors.primaryLight,
+              color: states.contains(WidgetState.disabled) ? AppColors.onSurfaceDark : AppColors.primaryLight,
             ),
           );
         },
@@ -308,9 +301,7 @@ final darkTheme = base.copyWith(
       foregroundColor: const WidgetStatePropertyAll(AppColors.white),
       backgroundColor: WidgetStateProperty.resolveWith(
         (states) {
-          return states.contains(WidgetState.disabled)
-              ? AppColors.onSurfaceDark
-              : Colors.transparent;
+          return states.contains(WidgetState.disabled) ? AppColors.onSurfaceDark : Colors.transparent;
         },
       ),
     ),
@@ -359,9 +350,7 @@ final darkTheme = base.copyWith(
       foregroundColor: const WidgetStatePropertyAll(AppColors.onPrimaryDark),
       backgroundColor: WidgetStateProperty.resolveWith(
         (states) {
-          return states.contains(WidgetState.disabled)
-              ? Colors.transparent
-              : AppColors.primaryDark;
+          return states.contains(WidgetState.disabled) ? Colors.transparent : AppColors.primaryDark;
         },
       ),
     ),

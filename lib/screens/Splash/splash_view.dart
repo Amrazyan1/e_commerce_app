@@ -23,7 +23,7 @@ class _SplashViewScreenState extends State<SplashViewScreen> {
   }
 
   void checkAutoLogin() async {
-    final status = await AppTrackingTransparency.requestTrackingAuthorization();
+    final status = await appTracking();
     final prefs = await SharedPreferences.getInstance();
     String? authToken = prefs.getString('auth_token');
     await Future.delayed(const Duration(seconds: 1));
@@ -31,6 +31,18 @@ class _SplashViewScreenState extends State<SplashViewScreen> {
       AutoRouter.of(context).replaceAll([const EntryPoint()]);
     } else {
       AutoRouter.of(context).replace(const AuthorizationRoute());
+    }
+  }
+
+  Future<void> appTracking() async {
+    final TrackingStatus status = await AppTrackingTransparency.trackingAuthorizationStatus;
+
+    while (status == TrackingStatus.notDetermined) {
+      await Future.delayed(const Duration(seconds: 1));
+      final TrackingStatus newStatus = await AppTrackingTransparency.requestTrackingAuthorization();
+      if (newStatus != TrackingStatus.notDetermined) {
+        break;
+      }
     }
   }
 

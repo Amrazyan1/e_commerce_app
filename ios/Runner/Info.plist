@@ -45,12 +45,7 @@
 	</array>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>This identifier will be used to deliver personalized goods to you.</string>
-	<!-- Added purpose strings -->
-	<key>NSMicrophoneUsageDescription</key>
-	<string>This app requires microphone access for recording audio to enhance user interaction.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app requires location access to provide personalized location-based services.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs location access to improve the user experience while using the app.</string>
+	<string>We need your location to help you add your shipping address quickly and accurately.</string>
 </dict>
 </plist>

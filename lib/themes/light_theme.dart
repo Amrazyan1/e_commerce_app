@@ -53,7 +53,7 @@ final lightTheme = base.copyWith(
     onSurface: AppColors.black,
     onError: AppColors.onErrorLight,
   ),
-  cardTheme: CardTheme(
+  cardTheme: CardThemeData(
     color: base.dialogBackgroundColor,
     elevation: 0,
     shape: RoundedRectangleBorder(
@@ -61,7 +61,7 @@ final lightTheme = base.copyWith(
     ),
     clipBehavior: Clip.none,
   ),
-  tabBarTheme: TabBarTheme(
+  tabBarTheme: TabBarThemeData(
     unselectedLabelStyle: base.primaryTextTheme.labelLarge!.copyWith(
       color: AppColors.primaryLight,
     ),
@@ -101,8 +101,7 @@ final lightTheme = base.copyWith(
     endIndent: 0,
     color: AppColors.dividerColor.withOpacity(.19),
   ),
-  primaryIconTheme:
-      base.primaryIconTheme.copyWith(color: AppColors.primaryLight),
+  primaryIconTheme: base.primaryIconTheme.copyWith(color: AppColors.primaryLight),
   iconTheme: base.iconTheme.copyWith(color: AppColors.iconLight),
   appBarTheme: base.appBarTheme.copyWith(
     centerTitle: false,
@@ -228,8 +227,7 @@ final lightTheme = base.copyWith(
     ),
     focusedBorder: OutlineInputBorder(
       borderSide: BorderSide(
-        color: AppColors.inputFieldLightBorder
-            .withOpacity(.4), //AppColors.inputFieldLightBorder.withOpacity(.3),
+        color: AppColors.inputFieldLightBorder.withOpacity(.4), //AppColors.inputFieldLightBorder.withOpacity(.3),
       ),
       borderRadius: const BorderRadius.all(Radius.circular(8)),
     ),
@@ -269,9 +267,7 @@ final lightTheme = base.copyWith(
           return RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
             side: BorderSide(
-              color: states.contains(WidgetState.disabled)
-                  ? AppColors.onSurfaceLight
-                  : AppColors.primaryLight,
+              color: states.contains(WidgetState.disabled) ? AppColors.onSurfaceLight : AppColors.primaryLight,
             ),
           );
         },
@@ -279,9 +275,7 @@ final lightTheme = base.copyWith(
       foregroundColor: const WidgetStatePropertyAll(AppColors.white),
       backgroundColor: WidgetStateProperty.resolveWith(
         (states) {
-          return states.contains(WidgetState.disabled)
-              ? AppColors.onSurfaceLight
-              : Colors.transparent;
+          return states.contains(WidgetState.disabled) ? AppColors.onSurfaceLight : Colors.transparent;
         },
       ),
     ),
@@ -298,9 +292,7 @@ final lightTheme = base.copyWith(
           return RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
             side: BorderSide(
-              color: states.contains(WidgetState.disabled)
-                  ? AppColors.onSurfaceLight
-                  : AppColors.primaryLight,
+              color: states.contains(WidgetState.disabled) ? AppColors.onSurfaceLight : AppColors.primaryLight,
             ),
           );
         },
@@ -308,9 +300,7 @@ final lightTheme = base.copyWith(
       foregroundColor: const WidgetStatePropertyAll(AppColors.white),
       backgroundColor: WidgetStateProperty.resolveWith(
         (states) {
-          return states.contains(WidgetState.disabled)
-              ? AppColors.onSurfaceLight
-              : Colors.transparent;
+          return states.contains(WidgetState.disabled) ? AppColors.onSurfaceLight : Colors.transparent;
         },
       ),
     ),
@@ -350,9 +340,7 @@ final lightTheme = base.copyWith(
       foregroundColor: const WidgetStatePropertyAll(AppColors.white),
       backgroundColor: WidgetStateProperty.resolveWith(
         (states) {
-          return states.contains(WidgetState.disabled)
-              ? AppColors.onSurfaceLight
-              : AppColors.primaryLight;
+          return states.contains(WidgetState.disabled) ? AppColors.onSurfaceLight : AppColors.primaryLight;
         },
       ),
     ),
