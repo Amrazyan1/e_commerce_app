@@ -46,6 +46,13 @@
 	<key>NSUserTrackingUsageDescription</key>
 	<string>This identifier will be used to deliver personalized goods to you.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We need your location to help you add your shipping address quickly and accurately.</string>
+	<string>We use your location to help you add your shipping address quickly and accurately.</string>
+
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app integrates third-party libraries that may request location access, though we do not actively use your location.</string>
+
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app includes functionality from third-party libraries that may request microphone access, though the microphone is not actively used.</string>
+
 </dict>
 </plist>

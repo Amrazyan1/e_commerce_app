@@ -26,9 +26,7 @@ class MostPopular extends StatelessWidget {
       listener: (context, state) {
         if (state is PopularProductsError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                duration: const Duration(seconds: 15),
-                content: Text(state.message)),
+            SnackBar(duration: const Duration(seconds: 15), content: Text(state.message)),
           );
         }
       },
@@ -88,16 +86,14 @@ class MostPopular extends StatelessWidget {
                       );
                     }
                     return SizedBox(
-                      height: 114,
+                      height: 130,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: products.length,
                         itemBuilder: (context, index) => Padding(
                           padding: EdgeInsets.only(
                             left: defaultPadding,
-                            right: index == products.length - 1
-                                ? defaultPadding
-                                : 0,
+                            right: index == products.length - 1 ? defaultPadding : 0,
                           ),
                           child: SecondaryProductCard(
                             key: ValueKey(products[index].id),
@@ -108,8 +104,7 @@ class MostPopular extends StatelessWidget {
                             priceAfetDiscount: products[index].discountedPrice,
                             dicountpercent: products[index].discount,
                             press: () {
-                              context.read<MainProvider>().currentProductModel =
-                                  products[index];
+                              context.read<MainProvider>().currentProductModel = products[index];
                               context.router.root.push(ProductDetailsRoute());
 // AutoRouter.of(context.router.root).push(const ProductDetailsRoute());
 

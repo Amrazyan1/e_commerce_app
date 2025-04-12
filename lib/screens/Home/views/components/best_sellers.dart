@@ -23,9 +23,7 @@ class BestSellers extends StatelessWidget {
       listener: (context, state) {
         if (state is TrendNewProductsError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                duration: const Duration(seconds: 15),
-                content: Text(state.message)),
+            SnackBar(duration: const Duration(seconds: 15), content: Text(state.message)),
           );
         }
       },
@@ -74,30 +72,30 @@ class BestSellers extends StatelessWidget {
                     final products = state.products;
 
                     return SizedBox(
-                      height: 220,
+                      height: 250,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: products.length,
                         itemBuilder: (context, index) => Padding(
                           padding: EdgeInsets.only(
                             left: defaultPadding,
-                            right: index == products.length - 1
-                                ? defaultPadding
-                                : 0,
+                            right: index == products.length - 1 ? defaultPadding : 0,
                           ),
-                          child: ProductCard(
-                            product: products[index],
-                            press: () {
-                              context.read<MainProvider>().currentProductModel =
-                                  products[index];
-                              // Navigator.of(context).push(
-                              //   MaterialPageRoute(
-                              //     builder: (context) =>
-                              //         const ProductDetailsScreen(),
-                              //   ),
-                              // );
-                              context.router.root.push(ProductDetailsRoute());
-                            },
+                          child: SizedBox(
+                            width: 170,
+                            child: ProductCard(
+                              product: products[index],
+                              press: () {
+                                context.read<MainProvider>().currentProductModel = products[index];
+                                // Navigator.of(context).push(
+                                //   MaterialPageRoute(
+                                //     builder: (context) =>
+                                //         const ProductDetailsScreen(),
+                                //   ),
+                                // );
+                                context.router.root.push(ProductDetailsRoute());
+                              },
+                            ),
                           ),
                         ),
                       ),

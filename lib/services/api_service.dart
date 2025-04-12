@@ -16,16 +16,28 @@ class ApiService {
   ApiService(this._dioClient);
 
   Future<void> sendPhoneNumber(String phoneNumber) async {
-    final response = await _dioClient.dio
-        .post('/auth/verification/send', data: {'phone': phoneNumber});
+    final prefs = await SharedPreferences.getInstance();
+    final fcmToken = prefs.getString('fcm_token');
+    final response = await _dioClient.dio.post(
+      '/auth/verification/send',
+      data: {
+        'phone': phoneNumber,
+        'fcm': fcmToken,
+      },
+    );
     if (response.statusCode != 200) {
       throw Exception('Failed to send phone number');
     }
   }
 
   Future<Response> verifyOtp(String phoneNumber, String otp) async {
-    final response = await _dioClient.dio.post('/auth/verification/verify',
-        data: {'phone': phoneNumber, 'code': otp});
+    final prefs = await SharedPreferences.getInstance();
+    final fcmToken = prefs.getString('fcm_token');
+    final response = await _dioClient.dio.post('/auth/verification/verify', data: {
+      'phone': phoneNumber,
+      'code': otp,
+      'fcm': fcmToken,
+    });
     if (response.statusCode != 200) {
       throw Exception('OTP verification failed');
     }
@@ -53,8 +65,8 @@ class ApiService {
 
   // User Addresses
   Future<DeliveryAddressesResponse> getUserAddresses(int perPage) async {
-    final response = await _dioClient.dio.get(Endpoints.userAddresses,
-        options: Options(contentType: "application/json"));
+    final response = await _dioClient.dio
+        .get(Endpoints.userAddresses, options: Options(contentType: "application/json"));
     if (response.statusCode == 200) {
       return deliveryAddressesResponseFromJson(response.data);
     } else {
@@ -148,9 +160,11 @@ class ApiService {
   }
 
   // Authentication
-  Future<Response> registeruser(String fullname, String email, String password,
-      String birthDate, String phone, String gender) async {
+  Future<Response> registeruser(String fullname, String email, String password, String birthDate,
+      String phone, String gender) async {
     try {
+      final prefs = await SharedPreferences.getInstance();
+      final fcmToken = prefs.getString('fcm_token');
       final response = await _dioClient.dio.post(
         Endpoints.userSignUp,
         data: {
@@ -159,6 +173,7 @@ class ApiService {
           'birthday': birthDate,
           'phone': phone,
           'sex': gender,
+          'fcm': fcmToken,
         },
       );
       log(response.data);
@@ -406,9 +421,7 @@ class ApiService {
   ) async {
     try {
       return await _dioClient.dio.post(
-        Endpoints.payOrder
-            .replaceFirst('{id}', id)
-            .replaceFirst('{method}', method),
+        Endpoints.payOrder.replaceFirst('{id}', id).replaceFirst('{method}', method),
       );
     } on DioException catch (e) {
       rethrow;
@@ -469,8 +482,7 @@ class ApiService {
   }
 
   // Products
-  Future<Response> getProductsByCategory(
-      String id, int perPage, CancelToken cancelToken) async {
+  Future<Response> getProductsByCategory(String id, int perPage, CancelToken cancelToken) async {
     try {
       return await _dioClient.dio.get(
           Endpoints.getProductsByCategory
@@ -483,8 +495,8 @@ class ApiService {
     }
   }
 
-  Future<Response> getProductsByCategoryWithQuery(String id,
-      Map<String, dynamic> queryParams, CancelToken cancelToken) async {
+  Future<Response> getProductsByCategoryWithQuery(
+      String id, Map<String, dynamic> queryParams, CancelToken cancelToken) async {
     try {
       return await _dioClient.dio.get(
           Endpoints.getProductsByCategoryWithQuery.replaceFirst('{id}', id),
@@ -516,8 +528,7 @@ class ApiService {
     }
   }
 
-  Future<Response> addProductRating(
-      String productId, Map<String, dynamic> data) async {
+  Future<Response> addProductRating(String productId, Map<String, dynamic> data) async {
     try {
       return await _dioClient.dio.post(
         Endpoints.addProductRating.replaceFirst('{product:id}', productId),
