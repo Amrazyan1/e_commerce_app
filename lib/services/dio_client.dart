@@ -13,16 +13,13 @@ class DioClient {
   DioClient()
       : _dio = Dio(
           BaseOptions(
-            baseUrl: 'http://imexpro.am/v1',
+            baseUrl: 'https://imexpro.am/v1',
             connectTimeout: Duration(milliseconds: 60 * 2000),
             receiveTimeout: Duration(milliseconds: 60 * 2000),
             headers: {
               'Content-Type': 'application/json; charset=UTF-8',
               'Accept-Language':
-                  EasyLocalization.of(navigatorKey.currentContext!)
-                          ?.locale
-                          .languageCode ??
-                      'en',
+                  EasyLocalization.of(navigatorKey.currentContext!)?.locale.languageCode ?? 'en',
               'Accept': 'application/json',
               'X-CSRF-TOKEN': '', // Add token if available or leave empty
             },
@@ -33,10 +30,7 @@ class DioClient {
         final prefs = await SharedPreferences.getInstance();
         final token = prefs.getString('auth_token');
         options.headers['Accept-Language'] =
-            EasyLocalization.of(navigatorKey.currentContext!)
-                    ?.locale
-                    .languageCode ??
-                'en';
+            EasyLocalization.of(navigatorKey.currentContext!)?.locale.languageCode ?? 'en';
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
         }
@@ -71,8 +65,7 @@ class DioClient {
               requestOptions: e.requestOptions,
               response: e.response,
               type: e.type,
-              error:
-                  message ?? e.error, // Replace the error message if available
+              error: message ?? e.error, // Replace the error message if available
             ),
           );
         } else {
