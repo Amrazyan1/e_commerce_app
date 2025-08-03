@@ -39,8 +39,8 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
   bool loading = false;
 
   LatLng? _selectedLocation;
-  String? _regionId; // Example: Can be updated dynamically based on the region.
-  String _address = ""; // Store address as a single editable string
+  String? _regionId;
+  String _address = "";
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
 
@@ -90,22 +90,19 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
 
   double get circleRadius => 8000;
 
-  bool isMarkerInsideCircle(mapToolkit.LatLng markerPosition,
-      mapToolkit.LatLng circleCenter, double circleRadius) {
-    num distanceBetween = mapToolkit.SphericalUtil.computeDistanceBetween(
-        circleCenter, markerPosition);
+  bool isMarkerInsideCircle(
+      mapToolkit.LatLng markerPosition, mapToolkit.LatLng circleCenter, double circleRadius) {
+    num distanceBetween =
+        mapToolkit.SphericalUtil.computeDistanceBetween(circleCenter, markerPosition);
     return distanceBetween <= circleRadius;
   }
 
   bool isInsede = false;
-  mapToolkit.LatLng yerevanCenter =
-      mapToolkit.LatLng(40.18206417925203, 44.51468563638671);
+  mapToolkit.LatLng yerevanCenter = mapToolkit.LatLng(40.18206417925203, 44.51468563638671);
 
   void _onMapTap(LatLng position) async {
     isInsede = isMarkerInsideCircle(
-        mapToolkit.LatLng(position.latitude, position.longitude),
-        yerevanCenter,
-        circleRadius);
+        mapToolkit.LatLng(position.latitude, position.longitude), yerevanCenter, circleRadius);
     setState(() {
       isInsede = isInsede;
     });
@@ -117,8 +114,8 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
     });
 
     try {
-      final reverseGeocodeResponse = await widget.apiService
-          .reverseGeocode(position.latitude, position.longitude);
+      final reverseGeocodeResponse =
+          await widget.apiService.reverseGeocode(position.latitude, position.longitude);
 
       final address = reverseGeocodeResponse.address;
       setState(() {
@@ -160,10 +157,8 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
         await Future.delayed(const Duration(milliseconds: 100));
       }
     }
-    final lat =
-        context.read<SettingsBloc>().settingsmodel!.data!.storeAddress!.lat;
-    final long =
-        context.read<SettingsBloc>().settingsmodel!.data!.storeAddress!.long;
+    final lat = context.read<SettingsBloc>().settingsmodel!.data!.storeAddress!.lat;
+    final long = context.read<SettingsBloc>().settingsmodel!.data!.storeAddress!.long;
     int distanceInMeters = await getPolyPoints();
     // Geolocator.distanceBetween(
     //   double.parse(lat!),
@@ -176,8 +171,8 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
     try {
       final addressDetails = {
         'name': _nameController.text,
-        'address': _address,
-        'details': _address,
+        'address': _nameController.text,
+        'details': _addressController.text,
         'latitude': _selectedLocation!.latitude,
         'longitude': _selectedLocation!.longitude,
         'distance': (distanceInMeters / 1000).toStringAsFixed(2),
@@ -201,10 +196,8 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
   }
 
   Future<int> getPolyPoints() async {
-    final lat =
-        context.read<SettingsBloc>().settingsmodel!.data!.storeAddress!.lat;
-    final long =
-        context.read<SettingsBloc>().settingsmodel!.data!.storeAddress!.long;
+    final lat = context.read<SettingsBloc>().settingsmodel!.data!.storeAddress!.lat;
+    final long = context.read<SettingsBloc>().settingsmodel!.data!.storeAddress!.long;
     PolylinePoints polylinePoints = PolylinePoints();
 
     log('$lat  $long');
@@ -240,9 +233,7 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
           child: ButtonMainWidget(
               callback: isInsede ? _addNewAddress : null,
               text: isInsede ? 'add_address'.tr() : 'out_bounds'.tr(),
-              customwidget: loading
-                  ? const CircularProgressIndicator(color: Colors.white)
-                  : null),
+              customwidget: loading ? const CircularProgressIndicator(color: Colors.white) : null),
         ),
       ),
       body: SingleChildScrollView(
@@ -256,9 +247,7 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
                     mapToolbarEnabled: true,
                     compassEnabled: true,
                     myLocationButtonEnabled: true,
-                    cloudMapId: Platform.isAndroid
-                        ? "75c80c69218fa3d7"
-                        : "f886856e2413792",
+                    cloudMapId: Platform.isAndroid ? "75c80c69218fa3d7" : "f886856e2413792",
                     initialCameraPosition: _initialPosition,
                     onMapCreated: (GoogleMapController controller) {
                       mapController = controller;
@@ -266,8 +255,7 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
                     circles: {
                       Circle(
                           circleId: CircleId('1'),
-                          center: LatLng(
-                              yerevanCenter.latitude, yerevanCenter.longitude),
+                          center: LatLng(yerevanCenter.latitude, yerevanCenter.longitude),
                           radius: circleRadius,
                           strokeWidth: 2,
                           strokeColor: Colors.red.withOpacity(0.2))
@@ -289,8 +277,7 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
                     right: 16, // Position slightly from the right edge
                     child: FloatingActionButton(
                       backgroundColor: kprimaryColor,
-                      onPressed:
-                          getCurrentLocation, // Centers map on current location
+                      onPressed: getCurrentLocation, // Centers map on current location
                       child: const Icon(Icons.my_location, color: Colors.white),
                     ),
                   ),
@@ -309,9 +296,7 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
                 maxLines: null, // Makes the height dynamic based on content
                 keyboardType: TextInputType.multiline, // Allows multiline input
                 onChanged: (value) {
-                  setState(() {
-                    _address = value;
-                  });
+                  _address = value;
                 },
               ),
             ),
@@ -321,15 +306,13 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
                 controller: _addressController,
                 decoration: InputDecoration(
                   labelText: "delivery_address".tr(),
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                 ),
                 minLines: 1, // Minimum height
                 maxLines: null, // Makes the height dynamic based on content
                 keyboardType: TextInputType.multiline, // Allows multiline input
                 onChanged: (value) {
-                  setState(() {
-                    _address = value;
-                  });
+                  _address = value;
                 },
               ),
             ),
