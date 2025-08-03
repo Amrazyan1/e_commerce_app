@@ -20,7 +20,6 @@ import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.da
 import 'blocs/products/discounts/bloc/discounted_bloc.dart';
 import 'blocs/products/popular/bloc/popular_products_bloc.dart';
 import 'blocs/products/trending/bloc/trend_new_products_bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 import 'screens/auth_required.dart';
@@ -46,9 +45,9 @@ class _EntryPointState extends State<EntryPoint> {
   void initState() {
     super.initState();
     _connectivity = Connectivity();
-    _connectivityStream =
-        _connectivity.onConnectivityChanged.expand((results) => results);
+    _connectivityStream = _connectivity.onConnectivityChanged.expand((results) => results);
     _checkInitialConnection();
+    context.read<SettingsBloc>().add(FetchUserSettingsEvent());
     context.read<TrendNewProductsBloc>().add(FetchTrendNewProductsEvent());
     context.read<DiscountedBloc>().add(FetchDiscountedProductsEvent());
     context.read<PopularProductsBloc>().add(FetchTrendPopularProductsEvent());
@@ -70,8 +69,7 @@ class _EntryPointState extends State<EntryPoint> {
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: const Text("No Internet Connection"),
-        content:
-            const Text("Please check your internet connection and try again."),
+        content: const Text("Please check your internet connection and try again."),
         actions: [
           TextButton(
             onPressed: () {
@@ -175,32 +173,27 @@ class _EntryPointState extends State<EntryPoint> {
                       items: [
                         BottomNavigationBarItem(
                           icon: svgIcon("assets/icons/shop_my.svg"),
-                          activeIcon: svgIcon("assets/icons/shop_my.svg",
-                              color: kprimaryColor),
+                          activeIcon: svgIcon("assets/icons/shop_my.svg", color: kprimaryColor),
                           label: "shop".tr(),
                         ),
                         BottomNavigationBarItem(
                           icon: svgIcon("assets/icons/explore_my.svg"),
-                          activeIcon: svgIcon("assets/icons/explore_my.svg",
-                              color: kprimaryColor),
+                          activeIcon: svgIcon("assets/icons/explore_my.svg", color: kprimaryColor),
                           label: "discover".tr(),
                         ),
                         BottomNavigationBarItem(
                           icon: svgIcon("assets/icons/cart_my.svg"),
-                          activeIcon: svgIcon("assets/icons/cart_my.svg",
-                              color: kprimaryColor),
+                          activeIcon: svgIcon("assets/icons/cart_my.svg", color: kprimaryColor),
                           label: "cart".tr(),
                         ),
                         BottomNavigationBarItem(
                           icon: svgIcon("assets/icons/fav_my.svg"),
-                          activeIcon: svgIcon("assets/icons/fav_my.svg",
-                              color: kprimaryColor),
+                          activeIcon: svgIcon("assets/icons/fav_my.svg", color: kprimaryColor),
                           label: "favorite".tr(),
                         ),
                         BottomNavigationBarItem(
                           icon: svgIcon("assets/icons/profile_my.svg"),
-                          activeIcon: svgIcon("assets/icons/profile_my.svg",
-                              color: kprimaryColor),
+                          activeIcon: svgIcon("assets/icons/profile_my.svg", color: kprimaryColor),
                           label: "profile".tr(),
                         ),
                       ],
@@ -242,9 +235,7 @@ class _EntryPointState extends State<EntryPoint> {
         case 1:
           context.read<CategoriesBloc>().add(FetchCategoriesEvent());
           context.read<CategoryDetailBloc>().cancelLoadProducts();
-          context
-              .read<CategoryDetailBloc>()
-              .add(FetchCategoryProductsEvent(id: '', page: 0));
+          context.read<CategoryDetailBloc>().add(FetchCategoryProductsEvent(id: '', page: 0));
 
           break;
         case 2:

@@ -4,8 +4,7 @@
 
 import 'dart:convert';
 
-SettingsModel settingsModelFromJson(String str) =>
-    SettingsModel.fromJson(json.decode(str));
+SettingsModel settingsModelFromJson(String str) => SettingsModel.fromJson(json.decode(str));
 
 String settingsModelToJson(SettingsModel data) => json.encode(data.toJson());
 
@@ -15,13 +14,6 @@ class SettingsModel {
   SettingsModel({
     this.data,
   });
-
-  SettingsModel copyWith({
-    Data? data,
-  }) =>
-      SettingsModel(
-        data: data ?? this.data,
-      );
 
   factory SettingsModel.fromJson(Map<String, dynamic> json) => SettingsModel(
         data: json["data"] == null ? null : Data.fromJson(json["data"]),
@@ -41,6 +33,8 @@ class Data {
   String? email;
   String? phone;
   bool? isPartner;
+  String? bonus;
+  String? bonusCode;
   StoreAddress? storeAddress;
 
   Data({
@@ -52,31 +46,10 @@ class Data {
     this.email,
     this.phone,
     this.isPartner,
+    this.bonus,
+    this.bonusCode,
     this.storeAddress,
   });
-
-  Data copyWith({
-    String? fullName,
-    String? firstName,
-    String? lastName,
-    String? birthday,
-    String? sex,
-    String? email,
-    String? phone,
-    bool? isPartner,
-    StoreAddress? storeAddress,
-  }) =>
-      Data(
-        fullName: fullName ?? this.fullName,
-        firstName: firstName ?? this.firstName,
-        lastName: lastName ?? this.lastName,
-        birthday: birthday ?? this.birthday,
-        sex: sex ?? this.sex,
-        email: email ?? this.email,
-        phone: phone ?? this.phone,
-        isPartner: isPartner ?? this.isPartner,
-        storeAddress: storeAddress ?? this.storeAddress,
-      );
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         fullName: json["fullName"],
@@ -87,9 +60,10 @@ class Data {
         email: json["email"],
         phone: json["phone"],
         isPartner: json["isPartner"],
-        storeAddress: json["storeAddress"] == null
-            ? null
-            : StoreAddress.fromJson(json["storeAddress"]),
+        bonus: json["bonus"],
+        bonusCode: json["bonus_code"],
+        storeAddress:
+            json["storeAddress"] == null ? null : StoreAddress.fromJson(json["storeAddress"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -101,6 +75,8 @@ class Data {
         "email": email,
         "phone": phone,
         "isPartner": isPartner,
+        "bonus": bonus,
+        "bonus_code": bonusCode,
         "storeAddress": storeAddress?.toJson(),
       };
 }
@@ -113,15 +89,6 @@ class StoreAddress {
     this.lat,
     this.long,
   });
-
-  StoreAddress copyWith({
-    String? lat,
-    String? long,
-  }) =>
-      StoreAddress(
-        lat: lat ?? this.lat,
-        long: long ?? this.long,
-      );
 
   factory StoreAddress.fromJson(Map<String, dynamic> json) => StoreAddress(
         lat: json["lat"],

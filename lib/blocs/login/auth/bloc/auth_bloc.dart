@@ -33,15 +33,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<VerifyOtpEvent>((event, emit) async {
       emit(AuthLoading());
       try {
-        final response =
-            await _apiService.verifyOtp(event.phoneNumber, event.otp);
+        final response = await _apiService.verifyOtp(event.phoneNumber, event.otp);
         final respData = otpModelResponseFromJson(response.data);
         if (respData.data?.user != null) {
           final prefs = await SharedPreferences.getInstance();
-          await prefs.setString(
-              'auth_token', respData.data!.token!.plainTextToken!);
-          await prefs.setString(
-              'bonus_code', respData.data!.user?.bonus_code ?? '');
+          await prefs.setString('auth_token', respData.data!.token!.plainTextToken!);
+
           emit(AuthApproved());
         } else {
           emit(AuthVerified());

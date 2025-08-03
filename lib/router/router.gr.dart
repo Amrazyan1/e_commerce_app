@@ -90,10 +90,19 @@ class AuthorizationRoute extends _i29.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.BonusCarScreen]
-class BonusCarRoute extends _i29.PageRouteInfo<void> {
-  const BonusCarRoute({List<_i29.PageRouteInfo>? children})
-      : super(
+class BonusCarRoute extends _i29.PageRouteInfo<BonusCarRouteArgs> {
+  BonusCarRoute({
+    _i30.Key? key,
+    required String code,
+    required String bonusPoints,
+    List<_i29.PageRouteInfo>? children,
+  }) : super(
           BonusCarRoute.name,
+          args: BonusCarRouteArgs(
+            key: key,
+            code: code,
+            bonusPoints: bonusPoints,
+          ),
           initialChildren: children,
         );
 
@@ -102,9 +111,33 @@ class BonusCarRoute extends _i29.PageRouteInfo<void> {
   static _i29.PageInfo page = _i29.PageInfo(
     name,
     builder: (data) {
-      return const _i3.BonusCarScreen();
+      final args = data.argsAs<BonusCarRouteArgs>();
+      return _i3.BonusCarScreen(
+        key: args.key,
+        code: args.code,
+        bonusPoints: args.bonusPoints,
+      );
     },
   );
+}
+
+class BonusCarRouteArgs {
+  const BonusCarRouteArgs({
+    this.key,
+    required this.code,
+    required this.bonusPoints,
+  });
+
+  final _i30.Key? key;
+
+  final String code;
+
+  final String bonusPoints;
+
+  @override
+  String toString() {
+    return 'BonusCarRouteArgs{key: $key, code: $code, bonusPoints: $bonusPoints}';
+  }
 }
 
 /// generated route for

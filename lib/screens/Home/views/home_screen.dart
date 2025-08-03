@@ -1,7 +1,9 @@
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:barcode_widget/barcode_widget.dart';
+import 'package:e_commerce_app/blocs/settings/bloc/settings_bloc.dart';
 import 'package:e_commerce_app/components/search_bar_input_field.dart';
+import 'package:e_commerce_app/models/Settings/settings_model.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:e_commerce_app/screens/Home/views/components/best_sellers.dart';
 import 'package:e_commerce_app/screens/Home/views/components/flash_sale.dart';
@@ -24,6 +26,7 @@ import '../../../blocs/products/discounts/bloc/discounted_bloc.dart';
 import '../../../blocs/products/popular/bloc/popular_products_bloc.dart';
 import '../../../blocs/products/trending/bloc/trend_new_products_bloc.dart';
 import '../../../blocs/search/bloc/global_search_bloc.dart';
+import '../../../blocs/settings/bloc/settings_state.dart';
 import '../../Products/Components/product_card.dart';
 import '../../Products/product_details_screen.dart';
 import '../../searchfocusnode.dart';
@@ -69,25 +72,21 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection: context.locale.languageCode == 'fa'
-          ? ui.TextDirection.rtl
-          : ui.TextDirection.ltr,
+      textDirection:
+          context.locale.languageCode == 'fa' ? ui.TextDirection.rtl : ui.TextDirection.ltr,
       child: RefreshIndicator(
         onRefresh: _onrefresh,
         child: SuperScaffold(
           key: superScaffoldKey,
           transitionBetweenRoutes: false,
           appBar: SuperAppBar(
-            backgroundColor:
-                Theme.of(context).colorScheme.background.withOpacity(.5),
+            backgroundColor: Theme.of(context).colorScheme.background.withOpacity(.5),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(15),
-                  child: SizedBox(
-                      width: 120,
-                      child: SvgPicture.asset("assets/images/Logo.svg")),
+                  child: SizedBox(width: 120, child: SvgPicture.asset("assets/images/Logo.svg")),
                 ),
               ],
             ),
@@ -131,32 +130,25 @@ class _HomeScreenState extends State<HomeScreen> {
                       return Padding(
                         padding: const EdgeInsets.all(defaultPadding),
                         child: GridView.builder(
-                          itemCount:
-                              state.results.data!.products!.data!.data!.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
+                          itemCount: state.results.data!.products!.data!.data!.length,
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             mainAxisSpacing: 8.0,
                             crossAxisSpacing: 8.0,
                             childAspectRatio: 140 / 220,
                           ),
                           itemBuilder: (context, index) {
-                            final product = state
-                                .results.data!.products!.data!.data![index];
+                            final product = state.results.data!.products!.data!.data![index];
                             return ProductCard(
                               product: product,
                               press: () {
                                 // _searchFocusNode.requestFocus();
-                                Future.delayed(const Duration(milliseconds: 0),
-                                    () {
+                                Future.delayed(const Duration(milliseconds: 0), () {
                                   // _searchFocusNode.unfocus();
                                   _searchTextController.clear();
 
-                                  context
-                                      .read<MainProvider>()
-                                      .currentProductModel = product;
-                                  AutoRouter.of(context)
-                                      .push(ProductDetailsRoute());
+                                  context.read<MainProvider>().currentProductModel = product;
+                                  AutoRouter.of(context).push(ProductDetailsRoute());
                                   // Navigator.of(context).push(
                                   //   MaterialPageRoute(
                                   //     builder: (context) =>
@@ -184,8 +176,19 @@ class _HomeScreenState extends State<HomeScreen> {
               slivers: [
                 const SliverToBoxAdapter(child: OffersCarouselAndCategories()),
                 const SliverToBoxAdapter(child: PopularProducts()),
-                const SliverToBoxAdapter(
-                  child: _barcodeItem(),
+                BlocBuilder<SettingsBloc, SettingsState>(
+                  builder: (context, state) {
+                    if (state is SettingsLoaded) {
+                      return SliverToBoxAdapter(
+                        child: _barcodeItem(
+                          settingsModel: state.settings,
+                        ),
+                      );
+                    }
+                    return const SliverToBoxAdapter(
+                      child: SizedBox.shrink(),
+                    );
+                  },
                 ),
                 const SliverPadding(
                   padding: EdgeInsets.symmetric(vertical: defaultPadding * 1.5),
@@ -229,8 +232,10 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _barcodeItem extends StatefulWidget {
+  final SettingsModel settingsModel;
   const _barcodeItem({
     super.key,
+    required this.settingsModel,
   });
 
   @override
@@ -238,20 +243,16 @@ class _barcodeItem extends StatefulWidget {
 }
 
 class _barcodeItemState extends State<_barcodeItem> {
-  String code = '';
-  @override
-  void initState() {
-    super.initState();
-    getCode();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Visibility(
-      visible: code.isNotEmpty,
+      visible: widget.settingsModel.data?.bonusCode?.isNotEmpty ?? false,
       child: GestureDetector(
         onTap: () {
-          // AutoRouter.of(context).push(BonusCarRoute());
+          AutoRouter.of(context).push(BonusCarRoute(
+            code: widget.settingsModel.data?.bonusCode ?? '',
+            bonusPoints: widget.settingsModel.data?.bonus ?? '',
+          ));
         },
         child: Padding(
           padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
@@ -267,49 +268,39 @@ class _barcodeItemState extends State<_barcodeItem> {
                 ),
               ],
             ),
-            padding: EdgeInsets.all(16), // Padding inside the container
+            padding: const EdgeInsets.all(16), // Padding inside the container
             child: Column(
               children: [
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      'Bonus Card',
-                      style: TextStyle(color: kprimaryColor),
+                      'bonus_card'.tr(),
+                      style: const TextStyle(color: kprimaryColor),
                     ),
                   ],
                 ),
                 BarcodeWidget(
-                  data: code ?? '', // Replace with dynamic barcode data
+                  data: widget.settingsModel.data?.bonusCode ?? '',
                   barcode: Barcode.code128(),
                   width: double.infinity,
                   height: 120,
                   drawText: false,
                 ),
-                // const Row(
-                //   mainAxisAlignment: MainAxisAlignment.end,
-                //   children: [
-                //     Text(
-                //       'Show Bonus Points > ',
-                //       style: TextStyle(color: kprimaryColor),
-                //     ),
-                //   ],
-                // ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'show_bonus'.tr(),
+                      style: const TextStyle(color: kprimaryColor),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
         ),
       ),
     );
-  }
-
-  Future<void> getCode() async {
-    final prefs = await SharedPreferences.getInstance();
-    // await prefs.setString('bonus_code', 'bonus');
-    final aa = await prefs.getString('bonus_code');
-
-    setState(() {
-      code = aa ?? '';
-    });
   }
 }
