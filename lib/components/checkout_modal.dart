@@ -1,13 +1,18 @@
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:dio/dio.dart';
 import 'package:e_commerce_app/Provider/main_provider.dart';
+import 'package:e_commerce_app/Provider/screen_service.dart';
 import 'package:e_commerce_app/blocs/cart/bloc/cart_bloc.dart';
 import 'package:e_commerce_app/components/always_notify.dart';
 import 'package:e_commerce_app/components/expansion_category.dart';
 import 'package:e_commerce_app/constants.dart';
+import 'package:e_commerce_app/models/Payment/payment_model.dart';
 import 'package:e_commerce_app/models/category_model.dart';
 import 'package:e_commerce_app/models/process_order_response.dart';
+import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:e_commerce_app/screens/order_accepted_screen.dart';
 import 'package:e_commerce_app/services/api_service.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -28,15 +33,14 @@ class CheckoutModal extends StatefulWidget {
 
 class _CheckoutModalState extends State<CheckoutModal> {
   final ApiService _apiService = GetIt.I<ApiService>();
-  String payType = 'cash';
+  String payType = 'idram';
   String addressid = 'address';
   String useBonus = '0';
   String couponId = '';
   TextEditingController inputController = TextEditingController();
   List<CategoryModel> categories = [];
 
-  final AlwaysNotifyValueNotifier<bool> deselectNotifier =
-      AlwaysNotifyValueNotifier(false);
+  final AlwaysNotifyValueNotifier<bool> deselectNotifier = AlwaysNotifyValueNotifier(false);
 
   @override
   void initState() {
@@ -71,13 +75,12 @@ class _CheckoutModalState extends State<CheckoutModal> {
                   info: payment.name ?? 'payment',
                   paytipe: payment.slug,
                   subCategories: [],
-                  isSelected: payment.slug == 'cash'))
+                  isSelected: payment.slug == 'idram'))
               .toList(),
         ),
       );
     }
-    if (widget.data.availableCoupons != null &&
-        widget.data.availableCoupons!.isNotEmpty) {
+    if (widget.data.availableCoupons != null && widget.data.availableCoupons!.isNotEmpty) {
       categories.add(
         CategoryModel(
           title: "coupon".tr(),
@@ -96,8 +99,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
       );
     }
     // widget.data.availableBonuses = '50 000,00 amd';
-    if (widget.data.availableBonuses != null &&
-        widget.data.availableBonuses!.isNotEmpty) {
+    if (widget.data.availableBonuses != null && widget.data.availableBonuses!.isNotEmpty) {
       inputController.text = '';
 
       num avalBonus = filterToGetNum(widget.data.availableBonuses!);
@@ -105,10 +107,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
       if (avalBonus != 0) {
         categories.add(
           CategoryModel(
-              title: "use_bonus".tr(),
-              info: '$avalBonus',
-              subCategories: [],
-              isCheckbox: true),
+              title: "use_bonus".tr(), info: '$avalBonus', subCategories: [], isCheckbox: true),
         );
       }
     }
@@ -152,26 +151,23 @@ class _CheckoutModalState extends State<CheckoutModal> {
         dataObject['usingBonus'] = useBonus;
       } else {}
 
-      final response =
-          await _apiService.processOrder(widget.data.id!, dataObject);
+      final response = await _apiService.processOrder(widget.data.id!, dataObject);
       final repsData = processOrderResponseFromJson(response.data);
       log(response.data);
       responseId = repsData.data!.id!;
 
-      addOrUpdateCategory(
-          categories, "price", 'price', '${repsData.data!.total}');
+      addOrUpdateCategory(categories, "price", 'price', '${repsData.data!.total}');
       num delivery = filterToGetNum(repsData.data!.deliveryPrice!);
       addOrUpdateCategory(categories, "delivery", 'delivery',
           '${delivery == 0 ? 'Free' : repsData.data!.deliveryPrice}');
       num discount = filterToGetNum(repsData.data!.discount!);
       if (discount > 0) {
-        addOrUpdateCategory(
-            categories, "coupon", 'discount', '-${repsData.data!.discount}');
+        addOrUpdateCategory(categories, "coupon", 'discount', '-${repsData.data!.discount}');
       } else {
         categories.removeWhere((cat) => cat.id == 'coupon');
       }
-      addOrUpdateCategory(categories, "tot_cost", 'tot_cost',
-          '${repsData.data!.totalWithDelivery}');
+      addOrUpdateCategory(
+          categories, "tot_cost", 'tot_cost', '${repsData.data!.totalWithDelivery}');
 
       num totalPrice = filterToGetNum(repsData.data!.total!);
 
@@ -195,13 +191,24 @@ class _CheckoutModalState extends State<CheckoutModal> {
         responseId,
         payType,
       );
+      final decoded = jsonDecode(resp.data); // now it's a Map<String, dynamic>
+      final paymentResponse = PaymentResponse.fromJson(decoded);
+
+      if (!paymentResponse.errors) {
+        final redirectUrl = paymentResponse.data?.redirectUrl;
+        AutoRouter.of(context).push(WebviewRoute(link: redirectUrl!));
+        log("Redirect user to: $redirectUrl");
+      } else {
+        log("Error: ${paymentResponse.message}");
+      }
+
       context.read<CartBloc>().add(ClearCart());
-      Navigator.of(context).pop();
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => OrderAcceptedScreen(),
-        ),
-      );
+      // Navigator.of(context).pop();
+      // Navigator.of(context).push(
+      //   MaterialPageRoute(
+      //     builder: (context) => OrderAcceptedScreen(),
+      //   ),
+      // );
     } on DioException catch (e) {
       String errmsg = e.response?.data["message"].toString() ?? e.message!;
 
@@ -213,8 +220,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
     }
   }
 
-  void addOrUpdateCategory(
-      List<CategoryModel> categories, String id, String title, String info) {
+  void addOrUpdateCategory(List<CategoryModel> categories, String id, String title, String info) {
     final existingCategoryIndex = categories.indexWhere((cat) => cat.id == id);
 
     if (existingCategoryIndex != -1) {
@@ -261,9 +267,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
                     Text(
                       'checkout'.tr(),
                       style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
+                          fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
                     ),
                     GestureDetector(
                         onTap: () {
@@ -308,10 +312,9 @@ class _CheckoutModalState extends State<CheckoutModal> {
                     height: 50,
                     child: ButtonMainWidget(
                       text: 'place_order'.tr(),
-                      customwidget:
-                          context.watch<MainProvider>().isProcessOrder == true
-                              ? const CircularProgressIndicator()
-                              : null,
+                      customwidget: context.watch<MainProvider>().isProcessOrder == true
+                          ? const CircularProgressIndicator()
+                          : null,
                       callback: payOrder,
                     )),
               ),
@@ -404,10 +407,7 @@ class ButtonMainWidget extends StatelessWidget {
           child: customwidget ??
               Text(
                 text,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(color: Colors.white),
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white),
               ),
         ),
       ),
@@ -431,8 +431,7 @@ class _customListTile extends StatelessWidget {
       onTap: () {},
       title: Text(
         text,
-        style: TextStyle(
-            fontSize: 17, fontWeight: FontWeight.bold, color: Colors.grey),
+        style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.grey),
       ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,

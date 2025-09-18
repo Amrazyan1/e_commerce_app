@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:e_commerce_app/screens/profile/views/fake_proifle_screen.dart';
+import 'package:flutter/material.dart';
 
 @AutoRouterConfig()
 class AppRouter extends RootStackRouter {
@@ -27,75 +28,72 @@ class AppRouter extends RootStackRouter {
           path: '/login',
         ),
 
-        AutoRoute(
-            page: EntryPoint.page,
-            initial: true,
-            path: '/entry',
+        AutoRoute(page: EntryPoint.page, initial: true, path: '/entry', children: [
+          AutoRoute(page: EmptyHomeRouter.page, path: 'home', children: [
+            AutoRoute(page: HomeRoute.page, path: ''),
+            AutoRoute(page: BonusCarRoute.page, path: 'bonuscard'),
+            AutoRoute(page: ProductDetailsRoute.page, path: 'home-product-details'),
+          ]),
+          AutoRoute(page: EmptyDiscoverRouter.page, path: 'discover', children: [
+            AutoRoute(page: DiscoverRoute.page, initial: true, path: ''),
+            AutoRoute(page: DiscoverDetailsRoute.page, path: 'discoverdetail'),
+            AutoRoute(page: ProductDetailsRoute.page, path: 'cart-product-details'),
+          ]),
+          AutoRoute(page: EmptyFavRouterPage.page, path: 'favorites', children: [
+            AutoRoute(page: FavoriteRoute.page, path: ''),
+            AutoRoute(page: ProductDetailsRoute.page, path: 'fav-product-details'),
+          ]),
+          AutoRoute(
+            page: EmptyCartRouterPage.page,
+            path: 'cart',
             children: [
-              AutoRoute(page: EmptyHomeRouter.page, path: 'home', children: [
-                AutoRoute(page: HomeRoute.page, path: ''),
-                AutoRoute(page: BonusCarRoute.page, path: 'bonuscard'),
-                AutoRoute(
-                    page: ProductDetailsRoute.page,
-                    path: 'home-product-details'),
-              ]),
-              AutoRoute(
-                  page: EmptyDiscoverRouter.page,
-                  path: 'discover',
-                  children: [
-                    AutoRoute(
-                        page: DiscoverRoute.page, initial: true, path: ''),
-                    AutoRoute(
-                        page: DiscoverDetailsRoute.page,
-                        path: 'discoverdetail'),
-                    AutoRoute(
-                        page: ProductDetailsRoute.page,
-                        path: 'cart-product-details'),
-                  ]),
-              AutoRoute(
-                  page: EmptyFavRouterPage.page,
-                  path: 'favorites',
-                  children: [
-                    AutoRoute(page: FavoriteRoute.page, path: ''),
-                    AutoRoute(
-                        page: ProductDetailsRoute.page,
-                        path: 'fav-product-details'),
-                  ]),
-              AutoRoute(
-                page: EmptyCartRouterPage.page,
-                path: 'cart',
-                children: [
-                  AutoRoute(page: CartRoute.page, path: ''),
-                  AutoRoute(
-                      page: ProductDetailsRoute.page,
-                      path: 'cart-product-details'),
-                ],
-              ),
-              AutoRoute(page: EmptyRouter.page, path: 'profile', children: [
-                AutoRoute(page: ProfileRoute.page, path: ''),
-                AutoRoute(page: AboutUsRoute.page, path: 'about-us'),
-                AutoRoute(page: CouponsRoute.page, path: 'couponsRoute'),
-                AutoRoute(
-                    page: DeliveryAddresseRoute.page,
-                    path: 'deliveryAddressRoute'),
-                AutoRoute(
-                    page: DeliveryAddressNew.page,
-                    path: 'deliveryAddressNewRoute'),
-                AutoRoute(
-                    page: PaymentmethodsRoute.page,
-                    path: 'paymentmethodsRoute'),
-                AutoRoute(page: OrdersRoute.page, path: 'ordersRoute'),
-                AutoRoute(page: OrderInfoRoute.page, path: 'ordersInfoRoute'),
-                AutoRoute(page: MyDetailsRoute.page, path: 'mydetailsRoute'),
-                AutoRoute(
-                    page: DeliveryAddressInfoRoute.page, path: 'addressinfo'),
-                AutoRoute(page: FakeProifleRoute.page, path: 'helproute'),
-              ]),
-            ]),
+              AutoRoute(page: CartRoute.page, path: ''),
+              AutoRoute(page: ProductDetailsRoute.page, path: 'cart-product-details'),
+            ],
+          ),
+          AutoRoute(page: EmptyRouter.page, path: 'profile', children: [
+            AutoRoute(page: ProfileRoute.page, path: ''),
+            AutoRoute(page: AboutUsRoute.page, path: 'about-us'),
+            AutoRoute(page: CouponsRoute.page, path: 'couponsRoute'),
+            AutoRoute(page: DeliveryAddresseRoute.page, path: 'deliveryAddressRoute'),
+            AutoRoute(page: DeliveryAddressNew.page, path: 'deliveryAddressNewRoute'),
+            AutoRoute(page: PaymentmethodsRoute.page, path: 'paymentmethodsRoute'),
+            AutoRoute(page: OrdersRoute.page, path: 'ordersRoute'),
+            AutoRoute(page: OrderInfoRoute.page, path: 'ordersInfoRoute'),
+            AutoRoute(page: MyDetailsRoute.page, path: 'mydetailsRoute'),
+            AutoRoute(page: DeliveryAddressInfoRoute.page, path: 'addressinfo'),
+            AutoRoute(page: FakeProifleRoute.page, path: 'helproute'),
+          ]),
+        ]),
         AutoRoute(page: AboutUsRoute.page, path: '/abhgs'),
-        AutoRoute(
-            page: DeliveryAddressNew.page,
-            path: '/deliveryAddressNewRouteFromLogin'),
+        AutoRoute(page: DeliveryAddressNew.page, path: '/deliveryAddressNewRouteFromLogin'),
         AutoRoute(page: FakeProifleRoute.page, path: '/FakeProifleRoute'),
+
+        CustomRoute(
+          page: WebviewRoute.page,
+          usesPathAsKey: true,
+          opaque: false,
+          fullscreenDialog: true,
+          barrierColor: Colors.transparent,
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            if (animation.status == AnimationStatus.reverse) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0, 1),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            } else {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0, 1),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            }
+          },
+        ),
       ];
 }

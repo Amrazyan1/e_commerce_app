@@ -712,4 +712,15 @@ class ApiService {
       rethrow;
     }
   }
+
+  Future<Response> addCard(Map<String, dynamic> data) async {
+    try {
+      return await _dioClient.dio.put(
+        Endpoints.addCard,
+        data: data,
+      );
+    } on DioException catch (e) {
+      rethrow;
+    }
+  }
 }

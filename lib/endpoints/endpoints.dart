@@ -1,11 +1,9 @@
 // endpoints.dart
 
 class Endpoints {
-
   //coupons/
-    static const String coupons= '/coupons';
-        static const String couponsActivate= '/coupons/activate';
-
+  static const String coupons = '/coupons';
+  static const String couponsActivate = '/coupons/activate';
 
   // User addresses
   static const String userAddresses = '/users/addresses';
@@ -40,15 +38,12 @@ class Endpoints {
   static const String cartById = '/carts/{id}';
 
   // Categories
-  static const String getCategories =
-      '/categories?perPage={perPage}&with-subcategories=true';
-  static const String getSubcategoriesById =
-      '/categories/{id}?perPage={perPage}';
+  static const String getCategories = '/categories?perPage={perPage}&with-subcategories=true';
+  static const String getSubcategoriesById = '/categories/{id}?perPage={perPage}';
   // static const String getCategoryBreadcrumbs = '/categories/{id}/breadcrumbs';
   static const String getProductsByCategory =
       '/categories/{id}/products?perPage={perPage}&page={page}';
-  static const String getProductsByCategoryWithQuery =
-      '/categories/{id}/products';
+  static const String getProductsByCategoryWithQuery = '/categories/{id}/products';
   // Contents
   static const String getContentsByKey = '/contents?keys[]={key}';
 
@@ -77,11 +72,9 @@ class Endpoints {
   static const String getFavoriteProducts = '/products/favorites';
   static const String addProductToFavorites = '/products/favorites';
   static const String removeProductFromFavorites = '/products/favorites/{id}';
-  static const String getTrendProducts =
-      '/products/trends/{trend}?perPage={perPage}';
+  static const String getTrendProducts = '/products/trends/{trend}?perPage={perPage}';
   static const String getTrendNewestProduct = '/products/trends/newest';
-  static const String getTrendPopularProduct =
-      '/products/trends/popular?perPage=12';
+  static const String getTrendPopularProduct = '/products/trends/popular?perPage=12';
   static const String getTrendDiscountProduct = '/products/trends/discounted';
 
   // Professions
@@ -105,4 +98,5 @@ class Endpoints {
   static const String deleteUser = '/users';
   static const String updateUserSettings = '/users/settings';
   static const String updateUserPassword = '/users/settings/password';
+  static const String addCard = '/users/addCard/addCard';
 }

@@ -2,18 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
 // Just for demo
-const productDemoImg1 =
-    "https://parspng.com/wp-content/uploads/2023/02/bananapng.parspng.com_.png";
-const productDemoImg2 =
-    "https://parspng.com/wp-content/uploads/2023/02/bananapng.parspng.com_.png";
-const productDemoImg3 =
-    "https://parspng.com/wp-content/uploads/2023/02/bananapng.parspng.com_.png";
-const productDemoImg4 =
-    "https://parspng.com/wp-content/uploads/2023/02/bananapng.parspng.com_.png";
-const productDemoImg5 =
-    "https://parspng.com/wp-content/uploads/2023/02/bananapng.parspng.com_.png";
-const productDemoImg6 =
-    "https://parspng.com/wp-content/uploads/2023/02/bananapng.parspng.com_.png";
+const productDemoImg1 = "https://parspng.com/wp-content/uploads/2023/02/bananapng.parspng.com_.png";
+const productDemoImg2 = "https://parspng.com/wp-content/uploads/2023/02/bananapng.parspng.com_.png";
+const productDemoImg3 = "https://parspng.com/wp-content/uploads/2023/02/bananapng.parspng.com_.png";
+const productDemoImg4 = "https://parspng.com/wp-content/uploads/2023/02/bananapng.parspng.com_.png";
+const productDemoImg5 = "https://parspng.com/wp-content/uploads/2023/02/bananapng.parspng.com_.png";
+const productDemoImg6 = "https://parspng.com/wp-content/uploads/2023/02/bananapng.parspng.com_.png";
 
 // End For demo
 
@@ -23,9 +17,11 @@ const grandisExtendedFont = "Grandis Extended";
 
 const Color kprimaryColor = Color(0xFF5A189A);
 const Color ksecondaryColor = Color(0xFFC77DFF);
+const Color kInputsBgColor = Color.fromARGB(255, 255, 9, 9);
+const Color kTextColor = Color.fromARGB(255, 249, 5, 5);
+const Color kButtonColor = Color.fromARGB(255, 249, 5, 5);
 
-const MaterialColor primaryMaterialColor =
-    MaterialColor(0xFF9581FF, <int, Color>{
+const MaterialColor primaryMaterialColor = MaterialColor(0xFF9581FF, <int, Color>{
   50: Color(0xFFEFECFF),
   100: Color(0xFFD7D0FF),
   200: Color(0xFFBDB0FF),

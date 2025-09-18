@@ -222,101 +222,105 @@ class _DeliveryAddressNewState extends State<DeliveryAddressNew> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("delivery_address".tr()),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(defaultPadding),
-        child: SizedBox(
-          height: 50,
-          child: ButtonMainWidget(
-              callback: isInsede ? _addNewAddress : null,
-              text: isInsede ? 'add_address'.tr() : 'out_bounds'.tr(),
-              customwidget: loading ? const CircularProgressIndicator(color: Colors.white) : null),
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("delivery_address".tr()),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 300,
-              child: Stack(
-                children: [
-                  GoogleMap(
-                    mapToolbarEnabled: true,
-                    compassEnabled: true,
-                    myLocationButtonEnabled: true,
-                    cloudMapId: Platform.isAndroid ? "75c80c69218fa3d7" : "f886856e2413792",
-                    initialCameraPosition: _initialPosition,
-                    onMapCreated: (GoogleMapController controller) {
-                      mapController = controller;
-                    },
-                    circles: {
-                      Circle(
-                          circleId: CircleId('1'),
-                          center: LatLng(yerevanCenter.latitude, yerevanCenter.longitude),
-                          radius: circleRadius,
-                          strokeWidth: 2,
-                          strokeColor: Colors.red.withOpacity(0.2))
-                    },
-                    onTap: _onMapTap,
-                    markers: _selectedLocation != null
-                        ? {
-                            Marker(
-                              markerId: const MarkerId('selected_location'),
-                              position: _selectedLocation!,
-                            ),
-                          }
-                        : {},
-                    myLocationEnabled: false,
-                    zoomControlsEnabled: false,
-                  ),
-                  Positioned(
-                    bottom: 16, // Position slightly above the bottom of the map
-                    right: 16, // Position slightly from the right edge
-                    child: FloatingActionButton(
-                      backgroundColor: kprimaryColor,
-                      onPressed: getCurrentLocation, // Centers map on current location
-                      child: const Icon(Icons.my_location, color: Colors.white),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.all(defaultPadding),
+          child: SizedBox(
+            height: 50,
+            child: ButtonMainWidget(
+                callback: isInsede ? _addNewAddress : null,
+                text: isInsede ? 'add_address'.tr() : 'out_bounds'.tr(),
+                customwidget:
+                    loading ? const CircularProgressIndicator(color: Colors.white) : null),
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 300,
+                child: Stack(
+                  children: [
+                    GoogleMap(
+                      mapToolbarEnabled: true,
+                      compassEnabled: true,
+                      myLocationButtonEnabled: true,
+                      cloudMapId: Platform.isAndroid ? "75c80c69218fa3d7" : "f886856e2413792",
+                      initialCameraPosition: _initialPosition,
+                      onMapCreated: (GoogleMapController controller) {
+                        mapController = controller;
+                      },
+                      circles: {
+                        Circle(
+                            circleId: CircleId('1'),
+                            center: LatLng(yerevanCenter.latitude, yerevanCenter.longitude),
+                            radius: circleRadius,
+                            strokeWidth: 2,
+                            strokeColor: Colors.red.withOpacity(0.2))
+                      },
+                      onTap: _onMapTap,
+                      markers: _selectedLocation != null
+                          ? {
+                              Marker(
+                                markerId: const MarkerId('selected_location'),
+                                position: _selectedLocation!,
+                              ),
+                            }
+                          : {},
+                      myLocationEnabled: false,
+                      zoomControlsEnabled: false,
                     ),
+                    Positioned(
+                      bottom: 16, // Position slightly above the bottom of the map
+                      right: 16, // Position slightly from the right edge
+                      child: FloatingActionButton(
+                        backgroundColor: kprimaryColor,
+                        onPressed: getCurrentLocation, // Centers map on current location
+                        child: const Icon(Icons.my_location, color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextFormField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    labelText: "address_name".tr(),
+                    border: const OutlineInputBorder(),
                   ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextFormField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: "address_name".tr(),
-                  border: const OutlineInputBorder(),
+                  minLines: 1, // Minimum height
+                  maxLines: null, // Makes the height dynamic based on content
+                  keyboardType: TextInputType.multiline, // Allows multiline input
+                  onChanged: (value) {
+                    _address = value;
+                  },
                 ),
-                minLines: 1, // Minimum height
-                maxLines: null, // Makes the height dynamic based on content
-                keyboardType: TextInputType.multiline, // Allows multiline input
-                onChanged: (value) {
-                  _address = value;
-                },
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextFormField(
-                controller: _addressController,
-                decoration: InputDecoration(
-                  labelText: "delivery_address".tr(),
-                  border: const OutlineInputBorder(),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextFormField(
+                  controller: _addressController,
+                  decoration: InputDecoration(
+                    labelText: "delivery_address".tr(),
+                    border: const OutlineInputBorder(),
+                  ),
+                  minLines: 1, // Minimum height
+                  maxLines: null, // Makes the height dynamic based on content
+                  keyboardType: TextInputType.multiline, // Allows multiline input
+                  onChanged: (value) {
+                    _address = value;
+                  },
                 ),
-                minLines: 1, // Minimum height
-                maxLines: null, // Makes the height dynamic based on content
-                keyboardType: TextInputType.multiline, // Allows multiline input
-                onChanged: (value) {
-                  _address = value;
-                },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
