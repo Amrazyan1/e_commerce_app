@@ -1,9 +1,14 @@
 import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:e_commerce_app/blocs/orders/bloc/orders_bloc.dart';
+import 'package:e_commerce_app/blocs/orders/bloc/orders_event.dart';
+import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage()
 class WebviewScreen extends StatefulWidget {
@@ -43,39 +48,66 @@ class _WebviewScreenState extends State<WebviewScreen> {
               )
             : null,
       ),
-      body: InAppWebView(
-        initialUrlRequest: URLRequest(
-          url: WebUri(widget.link),
-        ),
-        onWebViewCreated: (controller) {},
-        onPermissionRequest: _onPermissionRequest,
-        shouldOverrideUrlLoading: (controller, navigationAction) async {
-          final uri = navigationAction.request.url;
-          log("⚠️ Attempting to navigate to: $uri");
+      body: Column(
+        children: [
+          Expanded(
+            child: InAppWebView(
+              initialUrlRequest: URLRequest(
+                url: WebUri(widget.link),
+              ),
+              onWebViewCreated: (controller) {},
+              onPermissionRequest: _onPermissionRequest,
+              shouldOverrideUrlLoading: (controller, navigationAction) async {
+                final uri = navigationAction.request.url;
+                log("⚠️ Attempting to navigate to: $uri");
 
-          // // Example: Prevent external links and open them in browser instead
-          // if (uri != null && !uri.toString().contains("yourdomain.com")) {
-          //   log("🚫 Blocked external navigation: $uri");
-          //   return NavigationActionPolicy.CANCEL;
-          // }
+                if (uri.toString().contains("orderCallback")) {
+                  if (context.mounted) {
+                    Navigator.pop(context);
+                    context.read<OrdersBloc>().add(FetchOrders());
+                    AutoRouter.of(context).navigate(const EmptyRouter(children: [OrdersRoute()]));
+                  }
+                  return NavigationActionPolicy.CANCEL;
+                }
+                if (uri!.toString().startsWith("idramapp://") ||
+                    uri.toString().startsWith("idramappjr://")) {
+                  // 🚫 Prevent loading this in WebView
+                  // ✅ Handle idramapp deep link (idramapp / idramappjr)
 
-          return NavigationActionPolicy.ALLOW;
-        },
-        initialSettings: InAppWebViewSettings(
-          isInspectable: kDebugMode,
-          useHybridComposition: false,
-          mediaPlaybackRequiresUserGesture: false,
-          allowsInlineMediaPlayback: true,
-          clearSessionCache: true,
-          clearCache: true,
-          cacheEnabled: false,
-          supportZoom: false,
-          maximumZoomScale: 0,
-          minimumZoomScale: 0,
-          preferredContentMode: UserPreferredContentMode.MOBILE,
-          transparentBackground: true,
-          builtInZoomControls: false,
-        ),
+                  try {
+                    final canLaunchApp = await canLaunchUrl(uri);
+
+                    if (canLaunchApp) {
+                      await launchUrl(uri, mode: LaunchMode.externalApplication);
+                    }
+                  } catch (e) {
+                    log("Error launching deep link: $e");
+                  }
+
+                  return NavigationActionPolicy.CANCEL;
+                }
+
+                return NavigationActionPolicy.ALLOW;
+              },
+              initialSettings: InAppWebViewSettings(
+                isInspectable: kDebugMode,
+                useHybridComposition: true,
+                mediaPlaybackRequiresUserGesture: false,
+                javaScriptEnabled: true,
+                allowsInlineMediaPlayback: true,
+                clearSessionCache: true,
+                clearCache: true,
+                cacheEnabled: false,
+                supportZoom: false,
+                maximumZoomScale: 0,
+                minimumZoomScale: 0,
+                preferredContentMode: UserPreferredContentMode.MOBILE,
+                transparentBackground: true,
+                builtInZoomControls: false,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

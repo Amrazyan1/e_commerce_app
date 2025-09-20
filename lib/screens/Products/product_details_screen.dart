@@ -58,15 +58,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     //     .read<MainProvider>()
     //     .changeCountCartByProductId(
     //        , count);
-    var response = await _apiService.addToCart({
-      "id": context.read<MainProvider>().currentProductModel.id,
-      "count": count
-    });
+    var response = await _apiService
+        .addToCart({"id": context.read<MainProvider>().currentProductModel.id, "count": count});
     Map<String, dynamic> parsedJson = jsonDecode(response.data);
     int countTot = parsedJson['data']['count'];
     String total = parsedJson['data']['total'];
-    CartProductItem cardProdItem =
-        CartProductItem(count: countTot, total: total);
+    CartProductItem cardProdItem = CartProductItem(count: countTot, total: total);
 
     if (cardProdItem != null) {
       setState(() {
@@ -97,15 +94,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ProductDetailBloc()
-        ..add(FetchProductDetail(
-            context.read<MainProvider>().currentProductModel.id)),
+        ..add(FetchProductDetail(context.read<MainProvider>().currentProductModel.id)),
       child: BlocListener<TrendNewProductsBloc, TrendNewProductsState>(
         listener: (context, state) {
           if (state is TrendNewProductsError) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  duration: const Duration(seconds: 15),
-                  content: Text(state.message)),
+              SnackBar(duration: const Duration(seconds: 15), content: Text(state.message)),
             );
           }
         },
@@ -124,23 +118,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         flex: 4,
                         child: QuantityWidget(
                           initialCount: prodCount,
-                          minCount: context
-                                  .read<MainProvider>()
-                                  .currentProductModel
-                                  .unit!
-                                  .minCount ??
-                              1,
-                          maxCount: context
-                              .read<MainProvider>()
-                              .currentProductModel
-                              .unit!
-                              .maxCount,
+                          minCount:
+                              context.read<MainProvider>().currentProductModel.unit!.minCount ?? 1,
+                          maxCount: context.read<MainProvider>().currentProductModel.unit!.maxCount,
                           callback: productCounter,
-                          alternative: context
-                              .watch<MainProvider>()
-                              .currentProductModel
-                              .unit!
-                              .alternative!,
+                          alternative:
+                              context.watch<MainProvider>().currentProductModel.unit!.alternative!,
                         ),
                       ),
                       Expanded(
@@ -149,10 +132,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           countOfItem.isNotEmpty
                               ? '$countOfItem ' + 'items_added'.tr()
                               : 'add_basket'.tr(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .copyWith(color: Colors.white),
+                          style:
+                              Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.white),
                           textAlign: TextAlign.center,
                         ).tr(),
                       ),
@@ -193,8 +174,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             PageView.builder(
                               itemCount: 1,
                               itemBuilder: (context, index) => Padding(
-                                padding: const EdgeInsets.only(
-                                    right: defaultPadding),
+                                padding: const EdgeInsets.only(right: defaultPadding),
                                 child: Shimmer.fromColors(
                                   baseColor: Colors.grey.shade200,
                                   highlightColor: Colors.grey.shade100,
@@ -222,23 +202,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   sliver: BlocBuilder<ProductDetailBloc, ProductDetailState>(
                     builder: (context, state) {
                       if (state is ProductDetailLoaded) {
-                        context.read<MainProvider>().currentProductModel.unit =
-                            state.product.unit;
+                        context.read<MainProvider>().currentProductModel.unit = state.product.unit;
                         return SliverToBoxAdapter(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Flexible(
                                     child: Text(
                                       state.product.name!.toUpperCase(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge!
-                                          .copyWith(
+                                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
                                             fontWeight: FontWeight.bold,
                                           ),
                                     ),
@@ -248,9 +223,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       size: 30,
                                       onTap: (istapped) async {
                                         log('IS favorite true');
-                                        context.read<FavouritesBloc>().add(
-                                            AddToFavouritesEvent(
-                                                state.product.id!));
+                                        context
+                                            .read<FavouritesBloc>()
+                                            .add(AddToFavouritesEvent(state.product.id!));
                                         return !istapped;
                                       },
                                       likeBuilder: (isLiked) {
@@ -272,10 +247,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 children: [
                                   Text(
                                     '${context.read<MainProvider>().currentProductModel.unit?.value} ${context.read<MainProvider>().currentProductModel.unit?.name ?? ''}',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .copyWith(
+                                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    context
+                                            .read<MainProvider>()
+                                            .currentProductModel
+                                            .priceTotalUnit ??
+                                        '',
+                                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
                                           fontWeight: FontWeight.w500,
                                         ),
                                   ),
@@ -288,13 +275,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
                                   const Spacer(),
                                   const SizedBox(width: defaultPadding / 4),
-                                  state.product.discount != null &&
-                                          state.product.discount != '0 %'
+                                  state.product.discount != null && state.product.discount != '0 %'
                                       ? Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               "${state.product.discountedPrice}",
@@ -304,28 +288,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                 fontSize: 18,
                                               ),
                                             ),
-                                            const SizedBox(
-                                                width: defaultPadding / 2),
+                                            const SizedBox(width: defaultPadding / 2),
                                             Text(
                                               state.product.price!,
                                               style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge!
-                                                    .color,
+                                                color: Theme.of(context).textTheme.bodyLarge!.color,
                                                 fontSize: 16,
-                                                decoration:
-                                                    TextDecoration.lineThrough,
+                                                decoration: TextDecoration.lineThrough,
                                               ),
                                             ),
                                           ],
                                         )
                                       : Text(
                                           '${total.isNotEmpty ? total : state.product.price}',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge!
-                                              .copyWith(
+                                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 20,
                                               ),
@@ -339,10 +315,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   children: [
                                     Text(
                                       "product_info".tr(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium!
-                                          .copyWith(
+                                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
                                             fontWeight: FontWeight.w500,
                                           ),
                                     ),
@@ -353,24 +326,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: state.product?.characteristics
-                                            ?.isNotEmpty ??
-                                        false
+                                child: state.product?.characteristics?.isNotEmpty ?? false
                                     ? Column(
-                                        children: state
-                                            .product!.characteristics!
-                                            .map((characteristic) {
-                                          final name = characteristic['name'] ??
-                                              'Unknown';
-                                          final value =
-                                              characteristic['value'] ??
-                                                  'Unknown';
+                                        children:
+                                            state.product!.characteristics!.map((characteristic) {
+                                          final name = characteristic['name'] ?? 'Unknown';
+                                          final value = characteristic['value'] ?? 'Unknown';
                                           return Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 4.0),
+                                            padding: const EdgeInsets.symmetric(vertical: 4.0),
                                             child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   name,
@@ -433,16 +398,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             itemBuilder: (context, index) => Padding(
                               padding: EdgeInsets.only(
                                 left: defaultPadding,
-                                right: index == products!.length - 1
-                                    ? defaultPadding
-                                    : 0,
+                                right: index == products!.length - 1 ? defaultPadding : 0,
                               ),
                               child: ProductCard(
                                 product: products[index],
                                 press: () {
-                                  context
-                                      .read<MainProvider>()
-                                      .currentProductModel = products[index];
+                                  context.read<MainProvider>().currentProductModel =
+                                      products[index];
                                   // Navigator.of(context).push(
                                   //   MaterialPageRoute(
                                   //     builder: (context) =>
@@ -450,8 +412,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   //   ),
                                   // );
                                   // router.push(ProductDetailsRoute());
-                                  AutoRouter.of(context)
-                                      .push(const ProductDetailsRoute());
+                                  AutoRouter.of(context).push(const ProductDetailsRoute());
                                 },
                               ),
                             ),

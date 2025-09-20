@@ -4,8 +4,7 @@
 
 import 'dart:convert';
 
-ProductModel productModelFromJson(String str) =>
-    ProductModel.fromJson(json.decode(str));
+ProductModel productModelFromJson(String str) => ProductModel.fromJson(json.decode(str));
 
 String productModelToJson(ProductModel data) => json.encode(data.toJson());
 
@@ -30,9 +29,7 @@ class ProductModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data == null
-            ? []
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
@@ -51,6 +48,7 @@ class Product {
   Main? image;
   int? bonusPercent;
   dynamic bonus;
+  String? priceTotalUnit;
 
   Product({
     required this.id,
@@ -67,6 +65,7 @@ class Product {
     this.image,
     this.bonusPercent,
     this.bonus,
+    this.priceTotalUnit,
   });
 
   Product copyWith({
@@ -83,6 +82,7 @@ class Product {
     Images? images,
     int? bonusPercent,
     dynamic bonus,
+    String? priceTotalUnit,
   }) =>
       Product(
         id: id ?? this.id,
@@ -98,6 +98,7 @@ class Product {
         images: images ?? this.images,
         bonusPercent: bonusPercent ?? this.bonusPercent,
         bonus: bonus ?? this.bonus,
+        priceTotalUnit: priceTotalUnit ?? this.priceTotalUnit,
       );
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
@@ -115,6 +116,7 @@ class Product {
         image: json["image"] == null ? null : Main.fromJson(json["image"]),
         bonusPercent: json["bonusPercent"],
         bonus: json["bonus"],
+        priceTotalUnit: json["priceTotalUnit"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -131,6 +133,7 @@ class Product {
         "images": images?.toJson(),
         "bonusPercent": bonusPercent,
         "bonus": bonus,
+        "priceTotalUnit": priceTotalUnit,
       };
 }
 
@@ -221,9 +224,7 @@ class Unit {
         minCount: json["minCount"],
         maxCount: json["maxCount"],
         type: typeValues.map[json["type"]]!,
-        alternative: json["alternative"] == null
-            ? null
-            : Alternative.fromJson(json["alternative"]),
+        alternative: json["alternative"] == null ? null : Alternative.fromJson(json["alternative"]),
       );
 
   Map<String, dynamic> toJson() => {

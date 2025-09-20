@@ -53,6 +53,11 @@
 
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app includes functionality from third-party libraries that may request microphone access, though the microphone is not actively used.</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+	<string>idramapp</string>
+	<string>idramappjr</string>
+	</array>
 
 </dict>
 </plist>
