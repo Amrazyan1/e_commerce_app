@@ -246,7 +246,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '${context.read<MainProvider>().currentProductModel.unit?.value} ${context.read<MainProvider>().currentProductModel.unit?.name ?? ''}',
+                                    '${state.product.unit?.value} ${state.product.unit?.name ?? ''}',
                                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -257,14 +257,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    context
-                                            .read<MainProvider>()
-                                            .currentProductModel
-                                            .priceTotalUnit ??
-                                        '',
-                                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                                    state.product.priceTotalUnit ?? '',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall!
+                                        .copyWith(fontWeight: FontWeight.w500, color: Colors.grey),
                                   ),
                                 ],
                               ),

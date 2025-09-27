@@ -9,8 +9,7 @@ import 'package:e_commerce_app/models/Product/product_model.dart';
 ProductDetailModel productDetailModelFromJson(String str) =>
     ProductDetailModel.fromJson(json.decode(str));
 
-String productDetailModelToJson(ProductDetailModel data) =>
-    json.encode(data.toJson());
+String productDetailModelToJson(ProductDetailModel data) => json.encode(data.toJson());
 
 class ProductDetailModel {
   ProductDetail? data;
@@ -26,10 +25,8 @@ class ProductDetailModel {
         data: data ?? this.data,
       );
 
-  factory ProductDetailModel.fromJson(Map<String, dynamic> json) =>
-      ProductDetailModel(
-        data:
-            json["data"] == null ? null : ProductDetail.fromJson(json["data"]),
+  factory ProductDetailModel.fromJson(Map<String, dynamic> json) => ProductDetailModel(
+        data: json["data"] == null ? null : ProductDetail.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -58,6 +55,7 @@ class ProductDetail {
   List<Breadcrumb>? breadcrumb;
   int? rating;
   List<dynamic>? feedbacks;
+  String? priceTotalUnit;
 
   ProductDetail({
     this.id,
@@ -80,6 +78,7 @@ class ProductDetail {
     this.breadcrumb,
     this.rating,
     this.feedbacks,
+    this.priceTotalUnit,
   });
 
   ProductDetail copyWith({
@@ -103,6 +102,7 @@ class ProductDetail {
     List<Breadcrumb>? breadcrumb,
     int? rating,
     List<dynamic>? feedbacks,
+    String? priceTotalUnit,
   }) =>
       ProductDetail(
         id: id ?? this.id,
@@ -125,6 +125,7 @@ class ProductDetail {
         breadcrumb: breadcrumb ?? this.breadcrumb,
         rating: rating ?? this.rating,
         feedbacks: feedbacks ?? this.feedbacks,
+        priceTotalUnit: priceTotalUnit ?? this.priceTotalUnit,
       );
 
   factory ProductDetail.fromJson(Map<String, dynamic> json) => ProductDetail(
@@ -137,32 +138,25 @@ class ProductDetail {
         isPopular: json["isPopular"],
         brand: json["brand"],
         unit: json["unit"] == null ? null : Unit.fromJson(json["unit"]),
-        category: json["category"] == null
-            ? null
-            : Category.fromJson(json["category"]),
+        category: json["category"] == null ? null : Category.fromJson(json["category"]),
         price: json["price"],
         discount: json["discount"],
         discountedPrice: json["discountedPrice"],
-        images:
-            json["images"] == null ? null : DataImages.fromJson(json["images"]),
+        images: json["images"] == null ? null : DataImages.fromJson(json["images"]),
         characteristics: json["characteristics"] == null
             ? []
             : List<dynamic>.from(json["characteristics"]!.map((x) => x)),
-        relates: json["relates"] == null
-            ? []
-            : List<dynamic>.from(json["relates"]!.map((x) => x)),
+        relates: json["relates"] == null ? [] : List<dynamic>.from(json["relates"]!.map((x) => x)),
         similars: json["similars"] == null
             ? []
-            : List<Product>.from(
-                json["similars"]!.map((x) => Product.fromJson(x))),
+            : List<Product>.from(json["similars"]!.map((x) => Product.fromJson(x))),
         breadcrumb: json["breadcrumb"] == null
             ? []
-            : List<Breadcrumb>.from(
-                json["breadcrumb"]!.map((x) => Breadcrumb.fromJson(x))),
+            : List<Breadcrumb>.from(json["breadcrumb"]!.map((x) => Breadcrumb.fromJson(x))),
         rating: json["rating"],
-        feedbacks: json["feedbacks"] == null
-            ? []
-            : List<dynamic>.from(json["feedbacks"]!.map((x) => x)),
+        feedbacks:
+            json["feedbacks"] == null ? [] : List<dynamic>.from(json["feedbacks"]!.map((x) => x)),
+        priceTotalUnit: json["priceTotalUnit"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -180,18 +174,14 @@ class ProductDetail {
         "discount": discount,
         "discountedPrice": discountedPrice,
         "images": images?.toJson(),
-        "characteristics": characteristics == null
-            ? []
-            : List<dynamic>.from(characteristics!.map((x) => x)),
-        "relates":
-            relates == null ? [] : List<dynamic>.from(relates!.map((x) => x)),
-        "breadcrumb": breadcrumb == null
-            ? []
-            : List<dynamic>.from(breadcrumb!.map((x) => x.toJson())),
+        "characteristics":
+            characteristics == null ? [] : List<dynamic>.from(characteristics!.map((x) => x)),
+        "relates": relates == null ? [] : List<dynamic>.from(relates!.map((x) => x)),
+        "breadcrumb":
+            breadcrumb == null ? [] : List<dynamic>.from(breadcrumb!.map((x) => x.toJson())),
         "rating": rating,
-        "feedbacks": feedbacks == null
-            ? []
-            : List<dynamic>.from(feedbacks!.map((x) => x)),
+        "feedbacks": feedbacks == null ? [] : List<dynamic>.from(feedbacks!.map((x) => x)),
+        "priceTotalUnit": priceTotalUnit,
       };
 }
 
@@ -298,9 +288,8 @@ class DataImages {
 
   Map<String, dynamic> toJson() => {
         "main": main?.toJson(),
-        "additional": additional == null
-            ? []
-            : List<dynamic>.from(additional!.map((x) => x.toJson())),
+        "additional":
+            additional == null ? [] : List<dynamic>.from(additional!.map((x) => x.toJson())),
       };
 }
 

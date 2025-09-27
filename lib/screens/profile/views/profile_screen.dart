@@ -57,9 +57,8 @@ class ProfileScreen extends StatelessWidget {
         return true;
       },
       child: Directionality(
-        textDirection: context.locale.languageCode == 'fa'
-            ? ui.TextDirection.rtl
-            : ui.TextDirection.ltr,
+        textDirection:
+            context.locale.languageCode == 'fa' ? ui.TextDirection.rtl : ui.TextDirection.ltr,
         child: Scaffold(
           body: ListView(
             children: [
@@ -69,8 +68,7 @@ class ProfileScreen extends StatelessWidget {
                     return ProfileCard(
                       name: state.settings.data!.fullName!,
                       email: state.settings.data!.phone!,
-                      imageSrc:
-                          "https://cdn-icons-png.flaticon.com/512/219/219988.png",
+                      imageSrc: "https://cdn-icons-png.flaticon.com/512/219/219988.png",
                       isPro: state.settings.data!.isPartner!,
                     );
                   }
@@ -84,8 +82,7 @@ class ProfileScreen extends StatelessWidget {
                     child: const ProfileCard(
                       name: "",
                       email: "",
-                      imageSrc:
-                          "https://cdn-icons-png.flaticon.com/512/219/219988.png",
+                      imageSrc: "https://cdn-icons-png.flaticon.com/512/219/219988.png",
                     ),
                   );
                 },
@@ -137,6 +134,31 @@ class ProfileScreen extends StatelessWidget {
                   AutoRouter.of(context).push(const CouponsRoute());
                 },
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: defaultPadding, vertical: defaultPadding / 2),
+                child: Text(
+                  "helpful_info".tr(),
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+              ProfileMenuListTile(
+                text: "terms_conditions".tr(),
+                svgSrc: "assets/icons/help.svg",
+                press: () {
+                  AutoRouter.of(context)
+                      .push(WebviewRoute(link: 'https://imexpro.am/privacy-policy'));
+                },
+              ),
+              ProfileMenuListTile(
+                text: "privacy_policy".tr(),
+                svgSrc: "assets/icons/help.svg",
+                press: () {
+                  AutoRouter.of(context)
+                      .push(WebviewRoute(link: 'https://imexpro.am/privacy-policy'));
+                },
+              ),
+              const SizedBox(height: defaultPadding),
               const SizedBox(height: defaultPadding),
 
               // Additional Section
@@ -191,8 +213,7 @@ class ProfileScreen extends StatelessWidget {
                 text: "help".tr(),
                 svgSrc: "assets/icons/help.svg",
                 press: () {
-                  AutoRouter.of(context)
-                      .push(FakeProifleRoute(pageName: 'Help screen'));
+                  AutoRouter.of(context).push(FakeProifleRoute(pageName: 'Help screen'));
                 },
               ),
               const SizedBox(height: defaultPadding),
@@ -279,8 +300,7 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       child: TextButton(
                         style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
@@ -303,13 +323,12 @@ class ProfileScreen extends StatelessWidget {
                                   ),
                                   TextButton(
                                     onPressed: () async {
-                                      final prefs =
-                                          await SharedPreferences.getInstance();
+                                      final prefs = await SharedPreferences.getInstance();
                                       await prefs.remove('auth_token');
                                       context.read<MainProvider>().clear();
 
-                                      AutoRouter.of(context).replaceAll(
-                                          [const AuthorizationRoute()]);
+                                      AutoRouter.of(context)
+                                          .replaceAll([const AuthorizationRoute()]);
                                     },
                                     child: Text(
                                       'log_out'.tr(),
@@ -343,8 +362,7 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       child: TextButton(
                         style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),

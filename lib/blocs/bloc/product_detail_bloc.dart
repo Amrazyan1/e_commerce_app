@@ -9,7 +9,6 @@ import '../../services/api_service.dart';
 part 'product_detail_event.dart';
 part 'product_detail_state.dart';
 
-
 class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
   final ApiService _apiService = GetIt.I<ApiService>();
 
@@ -20,7 +19,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
         final response = await _apiService.getProductById(event.id);
         final data = productDetailModelFromJson(response.data);
 
-         emit(ProductDetailLoaded(data.data!));
+        emit(ProductDetailLoaded(data.data!));
       } catch (error) {
         emit(ProductDetailError(error.toString()));
       }

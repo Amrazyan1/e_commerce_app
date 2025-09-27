@@ -284,7 +284,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
                     if (categories[index].id.contains('price')) {
                       return Column(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 100,
                           ),
                           _expCategoryItem(index, context),
@@ -294,9 +294,9 @@ class _CheckoutModalState extends State<CheckoutModal> {
                     if (categories[index].id.contains('tot_cost')) {
                       return Column(
                         children: [
-                          Divider(),
+                          const Divider(),
                           _expCategoryItem(index, context),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                         ],
@@ -306,17 +306,40 @@ class _CheckoutModalState extends State<CheckoutModal> {
                   },
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20.0),
-                child: SizedBox(
-                    height: 50,
-                    child: ButtonMainWidget(
-                      text: 'place_order'.tr(),
-                      customwidget: context.watch<MainProvider>().isProcessOrder == true
-                          ? const CircularProgressIndicator()
-                          : null,
-                      callback: payOrder,
-                    )),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+                        child: SvgPicture.asset(
+                          "assets/icons/visa.svg",
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+                        child: Image.asset(
+                          "assets/icons/idram.png",
+                          height: 50,
+                          width: 50,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    child: SizedBox(
+                        height: 50,
+                        child: ButtonMainWidget(
+                          text: 'place_order'.tr(),
+                          customwidget: context.watch<MainProvider>().isProcessOrder == true
+                              ? const CircularProgressIndicator()
+                              : null,
+                          callback: payOrder,
+                        )),
+                  ),
+                ],
               ),
             ],
           ),
@@ -410,41 +433,6 @@ class ButtonMainWidget extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white),
               ),
         ),
-      ),
-    );
-  }
-}
-
-class _customListTile extends StatelessWidget {
-  const _customListTile({
-    super.key,
-    required this.text,
-    required this.text1,
-  });
-
-  final String text;
-  final String text1;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () {},
-      title: Text(
-        text,
-        style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.grey),
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            text1,
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-          ),
-          SvgPicture.asset(
-            "assets/icons/miniRight.svg",
-            colorFilter: ColorFilter.mode(Colors.black, BlendMode.srcIn),
-          ),
-        ],
       ),
     );
   }
