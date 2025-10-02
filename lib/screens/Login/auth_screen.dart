@@ -60,9 +60,8 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
     return BlocProvider(
       create: (_) => AuthBloc(),
       child: Directionality(
-        textDirection: context.locale.languageCode == 'fa'
-            ? ui.TextDirection.rtl
-            : ui.TextDirection.ltr,
+        textDirection:
+            context.locale.languageCode == 'fa' ? ui.TextDirection.rtl : ui.TextDirection.ltr,
         child: Scaffold(
           body: Scaffold(
             appBar: AppBar(actions: [
@@ -82,8 +81,7 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              AutoRouter.of(context)
-                                  .replaceAll([const EntryPoint()]);
+                              AutoRouter.of(context).replaceAll([const EntryPoint()]);
                             },
                         ),
                       ],
@@ -117,13 +115,10 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
             body: BlocListener<AuthBloc, AuthState>(
               listener: (context, state) {
                 if (state is AuthPhoneSent) {
-                  AutoRouter.of(context)
-                      .push(OtpRoute(phoneNumber: state.phoneNumber));
+                  AutoRouter.of(context).push(OtpRoute(phoneNumber: state.phoneNumber));
                 } else if (state is AuthError) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                        duration: const Duration(seconds: 5),
-                        content: Text(state.message)),
+                    SnackBar(duration: const Duration(seconds: 5), content: Text(state.message)),
                   );
                 }
               },
@@ -142,16 +137,14 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                             child: SizedBox(
                                 height: 50,
                                 width: 300,
-                                child:
-                                    SvgPicture.asset("assets/images/Logo.svg")),
+                                child: SvgPicture.asset("assets/images/Logo.svg")),
                           ),
                         ],
                       ),
                       Gap(50),
                       Text(
                         'Authorization'.tr(),
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 24),
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                       ),
                       Gap(90),
                       Column(
@@ -160,10 +153,7 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                           Text(
                             'welcome',
                             textAlign: TextAlign.left,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium!
-                                .copyWith(
+                            style: Theme.of(context).textTheme.labelMedium!.copyWith(
                                   fontSize: 16,
                                 ),
                           ).tr(),
@@ -171,9 +161,7 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SizedBox(
-                                  height: 90,
-                                  child: Center(child: Text('+374'))),
+                              SizedBox(height: 90, child: Center(child: Text('+374'))),
                               // DropdownButton<String>(
                               //   value: dropdownvalue,
                               //   onChanged: (val) {
@@ -191,9 +179,7 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                               //     );
                               //   }).toList(),
                               // ),
-                              const SizedBox(
-                                  width:
-                                      10), // Space between Dropdown and TextField
+                              const SizedBox(width: 10), // Space between Dropdown and TextField
                               Expanded(
                                 child: TextFormField(
                                   controller: _phoneController,
@@ -202,22 +188,18 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                                     labelText: 'Phone Number'.tr(),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10.0),
-                                      borderSide: const BorderSide(
-                                          color: kprimaryColor),
+                                      borderSide: const BorderSide(color: kprimaryColor),
                                     ),
                                     errorBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10.0),
-                                      borderSide:
-                                          const BorderSide(color: Colors.red),
+                                      borderSide: const BorderSide(color: Colors.red),
                                     ),
                                     focusedErrorBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10.0),
-                                      borderSide:
-                                          const BorderSide(color: Colors.red),
+                                      borderSide: const BorderSide(color: Colors.red),
                                     ),
                                   ),
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
                                   validator: _validateAndFormatPhoneNumber,
                                 ),
                               ),
@@ -241,73 +223,73 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                                   text: 'Next'.tr(),
                                   callback: () {
                                     final phoneNumber = _phoneController.text;
-                                    final formattedPhoneNumber =
-                                        phoneNumber.startsWith('0')
-                                            ? phoneNumber.substring(1)
-                                            : phoneNumber;
+                                    final formattedPhoneNumber = phoneNumber.startsWith('0')
+                                        ? phoneNumber.substring(1)
+                                        : phoneNumber;
 
                                     if (formattedPhoneNumber.isNotEmpty) {
-                                      BlocProvider.of<AuthBloc>(context).add(
-                                          SendPhoneEvent(
-                                              '$dropdownvalue$phoneNumber'));
+                                      BlocProvider.of<AuthBloc>(context)
+                                          .add(SendPhoneEvent('$dropdownvalue$phoneNumber'));
                                     }
                                   },
                                 ));
                           },
                         ),
                       ),
-                      Gap(20),
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Center(
-                              child: Text.rich(
+                      const Gap(20),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              children: [
                                 TextSpan(
-                                  text: '',
-                                  style: TextStyle(fontSize: 12),
-                                  children: [
-                                    TextSpan(
-                                      text: 'about'.tr(),
-                                      style: const TextStyle(
-                                        color: kprimaryColor,
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          AutoRouter.of(context)
-                                              .push(const AboutUsRoute());
-                                        },
-                                    ),
-                                  ],
+                                  text: '${'By signing up, you agree to the'.tr()} \n',
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 13,
+                                  ),
                                 ),
-                              ),
-                            ),
-                            Center(
-                              child: Text.rich(
                                 TextSpan(
-                                  text: '',
-                                  style: TextStyle(fontSize: 12),
-                                  children: [
-                                    TextSpan(
-                                      text: 'help'.tr(),
-                                      style: const TextStyle(
-                                        color: kprimaryColor,
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          AutoRouter.of(context).push(
-                                              FakeProifleRoute(pageName: ''));
-                                        },
-                                    ),
-                                  ],
+                                  text: 'terms_conditions'.tr(),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      final langCode =
+                                          EasyLocalization.of(context)!.locale.languageCode;
+                                      AutoRouter.of(context).push(WebviewRoute(
+                                          link: 'https://imexpro.am/terms-conditions/$langCode'));
+                                    },
+                                  style: const TextStyle(
+                                    color: kprimaryColor,
+                                    decoration: TextDecoration.underline,
+                                    fontSize: 14,
+                                  ),
                                 ),
-                              ),
+                                const TextSpan(
+                                  text: '  and  ',
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'privacy_policy'.tr(),
+                                  style: const TextStyle(
+                                    color: kprimaryColor,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      final langCode =
+                                          EasyLocalization.of(context)!.locale.languageCode;
+                                      AutoRouter.of(context).push(WebviewRoute(
+                                          link: 'https://imexpro.am/privacy-policy/$langCode'));
+                                    },
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

@@ -509,7 +509,6 @@ class ApiService {
 
   Future<Response> getProductById(String id) async {
     try {
-      id = '9f825e39-6e27-4dc8-aa7e-dc202209e4b3';
       return await _dioClient.dio.get(
         Endpoints.getProductById.replaceFirst('{id}', id),
       );

@@ -146,16 +146,18 @@ class ProfileScreen extends StatelessWidget {
                 text: "terms_conditions".tr(),
                 svgSrc: "assets/icons/help.svg",
                 press: () {
+                  final langCode = EasyLocalization.of(context)!.locale.languageCode;
                   AutoRouter.of(context)
-                      .push(WebviewRoute(link: 'https://imexpro.am/privacy-policy'));
+                      .push(WebviewRoute(link: 'https://imexpro.am/terms-conditions/$langCode'));
                 },
               ),
               ProfileMenuListTile(
                 text: "privacy_policy".tr(),
                 svgSrc: "assets/icons/help.svg",
                 press: () {
+                  final langCode = EasyLocalization.of(context)!.locale.languageCode;
                   AutoRouter.of(context)
-                      .push(WebviewRoute(link: 'https://imexpro.am/privacy-policy'));
+                      .push(WebviewRoute(link: 'https://imexpro.am/privacy-policy/$langCode'));
                 },
               ),
               const SizedBox(height: defaultPadding),
