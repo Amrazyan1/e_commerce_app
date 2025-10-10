@@ -313,14 +313,32 @@ class _CheckoutModalState extends State<CheckoutModal> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-                        child: SvgPicture.asset(
-                          "assets/icons/visa.svg",
+                        child: Image.asset(
+                          "assets/icons/idram.png",
+                          height: 50,
+                          width: 50,
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
                         child: Image.asset(
-                          "assets/icons/idram.png",
+                          "assets/icons/arca.png",
+                          height: 50,
+                          width: 50,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+                        child: Image.asset(
+                          "assets/icons/visa.png",
+                          height: 50,
+                          width: 50,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+                        child: Image.asset(
+                          "assets/icons/master.png",
                           height: 50,
                           width: 50,
                         ),

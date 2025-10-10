@@ -58,6 +58,8 @@
 	<string>idramapp</string>
 	<string>idramappjr</string>
 	</array>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 
 </dict>
 </plist>
