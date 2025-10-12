@@ -414,12 +414,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                     ),
                     ButtonMainWidget(
                         callback: () => {
-                              context.read<AddCardBlocBloc>().add(AddCardEvent(
-                                    cardHolder: nameController.text,
-                                    cardNumber: cardNumberController.text,
-                                    expiryDate: '$selectedOptionMonth/$selectedOptionYear',
-                                    cvv: cvvController.text,
-                                  )),
+                              context.read<AddCardBlocBloc>().add(AddCardEvent()),
                             },
                         text: 'Save'.tr(),
                         customwidget: isLoading

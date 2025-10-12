@@ -98,5 +98,7 @@ class Endpoints {
   static const String deleteUser = '/users';
   static const String updateUserSettings = '/users/settings';
   static const String updateUserPassword = '/users/settings/password';
-  static const String addCard = '/users/addCard/addCard';
+  static const String addCard = '/cards/attach';
+  static const String cards = '/cards';
+  static const String cardsWithId = '/cards/{id}';
 }

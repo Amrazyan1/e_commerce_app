@@ -728,12 +728,14 @@ class WebviewRoute extends _i31.PageRouteInfo<WebviewRouteArgs> {
   WebviewRoute({
     _i33.Key? key,
     required String link,
+    void Function(String)? onUrlChanged,
     List<_i31.PageRouteInfo>? children,
   }) : super(
           WebviewRoute.name,
           args: WebviewRouteArgs(
             key: key,
             link: link,
+            onUrlChanged: onUrlChanged,
           ),
           initialChildren: children,
         );
@@ -747,6 +749,7 @@ class WebviewRoute extends _i31.PageRouteInfo<WebviewRouteArgs> {
       return _i30.WebviewScreen(
         key: args.key,
         link: args.link,
+        onUrlChanged: args.onUrlChanged,
       );
     },
   );
@@ -756,14 +759,17 @@ class WebviewRouteArgs {
   const WebviewRouteArgs({
     this.key,
     required this.link,
+    this.onUrlChanged,
   });
 
   final _i33.Key? key;
 
   final String link;
 
+  final void Function(String)? onUrlChanged;
+
   @override
   String toString() {
-    return 'WebviewRouteArgs{key: $key, link: $link}';
+    return 'WebviewRouteArgs{key: $key, link: $link, onUrlChanged: $onUrlChanged}';
   }
 }

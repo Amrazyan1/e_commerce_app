@@ -12,6 +12,7 @@ import 'package:e_commerce_app/components/list_tile/divider_list_tile.dart';
 import 'package:e_commerce_app/components/network_image_with_loader.dart';
 import 'package:e_commerce_app/constants.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
+import 'package:e_commerce_app/screens/Card/bloc/bloc/add_card_bloc_bloc.dart';
 import 'package:e_commerce_app/services/api_service.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -119,13 +120,13 @@ class ProfileScreen extends StatelessWidget {
                   AutoRouter.of(context).push(const DeliveryAddresseRoute());
                 },
               ),
-              // ProfileMenuListTile(
-              //   text: "payment_methods".tr(),
-              //   svgSrc: "assets/icons/payment.svg",
-              //   press: () {
-              //     AutoRouter.of(context).push(const PaymentmethodsRoute());
-              //   },
-              // ),
+              ProfileMenuListTile(
+                text: "payment_methods".tr(),
+                svgSrc: "assets/icons/payment.svg",
+                press: () {
+                  AutoRouter.of(context).push(const PaymentmethodsRoute());
+                },
+              ),
               ProfileMenuListTile(
                 text: "promo_codes".tr(),
                 svgSrc: "assets/icons/promo_code.svg",
@@ -134,6 +135,13 @@ class ProfileScreen extends StatelessWidget {
                   AutoRouter.of(context).push(const CouponsRoute());
                 },
               ),
+              // ProfileMenuListTile(
+              //   text: "cards".tr(),
+              //   svgSrc: "assets/icons/promo_code.svg",
+              //   press: () {
+              //     AutoRouter.of(context).push(const AddCardRoute());
+              //   },
+              // ),
               Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: defaultPadding, vertical: defaultPadding / 2),

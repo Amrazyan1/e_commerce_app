@@ -712,11 +712,41 @@ class ApiService {
     }
   }
 
-  Future<Response> addCard(Map<String, dynamic> data) async {
+  Future<Response> addCard() async {
+    try {
+      return await _dioClient.dio.post(
+        Endpoints.addCard,
+      );
+    } on DioException catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> getAllCards() async {
+    try {
+      return await _dioClient.dio.get(
+        Endpoints.cards,
+      );
+    } on DioException catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> editCard(String id, Map<String, dynamic> data) async {
     try {
       return await _dioClient.dio.put(
-        Endpoints.addCard,
+        Endpoints.cardsWithId.replaceFirst('{id}', id),
         data: data,
+      );
+    } on DioException catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> deleteCard(String id) async {
+    try {
+      return await _dioClient.dio.delete(
+        Endpoints.cardsWithId.replaceFirst('{id}', id),
       );
     } on DioException catch (e) {
       rethrow;

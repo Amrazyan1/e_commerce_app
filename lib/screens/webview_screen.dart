@@ -13,8 +13,8 @@ import 'package:url_launcher/url_launcher.dart';
 @RoutePage()
 class WebviewScreen extends StatefulWidget {
   final String link;
-
-  const WebviewScreen({super.key, required this.link});
+  final void Function(String)? onUrlChanged;
+  const WebviewScreen({super.key, required this.link, this.onUrlChanged});
 
   @override
   State<WebviewScreen> createState() => _WebviewScreenState();
@@ -64,16 +64,15 @@ class _WebviewScreenState extends State<WebviewScreen> {
                 if (uri.toString().contains("orderCallback")) {
                   if (context.mounted) {
                     Navigator.pop(context);
-                    context.read<OrdersBloc>().add(FetchOrders());
-                    AutoRouter.of(context).navigate(const EmptyRouter(children: [OrdersRoute()]));
+                    if (widget.onUrlChanged == null) {
+                      context.read<OrdersBloc>().add(FetchOrders());
+                      AutoRouter.of(context).navigate(const EmptyRouter(children: [OrdersRoute()]));
+                    }
                   }
                   return NavigationActionPolicy.CANCEL;
                 }
                 if (uri!.toString().startsWith("idramapp://") ||
                     uri.toString().startsWith("idramappjr://")) {
-                  // 🚫 Prevent loading this in WebView
-                  // ✅ Handle idramapp deep link (idramapp / idramappjr)
-
                   try {
                     final canLaunchApp = await canLaunchUrl(uri);
 
@@ -83,7 +82,6 @@ class _WebviewScreenState extends State<WebviewScreen> {
                   } catch (e) {
                     log("Error launching deep link: $e");
                   }
-
                   return NavigationActionPolicy.CANCEL;
                 }
 

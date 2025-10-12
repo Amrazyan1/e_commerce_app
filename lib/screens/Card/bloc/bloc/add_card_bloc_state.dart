@@ -11,7 +11,15 @@ class AddCardInitial extends AddCardBlocState {}
 
 class AddCardLoading extends AddCardBlocState {}
 
-class AddCardSuccess extends AddCardBlocState {}
+class AddCardSuccess extends AddCardBlocState {
+  dynamic data;
+  AddCardSuccess({this.data});
+}
+
+class GetAllCardsState extends AddCardBlocState {
+  List<CardModel> data;
+  GetAllCardsState({required this.data});
+}
 
 class AddCardError extends AddCardBlocState {
   final String message;

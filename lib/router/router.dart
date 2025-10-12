@@ -65,7 +65,8 @@ class AppRouter extends RootStackRouter {
             AutoRoute(page: FakeProifleRoute.page, path: 'helproute'),
           ]),
         ]),
-        AutoRoute(page: AboutUsRoute.page, path: '/abhgs'),
+        AutoRoute(page: AboutUsRoute.page, path: '/aboutUsRoute'),
+        AutoRoute(page: AddCardRoute.page, path: '/addCardRoute'),
         AutoRoute(page: DeliveryAddressNew.page, path: '/deliveryAddressNewRouteFromLogin'),
         AutoRoute(page: FakeProifleRoute.page, path: '/FakeProifleRoute'),
 
