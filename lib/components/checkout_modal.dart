@@ -68,7 +68,6 @@ class _CheckoutModalState extends State<CheckoutModal> {
         CategoryModel(
           title: "payment".tr(),
           info: "sel_payment".tr(),
-          // ignoreExpansion: true,
           subCategories: (widget.data.paymentMethods!)
               .map((payment) => CategoryModel(
                   title: payment.name ?? 'payment',
