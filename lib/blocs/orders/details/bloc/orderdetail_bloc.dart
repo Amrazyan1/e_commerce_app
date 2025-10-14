@@ -15,11 +15,15 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
     on<FetchOrderDetail>(_onFetchOrderDetail);
     on<CancelOrderEvent>(_onCancelOrderDetail);
   }
-  Future<void> _onCancelOrderDetail(
-      CancelOrderEvent event, Emitter<OrderDetailState> emit) async {
+  Future<void> _onCancelOrderDetail(CancelOrderEvent event, Emitter<OrderDetailState> emit) async {
     emit(OrderDetailLoadingCancle((state as OrderDetailLoaded).orderDetail));
     try {
-      final response = await apiService.cancelOrderById(event.orderId);
+      late var response;
+      if (event.isReversable) {
+        response = await apiService.refundOrderById(event.orderId);
+      } else {
+        response = await apiService.cancelOrderById(event.orderId);
+      }
       if (response.statusCode == 200) {
         emit(const OrderDetailLoaded(null));
       }
@@ -29,8 +33,7 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
     }
   }
 
-  Future<void> _onFetchOrderDetail(
-      FetchOrderDetail event, Emitter<OrderDetailState> emit) async {
+  Future<void> _onFetchOrderDetail(FetchOrderDetail event, Emitter<OrderDetailState> emit) async {
     emit(OrderDetailLoading());
     try {
       final response = await apiService.getOrderById(event.orderId);

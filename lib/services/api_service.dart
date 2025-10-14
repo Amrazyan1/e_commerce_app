@@ -393,6 +393,16 @@ class ApiService {
     }
   }
 
+  Future<Response> refundOrderById(String id) async {
+    try {
+      return await _dioClient.dio.patch(
+        Endpoints.refundOrder.replaceFirst('{id}', id),
+      );
+    } on DioException catch (e) {
+      rethrow;
+    }
+  }
+
   Future<Response> createOrder(Map<String, dynamic> data) async {
     try {
       return await _dioClient.dio.post(

@@ -19,8 +19,8 @@ class OrderInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Sample product data
-    void cancelOrder(String orderId) {
-      context.read<OrderDetailBloc>().add(CancelOrderEvent(orderId));
+    void cancelOrder(String orderId, bool isReversable) {
+      context.read<OrderDetailBloc>().add(CancelOrderEvent(orderId, isReversable));
     }
 
     return Scaffold(
@@ -54,13 +54,11 @@ class OrderInfoScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
 
-            if (state is OrderDetailLoaded ||
-                state is OrderDetailLoadingCancle) {
+            if (state is OrderDetailLoaded || state is OrderDetailLoadingCancle) {
               if ((state as OrderDetailLoaded).orderDetail == null) {
                 return Container();
               }
-              final products =
-                  (state as OrderDetailLoaded).orderDetail!.data!.items!;
+              final products = (state as OrderDetailLoaded).orderDetail!.data!.items!;
               return ListView.builder(
                 padding: const EdgeInsets.all(defaultPadding),
                 itemCount: products.length + 1, // Products + summary info
@@ -92,8 +90,7 @@ class OrderInfoScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 AutoSizeText(
-                                  product.product?.name.toString() ??
-                                      'Product name',
+                                  product.product?.name.toString() ?? 'Product name',
                                   maxLines: 2,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -105,10 +102,8 @@ class OrderInfoScreen extends StatelessWidget {
                                 Flexible(
                                   child: Text(
                                     overflow: TextOverflow.ellipsis,
-                                    product.product?.description ??
-                                        'Description',
-                                    style: const TextStyle(
-                                        fontSize: 12, color: Colors.grey),
+                                    product.product?.description ?? 'Description',
+                                    style: const TextStyle(fontSize: 12, color: Colors.grey),
                                   ),
                                 ),
                               ],
@@ -124,8 +119,7 @@ class OrderInfoScreen extends StatelessWidget {
                               const SizedBox(width: 10),
                               Text(
                                 product.product?.price ?? 'Price',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
+                                style: const TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -137,14 +131,11 @@ class OrderInfoScreen extends StatelessWidget {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildInfoRow(
-                            'delivery', '${orderData?.addresses?[0].name}'),
+                        _buildInfoRow('delivery', '${orderData?.addresses?[0].name}'),
                         _buildInfoRow('payment'.tr(), '${orderData?.method}'),
-                        _buildInfoRow('total_cost',
-                            '${orderData?.totalWithDelivery ?? 'Total'}'),
+                        _buildInfoRow('total_cost', '${orderData?.totalWithDelivery ?? 'Total'}'),
                         _buildInfoRow('date', '${orderData?.date ?? 'Date'}'),
-                        _buildInfoRow(
-                            'status', '${orderData?.status ?? 'Status'}'),
+                        _buildInfoRow('status', '${orderData?.status ?? 'Status'}'),
                         Visibility(
                           visible: orderData?.isCancelable ?? false,
                           child: SizedBox(
@@ -157,12 +148,34 @@ class OrderInfoScreen extends StatelessWidget {
                                 Expanded(
                                     child: ButtonMainWidget(
                                   text: 'cancel_order'.tr(),
-                                  customwidget:
-                                      state is OrderDetailLoadingCancle
-                                          ? const CircularProgressIndicator()
-                                          : null,
+                                  customwidget: state is OrderDetailLoadingCancle
+                                      ? const CircularProgressIndicator()
+                                      : null,
                                   callback: () {
-                                    cancelOrder(orderData!.id!);
+                                    cancelOrder(orderData!.id!, false);
+                                  },
+                                )),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Visibility(
+                          visible: orderData?.isReversable ?? false,
+                          child: SizedBox(
+                            height: 50,
+                            child: Row(
+                              children: [
+                                // Expanded(
+                                //     child: ButtonMainWidget(text: 'Order Again')),
+                                // Gap(10),
+                                Expanded(
+                                    child: ButtonMainWidget(
+                                  text: 'refund_order'.tr(),
+                                  customwidget: state is OrderDetailLoadingCancle
+                                      ? const CircularProgressIndicator()
+                                      : null,
+                                  callback: () {
+                                    cancelOrder(orderData!.id!, true);
                                   },
                                 )),
                               ],
@@ -194,16 +207,14 @@ class OrderInfoScreen extends StatelessWidget {
               children: [
                 Text(
                   title.tr(),
-                  style: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 const Gap(40),
                 Flexible(
                   child: Text(
                     value,
                     style: const TextStyle(fontSize: 14, color: Colors.grey),
-                    overflow:
-                        TextOverflow.ellipsis, // Add this to show ellipsis
+                    overflow: TextOverflow.ellipsis, // Add this to show ellipsis
                     maxLines: 1, // Ensure it doesn't exceed one line
                   ),
                 ),

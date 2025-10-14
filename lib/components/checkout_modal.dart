@@ -13,6 +13,7 @@ import 'package:e_commerce_app/models/Payment/payment_model.dart';
 import 'package:e_commerce_app/models/category_model.dart';
 import 'package:e_commerce_app/models/process_order_response.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
+import 'package:e_commerce_app/screens/Card/models/card_model.dart';
 import 'package:e_commerce_app/screens/order_accepted_screen.dart';
 import 'package:e_commerce_app/services/api_service.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -22,6 +23,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 
 import '../models/vieworderresponse_model.dart';
+import '../screens/Card/bloc/bloc/add_card_bloc_bloc.dart';
 
 class CheckoutModal extends StatefulWidget {
   final ViewOrderData data;
@@ -34,6 +36,7 @@ class CheckoutModal extends StatefulWidget {
 class _CheckoutModalState extends State<CheckoutModal> {
   final ApiService _apiService = GetIt.I<ApiService>();
   String payType = 'idram';
+  String selectedCardUuid = '';
   String addressid = 'address';
   String useBonus = '0';
   String couponId = '';
@@ -186,28 +189,33 @@ class _CheckoutModalState extends State<CheckoutModal> {
     context.read<MainProvider>().isProcessOrder = true;
 
     try {
+      if (payType.contains('idram') == false) {
+        payType = '$payType/$selectedCardUuid';
+      }
       final resp = await _apiService.payOrder(
         responseId,
         payType,
       );
-      final decoded = jsonDecode(resp.data); // now it's a Map<String, dynamic>
+      final decoded = jsonDecode(resp.data);
       final paymentResponse = PaymentResponse.fromJson(decoded);
 
       if (!paymentResponse.errors) {
-        final redirectUrl = paymentResponse.data?.redirectUrl;
-        AutoRouter.of(context).push(WebviewRoute(link: redirectUrl!));
-        log("Redirect user to: $redirectUrl");
+        if (payType.contains('idram')) {
+          final redirectUrl = paymentResponse.data?.redirectUrl;
+          AutoRouter.of(context).push(WebviewRoute(link: redirectUrl!));
+          log("Redirect user to: $redirectUrl");
+        }
       } else {
         log("Error: ${paymentResponse.message}");
       }
 
       context.read<CartBloc>().add(ClearCart());
-      // Navigator.of(context).pop();
-      // Navigator.of(context).push(
-      //   MaterialPageRoute(
-      //     builder: (context) => OrderAcceptedScreen(),
-      //   ),
-      // );
+      Navigator.of(context).pop();
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => OrderAcceptedScreen(),
+        ),
+      );
     } on DioException catch (e) {
       String errmsg = e.response?.data["message"].toString() ?? e.message!;
 
@@ -305,63 +313,67 @@ class _CheckoutModalState extends State<CheckoutModal> {
                   },
                 ),
               ),
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-                        child: Image.asset(
-                          "assets/icons/idram.png",
-                          height: 50,
-                          width: 50,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-                        child: Image.asset(
-                          "assets/icons/arca.png",
-                          height: 50,
-                          width: 50,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-                        child: Image.asset(
-                          "assets/icons/visa.png",
-                          height: 50,
-                          width: 50,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-                        child: Image.asset(
-                          "assets/icons/master.png",
-                          height: 50,
-                          width: 50,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0),
-                    child: SizedBox(
-                        height: 50,
-                        child: ButtonMainWidget(
-                          text: 'place_order'.tr(),
-                          customwidget: context.watch<MainProvider>().isProcessOrder == true
-                              ? const CircularProgressIndicator()
-                              : null,
-                          callback: payOrder,
-                        )),
-                  ),
-                ],
-              ),
+              _iconsWidget(context),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Column _iconsWidget(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+              child: Image.asset(
+                "assets/icons/idram.png",
+                height: 50,
+                width: 50,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+              child: Image.asset(
+                "assets/icons/arca.png",
+                height: 50,
+                width: 50,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+              child: Image.asset(
+                "assets/icons/visa.png",
+                height: 50,
+                width: 50,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+              child: Image.asset(
+                "assets/icons/master.png",
+                height: 50,
+                width: 50,
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 20.0),
+          child: SizedBox(
+              height: 50,
+              child: ButtonMainWidget(
+                text: 'place_order'.tr(),
+                customwidget: context.watch<MainProvider>().isProcessOrder == true
+                    ? const CircularProgressIndicator()
+                    : null,
+                callback: payOrder,
+              )),
+        ),
+      ],
     );
   }
 
@@ -386,6 +398,14 @@ class _CheckoutModalState extends State<CheckoutModal> {
         }
         if (selectedCategory.paytipe != null) {
           payType = selectedCategory.paytipe!;
+          if (payType.contains('idram')) {
+            ///
+          } else {
+            showCardSelectorModal(context: context, title: 'Select card').then((selCard) {
+              log(' Selected card UUID: $selectedCardUuid');
+              selectedCardUuid = selCard ?? '';
+            });
+          }
         }
         if (selectedCategory.isCheckbox) {
           expansionCategoryList
@@ -418,6 +438,186 @@ class _CheckoutModalState extends State<CheckoutModal> {
 
     // Return the created instance
     return expansionCategory;
+  }
+}
+
+Future<String?> showCardSelectorModal({
+  required BuildContext context,
+  String title = 'Select card',
+}) {
+  return showModalBottomSheet<String>(
+    context: context,
+    isScrollControlled: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+    ),
+    builder: (ctx) {
+      return BlocProvider(
+        create: (context) => AddCardBlocBloc()..add(GetAllCards()),
+        child: _CardSelectorSheet(
+          title: title,
+        ),
+      );
+    },
+  );
+}
+
+class _CardSelectorSheet extends StatefulWidget {
+  final String title;
+  const _CardSelectorSheet({required this.title});
+
+  @override
+  State<_CardSelectorSheet> createState() => _CardSelectorSheetState();
+}
+
+class _CardSelectorSheetState extends State<_CardSelectorSheet> {
+  String? _selectedUuid;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.6,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // --- Header
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(widget.title, style: Theme.of(context).textTheme.titleLarge),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1),
+
+              // --- Bloc State Handling
+              Expanded(
+                child: BlocBuilder<AddCardBlocBloc, AddCardBlocState>(
+                  builder: (context, state) {
+                    if (state is AddCardLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is GetAllCardsState) {
+                      final cards = state.data;
+
+                      if (cards.isEmpty) {
+                        return const Center(child: Text('No cards found. Add one first.'));
+                      }
+
+                      final selectedIndex = cards.indexWhere((c) => c.uuid == _selectedUuid);
+
+                      return ListView.separated(
+                        itemCount: cards.length,
+                        separatorBuilder: (_, __) => const Divider(height: 1),
+                        itemBuilder: (context, i) {
+                          final card = cards[i];
+                          final isSelected = i == selectedIndex;
+
+                          return InkWell(
+                            onTap: () {
+                              setState(() => _selectedUuid = card.uuid);
+                              Navigator.of(context).pop(card.uuid);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                              child: Row(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(6),
+                                    child: Image.network(
+                                      card.icon,
+                                      width: 48,
+                                      height: 32,
+                                      fit: BoxFit.contain,
+                                      errorBuilder: (_, __, ___) =>
+                                          const Icon(Icons.credit_card, size: 32),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                card.name,
+                                                style: const TextStyle(fontWeight: FontWeight.w600),
+                                              ),
+                                            ),
+                                            if (card.isDefault)
+                                              Container(
+                                                margin: const EdgeInsets.only(left: 8),
+                                                padding: const EdgeInsets.symmetric(
+                                                    horizontal: 8, vertical: 4),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey.shade200,
+                                                  borderRadius: BorderRadius.circular(12),
+                                                ),
+                                                child: const Text(
+                                                  'Default',
+                                                  style: TextStyle(fontSize: 12),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Text('${card.pan} • ${card.expiration}',
+                                            style: TextStyle(
+                                                color: Colors.grey.shade700, fontSize: 13)),
+                                        const SizedBox(height: 4),
+                                        Text(card.cardholder,
+                                            style: TextStyle(
+                                                color: Colors.grey.shade600, fontSize: 12)),
+                                      ],
+                                    ),
+                                  ),
+                                  Radio<String>(
+                                    value: card.uuid,
+                                    groupValue: _selectedUuid,
+                                    onChanged: (val) {
+                                      if (val != null) {
+                                        setState(() => _selectedUuid = val);
+                                        Navigator.of(context).pop(val);
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    } else if (state is AddCardError) {
+                      return Center(
+                        child: Text(
+                          'Failed to load cards: ${state.message}',
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      );
+                    }
+
+                    return const SizedBox.shrink();
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 

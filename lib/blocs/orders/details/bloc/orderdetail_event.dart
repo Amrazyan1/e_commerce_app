@@ -18,5 +18,6 @@ class FetchOrderDetail extends OrderDetailEvent {
 
 class CancelOrderEvent extends OrderDetailEvent {
   final String orderId;
-  const CancelOrderEvent(this.orderId);
+  final bool isReversable;
+  const CancelOrderEvent(this.orderId, this.isReversable);
 }
