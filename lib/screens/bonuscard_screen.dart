@@ -55,19 +55,31 @@ class BonusCarScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment:
+                          CrossAxisAlignment.start, // Important for multiline alignment
                       children: [
-                        Text(
-                          'bonus_points'.tr(),
-                          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                        Expanded(
+                          child: Text(
+                            'bonus_points'.tr(),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                            ),
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                            maxLines: null,
+                          ),
                         ),
+                        const SizedBox(width: 8),
                         Text(
                           bonusPoints,
-                          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                          ),
                         ),
                       ],
                     ),
-                    // Divider()
                   ],
                 ),
               ),

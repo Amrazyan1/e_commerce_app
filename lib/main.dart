@@ -48,8 +48,7 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   injectGetItServices();
 
-  final GoogleMapsFlutterPlatform mapsImplementation =
-      GoogleMapsFlutterPlatform.instance;
+  final GoogleMapsFlutterPlatform mapsImplementation = GoogleMapsFlutterPlatform.instance;
   if (mapsImplementation is GoogleMapsFlutterAndroid) {
     initializeMapRenderer();
   }
@@ -74,12 +73,7 @@ void main() async {
   });
   runApp(
     EasyLocalization(
-      supportedLocales: const [
-        Locale('en'),
-        Locale('hy'),
-        Locale('fa'),
-        Locale('ru')
-      ],
+      supportedLocales: const [Locale('en'), Locale('hy'), Locale('fa'), Locale('ru')],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
       // assetLoader: SmartNetworkAssetLoader(
@@ -159,19 +153,16 @@ Future<AndroidMapRenderer?> initializeMapRenderer() async {
     return _initializedRendererCompleter!.future;
   }
 
-  final Completer<AndroidMapRenderer?> completer =
-      Completer<AndroidMapRenderer?>();
+  final Completer<AndroidMapRenderer?> completer = Completer<AndroidMapRenderer?>();
   _initializedRendererCompleter = completer;
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  final GoogleMapsFlutterPlatform mapsImplementation =
-      GoogleMapsFlutterPlatform.instance;
+  final GoogleMapsFlutterPlatform mapsImplementation = GoogleMapsFlutterPlatform.instance;
   if (mapsImplementation is GoogleMapsFlutterAndroid) {
     unawaited(mapsImplementation
         .initializeWithRenderer(AndroidMapRenderer.latest)
-        .then((AndroidMapRenderer initializedRenderer) =>
-            completer.complete(initializedRenderer)));
+        .then((AndroidMapRenderer initializedRenderer) => completer.complete(initializedRenderer)));
   } else {
     completer.complete(null);
   }
@@ -189,8 +180,7 @@ class MainApp extends StatelessWidget {
     ]);
     return ScreenUtilInit(
       designSize: const Size(414, 896),
-      fontSizeResolver: (fontSize, instance) =>
-          FontSizeResolvers.width(fontSize, instance),
+      fontSizeResolver: (fontSize, instance) => FontSizeResolvers.width(fontSize, instance),
       builder: (context, child) {
         return MaterialApp.router(
           key: navigatorKey,

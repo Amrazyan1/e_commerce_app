@@ -116,20 +116,17 @@ class _CheckoutModalState extends State<CheckoutModal> {
   }
 
   num filterToGetNum(String text) {
-    // Remove all non-numeric characters except digits, commas, and periods
-    String sanitizedString = text.replaceAll(RegExp(r'[^\d,]'), '');
+    String sanitized = text.replaceAll(RegExp(r'[^\d.,]'), '');
 
-    // Replace the last comma with a period to handle the decimal part
-    sanitizedString = sanitizedString.replaceFirst(RegExp(r',(?=\d{2}$)'), '.');
+    if (sanitized.contains(',') && sanitized.lastIndexOf(',') > sanitized.lastIndexOf('.')) {
+      sanitized = sanitized.replaceAll('.', '').replaceAll(',', '.');
+    } else {
+      sanitized = sanitized.replaceAll(',', '');
+    }
 
-    // Remove any remaining commas used as thousand separators
-    sanitizedString = sanitizedString.replaceAll(RegExp(r','), '');
-
-    // Parse the final sanitized string into a number
-    num avalBonus = num.parse(sanitizedString);
-
-    log(avalBonus.toString());
-    return avalBonus;
+    final value = num.tryParse(sanitized) ?? 0;
+    log('Parsed value: $value');
+    return value;
   }
 
   String responseId = '';
