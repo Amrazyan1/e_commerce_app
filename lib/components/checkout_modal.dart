@@ -35,7 +35,7 @@ class CheckoutModal extends StatefulWidget {
 
 class _CheckoutModalState extends State<CheckoutModal> {
   final ApiService _apiService = GetIt.I<ApiService>();
-  String payType = 'idram';
+  String payType = '';
   String selectedCardUuid = '';
   String addressid = 'address';
   String useBonus = '0';
@@ -77,7 +77,9 @@ class _CheckoutModalState extends State<CheckoutModal> {
                   info: payment.name ?? 'payment',
                   paytipe: payment.slug,
                   subCategories: [],
-                  isSelected: payment.slug == 'idram'))
+                  isSelected: false
+                  // payment.slug == 'idram'
+                  ))
               .toList(),
         ),
       );
