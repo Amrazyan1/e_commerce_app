@@ -1,6 +1,8 @@
 import 'dart:developer';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PushNotifications {
@@ -49,21 +51,54 @@ class PushNotifications {
     //     .pushNamed("/message", arguments: notificationResponse);
   }
 
+  static Future<Uint8List> _getByteArrayFromUrl(String url) async {
+    final http.Response response = await http.get(Uri.parse(url));
+    return response.bodyBytes;
+  }
+
   // show a simple notification
   static Future showSimpleNotification({
     required String title,
     required String body,
     required String payload,
+    String? imageUrl,
   }) async {
-    const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
+    late final BigPictureStyleInformation bigPictureStyleInformation;
+    if (imageUrl != null && imageUrl.isNotEmpty) {
+      final ByteArrayAndroidBitmap largeIcon =
+          ByteArrayAndroidBitmap(await _getByteArrayFromUrl(imageUrl));
+      final ByteArrayAndroidBitmap bigPicture =
+          ByteArrayAndroidBitmap(await _getByteArrayFromUrl(imageUrl));
+      bigPictureStyleInformation = BigPictureStyleInformation(
+        bigPicture,
+        largeIcon: largeIcon,
+        contentTitle: 'overridden <b>big</b> content title',
+        htmlFormatContentTitle: true,
+        summaryText: 'summary <i>text</i>',
+        htmlFormatSummaryText: true,
+      );
+    }
+
+    AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
         'your channel id', 'your channel name',
         channelDescription: 'your channel description',
         importance: Importance.max,
         priority: Priority.high,
+        styleInformation: bigPictureStyleInformation ?? null,
         ticker: 'ticker');
-    const NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
-    await _flutterLocalNotificationsPlugin.show(0, title, body, notificationDetails,
-        payload: payload);
+
+    const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
+      sound: 'default',
+    );
+
+    NotificationDetails notificationDetails =
+        NotificationDetails(android: androidNotificationDetails, iOS: iosNotificationDetails);
+    await _flutterLocalNotificationsPlugin.show(
+      0,
+      title,
+      body,
+      notificationDetails,
+      payload: payload,
+    );
   }
 }

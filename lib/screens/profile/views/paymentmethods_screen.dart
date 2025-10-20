@@ -8,6 +8,7 @@ import 'package:e_commerce_app/models/Payment/payment_model.dart';
 import 'package:e_commerce_app/router/router.gr.dart';
 import 'package:e_commerce_app/screens/Card/bloc/bloc/add_card_bloc_bloc.dart';
 import 'package:e_commerce_app/services/api_service.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -24,9 +25,9 @@ class PaymentmethodsScreen extends StatelessWidget {
         child: Scaffold(
             appBar: AppBar(
               centerTitle: true,
-              title: const Text(
-                'Payment',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              title: Text(
+                'cards'.tr(),
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
             ),
             body: BlocBuilder<AddCardBlocBloc, AddCardBlocState>(
@@ -63,13 +64,13 @@ class PaymentmethodsScreen extends StatelessWidget {
                                   color: Colors.green,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                child: const Row(
+                                child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Icon(Icons.check_circle_outline, color: Colors.white),
-                                    SizedBox(width: 8),
-                                    Text('Set Primary',
-                                        style: TextStyle(
+                                    const Icon(Icons.check_circle_outline, color: Colors.white),
+                                    const SizedBox(width: 8),
+                                    Text('set_primary'.tr(),
+                                        style: const TextStyle(
                                             color: Colors.white, fontWeight: FontWeight.w600)),
                                   ],
                                 ),
@@ -81,14 +82,14 @@ class PaymentmethodsScreen extends StatelessWidget {
                                   color: Colors.red,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                child: const Row(
+                                child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Text('Delete',
-                                        style: TextStyle(
+                                    Text('delete'.tr(),
+                                        style: const TextStyle(
                                             color: Colors.white, fontWeight: FontWeight.w600)),
-                                    SizedBox(width: 8),
-                                    Icon(Icons.delete_outline, color: Colors.white),
+                                    const SizedBox(width: 8),
+                                    const Icon(Icons.delete_outline, color: Colors.white),
                                   ],
                                 ),
                               ),
@@ -96,8 +97,7 @@ class PaymentmethodsScreen extends StatelessWidget {
                                 if (direction == DismissDirection.startToEnd) {
                                   if (card.isDefault) {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text('This card is already your primary card')),
+                                      SnackBar(content: Text('already_prim'.tr())),
                                     );
                                     return false;
                                   }
@@ -105,15 +105,14 @@ class PaymentmethodsScreen extends StatelessWidget {
                                     context: context,
                                     builder: (context) => AlertDialog(
                                       title: const Text('Make Primary'),
-                                      content: const Text(
-                                          'Do you want to make this card your primary payment method?'),
+                                      content: Text('primary_info'.tr()),
                                       actions: [
                                         TextButton(
                                             onPressed: () => Navigator.pop(context, false),
-                                            child: const Text('Cancel')),
+                                            child: Text('cancel'.tr())),
                                         TextButton(
                                             onPressed: () => Navigator.pop(context, true),
-                                            child: const Text('Confirm')),
+                                            child: Text('confirm'.tr())),
                                       ],
                                     ),
                                   );
@@ -128,15 +127,14 @@ class PaymentmethodsScreen extends StatelessWidget {
                                     context: context,
                                     builder: (context) => AlertDialog(
                                       title: const Text('Delete Card'),
-                                      content: const Text(
-                                          'Are you sure you want to delete this card? This action cannot be undone.'),
+                                      content: Text('delete_card_info'.tr()),
                                       actions: [
                                         TextButton(
                                             onPressed: () => Navigator.pop(context, false),
-                                            child: const Text('Cancel')),
+                                            child: Text('cancel'.tr())),
                                         TextButton(
                                             onPressed: () => Navigator.pop(context, true),
-                                            child: const Text('Delete')),
+                                            child: Text('delete'.tr())),
                                       ],
                                     ),
                                   );
@@ -218,7 +216,7 @@ class PaymentmethodsScreen extends StatelessWidget {
                 child: SizedBox(
                   height: 55,
                   child: ButtonMainWidget(
-                    text: 'Add new payment method',
+                    text: 'add_new_payment_method'.tr(),
                     callback: () async {
                       final ApiService apiService = GetIt.I<ApiService>();
                       final response = await apiService.addCard();

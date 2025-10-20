@@ -40,7 +40,15 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 final appRouter = AppRouter(); // Initialize the AppRouter
 
 Future _firebaseBackgroundMessage(RemoteMessage message) async {
-  if (message.notification != null) {}
+  if (message.notification != null) {
+    String payloadData = jsonEncode(message.data);
+    log("Got a message in background");
+    await PushNotifications.showSimpleNotification(
+        title: message.notification!.title!,
+        body: message.notification!.body!,
+        payload: payloadData,
+        imageUrl: message.notification!.apple?.imageUrl);
+  }
 }
 
 void main() async {
@@ -68,7 +76,8 @@ void main() async {
       PushNotifications.showSimpleNotification(
           title: message.notification!.title!,
           body: message.notification!.body!,
-          payload: payloadData);
+          payload: payloadData,
+          imageUrl: message.notification!.apple?.imageUrl);
     }
   });
   runApp(

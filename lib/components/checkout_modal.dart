@@ -259,61 +259,64 @@ class _CheckoutModalState extends State<CheckoutModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'checkout'.tr(),
-                      style: const TextStyle(
-                          fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
-                    ),
-                    GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Icon(Icons.close))
-                  ],
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'checkout'.tr(),
+                        style: const TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Icon(Icons.close))
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    if (categories[index].id.contains('price')) {
-                      return Column(
-                        children: [
-                          const SizedBox(
-                            height: 100,
-                          ),
-                          _expCategoryItem(index, context),
-                        ],
-                      );
-                    }
-                    if (categories[index].id.contains('tot_cost')) {
-                      return Column(
-                        children: [
-                          const Divider(),
-                          _expCategoryItem(index, context),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                        ],
-                      );
-                    }
-                    return _expCategoryItem(index, context);
-                  },
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: categories.length,
+                    itemBuilder: (context, index) {
+                      if (categories[index].id.contains('price')) {
+                        return Column(
+                          children: [
+                            const SizedBox(
+                              height: 100,
+                            ),
+                            _expCategoryItem(index, context),
+                          ],
+                        );
+                      }
+                      if (categories[index].id.contains('tot_cost')) {
+                        return Column(
+                          children: [
+                            const Divider(),
+                            _expCategoryItem(index, context),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        );
+                      }
+                      return _expCategoryItem(index, context);
+                    },
+                  ),
                 ),
-              ),
-              _iconsWidget(context),
-            ],
+                _iconsWidget(context),
+              ],
+            ),
           ),
         ),
       ),
